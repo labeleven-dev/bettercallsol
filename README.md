@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="128px" src="https://raw.githubusercontent.com/labeleven-dev/bettercallsol/main/public/logo128.png" />
+  ![Logo](/public/logo128.png)
   <h1>BetterCallSol</h1>
   <p>
     <h3>The Missing Solana Client</h3>
