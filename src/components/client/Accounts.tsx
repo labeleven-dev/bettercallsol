@@ -1,6 +1,8 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Heading, IconButton, Tooltip } from "@chakra-ui/react";
+import { Box, Heading, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useContext } from "react";
+import { FaWallet } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { instructionGetter, useTransactionStore } from "../../store";
 import { IID } from "../../web3";
@@ -14,6 +16,8 @@ export const Accounts: React.FC = () => {
   const instruction = useTransactionStore(getInstruction);
 
   const set = useTransactionStore((state) => state.set);
+
+  const { publicKey: walletPubkey } = useWallet();
 
   const setItemOrder = (itemOrder: IID[]) => {
     set((state) => {
@@ -29,6 +33,20 @@ export const Accounts: React.FC = () => {
         id,
         pubkey: "",
         isSigner: false,
+        isWritable: false,
+      };
+      instruction.accountOrder.push(id);
+    });
+  };
+
+  const addWalletAccount = () => {
+    set((state) => {
+      const instruction = getInstruction(state);
+      const id = uuid();
+      instruction.accounts[id] = {
+        id,
+        pubkey: walletPubkey?.toBase58() || "",
+        isSigner: true,
         isWritable: false,
       };
       instruction.accountOrder.push(id);
@@ -52,10 +70,19 @@ export const Accounts: React.FC = () => {
       </Box>
       <Tooltip label="Add Account">
         <IconButton
+          mr="2"
           aria-label="Add Account"
           icon={<AddIcon />}
-          variant="ghost"
+          variant="outline"
           onClick={addAccount}
+        />
+      </Tooltip>
+      <Tooltip label="Add Wallet Account">
+        <IconButton
+          aria-label="Add Wallet Account"
+          icon={<Icon as={FaWallet} />}
+          variant="outline"
+          onClick={addWalletAccount}
         />
       </Tooltip>
     </>

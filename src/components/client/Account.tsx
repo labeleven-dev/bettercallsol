@@ -5,6 +5,7 @@ import {
   IconButton,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
   Text,
   Tooltip,
@@ -12,9 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { ChangeEvent, useContext } from "react";
-import { FaSignature } from "react-icons/fa";
+import { FaSignature, FaWallet } from "react-icons/fa";
 import { accountGetter, useTransactionStore } from "../../store";
 import { IID } from "../../web3";
 import { ExplorerButton } from "../common/ExplorerButton";
@@ -27,6 +29,9 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
 
   const account = useTransactionStore(getAccount);
   const set = useTransactionStore((state) => state.set);
+
+  const { publicKey: walletPubkey } = useWallet();
+  const isWallet = account.pubkey == walletPubkey?.toBase58();
 
   // Sortable item
   // TODO find a clean way to abstract this away into their own SortableItem
@@ -72,6 +77,13 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
         {account.name}
       </Text>
       <InputGroup>
+        {isWallet && (
+          <InputLeftElement
+            pointerEvents="none"
+            ml="2"
+            children={<Icon as={FaWallet} color="gray.400" />}
+          />
+        )}
         <Input
           flex="1"
           ml="2"
