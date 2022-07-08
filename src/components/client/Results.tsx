@@ -56,7 +56,7 @@ export const Results: React.FC = () => {
         )}
       </Flex>
       {results.error && (
-        <Alert mb="2" status="error" fontSize="md">
+        <Alert mb="5" status="error" fontSize="md" rounded="sm">
           <AlertIcon />
           <AlertDescription>{results.error}</AlertDescription>
         </Alert>
@@ -95,12 +95,12 @@ export const Results: React.FC = () => {
         <Box width="70px" />
         {results.slot && (
           <Tag mr="1">
-            <strong>Slot:</strong> {results.slot}
+            <strong>Slot:&nbsp;</strong> {results.slot}
           </Tag>
         )}
         {results.fee && (
           <Tag mr="1">
-            <strong>Fee:</strong> {results.fee}
+            <strong>Fee:&nbsp;</strong> {results.fee} {/* TODO in SOL */}
           </Tag>
         )}
       </Flex>

@@ -91,6 +91,15 @@ export const Transaction: React.FC = () => {
   );
 
   const transact = async () => {
+    if (
+      !transactionData.instructions ||
+      Object.values(transactionData.instructions).every((x) => x.disabled)
+    ) {
+      set((state) => {
+        state.results.error = "No instructions provided";
+      });
+      return;
+    }
     if (!publicKey) {
       set((state) => {
         state.results.error = "Wallet is not connected";

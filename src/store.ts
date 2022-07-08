@@ -42,6 +42,7 @@ const temp: ITransaction = {
         },
       },
       data: "hello",
+      disabled: false,
       expanded: true,
     },
   },

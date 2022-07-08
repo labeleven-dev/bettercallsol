@@ -33,6 +33,7 @@ export interface IInstruction {
   data: IPlainText; // TODO anchor
 
   // UI
+  disabled: boolean;
   expanded: boolean;
 }
 
@@ -86,8 +87,9 @@ export const mapTransaction = (transactionData: ITransaction): Transaction => {
   // TODO filter out empty fields
   const transaction = new Transaction();
   transactionData.instructionOrder.forEach((id) => {
-    const { programId, accountOrder, accounts, data } =
+    const { disabled, programId, accountOrder, accounts, data } =
       transactionData.instructions[id];
+    if (disabled) return;
     transaction.add(
       new TransactionInstruction({
         programId: new PublicKey(programId),

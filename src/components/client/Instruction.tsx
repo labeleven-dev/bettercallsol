@@ -22,9 +22,8 @@ import {
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { instructionGetter, useTransactionStore } from "../../store";
-import { ToggleIconButton } from "../common/ToggleIconButton";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionContext } from "./Instructions";
@@ -72,7 +71,6 @@ export const Instruction: React.FC = () => {
     >
       <Flex>
         <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
-        {/* TODO change aria-label based on state */}
         <IconButton
           h="8"
           w="8"
@@ -109,11 +107,25 @@ export const Instruction: React.FC = () => {
           </Editable>
         </Tooltip>
         <Spacer />
-        <ToggleIconButton
-          ml="2"
-          label="Disable"
-          icon={<Icon as={FaEyeSlash} />}
-        />
+        <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
+          <IconButton
+            ml="2"
+            aria-label={instruction.disabled ? "Enable" : "Disable"}
+            variant="ghost"
+            icon={
+              instruction.disabled ? (
+                <Icon as={FaEyeSlash} />
+              ) : (
+                <Icon as={FaEye} />
+              )
+            }
+            onClick={() => {
+              set((state) => {
+                getInstruction(state).disabled = !instruction.disabled;
+              });
+            }}
+          />
+        </Tooltip>
         <Tooltip label="Remove">
           <IconButton
             ml="2"

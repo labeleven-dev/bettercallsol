@@ -29,6 +29,7 @@ export const Instructions: React.FC = () => {
         data: "",
         accounts: {},
         accountOrder: [],
+        disabled: false,
         expanded: true,
       };
       state.transaction.instructionOrder.push(id);
