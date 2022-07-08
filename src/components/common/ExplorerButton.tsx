@@ -7,22 +7,33 @@ import { useTransactionStore } from "../../store";
 export const ExplorerButton: React.FC<{
   value: string;
   type: "tx" | "account";
-}> = ({ value, type }) => {
+  isDisabled?: boolean;
+  [x: string]: any;
+}> = ({ value, type, isDisabled = false, ...theRest }) => {
   const network = useTransactionStore(
     (state) => state.transactionOptions.network.id
   );
   const href = `https://solscan.io/${type}/${value}?cluster=${network}`;
+  const button = (
+    <IconButton
+      size="sm"
+      aria-label="Open in Solscan"
+      variant="ghost"
+      icon={<SolscanIcon />}
+      isDisabled={isDisabled}
+      {...theRest}
+    />
+  );
 
   return (
-    <Tooltip label="Open in Solscan">
-      <Link href={href} isExternal>
-        <IconButton
-          size="sm"
-          aria-label="Open in Solscan"
-          variant="ghost"
-          icon={<SolscanIcon />}
-        />
-      </Link>
+    <Tooltip label="Open in Solscan" isDisabled={isDisabled}>
+      {isDisabled ? (
+        <Link>{button}</Link>
+      ) : (
+        <Link href={href} isExternal>
+          {button}
+        </Link>
+      )}
     </Tooltip>
   );
 };

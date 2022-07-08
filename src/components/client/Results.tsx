@@ -12,7 +12,6 @@ import {
   InputGroup,
   InputRightElement,
   Skeleton,
-  Spacer,
   Stack,
   Tag,
   useColorModeValue,
@@ -33,12 +32,21 @@ export const Results: React.FC = () => {
       borderColor={useColorModeValue("gray.100", "gray.600")}
     >
       <Flex>
-        <Heading mb="4" size="md">
+        <Heading mb="6" mr="3" size="md">
           Results
         </Heading>
-        <Spacer />
         {results.confirmationStatus && (
-          <Tag mr="1" colorScheme="main" height="30px">
+          <Tag
+            mr="1"
+            colorScheme={
+              results.confirmationStatus === "processed"
+                ? "yellow"
+                : results.confirmationStatus === "confirmed"
+                ? "blue"
+                : "green"
+            }
+            height="20px"
+          >
             {results.confirmationStatus === "processed"
               ? "Processed"
               : results.confirmationStatus === "confirmed"
@@ -70,14 +78,18 @@ export const Results: React.FC = () => {
             isReadOnly
             value={results.signature}
           />
-
-          {results.signature && (
-            <InputRightElement>
-              <ExplorerButton type="tx" value={results.signature} />
-            </InputRightElement>
-          )}
+          <InputRightElement>
+            <ExplorerButton
+              type="tx"
+              isDisabled={!results.signature}
+              value={results.signature!}
+            />
+          </InputRightElement>
         </InputGroup>
-        {results.signature && <CopyButton value={results.signature} />}
+        <CopyButton
+          isDisabled={!results.signature}
+          value={results.signature!}
+        />
       </Flex>
       <Flex mb="4">
         <Box width="70px" />
@@ -101,7 +113,7 @@ export const Results: React.FC = () => {
         </Stack>
       ) : (
         results.logs && (
-          <Box p="3" backgroundColor="gray.700" rounded="sm">
+          <Grid p="3" backgroundColor="gray.700" rounded="sm">
             {results.logs.map((line, index) => (
               <Code
                 key={index}
@@ -112,7 +124,7 @@ export const Results: React.FC = () => {
                 {line}
               </Code>
             ))}
-          </Box>
+          </Grid>
         )
       )}
     </Grid>

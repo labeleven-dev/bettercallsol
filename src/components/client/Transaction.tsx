@@ -56,6 +56,7 @@ export const Transaction: React.FC = () => {
               set((state) => {
                 state.results = {
                   inProgress: false,
+                  signature: results.signature,
                   confirmationStatus: "finalized",
                   slot: transaction?.slot,
                   logs: logMessages || [],
