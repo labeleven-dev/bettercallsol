@@ -1,38 +1,69 @@
-import * as React from "react"
+import { ChakraProvider, Flex, Spacer } from "@chakra-ui/react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import {
+  GlowWalletAdapter,
+  PhantomWalletAdapter,
+  SlopeWalletAdapter,
+  SolflareWalletAdapter,
+  TorusWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import React, { useMemo } from "react";
+import { Transaction } from "./components/client/Transaction";
+import { Footer } from "./components/Footer";
+import { TopBar } from "./components/TopBar";
+import { useTransactionStore } from "./store";
+import theme from "./theme";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+require("@solana/wallet-adapter-react-ui/styles.css");
+
+export const App: React.FC = () => {
+  const {
+    network,
+    commitment,
+    confirmTransactionInitialTimeout,
+    disableRetryOnRateLimit,
+  } = useTransactionStore((state) => state.transactionOptions);
+
+  // TODO support RPC URL
+  const wallets = useMemo(
+    () => [
+      new PhantomWalletAdapter(),
+      new GlowWalletAdapter(),
+      new SlopeWalletAdapter(),
+      new SolflareWalletAdapter({
+        network: network.id as WalletAdapterNetwork,
+      }),
+      new TorusWalletAdapter(),
+    ],
+    [network]
+  );
+
+  return (
+    <ChakraProvider theme={theme}>
+      <ConnectionProvider
+        endpoint={network.url}
+        config={{
+          commitment,
+          confirmTransactionInitialTimeout,
+          disableRetryOnRateLimit,
+        }}
+      >
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <Flex flexDirection="column" minH="100vh">
+              <TopBar />
+              <Transaction />
+              <Spacer />
+              <Footer />
+            </Flex>
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    </ChakraProvider>
+  );
+};
