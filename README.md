@@ -1,5 +1,7 @@
 <div align="center">
-  ![Logo](/public/logo128.png)
+  <!-- TODO when public repo -->
+  <!-- <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/main/public/logo128.png?raw=true" /> -->
+  <h1>LOGO</h1>
   <h1>BetterCallSol</h1>
   <p>
     <h3>The Missing Solana Client</h3>
