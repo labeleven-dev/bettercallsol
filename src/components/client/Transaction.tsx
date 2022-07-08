@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
-import { FaExpandArrowsAlt, FaPlay } from "react-icons/fa";
+import { FaExpand, FaExpandAlt, FaPlay } from "react-icons/fa";
 import { useTransactionStore } from "../../store";
 import { mapTransaction } from "../../web3";
 import { Instructions } from "./Instructions";
@@ -33,6 +33,8 @@ export const Transaction: React.FC = () => {
 
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
+
+  // TODO refactor
 
   useInterval(
     async () => {
@@ -143,13 +145,33 @@ export const Transaction: React.FC = () => {
           </Tooltip>
           <Spacer />
           <Tooltip label="Expand All">
-            {/* TODO Switch to Collapse All and another icon */}
             <IconButton
               ml="2"
-              mr="2"
               aria-label="Expand All"
-              icon={<Icon as={FaExpandArrowsAlt} />}
+              icon={<Icon as={FaExpandAlt} />}
               variant="ghost"
+              onClick={() => {
+                set((state) => {
+                  Object.keys(state.transaction.instructions).forEach((id) => {
+                    state.transaction.instructions[id].expanded = true;
+                  });
+                });
+              }}
+            />
+          </Tooltip>
+          <Tooltip label="Collapse All">
+            <IconButton
+              mr="2"
+              aria-label="Collapse All"
+              icon={<Icon as={FaExpand} />}
+              variant="ghost"
+              onClick={() => {
+                set((state) => {
+                  Object.keys(state.transaction.instructions).forEach((id) => {
+                    state.transaction.instructions[id].expanded = false;
+                  });
+                });
+              }}
             />
           </Tooltip>
           <NetworkSelector />

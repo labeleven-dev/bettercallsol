@@ -9,6 +9,8 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 
+// TODO what is exported is a subset of the fields, i.e. don't export ui settings
+
 export type IID = string;
 export type IPubKey = string;
 
@@ -29,6 +31,9 @@ export interface IInstruction {
   accountOrder: IID[];
   accounts: { [key: IID]: IAccount };
   data: IPlainText; // TODO anchor
+
+  // UI
+  expanded: boolean;
 }
 
 export interface INetwork {

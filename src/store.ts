@@ -1,5 +1,6 @@
-import create from "zustand";
 import produce, { Draft } from "immer";
+import { WritableDraft } from "immer/dist/internal";
+import create from "zustand";
 import {
   DEFAULT_NETWORKS,
   IID,
@@ -7,7 +8,6 @@ import {
   ITransaction,
   ITransactionOptions,
 } from "./web3";
-import { WritableDraft } from "immer/dist/internal";
 
 export interface AppOptions {
   pollingPeriod: number;
@@ -42,6 +42,7 @@ const temp: ITransaction = {
         },
       },
       data: "hello",
+      expanded: true,
     },
   },
 };

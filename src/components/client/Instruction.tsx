@@ -1,5 +1,11 @@
-import { ChevronDownIcon, DeleteIcon, DragHandleIcon } from "@chakra-ui/icons";
 import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  DeleteIcon,
+  DragHandleIcon,
+} from "@chakra-ui/icons";
+import {
+  Collapse,
   Editable,
   EditableInput,
   EditablePreview,
@@ -72,8 +78,19 @@ export const Instruction: React.FC = () => {
           w="8"
           mr="2"
           aria-label="Collapse"
-          icon={<ChevronDownIcon h="6" w="6" />}
+          icon={
+            instruction.expanded ? (
+              <ChevronDownIcon h="6" w="6" />
+            ) : (
+              <ChevronRightIcon h="6" w="6" />
+            )
+          }
           variant="ghost"
+          onClick={() => {
+            set((state) => {
+              getInstruction(state).expanded = !instruction.expanded;
+            });
+          }}
         />
         <Tooltip label="Click to edit" placement="top-start">
           <Editable
@@ -107,18 +124,20 @@ export const Instruction: React.FC = () => {
           />
         </Tooltip>
       </Flex>
-      <Input
-        mb="5"
-        placeholder="Program ID"
-        value={instruction.programId}
-        onChange={(e) => {
-          set((state) => {
-            getInstruction(state).programId = e.target.value;
-          });
-        }}
-      />
-      <Accounts />
-      <Data />
+      <Collapse in={instruction.expanded}>
+        <Input
+          mb="5"
+          placeholder="Program ID"
+          value={instruction.programId}
+          onChange={(e) => {
+            set((state) => {
+              getInstruction(state).programId = e.target.value;
+            });
+          }}
+        />
+        <Accounts />
+        <Data />
+      </Collapse>
     </Grid>
   );
 };
