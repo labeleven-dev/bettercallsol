@@ -191,6 +191,8 @@ export const Transaction: React.FC = () => {
               ml="2"
               mr="2"
               colorScheme="main"
+              color="main.500"
+              borderWidth="2px"
               variant="outline"
               aria-label="Run Program"
               icon={<Icon as={FaPlay} />}
