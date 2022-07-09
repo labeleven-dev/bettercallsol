@@ -3,6 +3,7 @@ import {
   AlertDescription,
   AlertIcon,
   Box,
+  CloseButton,
   Code,
   Flex,
   FormLabel,
@@ -22,6 +23,7 @@ import { ExplorerButton } from "../common/ExplorerButton";
 
 export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
+  const set = useTransactionStore((state) => state.set);
 
   return (
     <Grid p="5">
@@ -50,9 +52,26 @@ export const Results: React.FC = () => {
         )}
       </Flex>
       {results.error && (
-        <Alert mb="5" status="error" fontSize="md" rounded="sm">
+        <Alert
+          mb="5"
+          status="error"
+          fontSize="md"
+          rounded="sm"
+          variant="left-accent"
+        >
           <AlertIcon />
-          <AlertDescription>{results.error}</AlertDescription>
+          <AlertDescription flex="1">{results.error}</AlertDescription>
+          <CloseButton
+            alignSelf="flex-start"
+            position="relative"
+            right={-1}
+            top={-1}
+            onClick={() => {
+              set((state) => {
+                state.results.error = "";
+              });
+            }}
+          />
         </Alert>
       )}
       <Flex>
