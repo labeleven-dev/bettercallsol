@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Editable,
   EditableInput,
   EditablePreview,
@@ -10,7 +11,6 @@ import {
   IconButton,
   Spacer,
   Tooltip,
-  useColorModeValue,
   useInterval,
 } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -136,12 +136,7 @@ export const Transaction: React.FC = () => {
 
   return (
     <Grid m="2">
-      <Box
-        p="5"
-        border="1px"
-        rounded="md"
-        borderColor={useColorModeValue("gray.200", "gray.600")}
-      >
+      <Box p="5">
         <Flex mb="5">
           <Tooltip label="Click to edit" placement="top-start">
             <Editable
@@ -205,7 +200,8 @@ export const Transaction: React.FC = () => {
         </Flex>
         <Instructions />
       </Box>
-      <Box mt="2">
+      <Divider />
+      <Box mt="5">
         <Results />
       </Box>
     </Grid>

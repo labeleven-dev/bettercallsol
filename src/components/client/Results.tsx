@@ -14,7 +14,6 @@ import {
   Skeleton,
   Stack,
   Tag,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../store";
@@ -25,12 +24,7 @@ export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
 
   return (
-    <Grid
-      p="3"
-      border="1px"
-      rounded="md"
-      borderColor={useColorModeValue("gray.100", "gray.600")}
-    >
+    <Grid p="5">
       <Flex>
         <Heading mb="6" mr="3" size="md">
           Results
