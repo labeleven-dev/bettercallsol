@@ -1,5 +1,12 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Heading, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Icon,
+  IconButton,
+  Tooltip,
+} from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useContext } from "react";
 import { FaWallet } from "react-icons/fa";
@@ -55,9 +62,30 @@ export const Accounts: React.FC = () => {
 
   return (
     <>
-      <Heading mb="3" size="sm">
-        Accounts
-      </Heading>
+      <Flex mb="3">
+        <Heading mt="2" mb="3" mr="3" size="sm">
+          Accounts
+        </Heading>
+        <Tooltip label="Add Account">
+          <IconButton
+            mr="2"
+            aria-label="Add Account"
+            icon={<AddIcon />}
+            variant="outline"
+            size="sm"
+            onClick={addAccount}
+          />
+        </Tooltip>
+        <Tooltip label="Add Wallet Account">
+          <IconButton
+            aria-label="Add Wallet Account"
+            icon={<Icon as={FaWallet} />}
+            variant="outline"
+            size="sm"
+            onClick={addWalletAccount}
+          />
+        </Tooltip>
+      </Flex>
       <Box>
         <Sortable
           itemOrder={instruction.accountOrder}
@@ -68,23 +96,6 @@ export const Accounts: React.FC = () => {
           ))}
         </Sortable>
       </Box>
-      <Tooltip label="Add Account">
-        <IconButton
-          mr="2"
-          aria-label="Add Account"
-          icon={<AddIcon />}
-          variant="outline"
-          onClick={addAccount}
-        />
-      </Tooltip>
-      <Tooltip label="Add Wallet Account">
-        <IconButton
-          aria-label="Add Wallet Account"
-          icon={<Icon as={FaWallet} />}
-          variant="outline"
-          onClick={addWalletAccount}
-        />
-      </Tooltip>
     </>
   );
 };
