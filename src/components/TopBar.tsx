@@ -18,7 +18,7 @@ export const TopBar: React.FC = () => (
     <DarkMode>
       <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
       <Text m="2" as="strong" color="white">
-        BetterCallSol
+        Better Call SOL
       </Text>
       <Spacer />
     </DarkMode>

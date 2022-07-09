@@ -31,7 +31,7 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
   const set = useTransactionStore((state) => state.set);
 
   const { publicKey: walletPubkey } = useWallet();
-  const isWallet = account.pubkey == walletPubkey?.toBase58();
+  const isWallet = account.pubkey === walletPubkey?.toBase58();
 
   // Sortable item
   // TODO find a clean way to abstract this away into their own SortableItem

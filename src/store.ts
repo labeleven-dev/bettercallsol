@@ -63,6 +63,7 @@ export const useTransactionStore = create<AppState>((set) => ({
   transaction: temp, // TODO remove
   results: {
     inProgress: false,
+    signature: "",
     logs: ["Run a transaction to see logs"],
   },
   appOptions: {

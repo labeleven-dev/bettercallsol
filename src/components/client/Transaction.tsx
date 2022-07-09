@@ -39,7 +39,7 @@ export const Transaction: React.FC = () => {
   useInterval(
     async () => {
       try {
-        const status = await connection.getSignatureStatus(results?.signature!);
+        const status = await connection.getSignatureStatus(results?.signature);
         if (status) {
           set((state) => {
             state.results.slot = status.value?.slot;
@@ -49,7 +49,7 @@ export const Transaction: React.FC = () => {
 
           if (status.value?.confirmationStatus === "finalized") {
             const transaction = await connection.getTransaction(
-              results.signature!,
+              results.signature,
               { commitment: "finalized" }
             );
 
@@ -77,6 +77,7 @@ export const Transaction: React.FC = () => {
           set((state) => {
             state.results = {
               inProgress: false,
+              signature: "",
               error: `Transcation failed to confirm in ${
                 transactionOptions.confirmTransactionTimeout / 1000
               } seconds`,
@@ -108,7 +109,11 @@ export const Transaction: React.FC = () => {
     }
 
     set((state) => {
-      state.results = { inProgress: true, startedAt: new Date().getTime() };
+      state.results = {
+        inProgress: true,
+        signature: "",
+        startedAt: new Date().getTime(),
+      };
     });
 
     const transaction = mapTransaction(transactionData);
@@ -124,6 +129,7 @@ export const Transaction: React.FC = () => {
     } catch (err) {
       set((state) => {
         state.results.error = (err as { message: string }).message;
+        state.results.inProgress = false;
       });
     }
   };
@@ -192,7 +198,8 @@ export const Transaction: React.FC = () => {
               colorScheme="main"
               variant="outline"
               aria-label="Run Program"
-              icon={<Icon as={FaPlay} onClick={transact} />}
+              icon={<Icon as={FaPlay} />}
+              onClick={transact}
             />
           </Tooltip>
         </Flex>

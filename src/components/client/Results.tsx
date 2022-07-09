@@ -82,14 +82,11 @@ export const Results: React.FC = () => {
             <ExplorerButton
               type="tx"
               isDisabled={!results.signature}
-              value={results.signature!}
+              value={results.signature}
             />
           </InputRightElement>
         </InputGroup>
-        <CopyButton
-          isDisabled={!results.signature}
-          value={results.signature!}
-        />
+        <CopyButton isDisabled={!results.signature} value={results.signature} />
       </Flex>
       <Flex mb="4">
         <Box width="70px" />

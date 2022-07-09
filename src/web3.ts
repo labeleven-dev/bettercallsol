@@ -61,7 +61,7 @@ export interface ITransaction {
 
 export interface IResults {
   inProgress: boolean;
-  signature?: string;
+  signature: string; // not optional to work-around uncontrolled input issue
   startedAt?: number;
   slot?: number;
   confirmations?: number;
