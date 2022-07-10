@@ -21,9 +21,13 @@ import { accountGetter, useTransactionStore } from "../../store";
 import { IID } from "../../web3";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { ToggleIconButton } from "../common/ToggleIconButton";
+import { TruncatableEditable } from "../common/TruncatableEditable";
 import { InstructionContext } from "./Instructions";
 
-export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
+export const Account: React.FC<{ accountId: IID; index: number }> = ({
+  accountId,
+  index,
+}) => {
   const instructionId = useContext(InstructionContext);
   const getAccount = accountGetter(instructionId, accountId);
 
@@ -70,12 +74,24 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
       <Text
         ml="2"
         mt="2"
-        w="40px"
-        textAlign="right"
+        w="50px"
         textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
       >
-        {account.name}
+        #{index + 1}
       </Text>
+      <TruncatableEditable
+        ml="2"
+        mt="2"
+        width="100px"
+        textAlign="right"
+        fontSize="sm"
+        value={account.name}
+        onChange={(value: string) => {
+          set((state) => {
+            getAccount(state).name = value;
+          });
+        }}
+      ></TruncatableEditable>
       <InputGroup>
         {isWallet && (
           <InputLeftElement
@@ -85,6 +101,7 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
           />
         )}
         <Input
+          id={account.id}
           flex="1"
           ml="2"
           placeholder="Account Public Key"
@@ -95,6 +112,7 @@ export const Account: React.FC<{ accountId: IID }> = ({ accountId }) => {
           <ExplorerButton type="account" value={account.pubkey} />
         </InputRightElement>
       </InputGroup>
+
       <ToggleIconButton
         ml="1"
         label="Writable"

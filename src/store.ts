@@ -35,7 +35,7 @@ const temp: ITransaction = {
       accounts: {
         "111": {
           id: "111",
-          name: "#1",
+          name: "Signer",
           pubkey: "EQPzCaaYtoCRqaeHkahZWHaX6kyC6K3ytu9t86WvR4Y3",
           isWritable: true,
           isSigner: true,
