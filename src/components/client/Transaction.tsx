@@ -1,5 +1,8 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
+  Collapse,
   Divider,
   Editable,
   EditableInput,
@@ -24,6 +27,9 @@ import { Results } from "./Results";
 
 export const Transaction: React.FC = () => {
   const transactionOptions = useTransactionStore(
+    (state) => state.transactionOptions
+  );
+  const transcationOptions = useTransactionStore(
     (state) => state.transactionOptions
   );
   const transactionData = useTransactionStore((state) => state.transaction);
@@ -220,6 +226,24 @@ export const Transaction: React.FC = () => {
             />
           </Tooltip>
         </Flex>
+
+        <Collapse
+          in={transcationOptions.network.id === "mainnet-beta"}
+          unmountOnExit
+        >
+          <Alert
+            mb="2"
+            fontSize="sm"
+            rounded="sm"
+            status="warning"
+            variant="left-accent"
+          >
+            <AlertIcon />
+            This app is currently in active development. Use MAINNET at your own
+            risk.
+          </Alert>
+        </Collapse>
+
         <Instructions />
       </Box>
       <Divider />
