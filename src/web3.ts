@@ -9,6 +9,7 @@ import {
   TransactionConfirmationStatus,
   TransactionInstruction,
 } from "@solana/web3.js";
+import { v4 as uuid } from "uuid";
 
 // TODO what is exported is a subset of the fields, i.e. don't export ui settings
 
@@ -39,6 +40,17 @@ export interface IInstruction {
   disabled: boolean;
   expanded: boolean;
 }
+
+export const emptyInstruction = () => ({
+  id: uuid(),
+  name: "New Instruction",
+  programId: "",
+  data: "",
+  accounts: {},
+  accountOrder: [],
+  disabled: false,
+  expanded: true,
+});
 
 export interface INetwork {
   id: "devnet" | "testnet" | "mainnet-beta";

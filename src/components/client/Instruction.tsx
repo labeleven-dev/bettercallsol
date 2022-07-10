@@ -15,6 +15,10 @@ import {
   Icon,
   IconButton,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Tooltip,
   useColorModeValue,
@@ -22,8 +26,15 @@ import {
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaEllipsisV,
+  FaEraser,
+  FaEye,
+  FaEyeSlash,
+  FaFolderOpen,
+} from "react-icons/fa";
 import { instructionGetter, useTransactionStore } from "../../store";
+import { emptyInstruction } from "../../web3";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionContext } from "./Instructions";
@@ -49,6 +60,15 @@ export const Instruction: React.FC = () => {
     transition,
   };
 
+  const clearInstruction = () => {
+    set((state) => {
+      state.transaction.instructions[instructionId] = {
+        ...emptyInstruction(),
+        id: instructionId,
+      };
+    });
+  };
+
   const removeInstruction = () => {
     set((state) => {
       state.transaction.instructionOrder =
@@ -66,7 +86,12 @@ export const Instruction: React.FC = () => {
       border="1px"
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.600")}
-      bg={useColorModeValue("", "whiteAlpha.50")}
+      bg={
+        instruction.disabled
+          ? "repeating-linear-gradient(-45deg, transparent, transparent 40px, #85858510 40px, #85858510 80px)"
+          : ""
+      }
+      bgColor={useColorModeValue("", "whiteAlpha.50")}
       boxShadow={useColorModeValue("base", "")}
     >
       <Flex>
@@ -126,15 +151,23 @@ export const Instruction: React.FC = () => {
             }}
           />
         </Tooltip>
-        <Tooltip label="Remove">
-          <IconButton
-            ml="2"
-            aria-label="Remove"
-            icon={<DeleteIcon />}
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<Icon as={FaEllipsisV} />}
             variant="ghost"
-            onClick={removeInstruction}
           />
-        </Tooltip>
+          <MenuList>
+            <MenuItem icon={<Icon as={FaFolderOpen} />}>Import</MenuItem>
+            <MenuItem icon={<Icon as={FaEraser} />} onClick={clearInstruction}>
+              Clear
+            </MenuItem>
+            <MenuItem icon={<DeleteIcon />} onClick={removeInstruction}>
+              Remove
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
       <Collapse in={instruction.expanded}>
         <Input
