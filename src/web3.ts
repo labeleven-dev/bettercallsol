@@ -3,6 +3,7 @@
 import {
   clusterApiUrl,
   Commitment,
+  LAMPORTS_PER_SOL,
   PublicKey,
   Transaction,
   TransactionConfirmationStatus,
@@ -10,6 +11,8 @@ import {
 } from "@solana/web3.js";
 
 // TODO what is exported is a subset of the fields, i.e. don't export ui settings
+
+export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
 
 export type IID = string;
 export type IPubKey = string;
@@ -59,6 +62,13 @@ export interface ITransaction {
   instructions: { [key: IID]: IInstruction };
 }
 
+export interface IBalance {
+  address: string;
+  names: string[];
+  before: number;
+  after: number;
+}
+
 export interface IResults {
   inProgress: boolean;
   signature: string; // not optional to work-around uncontrolled input issue
@@ -67,6 +77,7 @@ export interface IResults {
   confirmations?: number;
   confirmationStatus?: TransactionConfirmationStatus;
   fee?: number;
+  balances?: IBalance[];
   error?: string;
   logs?: string[];
 }

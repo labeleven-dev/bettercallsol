@@ -1,3 +1,4 @@
+import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -14,12 +15,20 @@ import {
   InputRightElement,
   Skeleton,
   Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Tag,
+  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../store";
+import { toSol } from "../../web3";
 import { CopyButton } from "../common/CopyButton";
 import { ExplorerButton } from "../common/ExplorerButton";
+import { BalanceTable } from "./BalanceTable";
 
 export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
@@ -31,6 +40,16 @@ export const Results: React.FC = () => {
         <Heading mb="6" mr="3" size="md">
           Results
         </Heading>
+        {results.confirmationStatus === "finalized" &&
+          (results.error ? (
+            <Tooltip label="Transaction returned a failure">
+              <WarningIcon mt="0.5" color="red.400" />
+            </Tooltip>
+          ) : (
+            <Tooltip label="Transaction returned a success">
+              <CheckCircleIcon mt="1" mr="1" color="green.400" />
+            </Tooltip>
+          ))}
         {results.confirmationStatus && (
           <Tag
             mr="1"
@@ -110,33 +129,47 @@ export const Results: React.FC = () => {
         )}
         {results.fee && (
           <Tag mr="1">
-            <strong>Fee:&nbsp;</strong> {results.fee} {/* TODO in SOL */}
+            <strong>Fee:&nbsp;</strong> {toSol(results.fee)}{" "}
+            {/* TODO with logo */}
           </Tag>
         )}
       </Flex>
 
-      {results.inProgress ? (
-        <Stack>
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-          <Skeleton height="20px" />
-        </Stack>
-      ) : (
-        results.logs && (
-          <Grid p="3" backgroundColor="gray.700" rounded="sm">
-            {results.logs.map((line, index) => (
-              <Code
-                key={index}
-                fontSize="sm"
-                textColor="main.200"
-                bgColor="gray.700"
-              >
-                {line}
-              </Code>
-            ))}
-          </Grid>
-        )
-      )}
+      <Tabs variant="enclosed">
+        <TabList>
+          <Tab>Program Logs</Tab>
+          <Tab>Account Balances</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            {results.inProgress ? (
+              <Stack>
+                <Skeleton height="20px" />
+                <Skeleton height="20px" />
+                <Skeleton height="20px" />
+              </Stack>
+            ) : (
+              results.logs && (
+                <Grid p="3" backgroundColor="gray.700" rounded="sm">
+                  {results.logs.map((line, index) => (
+                    <Code
+                      key={index}
+                      fontSize="sm"
+                      textColor="main.200"
+                      bgColor="gray.700"
+                    >
+                      {line}
+                    </Code>
+                  ))}
+                </Grid>
+              )
+            )}
+          </TabPanel>
+          <TabPanel>
+            <BalanceTable balances={results.balances || []} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Grid>
   );
 };

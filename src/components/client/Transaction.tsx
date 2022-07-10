@@ -54,13 +54,33 @@ export const Transaction: React.FC = () => {
             );
 
             if (transaction) {
-              const { logMessages, err, fee } = transaction.meta!;
+              const { accountKeys } = transaction.transaction.message;
+              const { logMessages, err, fee, preBalances, postBalances } =
+                transaction.meta!;
+
+              // determine balances
+              const accounts = Object.values(
+                transactionData.instructions
+              ).flatMap((instruction) => Object.values(instruction.accounts));
+              let balances = accountKeys.map((address, index) => ({
+                address: address.toBase58(),
+                names: accounts
+                  .filter(
+                    (account) =>
+                      account.pubkey === address.toBase58() && account.name
+                  )
+                  .map((account) => account.name!),
+                before: preBalances[index],
+                after: postBalances[index],
+              }));
+
               set((state) => {
                 state.results = {
                   inProgress: false,
                   signature: results.signature,
                   confirmationStatus: "finalized",
                   slot: transaction?.slot,
+                  balances,
                   logs: logMessages || [],
                   error: err as string,
                   fee,

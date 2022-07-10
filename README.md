@@ -20,6 +20,6 @@ Contribution
 
 **This tool is under active development. Currently, we can only accept defect reports, enhancement requests and minor fix pull requests from the community. Thank you for your understanding.**
 
-If you are a core committer, see [](CONTRIB.md).
+If you are a core committer, see [CONTRIB.md](CONTRIB.md).
 
 <sub>Logo attribution: <a href="https://www.flaticon.com/free-icons/sports-and-competition" title="sports and competition icons">Sports and competition icons created by Freepik - Flaticon</a></sub>
