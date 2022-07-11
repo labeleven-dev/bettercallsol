@@ -109,7 +109,7 @@ export const Account: React.FC<{ accountId: IID; index: number }> = ({
           onChange={setPubKey}
         ></Input>
         <InputRightElement>
-          <ExplorerButton type="account" value={account.pubkey} />
+          <ExplorerButton valueType="account" value={account.pubkey} />
         </InputRightElement>
       </InputGroup>
 

@@ -110,7 +110,7 @@ export const Results: React.FC = () => {
           />
           <InputRightElement>
             <ExplorerButton
-              type="tx"
+              valueType="tx"
               isDisabled={!results.signature}
               value={results.signature}
             />

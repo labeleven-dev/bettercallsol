@@ -15,17 +15,20 @@ export const ProgramLogs: React.FC = () => {
     );
   }
 
-  if (!results.logs) {
-    return null;
-  }
-
   return (
     <Grid p="3" backgroundColor="gray.700" rounded="sm">
-      {results.logs.map((line, index) => (
-        <Code key={index} fontSize="sm" textColor="main.200" bgColor="gray.700">
-          {line}
-        </Code>
-      ))}
+      {(results.logs || ["Run a transaction to see program logs"]).map(
+        (line, index) => (
+          <Code
+            key={index}
+            fontSize="sm"
+            textColor="main.200"
+            bgColor="gray.700"
+          >
+            {line}
+          </Code>
+        )
+      )}
     </Grid>
   );
 };

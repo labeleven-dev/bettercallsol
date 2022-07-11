@@ -1,15 +1,16 @@
 import { Icon, IconButton, Link, Tooltip } from "@chakra-ui/react";
 import React from "react";
+import { CustomIconButtonProps } from "../../chakra";
 import { useTransactionStore } from "../../store";
 
 // TODO add Solana Explorer support - user get to pick in options
 
-export const ExplorerButton: React.FC<{
-  value: string;
-  type: "tx" | "account";
-  isDisabled?: boolean;
-  [x: string]: any;
-}> = ({ value, type, isDisabled = false, ...theRest }) => {
+export const ExplorerButton: React.FC<
+  {
+    value: string;
+    valueType: "tx" | "account";
+  } & CustomIconButtonProps
+> = ({ value, type, ...theRest }) => {
   const network = useTransactionStore(
     (state) => state.transactionOptions.network.id
   );
@@ -17,17 +18,16 @@ export const ExplorerButton: React.FC<{
   const button = (
     <IconButton
       size="sm"
-      aria-label="Open in Solscan"
       variant="ghost"
       icon={<SolscanIcon />}
-      isDisabled={isDisabled}
+      aria-label="Open in Solscan"
       {...theRest}
     />
   );
 
   return (
-    <Tooltip label="Open in Solscan" isDisabled={isDisabled}>
-      {isDisabled ? (
+    <Tooltip label="Open in Solscan" isDisabled={theRest.isDisabled}>
+      {theRest.isDisabled ? (
         <Link>{button}</Link>
       ) : (
         <Link href={href} isExternal>

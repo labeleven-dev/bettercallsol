@@ -1,13 +1,15 @@
 import { IconButton, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { CustomIconButtonProps } from "../../chakra";
 
-export const ToggleIconButton: React.FC<{
-  icon: React.ReactElement;
-  label: string;
-  initialToggled?: boolean;
-  onToggled?: (toggled: boolean) => void;
-  [x: string]: any;
-}> = ({ icon, label, initialToggled = false, onToggled, ...theRest }) => {
+export const ToggleIconButton: React.FC<
+  {
+    icon: React.ReactElement;
+    label: string;
+    initialToggled?: boolean;
+    onToggled?: (toggled: boolean) => void;
+  } & CustomIconButtonProps
+> = ({ icon, label, initialToggled = false, onToggled, ...theRest }) => {
   const [toggled, setToggled] = useState(initialToggled);
   const bgColour = useColorModeValue("main.200", "main.800");
 

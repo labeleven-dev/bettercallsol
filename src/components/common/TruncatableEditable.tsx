@@ -2,14 +2,16 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
+  EditableProps,
   Tooltip,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
 
-export const TruncatableEditable: React.FC<{
-  width?: string;
-  [key: string]: any;
-}> = ({ width, ...theRest }) => {
+export const TruncatableEditable: React.FC<
+  {
+    width?: string;
+  } & EditableProps
+> = ({ width, ...theRest }) => {
   const previewRef = useRef<HTMLSpanElement>(null);
 
   // TODO only show tooltip if truncated

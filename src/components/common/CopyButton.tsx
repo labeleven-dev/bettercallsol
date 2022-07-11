@@ -1,12 +1,13 @@
 import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
 import { IconButton, Tooltip, useClipboard } from "@chakra-ui/react";
 import React from "react";
+import { CustomIconButtonProps } from "../../chakra";
 
-export const CopyButton: React.FC<{
-  value: string;
-  isDisabled: boolean;
-  [x: string]: any;
-}> = ({ value, isDisabled = false, ...theRest }) => {
+export const CopyButton: React.FC<
+  {
+    value: string;
+  } & CustomIconButtonProps
+> = ({ value, ...theRest }) => {
   const { hasCopied, onCopy } = useClipboard(value);
 
   return (
@@ -14,10 +15,9 @@ export const CopyButton: React.FC<{
       <IconButton
         size="sm"
         variant="ghost"
-        aria-label="Copy"
         icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+        aria-label="Copy"
         onClick={onCopy}
-        isDisabled={isDisabled}
         {...theRest}
       />
     </Tooltip>
