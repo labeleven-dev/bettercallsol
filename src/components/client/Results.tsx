@@ -5,7 +5,6 @@ import {
   AlertIcon,
   Box,
   CloseButton,
-  Code,
   Flex,
   FormLabel,
   Grid,
@@ -13,8 +12,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Skeleton,
-  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -29,6 +26,7 @@ import { toSol } from "../../web3";
 import { CopyButton } from "../common/CopyButton";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { BalanceTable } from "./BalanceTable";
+import { ProgramLogs } from "./ProgramLogs";
 
 export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
@@ -142,28 +140,7 @@ export const Results: React.FC = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {results.inProgress ? (
-              <Stack>
-                <Skeleton height="20px" />
-                <Skeleton height="20px" />
-                <Skeleton height="20px" />
-              </Stack>
-            ) : (
-              results.logs && (
-                <Grid p="3" backgroundColor="gray.700" rounded="sm">
-                  {results.logs.map((line, index) => (
-                    <Code
-                      key={index}
-                      fontSize="sm"
-                      textColor="main.200"
-                      bgColor="gray.700"
-                    >
-                      {line}
-                    </Code>
-                  ))}
-                </Grid>
-              )
-            )}
+            <ProgramLogs />
           </TabPanel>
           <TabPanel>
             <BalanceTable balances={results.balances || []} />
