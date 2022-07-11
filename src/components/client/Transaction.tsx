@@ -12,13 +12,25 @@ import {
   Heading,
   Icon,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Tooltip,
   useInterval,
 } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
-import { FaExpand, FaExpandAlt, FaPlay } from "react-icons/fa";
+import {
+  FaEllipsisV,
+  FaEraser,
+  FaExpand,
+  FaExpandAlt,
+  FaFileExport,
+  FaFolderOpen,
+  FaPlay,
+} from "react-icons/fa";
 import { useTransactionStore } from "../../store";
 import { mapTransaction } from "../../web3";
 import { Instructions } from "./Instructions";
@@ -142,8 +154,8 @@ export const Transaction: React.FC = () => {
       };
     });
 
-    const transaction = mapTransaction(transactionData);
     try {
+      const transaction = mapTransaction(transactionData);
       const signature = await sendTransaction(transaction, connection, {
         skipPreflight: transactionOptions.skipPreflight,
         maxRetries: transactionOptions.maxRetries,
@@ -174,7 +186,7 @@ export const Transaction: React.FC = () => {
               }
             >
               <Heading size="md">
-                <EditablePreview minW="20px" />
+                <EditablePreview minW="100px" minH="23px" />
                 <EditableInput />
               </Heading>
             </Editable>
@@ -197,7 +209,6 @@ export const Transaction: React.FC = () => {
           </Tooltip>
           <Tooltip label="Collapse All">
             <IconButton
-              mr="2"
               aria-label="Collapse All"
               icon={<Icon as={FaExpand} />}
               variant="ghost"
@@ -210,6 +221,26 @@ export const Transaction: React.FC = () => {
               }}
             />
           </Tooltip>
+          <Menu>
+            <MenuButton
+              mr="2"
+              as={IconButton}
+              aria-label="Options"
+              icon={<Icon as={FaEllipsisV} />}
+              variant="ghost"
+            />
+            <MenuList>
+              {/* TODO implement */}
+              <MenuItem icon={<Icon as={FaFolderOpen} />} isDisabled>
+                Import
+              </MenuItem>
+              {/* TODO implement */}
+              <MenuItem icon={<Icon as={FaFileExport} />} isDisabled>
+                Export
+              </MenuItem>
+              <MenuItem icon={<Icon as={FaEraser} />}>Clear</MenuItem>
+            </MenuList>
+          </Menu>
           <NetworkSelector />
           <Tooltip label="Run Program">
             <IconButton
@@ -227,6 +258,7 @@ export const Transaction: React.FC = () => {
           </Tooltip>
         </Flex>
 
+        {/* TODO remove once out of beta */}
         <Collapse
           in={transcationOptions.network.id === "mainnet-beta"}
           unmountOnExit

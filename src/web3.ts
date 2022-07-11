@@ -112,7 +112,7 @@ export const mapTransaction = (transactionData: ITransaction): Transaction => {
   transactionData.instructionOrder.forEach((id) => {
     const { disabled, programId, accountOrder, accounts, data } =
       transactionData.instructions[id];
-    if (disabled) return;
+    if (disabled || !programId) return;
     transaction.add(
       new TransactionInstruction({
         programId: new PublicKey(programId),

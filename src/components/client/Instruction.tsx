@@ -26,13 +26,7 @@ import {
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
-import {
-  FaEllipsisV,
-  FaEraser,
-  FaEye,
-  FaEyeSlash,
-  FaFolderOpen,
-} from "react-icons/fa";
+import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { instructionGetter, useTransactionStore } from "../../store";
 import { emptyInstruction } from "../../web3";
 import { Accounts } from "./Accounts";
@@ -126,7 +120,7 @@ export const Instruction: React.FC = () => {
             }}
           >
             <Heading size="md">
-              <EditablePreview minW="20px" />
+              <EditablePreview minW="100px" minH="23px" />
               <EditableInput />
             </Heading>
           </Editable>
@@ -134,6 +128,7 @@ export const Instruction: React.FC = () => {
         <Spacer />
         <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
           <IconButton
+            mt="-2"
             ml="2"
             aria-label={instruction.disabled ? "Enable" : "Disable"}
             variant="ghost"
@@ -153,13 +148,13 @@ export const Instruction: React.FC = () => {
         </Tooltip>
         <Menu>
           <MenuButton
+            mt="-2"
             as={IconButton}
             aria-label="Options"
             icon={<Icon as={FaEllipsisV} />}
             variant="ghost"
           />
           <MenuList>
-            <MenuItem icon={<Icon as={FaFolderOpen} />}>Import</MenuItem>
             <MenuItem icon={<Icon as={FaEraser} />} onClick={clearInstruction}>
               Clear
             </MenuItem>

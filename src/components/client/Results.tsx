@@ -135,7 +135,7 @@ export const Results: React.FC = () => {
         )}
       </Flex>
 
-      <Tabs variant="enclosed">
+      <Tabs colorScheme="main" variant="enclosed">
         <TabList>
           <Tab>Program Logs</Tab>
           <Tab>Account Balances</Tab>

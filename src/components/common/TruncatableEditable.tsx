@@ -30,6 +30,7 @@ export const TruncatableEditable: React.FC<{
         <EditablePreview
           ref={previewRef}
           noOfLines={1}
+          minH="23px"
           minW={width}
           maxW={width}
         />
