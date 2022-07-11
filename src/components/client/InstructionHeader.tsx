@@ -23,7 +23,8 @@ import { DraggableAttributes } from "@dnd-kit/core";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
-import { instructionGetter, useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { instructionGetter } from "../../state";
 import { emptyInstruction } from "../../web3";
 import { InstructionContext } from "./Instructions";
 

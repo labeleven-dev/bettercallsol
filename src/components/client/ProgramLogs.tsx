@@ -1,6 +1,6 @@
 import { Code, Grid, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 
 export const ProgramLogs: React.FC = () => {
   const results = useTransactionStore((state) => state.results);

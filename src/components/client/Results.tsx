@@ -21,7 +21,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { toSol } from "../../web3";
 import { CopyButton } from "../common/CopyButton";
 import { ExplorerButton } from "../common/ExplorerButton";

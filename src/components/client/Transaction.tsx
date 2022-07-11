@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./Results";
 import { TransactionHeader } from "./TransactionHeader";

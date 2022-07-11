@@ -1,6 +1,7 @@
 import { Flex, Heading, Select, Textarea } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { instructionGetter, useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { instructionGetter } from "../../state";
 import { InstructionContext } from "./Instructions";
 
 export const Data: React.FC = () => {

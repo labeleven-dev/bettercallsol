@@ -1,7 +1,7 @@
 import { Icon, IconButton, Link, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { CustomIconButtonProps } from "../../chakra";
-import { useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 
 // TODO add Solana Explorer support - user get to pick in options
 

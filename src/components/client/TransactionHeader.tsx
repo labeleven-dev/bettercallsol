@@ -24,7 +24,7 @@ import {
   FaPlay,
 } from "react-icons/fa";
 import { useTransaction } from "../../hooks/useTransaction";
-import { useTransactionStore } from "../../store";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { NetworkSelector } from "./NetworkSelector";
 
 export const TransactionHeader: React.FC = () => {

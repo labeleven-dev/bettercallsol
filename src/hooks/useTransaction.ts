@@ -1,7 +1,7 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useTransactionStore } from "../store";
 import { mapTransaction } from "../web3";
+import { useTransactionStore } from "./useTransactionStore";
 
 /**
  * The actual logic of sending a transaction to the chain.

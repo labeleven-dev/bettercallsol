@@ -1,25 +1,7 @@
-import produce, { Draft } from "immer";
-import { WritableDraft } from "immer/dist/internal";
+import produce from "immer";
 import create from "zustand";
-import {
-  DEFAULT_NETWORKS,
-  IID,
-  IResults,
-  ITransaction,
-  ITransactionOptions,
-} from "./web3";
-
-export interface AppOptions {
-  pollingPeriod: number;
-}
-
-export type AppState = {
-  transactionOptions: ITransactionOptions;
-  transaction: ITransaction;
-  results: IResults;
-  appOptions: AppOptions;
-  set: (fn: (state: Draft<AppState>) => void) => void;
-};
+import { AppState } from "../state";
+import { DEFAULT_NETWORKS, ITransaction } from "../web3";
 
 // TODO just for testing
 const temp: ITransaction = {
@@ -72,12 +54,3 @@ export const useTransactionStore = create<AppState>((set) => ({
   },
   set: (fn) => set(produce(fn)),
 }));
-
-export const instructionGetter =
-  (id: IID) => (state: AppState | WritableDraft<AppState>) =>
-    state.transaction.instructions[id];
-
-export const accountGetter =
-  (instructionId: IID, accountId: IID) =>
-  (state: AppState | WritableDraft<AppState>) =>
-    state.transaction.instructions[instructionId].accounts[accountId];

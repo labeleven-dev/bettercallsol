@@ -1,4 +1,12 @@
-import { ChakraProvider, Flex, Spacer } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  ChakraProvider,
+  Flex,
+  Show,
+  Spacer,
+} from "@chakra-ui/react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
@@ -16,7 +24,7 @@ import React, { useMemo } from "react";
 import { Transaction } from "./components/client/Transaction";
 import { Footer } from "./components/Footer";
 import { TopBar } from "./components/TopBar";
-import { useTransactionStore } from "./store";
+import { useTransactionStore } from "./hooks/useTransactionStore";
 import theme from "./theme";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -56,6 +64,16 @@ export const App: React.FC = () => {
         <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
             <Flex flexDirection="column" minH="100vh">
+              {/* TODO it's Solana wallet button's fault, we need to replace it */}
+              <Show below="sm">
+                <Alert status="warning" variant="left-accent">
+                  <AlertIcon />
+                  <AlertDescription>
+                    This app is optimised for desktop. It may look wonky on your
+                    mobile device.
+                  </AlertDescription>
+                </Alert>
+              </Show>
               <TopBar />
               <Transaction />
               <Spacer />
