@@ -1,36 +1,11 @@
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  DeleteIcon,
-  DragHandleIcon,
-} from "@chakra-ui/icons";
-import {
-  Collapse,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  Flex,
-  Grid,
-  Heading,
-  Icon,
-  IconButton,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spacer,
-  Tooltip,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Collapse, Grid, Input, useColorModeValue } from "@chakra-ui/react";
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
-import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { instructionGetter, useTransactionStore } from "../../store";
-import { emptyInstruction } from "../../web3";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
+import { InstructionHeader } from "./InstructionHeader";
 import { InstructionContext } from "./Instructions";
 
 export const Instruction: React.FC = () => {
@@ -54,23 +29,6 @@ export const Instruction: React.FC = () => {
     transition,
   };
 
-  const clearInstruction = () => {
-    set((state) => {
-      state.transaction.instructions[instructionId] = {
-        ...emptyInstruction(),
-        id: instructionId,
-      };
-    });
-  };
-
-  const removeInstruction = () => {
-    set((state) => {
-      state.transaction.instructionOrder =
-        state.transaction.instructionOrder.filter((x) => x !== instructionId);
-      delete state.transaction.instructions[instructionId];
-    });
-  };
-
   return (
     <Grid
       ref={setNodeRef}
@@ -88,82 +46,8 @@ export const Instruction: React.FC = () => {
       bgColor={useColorModeValue("", "whiteAlpha.50")}
       boxShadow={useColorModeValue("base", "")}
     >
-      <Flex>
-        <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
-        <IconButton
-          h="8"
-          w="8"
-          mr="2"
-          aria-label="Collapse"
-          icon={
-            instruction.expanded ? (
-              <ChevronDownIcon h="6" w="6" />
-            ) : (
-              <ChevronRightIcon h="6" w="6" />
-            )
-          }
-          variant="ghost"
-          onClick={() => {
-            set((state) => {
-              getInstruction(state).expanded = !instruction.expanded;
-            });
-          }}
-        />
-        <Tooltip label="Click to edit" placement="top-start">
-          <Editable
-            mb="5"
-            value={instruction.name}
-            onChange={(value) => {
-              set((state) => {
-                getInstruction(state).name = value;
-              });
-            }}
-          >
-            <Heading size="md">
-              <EditablePreview minW="100px" minH="23px" />
-              <EditableInput />
-            </Heading>
-          </Editable>
-        </Tooltip>
-        <Spacer />
-        <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
-          <IconButton
-            mt="-2"
-            ml="2"
-            aria-label={instruction.disabled ? "Enable" : "Disable"}
-            variant="ghost"
-            icon={
-              instruction.disabled ? (
-                <Icon as={FaEyeSlash} />
-              ) : (
-                <Icon as={FaEye} />
-              )
-            }
-            onClick={() => {
-              set((state) => {
-                getInstruction(state).disabled = !instruction.disabled;
-              });
-            }}
-          />
-        </Tooltip>
-        <Menu>
-          <MenuButton
-            mt="-2"
-            as={IconButton}
-            aria-label="Options"
-            icon={<Icon as={FaEllipsisV} />}
-            variant="ghost"
-          />
-          <MenuList>
-            <MenuItem icon={<Icon as={FaEraser} />} onClick={clearInstruction}>
-              Clear
-            </MenuItem>
-            <MenuItem icon={<DeleteIcon />} onClick={removeInstruction}>
-              Remove
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
+      <InstructionHeader attributes={attributes} listeners={listeners!} />
+
       <Collapse in={instruction.expanded}>
         <Input
           mb="5"

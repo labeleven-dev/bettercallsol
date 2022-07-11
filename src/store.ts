@@ -21,6 +21,7 @@ export type AppState = {
   set: (fn: (state: Draft<AppState>) => void) => void;
 };
 
+// TODO just for testing
 const temp: ITransaction = {
   name: "Baby's First Transaction",
   instructionOrder: ["aaa"],
