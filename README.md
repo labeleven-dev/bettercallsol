@@ -1,7 +1,7 @@
 <div align="center">
   <!-- TODO when public repo -->
   <!-- <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/main/public/logo128.png?raw=true" /> -->
-  <h1>BetterCallSol</h1>
+  <h1>Better Call SOL</h1>
   <p>
     <h3>The Missing Solana Client</h3>
   </p>

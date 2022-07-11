@@ -1,0 +1,33 @@
+name: Deploy
+on:
+  push:
+    branches: [ alpha ]
+
+jobs:
+  deployProd:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      # setup
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x (LTS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      # test & build
+      - run: npm ci
+      # TODO
+      # - run: npm test
+      # - run: npm run lint
+      - run: npm run build
+      # TODO
+      # version & publish
+      # - run: npm run release
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BCSOL_A8522 }}"
+          projectId: bcsol-a8522
+          channelId: live
