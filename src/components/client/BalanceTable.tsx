@@ -45,35 +45,37 @@ export const BalanceTable: React.FC<{
           </Tr>
         </Thead>
         <Tbody>
-          {balances.map(({ address, names, before, after }) => {
-            const change = after - before;
+          {balances
+            .filter(
+              ({ before, after }) => !showOnlyChanges || after - before !== 0
+            )
+            .map(({ address, names, before, after }, index) => {
+              const change = after - before;
 
-            if (showOnlyChanges && change === 0) return;
-
-            return (
-              <Tr>
-                <Td>
-                  {address}
-                  <br />
-                  {names.map((name) => (
-                    <Tag>{name}</Tag>
-                  ))}
-                </Td>
-                <Td isNumeric>{toSol(before)}</Td>
-                <Td isNumeric>{toSol(after)}</Td>
-                <Td isNumeric>
-                  {toSol(change)}&nbsp;
-                  {change > 0 ? (
-                    <ArrowUpIcon color="green" />
-                  ) : change < 0 ? (
-                    <ArrowDownIcon color="red" />
-                  ) : (
-                    ""
-                  )}
-                </Td>
-              </Tr>
-            );
-          })}
+              return (
+                <Tr key={index}>
+                  <Td>
+                    {address}
+                    <br />
+                    {names.map((name) => (
+                      <Tag>{name}</Tag>
+                    ))}
+                  </Td>
+                  <Td isNumeric>{toSol(before)}</Td>
+                  <Td isNumeric>{toSol(after)}</Td>
+                  <Td isNumeric>
+                    {toSol(change)}&nbsp;
+                    {change > 0 ? (
+                      <ArrowUpIcon color="green" />
+                    ) : change < 0 ? (
+                      <ArrowDownIcon color="red" />
+                    ) : (
+                      ""
+                    )}
+                  </Td>
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
     </TableContainer>
