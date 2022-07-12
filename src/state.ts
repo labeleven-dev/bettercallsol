@@ -1,6 +1,12 @@
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
-import { IID, IResults, ITransaction, ITransactionOptions } from "./web3";
+import {
+  DEFAULT_NETWORKS,
+  IID,
+  IResults,
+  ITransaction,
+  ITransactionOptions,
+} from "./web3";
 
 export interface AppOptions {
   pollingPeriod: number;
@@ -12,6 +18,75 @@ export type AppState = {
   results: IResults;
   appOptions: AppOptions;
   set: (fn: (state: Draft<AppState>) => void) => void;
+};
+
+// TODO just for testing
+const DEFAULT_TRANSACTION: ITransaction = {
+  name: "Baby's First Transaction",
+  instructionOrder: ["aaa"],
+  instructions: {
+    aaa: {
+      id: "aaa",
+      name: "Memo",
+      programId: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo",
+      // accountOrder: [],
+      // accounts: {},
+      accountOrder: ["111"],
+      accounts: {
+        "111": {
+          id: "111",
+          name: "Signer",
+          pubkey: "EQPzCaaYtoCRqaeHkahZWHaX6kyC6K3ytu9t86WvR4Y3",
+          isWritable: true,
+          isSigner: true,
+        },
+      },
+      data: "hello",
+      disabled: false,
+      expanded: true,
+    },
+  },
+};
+
+// const DEFAULT_TRANSACTION: ITransaction = {
+//   name: "My Transcation",
+//   instructionOrder: ["ba928274-35b6-48c4-a16c-c4346f0ffaf2"],
+//   instructions: {
+//     "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
+//       id:"ba928274-35b6-48c4-a16c-c4346f0ffaf2",
+//       name: "Instruction #1",
+//       programId: "",
+//       accountOrder: [],
+//       accounts: {},
+//       data: "",
+//       disabled: false,
+//       expanded: true
+//     },
+//   }
+// }
+
+export const DEFAULT_STATE: AppState = {
+  transactionOptions: {
+    network: DEFAULT_NETWORKS[0],
+    customNetworks: [],
+    skipPreflight: true,
+    commitment: "processed",
+    preflightCommitment: "processed",
+    confirmTransactionInitialTimeout: 30_000,
+    confirmTransactionTimeout: 30_000,
+    maxRetries: 5,
+    disableRetryOnRateLimit: true,
+  },
+  transaction: DEFAULT_TRANSACTION,
+  results: {
+    inProgress: false,
+    signature: "",
+    logs: ["Run a transaction to see logs"],
+  },
+  appOptions: {
+    pollingPeriod: 1_000,
+  },
+  set: () => {}, // set by the hook
 };
 
 export const instructionGetter =
