@@ -87,7 +87,7 @@ export const App: React.FC = () => {
                   <Transaction />
                 </Box>
                 {paletteOpen && (
-                  <Box flex="4" h="90vh" overflow="scroll">
+                  <Box flex="5" h="90vh" overflow="scroll">
                     <Palette />
                   </Box>
                 )}

@@ -20,6 +20,8 @@ jobs:
       # - run: npm test
       # - run: npm run lint
       - run: npm run build
+        env:
+          GENERATE_SOURCEMAP: false
       # TODO
       # version & publish
       # - run: npm run release
