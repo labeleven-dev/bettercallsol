@@ -95,7 +95,7 @@ export const useTransaction: () => () => void = () => {
         // TODO
       }
     },
-    results.inProgress ? appOptions.pollingPeriod : null
+    results.inProgress ? transactionOptions.pollingPeriod : null
   );
 
   const transact = async () => {

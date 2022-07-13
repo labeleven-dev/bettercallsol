@@ -23,6 +23,7 @@ import {
 import React, { useMemo } from "react";
 import { Transaction } from "./components/client/Transaction";
 import { Footer } from "./components/Footer";
+import { Options } from "./components/options/Options";
 import { TopBar } from "./components/TopBar";
 import { useTransactionStore } from "./hooks/useTransactionStore";
 import theme from "./theme";
@@ -78,6 +79,7 @@ export const App: React.FC = () => {
               <Transaction />
               <Spacer />
               <Footer />
+              <Options />
             </Flex>
           </WalletModalProvider>
         </WalletProvider>

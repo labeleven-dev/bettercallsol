@@ -94,6 +94,22 @@ export interface IResults {
   logs?: string[];
 }
 
+export interface ICommitment {
+  id: Commitment;
+  name: string;
+}
+
+export const COMMITMENT_LEVELS = [
+  { id: "processed", name: "Processed" },
+  { id: "confirmed", name: "Confirmed" },
+  { id: "finalized", name: "Finalized" },
+  { id: "recent", name: "Recent" },
+  { id: "single", name: "Single" },
+  { id: "singleGossip", name: "Single Gossip" },
+  { id: "root", name: "Root" },
+  { id: "max", name: "Max" },
+];
+
 export interface ITransactionOptions {
   network: INetwork;
   customNetworks: INetwork[];
@@ -104,6 +120,7 @@ export interface ITransactionOptions {
   disableRetryOnRateLimit: boolean;
   confirmTransactionInitialTimeout: number;
   confirmTransactionTimeout: number;
+  pollingPeriod: number; // used in our app, rather than passed to web3.js stuff
 }
 
 export const mapTransaction = (transactionData: ITransaction): Transaction => {

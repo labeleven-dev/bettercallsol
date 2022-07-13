@@ -8,8 +8,16 @@ import {
   ITransactionOptions,
 } from "./web3";
 
+export type Explorer = "solscan" | "solana" | "none";
+export const EXPLORERS: { id: Explorer; name: string }[] = [
+  { id: "solscan", name: "Solscan" },
+  { id: "solana", name: "Solana Explorer" },
+  { id: "none", name: "None" },
+];
+
 export interface AppOptions {
-  pollingPeriod: number;
+  explorer: Explorer;
+  disableMainnet: boolean;
 }
 
 export type AppState = {
@@ -17,6 +25,7 @@ export type AppState = {
   transaction: ITransaction;
   results: IResults;
   appOptions: AppOptions;
+  optionsOpen: boolean;
   set: (fn: (state: Draft<AppState>) => void) => void;
 };
 
@@ -76,6 +85,7 @@ export const DEFAULT_STATE: AppState = {
     confirmTransactionTimeout: 30_000,
     maxRetries: 5,
     disableRetryOnRateLimit: true,
+    pollingPeriod: 1_000,
   },
   transaction: DEFAULT_TRANSACTION,
   results: {
@@ -84,8 +94,10 @@ export const DEFAULT_STATE: AppState = {
     logs: ["Run a transaction to see logs"],
   },
   appOptions: {
-    pollingPeriod: 1_000,
+    explorer: "solscan",
+    disableMainnet: false,
   },
+  optionsOpen: false,
   set: () => {}, // set by the hook
 };
 

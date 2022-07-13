@@ -10,11 +10,11 @@ export const ExplorerButton: React.FC<
     value: string;
     valueType: "tx" | "account";
   } & CustomIconButtonProps
-> = ({ value, type, ...theRest }) => {
+> = ({ value, valueType, ...theRest }) => {
   const network = useTransactionStore(
     (state) => state.transactionOptions.network.id
   );
-  const href = `https://solscan.io/${type}/${value}?cluster=${network}`;
+  const href = `https://solscan.io/${valueType}/${value}?cluster=${network}`;
   const button = (
     <IconButton
       size="sm"
