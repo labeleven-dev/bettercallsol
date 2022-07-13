@@ -57,8 +57,8 @@ export const BalanceTable: React.FC<{
                   <Td>
                     {address}
                     <br />
-                    {names.map((name) => (
-                      <Tag>{name}</Tag>
+                    {names.map((name, index) => (
+                      <Tag key={index}>{name}</Tag>
                     ))}
                   </Td>
                   <Td isNumeric>{toSol(before)}</Td>

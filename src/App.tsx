@@ -2,10 +2,10 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
+  Box,
   ChakraProvider,
   Flex,
   Show,
-  Spacer,
 } from "@chakra-ui/react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
@@ -23,8 +23,9 @@ import {
 import React, { useMemo } from "react";
 import { Transaction } from "./components/client/Transaction";
 import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
 import { Options } from "./components/options/Options";
-import { TopBar } from "./components/TopBar";
+import { Palette } from "./components/palette/Palette";
 import { useTransactionStore } from "./hooks/useTransactionStore";
 import theme from "./theme";
 
@@ -64,7 +65,7 @@ export const App: React.FC = () => {
       >
         <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
-            <Flex flexDirection="column" minH="100vh">
+            <Flex flexDirection="column">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
               <Show below="sm">
                 <Alert status="warning" variant="left-accent">
@@ -75,12 +76,32 @@ export const App: React.FC = () => {
                   </AlertDescription>
                 </Alert>
               </Show>
-              <TopBar />
-              <Transaction />
-              <Spacer />
-              <Footer />
-              <Options />
+
+              <Box h="55px" w="full" position="fixed" zIndex="modal">
+                <Header />
+              </Box>
+
+              <Flex mt="55px">
+                <Box flex="10" h="90vh" overflow="scroll">
+                  <Transaction />
+                </Box>
+                <Box flex="4" h="90vh" overflow="scroll">
+                  <Palette />
+                </Box>
+              </Flex>
+
+              <Box
+                position="fixed"
+                bottom="0px"
+                h="70px"
+                w="full"
+                zIndex="modal"
+              >
+                <Footer />
+              </Box>
             </Flex>
+
+            <Options />
           </WalletModalProvider>
         </WalletProvider>
       </ConnectionProvider>

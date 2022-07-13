@@ -15,11 +15,11 @@ import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
 import { useTransactionStore } from "../hooks/useTransactionStore";
 import { ColorModeSwitcher } from "./common/ColorModeSwitcher";
 
-export const TopBar: React.FC = () => {
+export const Header: React.FC = () => {
   const set = useTransactionStore((state) => state.set);
 
   return (
-    <Flex p="2" mb="2" bg="main.800">
+    <Flex p="2" bgColor="main.800">
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
         <Text m="2" as="strong" color="white">

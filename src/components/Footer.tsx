@@ -11,12 +11,7 @@ import {
 import { FaGithub, FaGlobe, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export const Footer: React.FC = () => (
-  <Box
-    mt="20"
-    p="5"
-    pb="3"
-    backgroundColor={useColorModeValue("blackAlpha.100", "blackAlpha.400")}
-  >
+  <Box p="5" backgroundColor={useColorModeValue("gray.100", "gray.900")}>
     <Center>
       <Link mr="4" href="https://github.com/labeleven-dev" isExternal>
         <Icon as={FaGithub} />

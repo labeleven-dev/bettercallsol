@@ -20,3 +20,8 @@ Commit
 * Strict [Conventional Commits](https://www.conventionalcommits.org/)
 * For community PRs, rewrite the commit message if it does not align, before merging
 * Merge squash PRs. We don't need to see PR feedback cycle permenantly in commit history
+
+Tips
+---
+
+* If something you have added to the state is not reflecting, try clearing the localstorage cache.
