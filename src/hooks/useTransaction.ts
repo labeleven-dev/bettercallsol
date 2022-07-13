@@ -17,7 +17,6 @@ export const useTransaction: () => () => void = () => {
   );
   const transactionData = useTransactionStore((state) => state.transaction);
   const results = useTransactionStore((state) => state.results);
-  const appOptions = useTransactionStore((state) => state.appOptions);
   const set = useTransactionStore((state) => state.set);
 
   const { connection } = useConnection();
