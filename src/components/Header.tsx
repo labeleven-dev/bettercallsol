@@ -1,4 +1,4 @@
-import { QuestionIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, QuestionIcon } from "@chakra-ui/icons";
 import {
   Box,
   DarkMode,
@@ -76,9 +76,23 @@ export const Header: React.FC = () => {
             isDisabled
           />
         </Tooltip>
-        <Box sx={{ ".wallet-adapter-button": { height: "40px" } }}>
+        <Box mr="0.5" sx={{ ".wallet-adapter-button": { height: "40px" } }}>
           <WalletMultiButton />
         </Box>
+        <Tooltip label="Palette">
+          <IconButton
+            mr="0.5"
+            aria-label="Palette"
+            icon={<HamburgerIcon />}
+            variant="ghost"
+            color="white"
+            onClick={() => {
+              set((state) => {
+                state.paletteOpen = !state.paletteOpen;
+              });
+            }}
+          />
+        </Tooltip>
       </DarkMode>
     </Flex>
   );

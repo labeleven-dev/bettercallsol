@@ -38,6 +38,7 @@ export const App: React.FC = () => {
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
   } = useTransactionStore((state) => state.transactionOptions);
+  const paletteOpen = useTransactionStore((state) => state.paletteOpen);
 
   // TODO support RPC URL
   const wallets = useMemo(
@@ -85,9 +86,11 @@ export const App: React.FC = () => {
                 <Box flex="10" h="90vh" overflow="scroll">
                   <Transaction />
                 </Box>
-                <Box flex="4" h="90vh" overflow="scroll">
-                  <Palette />
-                </Box>
+                {paletteOpen && (
+                  <Box flex="4" h="90vh" overflow="scroll">
+                    <Palette />
+                  </Box>
+                )}
               </Flex>
 
               <Box

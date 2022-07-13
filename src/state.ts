@@ -20,6 +20,7 @@ export type AppState = {
   transaction: ITransaction;
   results: IResults;
   appOptions: IAppOptions;
+  paletteOpen: boolean;
   optionsOpen: boolean;
   set: (fn: (state: Draft<AppState>) => void) => void;
 };
@@ -102,6 +103,7 @@ export const DEFAULT_STATE: AppState = {
   },
   transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
   appOptions: DEFAULT_APP_OPTIONS,
+  paletteOpen: false,
   optionsOpen: false,
   set: () => {}, // set by the hook
 };
