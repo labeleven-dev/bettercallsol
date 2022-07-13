@@ -8,6 +8,10 @@ export const NetworkSelector: React.FC = () => {
   const network = useTransactionStore(
     (state) => state.transactionOptions.network
   );
+  const disableMainnet = useTransactionStore(
+    (state) => state.appOptions.disableMainnet
+  );
+
   const set = useTransactionStore((state) => state.set);
 
   return (
@@ -16,7 +20,9 @@ export const NetworkSelector: React.FC = () => {
         {network.name}
       </MenuButton>
       <MenuList>
-        {DEFAULT_NETWORKS.map(({ id, name, url }) => (
+        {DEFAULT_NETWORKS.filter(
+          ({ id }) => !disableMainnet || id !== "mainnet-beta"
+        ).map(({ id, name, url }) => (
           <MenuItem
             onClick={() =>
               set((state) => {
