@@ -15,14 +15,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { DEFAULT_APP_OPTIONS, DEFAUT_TRANSACTION_OPTIONS } from "../../state";
 import { GeneralOptions } from "./GeneralOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
   const isOpen = useTransactionStore((state) => state.optionsOpen);
   const set = useTransactionStore((state) => state.set);
-
-  const options = [];
 
   return (
     <Modal
@@ -57,7 +56,17 @@ export const Options: React.FC = () => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost">Reset Settings</Button>
+          <Button
+            colorScheme="gray"
+            onClick={() => {
+              set((state) => {
+                state.appOptions = DEFAULT_APP_OPTIONS;
+                state.transactionOptions = DEFAUT_TRANSACTION_OPTIONS;
+              });
+            }}
+          >
+            Reset Settings
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

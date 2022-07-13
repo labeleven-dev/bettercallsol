@@ -9,13 +9,8 @@ import {
 } from "./web3";
 
 export type Explorer = "solscan" | "solana" | "none";
-export const EXPLORERS: { id: Explorer; name: string }[] = [
-  { id: "solscan", name: "Solscan" },
-  { id: "solana", name: "Solana Explorer" },
-  { id: "none", name: "None" },
-];
 
-export interface AppOptions {
+export interface IAppOptions {
   explorer: Explorer;
   disableMainnet: boolean;
 }
@@ -24,9 +19,33 @@ export type AppState = {
   transactionOptions: ITransactionOptions;
   transaction: ITransaction;
   results: IResults;
-  appOptions: AppOptions;
+  appOptions: IAppOptions;
   optionsOpen: boolean;
   set: (fn: (state: Draft<AppState>) => void) => void;
+};
+
+export const EXPLORERS: { id: Explorer; name: string }[] = [
+  { id: "solscan", name: "Solscan" },
+  { id: "solana", name: "Solana Explorer" },
+  { id: "none", name: "None" },
+];
+
+export const DEFAULT_APP_OPTIONS: IAppOptions = {
+  explorer: "solscan",
+  disableMainnet: false,
+};
+
+export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
+  network: DEFAULT_NETWORKS[0],
+  customNetworks: [],
+  skipPreflight: true,
+  commitment: "processed",
+  preflightCommitment: "processed",
+  confirmTransactionInitialTimeout: 30_000,
+  confirmTransactionTimeout: 30_000,
+  maxRetries: 5,
+  disableRetryOnRateLimit: true,
+  pollingPeriod: 1_000,
 };
 
 // TODO just for testing
@@ -75,28 +94,14 @@ const DEFAULT_TRANSACTION: ITransaction = {
 // }
 
 export const DEFAULT_STATE: AppState = {
-  transactionOptions: {
-    network: DEFAULT_NETWORKS[0],
-    customNetworks: [],
-    skipPreflight: true,
-    commitment: "processed",
-    preflightCommitment: "processed",
-    confirmTransactionInitialTimeout: 30_000,
-    confirmTransactionTimeout: 30_000,
-    maxRetries: 5,
-    disableRetryOnRateLimit: true,
-    pollingPeriod: 1_000,
-  },
   transaction: DEFAULT_TRANSACTION,
   results: {
     inProgress: false,
     signature: "",
     logs: ["Run a transaction to see logs"],
   },
-  appOptions: {
-    explorer: "solscan",
-    disableMainnet: false,
-  },
+  transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
+  appOptions: DEFAULT_APP_OPTIONS,
   optionsOpen: false,
   set: () => {}, // set by the hook
 };
