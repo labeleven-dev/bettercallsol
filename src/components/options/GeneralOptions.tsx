@@ -2,8 +2,8 @@ import { FormControl, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { Explorer, EXPLORERS } from "../../state";
-import { ChoiceOption } from "./ChoiceOption";
-import { ToggleOption } from "./ToggleOption";
+import { ChoiceOption } from "../common/ChoiceOption";
+import { ToggleOption } from "../common/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
   const appOptions = useTransactionStore((state) => state.appOptions);

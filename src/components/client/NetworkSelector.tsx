@@ -29,7 +29,7 @@ export const NetworkSelector: React.FC = () => {
                 state.transactionOptions.network = { id, name, url };
               })
             }
-            key={name}
+            key={id}
           >
             {name}
           </MenuItem>

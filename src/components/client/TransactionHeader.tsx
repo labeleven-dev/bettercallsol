@@ -1,3 +1,4 @@
+import { DownloadIcon } from "@chakra-ui/icons";
 import {
   Editable,
   EditableInput,
@@ -19,9 +20,8 @@ import {
   FaEraser,
   FaExpand,
   FaExpandAlt,
-  FaFileExport,
-  FaFolderOpen,
   FaPlay,
+  FaShareAlt,
 } from "react-icons/fa";
 import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
@@ -91,12 +91,12 @@ export const TransactionHeader: React.FC = () => {
         />
         <MenuList>
           {/* TODO implement */}
-          <MenuItem icon={<Icon as={FaFolderOpen} />} isDisabled>
-            Import
+          <MenuItem icon={<Icon as={FaShareAlt} />} isDisabled>
+            Share
           </MenuItem>
           {/* TODO implement */}
-          <MenuItem icon={<Icon as={FaFileExport} />} isDisabled>
-            Export
+          <MenuItem icon={<DownloadIcon />} isDisabled>
+            Download
           </MenuItem>
           <MenuItem icon={<Icon as={FaEraser} />}>Clear</MenuItem>
         </MenuList>
