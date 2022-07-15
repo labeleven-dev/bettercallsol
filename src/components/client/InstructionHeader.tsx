@@ -24,8 +24,8 @@ import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { instructionGetter } from "../../state";
-import { emptyInstruction } from "../../web3";
+import { instructionGetter } from "../../models/state";
+import { emptyInstruction } from "../../models/web3";
 import { InstructionContext } from "./Instructions";
 
 export const InstructionHeader: React.FC<{

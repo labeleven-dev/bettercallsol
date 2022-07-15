@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { DEFAULT_NETWORKS } from "../../web3";
+import { DEFAULT_NETWORKS } from "../../models/web3";
 
 export const NetworkSelector: React.FC = () => {
   const network = useTransactionStore(

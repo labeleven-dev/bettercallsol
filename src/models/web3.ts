@@ -1,4 +1,5 @@
-// decouple web3.js stuff from UI models
+// The internal common model
+// Use as intermediate for other models and for tracking transaction state in the app
 
 import {
   clusterApiUrl,
@@ -116,6 +117,7 @@ export interface ITransactionOptions {
   pollingPeriod: number; // used in our app, rather than passed to web3.js stuff
 }
 
+/**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
 export const mapTransaction = (
   transactionData: ITransaction,
   uiInstructions: Record<IID, UIInstructionState>

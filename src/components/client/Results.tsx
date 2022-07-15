@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { toSol } from "../../web3";
+import { toSol } from "../../models/web3";
 import { CopyButton } from "../common/CopyButton";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { BalanceTable } from "./BalanceTable";

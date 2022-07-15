@@ -1,3 +1,5 @@
+// Models for non-transaction app state
+
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import {

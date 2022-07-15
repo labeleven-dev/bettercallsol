@@ -15,7 +15,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { DEFAULT_APP_OPTIONS, DEFAUT_TRANSACTION_OPTIONS } from "../../state";
+import {
+  DEFAULT_APP_OPTIONS,
+  DEFAUT_TRANSACTION_OPTIONS,
+} from "../../models/state";
 import { GeneralOptions } from "./GeneralOptions";
 import { TransactionOptions } from "./TransactionOptions";
 

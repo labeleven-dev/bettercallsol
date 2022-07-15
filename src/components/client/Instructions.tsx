@@ -2,7 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { emptyInstruction, IID } from "../../web3";
+import { emptyInstruction, IID } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 

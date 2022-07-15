@@ -19,7 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import React from "react";
-import { IID } from "../../web3";
+import { IID } from "../../models/web3";
 
 export const Sortable: React.FC<{
   itemOrder: IID[];

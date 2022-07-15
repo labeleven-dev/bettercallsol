@@ -1,6 +1,6 @@
 import produce from "immer";
 import create from "zustand";
-import { AppState, DEFAULT_STATE } from "../state";
+import { AppState, DEFAULT_STATE } from "../models/state";
 
 const LOCAL_STORAGE_KEY = "bscolState";
 
@@ -22,5 +22,6 @@ export const useTransactionStore = create<AppState>((set) => {
 });
 
 useTransactionStore.subscribe((state) => {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+  const { set: _, ...theRest } = state;
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(theRest));
 });

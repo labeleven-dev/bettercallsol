@@ -3,7 +3,7 @@ import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { instructionGetter } from "../../state";
+import { instructionGetter } from "../../models/state";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
