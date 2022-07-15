@@ -12,10 +12,13 @@ import { InstructionContext } from "./Instructions";
 export const Instruction: React.FC = () => {
   const instructionId = useContext(InstructionContext);
   const getInstruction = instructionGetter(instructionId);
+
   const instruction = useTransactionStore(
     (state) => state.transaction.instructions[instructionId]
   );
-
+  const uiState = useTransactionStore(
+    (state) => state.uiState.instructions[instructionId]
+  );
   const set = useTransactionStore((state) => state.set);
 
   // TODO find a clean way to abstract this away into their own SortableItem
@@ -40,7 +43,7 @@ export const Instruction: React.FC = () => {
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.600")}
       bg={
-        instruction.disabled
+        uiState.disabled
           ? "repeating-linear-gradient(-45deg, transparent, transparent 40px, #85858510 40px, #85858510 80px)"
           : ""
       }
@@ -49,7 +52,7 @@ export const Instruction: React.FC = () => {
     >
       <InstructionHeader attributes={attributes} listeners={listeners!} />
 
-      <Collapse in={instruction.expanded}>
+      <Collapse in={uiState.expanded}>
         <Input
           mb="5"
           placeholder="Program ID"

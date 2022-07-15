@@ -34,10 +34,13 @@ export const InstructionHeader: React.FC<{
 }> = ({ attributes, listeners }) => {
   const instructionId = useContext(InstructionContext);
   const getInstruction = instructionGetter(instructionId);
+
   const instruction = useTransactionStore(
     (state) => state.transaction.instructions[instructionId]
   );
-
+  const uiState = useTransactionStore(
+    (state) => state.uiState.instructions[instructionId]
+  );
   const set = useTransactionStore((state) => state.set);
 
   const clearInstruction = () => {
@@ -66,7 +69,7 @@ export const InstructionHeader: React.FC<{
         mr="2"
         aria-label="Collapse"
         icon={
-          instruction.expanded ? (
+          uiState.expanded ? (
             <ChevronDownIcon h="6" w="6" />
           ) : (
             <ChevronRightIcon h="6" w="6" />
@@ -75,7 +78,8 @@ export const InstructionHeader: React.FC<{
         variant="ghost"
         onClick={() => {
           set((state) => {
-            getInstruction(state).expanded = !instruction.expanded;
+            state.uiState.instructions[instructionId].expanded =
+              !uiState.expanded;
           });
         }}
       />
@@ -96,22 +100,19 @@ export const InstructionHeader: React.FC<{
         </Editable>
       </Tooltip>
       <Spacer />
-      <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
+      <Tooltip label={uiState.disabled ? "Enable" : "Disable"}>
         <IconButton
           mt="-2"
           ml="2"
-          aria-label={instruction.disabled ? "Enable" : "Disable"}
+          aria-label={uiState.disabled ? "Enable" : "Disable"}
           variant="ghost"
           icon={
-            instruction.disabled ? (
-              <Icon as={FaEyeSlash} />
-            ) : (
-              <Icon as={FaEye} />
-            )
+            uiState.disabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />
           }
           onClick={() => {
             set((state) => {
-              getInstruction(state).disabled = !instruction.disabled;
+              state.uiState.instructions[instructionId].disabled =
+                !uiState.disabled;
             });
           }}
         />

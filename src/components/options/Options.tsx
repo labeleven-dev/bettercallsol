@@ -20,7 +20,7 @@ import { GeneralOptions } from "./GeneralOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
-  const isOpen = useTransactionStore((state) => state.optionsOpen);
+  const isOpen = useTransactionStore((state) => state.uiState.optionsOpen);
   const set = useTransactionStore((state) => state.set);
 
   return (
@@ -29,7 +29,7 @@ export const Options: React.FC = () => {
       isOpen={isOpen}
       onClose={() => {
         set((state) => {
-          state.optionsOpen = false;
+          state.uiState.optionsOpen = false;
         });
       }}
     >

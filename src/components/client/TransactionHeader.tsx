@@ -60,8 +60,8 @@ export const TransactionHeader: React.FC = () => {
           variant="ghost"
           onClick={() => {
             set((state) => {
-              Object.keys(state.transaction.instructions).forEach((id) => {
-                state.transaction.instructions[id].expanded = true;
+              Object.keys(state.uiState.instructions).forEach((id) => {
+                state.uiState.instructions[id].expanded = true;
               });
             });
           }}
@@ -74,8 +74,8 @@ export const TransactionHeader: React.FC = () => {
           variant="ghost"
           onClick={() => {
             set((state) => {
-              Object.keys(state.transaction.instructions).forEach((id) => {
-                state.transaction.instructions[id].expanded = false;
+              Object.keys(state.uiState.instructions).forEach((id) => {
+                state.uiState.instructions[id].expanded = false;
               });
             });
           }}

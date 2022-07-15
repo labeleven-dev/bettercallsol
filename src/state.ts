@@ -10,18 +10,28 @@ import {
 
 export type Explorer = "solscan" | "solana" | "none";
 
-export interface IAppOptions {
+export interface AppOptions {
   explorer: Explorer;
   disableMainnet: boolean;
+}
+
+export interface UIInstructionState {
+  disabled: boolean;
+  expanded: boolean;
+}
+
+export interface UIState {
+  instructions: Record<IID, UIInstructionState>;
+  paletteOpen: boolean;
+  optionsOpen: boolean;
 }
 
 export type AppState = {
   transactionOptions: ITransactionOptions;
   transaction: ITransaction;
   results: IResults;
-  appOptions: IAppOptions;
-  paletteOpen: boolean;
-  optionsOpen: boolean;
+  appOptions: AppOptions;
+  uiState: UIState;
   set: (fn: (state: Draft<AppState>) => void) => void;
 };
 
@@ -31,9 +41,20 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
   { id: "none", name: "None" },
 ];
 
-export const DEFAULT_APP_OPTIONS: IAppOptions = {
+export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solscan",
   disableMainnet: false,
+};
+
+export const DEFAULT_UI_STATE: UIState = {
+  instructions: {
+    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
+      disabled: false,
+      expanded: true,
+    },
+  },
+  paletteOpen: false,
+  optionsOpen: false,
 };
 
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
@@ -52,14 +73,12 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 // TODO just for testing
 const DEFAULT_TRANSACTION: ITransaction = {
   name: "Baby's First Transaction",
-  instructionOrder: ["aaa"],
+  instructionOrder: ["ba928274-35b6-48c4-a16c-c4346f0ffaf2"],
   instructions: {
-    aaa: {
-      id: "aaa",
+    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
+      id: "ba928274-35b6-48c4-a16c-c4346f0ffaf2",
       name: "Memo",
       programId: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo",
-      // accountOrder: [],
-      // accounts: {},
       accountOrder: ["111"],
       accounts: {
         "111": {
@@ -71,8 +90,6 @@ const DEFAULT_TRANSACTION: ITransaction = {
         },
       },
       data: "hello",
-      disabled: false,
-      expanded: true,
     },
   },
 };
@@ -88,8 +105,6 @@ const DEFAULT_TRANSACTION: ITransaction = {
 //       accountOrder: [],
 //       accounts: {},
 //       data: "",
-//       disabled: false,
-//       expanded: true
 //     },
 //   }
 // }
@@ -103,8 +118,7 @@ export const DEFAULT_STATE: AppState = {
   },
   transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
   appOptions: DEFAULT_APP_OPTIONS,
-  paletteOpen: false,
-  optionsOpen: false,
+  uiState: DEFAULT_UI_STATE,
   set: () => {}, // set by the hook
 };
 

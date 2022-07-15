@@ -38,7 +38,7 @@ export const App: React.FC = () => {
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
   } = useTransactionStore((state) => state.transactionOptions);
-  const paletteOpen = useTransactionStore((state) => state.paletteOpen);
+  const paletteOpen = useTransactionStore((state) => state.uiState.paletteOpen);
 
   // TODO support RPC URL
   const wallets = useMemo(

@@ -12,6 +12,7 @@ import { useTransactionStore } from "./useTransactionStore";
  * @returns the function that will run the transaction
  */
 export const useTransaction: () => () => void = () => {
+  const uiState = useTransactionStore((state) => state.uiState);
   const transactionOptions = useTransactionStore(
     (state) => state.transactionOptions
   );
@@ -100,7 +101,7 @@ export const useTransaction: () => () => void = () => {
   const transact = async () => {
     if (
       !transactionData.instructions ||
-      Object.values(transactionData.instructions).every((x) => x.disabled)
+      Object.values(uiState.instructions).every((x) => x.disabled)
     ) {
       set((state) => {
         state.results.error = "No instructions provided";
@@ -123,7 +124,7 @@ export const useTransaction: () => () => void = () => {
     });
 
     try {
-      const transaction = mapTransaction(transactionData);
+      const transaction = mapTransaction(transactionData, uiState.instructions);
       const signature = await sendTransaction(transaction, connection, {
         skipPreflight: transactionOptions.skipPreflight,
         maxRetries: transactionOptions.maxRetries,

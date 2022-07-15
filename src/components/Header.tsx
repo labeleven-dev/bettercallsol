@@ -60,7 +60,7 @@ export const Header: React.FC = () => {
             color="white"
             onClick={() => {
               set((state) => {
-                state.optionsOpen = true;
+                state.uiState.optionsOpen = true;
               });
             }}
           />
@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
             color="white"
             onClick={() => {
               set((state) => {
-                state.paletteOpen = !state.paletteOpen;
+                state.uiState.paletteOpen = !state.uiState.paletteOpen;
               });
             }}
           />

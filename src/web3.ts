@@ -10,8 +10,7 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-
-// TODO what is exported is a subset of the fields, i.e. don't export ui settings
+import { UIInstructionState } from "./state";
 
 export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
 
@@ -35,21 +34,15 @@ export interface IInstruction {
   accountOrder: IID[];
   accounts: { [key: IID]: IAccount };
   data: IPlainText; // TODO anchor
-
-  // UI
-  disabled: boolean;
-  expanded: boolean;
 }
 
-export const emptyInstruction = () => ({
+export const emptyInstruction = (): IInstruction => ({
   id: uuid(),
   name: "New Instruction",
   programId: "",
   data: "",
   accounts: {},
   accountOrder: [],
-  disabled: false,
-  expanded: true,
 });
 
 export interface INetwork {
@@ -123,13 +116,16 @@ export interface ITransactionOptions {
   pollingPeriod: number; // used in our app, rather than passed to web3.js stuff
 }
 
-export const mapTransaction = (transactionData: ITransaction): Transaction => {
+export const mapTransaction = (
+  transactionData: ITransaction,
+  uiInstructions: Record<IID, UIInstructionState>
+): Transaction => {
   // TODO filter out empty fields
   const transaction = new Transaction();
   transactionData.instructionOrder.forEach((id) => {
-    const { disabled, programId, accountOrder, accounts, data } =
+    const { programId, accountOrder, accounts, data } =
       transactionData.instructions[id];
-    if (disabled || !programId) return;
+    if (uiInstructions[id].disabled || !programId) return;
     transaction.add(
       new TransactionInstruction({
         programId: new PublicKey(programId),
