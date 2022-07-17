@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { Instructions } from "./Instructions";
-import { Results } from "./Results";
+import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
