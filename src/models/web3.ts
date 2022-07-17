@@ -16,6 +16,13 @@ import { UIInstructionState } from "./state";
 /** Converts lamports to SOL */
 export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
 
+const SHORT_TRUNC_TO = 7;
+/** Shortens public keys to a truncated format */
+export const short = (pubkey: string) =>
+  `${pubkey.substring(0, SHORT_TRUNC_TO)}...${pubkey.substring(
+    pubkey.length - SHORT_TRUNC_TO
+  )}`;
+
 export type IID = string;
 export type IPubKey = string;
 
