@@ -67,8 +67,8 @@ export const ExplorerButton: React.FC<
 
 const SolscanIcon: React.FC<{ size: any }> = ({ size }) => (
   <Icon
-    w={size === "xs" ? 3 : size == "sm" ? 4 : 5}
-    h={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
+    h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
     viewBox="0 0 16 16"
   >
     <path
@@ -86,8 +86,8 @@ const SolscanIcon: React.FC<{ size: any }> = ({ size }) => (
 
 const SolanaExplorerIcon: React.FC<{ size: any }> = ({ size }) => (
   <Icon
-    w={size === "xs" ? 3 : size == "sm" ? 4 : 5}
-    h={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
+    h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
     mt="1"
     ml="1"
     viewBox="0 0 16 16"

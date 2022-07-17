@@ -2,7 +2,8 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { emptyInstruction, IID } from "../../models/web3";
+import { DEFAULT_UI_INSTRUCTION_STATE } from "../../models/state";
+import { IID, newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 
@@ -20,9 +21,10 @@ export const Instructions: React.FC = () => {
 
   const addInstruction = () => {
     set((state) => {
-      const instruction = emptyInstruction();
+      const instruction = newInstruction();
       state.transaction.instructions[instruction.id] = instruction;
       state.transaction.instructionOrder.push(instruction.id);
+      state.uiState.instructions[instruction.id] = DEFAULT_UI_INSTRUCTION_STATE;
     });
   };
 

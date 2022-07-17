@@ -22,6 +22,11 @@ export interface UIInstructionState {
   expanded: boolean;
 }
 
+export const DEFAULT_UI_INSTRUCTION_STATE = {
+  disabled: false,
+  expanded: true,
+};
+
 export interface UIState {
   instructions: Record<IID, UIInstructionState>;
   paletteOpen: boolean;
@@ -50,10 +55,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
 
 export const DEFAULT_UI_STATE: UIState = {
   instructions: {
-    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
-      disabled: false,
-      expanded: true,
-    },
+    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": DEFAULT_UI_INSTRUCTION_STATE,
   },
   paletteOpen: false,
   optionsOpen: false,

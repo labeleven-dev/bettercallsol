@@ -13,6 +13,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { UIInstructionState } from "./state";
 
+/** Converts lamports to SOL */
 export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
 
 export type IID = string;
@@ -38,7 +39,7 @@ export interface IInstruction {
   data: IPlainText; // TODO anchor
 }
 
-export const emptyInstruction = (): IInstruction => ({
+export const newInstruction = (): IInstruction => ({
   id: uuid(),
   name: "New Instruction",
   programId: "",

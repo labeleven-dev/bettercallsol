@@ -25,7 +25,7 @@ import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
-import { emptyInstruction } from "../../models/web3";
+import { newInstruction } from "../../models/web3";
 import { InstructionContext } from "./Instructions";
 
 export const InstructionHeader: React.FC<{
@@ -46,7 +46,7 @@ export const InstructionHeader: React.FC<{
   const clearInstruction = () => {
     set((state) => {
       state.transaction.instructions[instructionId] = {
-        ...emptyInstruction(),
+        ...newInstruction(),
         id: instructionId,
       };
     });
@@ -57,6 +57,7 @@ export const InstructionHeader: React.FC<{
       state.transaction.instructionOrder =
         state.transaction.instructionOrder.filter((x) => x !== instructionId);
       delete state.transaction.instructions[instructionId];
+      delete state.uiState.instructions[instructionId];
     });
   };
 
@@ -107,7 +108,7 @@ export const InstructionHeader: React.FC<{
           aria-label={uiState.disabled ? "Enable" : "Disable"}
           variant="ghost"
           icon={
-            uiState.disabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />
+            uiState.disabled ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />
           }
           onClick={() => {
             set((state) => {
