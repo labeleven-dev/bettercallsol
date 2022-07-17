@@ -32,8 +32,9 @@ export interface IInstruction {
   id: IID;
   name?: string;
   programId: IPubKey;
+  // The map and id array is to cater for Sortable component
   accountOrder: IID[];
-  accounts: { [key: IID]: IAccount };
+  accounts: Record<IID, IAccount>;
   data: IPlainText; // TODO anchor
 }
 
@@ -64,8 +65,9 @@ export const DEFAULT_NETWORKS: INetwork[] = [
 
 export interface ITransaction {
   name?: string;
+  // The map and id array is to cater for Sortable component
   instructionOrder: IID[];
-  instructions: { [key: IID]: IInstruction };
+  instructions: Record<IID, IInstruction>;
 }
 
 export interface IBalance {

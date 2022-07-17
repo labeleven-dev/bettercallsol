@@ -5,7 +5,9 @@ import { useTransactionStore } from "../../hooks/useTransactionStore";
 
 export type AddressType = "tx" | "account";
 
-const explorerOpts: { [key: string]: any } = {
+// TODO add solana.fm support
+
+const explorerOpts: Record<string, any> = {
   solscan: {
     label: "Open in Solscan",
     url: (valueType: AddressType, value: string, network: string) =>

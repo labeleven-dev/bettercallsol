@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
@@ -24,6 +24,7 @@ export const NetworkSelector: React.FC = () => {
           ({ id }) => !disableMainnet || id !== "mainnet-beta"
         ).map(({ id, name, url }) => (
           <MenuItem
+            icon={network.id === id ? <CheckIcon /> : undefined}
             onClick={() =>
               set((state) => {
                 state.transactionOptions.network = { id, name, url };

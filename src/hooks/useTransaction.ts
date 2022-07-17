@@ -23,6 +23,8 @@ export const useTransaction: () => () => void = () => {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
 
+  // check if transaction is finalised, then fetch the confirmed transaction
+  // and populate the global state.
   useInterval(
     async () => {
       try {
@@ -98,6 +100,7 @@ export const useTransaction: () => () => void = () => {
     results.inProgress ? transactionOptions.pollingPeriod : null
   );
 
+  // send the transaction to the chain
   const transact = async () => {
     if (
       !transactionData.instructions ||
