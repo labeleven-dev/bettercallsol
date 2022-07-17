@@ -16,7 +16,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { ChangeEvent, useContext } from "react";
-import { FaSignature, FaWallet } from "react-icons/fa";
+import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { accountGetter } from "../../models/state";
 import { IID } from "../../models/web3";
@@ -105,12 +105,17 @@ export const Account: React.FC<{ accountId: IID; index: number }> = ({
           id={account.id}
           flex="1"
           ml="2"
+          fontFamily="mono"
           placeholder="Account Public Key"
           value={account.pubkey}
           onChange={setPubKey}
         ></Input>
         <InputRightElement>
-          <ExplorerButton valueType="account" value={account.pubkey} />
+          <ExplorerButton
+            size="sm"
+            valueType="account"
+            value={account.pubkey}
+          />
         </InputRightElement>
       </InputGroup>
 
@@ -128,7 +133,7 @@ export const Account: React.FC<{ accountId: IID; index: number }> = ({
       <ToggleIconButton
         ml="1"
         label="Signer"
-        icon={<Icon as={FaSignature} />}
+        icon={<Icon as={FaPenNib} />}
         initialToggled={account.isSigner}
         onToggled={(toggled) => {
           set((state) => {

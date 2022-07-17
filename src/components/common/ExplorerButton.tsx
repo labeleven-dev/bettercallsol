@@ -27,7 +27,7 @@ export const ExplorerButton: React.FC<
     value: string;
     valueType: AddressType;
   } & CustomIconButtonProps
-> = ({ value, valueType, ...theRest }) => {
+> = ({ value, valueType, size, ...theRest }) => {
   const explorer = useTransactionStore((state) => state.appOptions.explorer);
   const network = useTransactionStore(
     (state) => state.transactionOptions.network.id
@@ -38,10 +38,16 @@ export const ExplorerButton: React.FC<
 
   const button = (
     <IconButton
-      size="sm"
       variant="ghost"
-      icon={explorer === "solscan" ? <SolscanIcon /> : <SolanaExplorerIcon />}
+      icon={
+        explorer === "solscan" ? (
+          <SolscanIcon size={size} />
+        ) : (
+          <SolanaExplorerIcon size={size} />
+        )
+      }
       aria-label={opts.label}
+      size={size}
       {...theRest}
     />
   );
@@ -59,8 +65,12 @@ export const ExplorerButton: React.FC<
   );
 };
 
-const SolscanIcon: React.FC = () => (
-  <Icon width="4" height="4" viewBox="0 0 16 16">
+const SolscanIcon: React.FC<{ size: any }> = ({ size }) => (
+  <Icon
+    w={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    h={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    viewBox="0 0 16 16"
+  >
     <path
       d="m 8.021296,4.8390002 c 1.7612,0.016 3.1512,1.43932 3.1263,3.1999 -0.025,1.76122 -1.4605,3.1505998 -3.2147,3.1115998 -1.7343,-0.0384 -3.0943,-1.4310198 -3.0898,-3.1634398 0.0045,-1.75994 1.4214,-3.16406 3.1782,-3.14806 z"
       fill="#c74ae3"
@@ -74,8 +84,14 @@ const SolscanIcon: React.FC = () => (
   </Icon>
 );
 
-const SolanaExplorerIcon: React.FC = () => (
-  <Icon mt="1" ml="1" width="5" height="5" viewBox="0 0 16 16">
+const SolanaExplorerIcon: React.FC<{ size: any }> = ({ size }) => (
+  <Icon
+    w={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    h={size === "xs" ? 3 : size == "sm" ? 4 : 5}
+    mt="1"
+    ml="1"
+    viewBox="0 0 16 16"
+  >
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

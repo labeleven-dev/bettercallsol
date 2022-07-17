@@ -41,7 +41,7 @@ export const Results: React.FC = () => {
         {results.confirmationStatus === "finalized" &&
           (results.error ? (
             <Tooltip label="Transaction returned a failure">
-              <WarningIcon mt="0.5" color="red.400" />
+              <WarningIcon mt="0.5" mr="1" color="red.400" />
             </Tooltip>
           ) : (
             <Tooltip label="Transaction returned a success">
@@ -104,12 +104,14 @@ export const Results: React.FC = () => {
         <InputGroup flex="1" mr="1" size="sm">
           <Input
             id="signature"
+            fontFamily="mono"
             placeholder="Transaction Signature"
             isReadOnly
             value={results.signature}
           />
           <InputRightElement>
             <ExplorerButton
+              size="xs"
               valueType="tx"
               isDisabled={!results.signature}
               value={results.signature}

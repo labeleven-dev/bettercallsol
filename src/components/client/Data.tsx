@@ -23,6 +23,7 @@ export const Data: React.FC = () => {
         </Select>
         <Textarea
           flex="1"
+          fontFamily="mono"
           placeholder="Instruction data"
           value={data}
           onChange={(e) => {

@@ -55,6 +55,7 @@ export const Instruction: React.FC = () => {
       <Collapse in={uiState.expanded}>
         <Input
           mb="5"
+          fontFamily="mono"
           placeholder="Program ID"
           value={instruction.programId}
           onChange={(e) => {
