@@ -73,6 +73,8 @@ export const useTransaction: () => () => void = () => {
                   inProgress: false,
                   signature: results.signature,
                   confirmationStatus: "finalized",
+                  finalisedAt: new Date().getTime(),
+                  blockTime: transaction.blockTime || undefined,
                   slot: transaction?.slot,
                   balances,
                   logs: logMessages || [],

@@ -99,6 +99,8 @@ export interface IResults {
   slot?: number;
   confirmations?: number;
   confirmationStatus?: TransactionConfirmationStatus;
+  finalisedAt?: number;
+  blockTime?: number;
   fee?: number;
   balances?: IBalance[];
   error?: string;

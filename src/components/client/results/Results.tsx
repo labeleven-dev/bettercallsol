@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spacer,
   Tab,
   TabList,
   TabPanel,
@@ -62,6 +63,14 @@ export const Results: React.FC = () => {
               : results.confirmationStatus === "confirmed"
               ? `Confirmed by ${results.confirmations}`
               : `Finalised by max confirmations`}
+          </Tag>
+        )}
+        <Spacer />
+        {results.finalisedAt && (
+          <Tag height="20px">
+            {`Finalised @ ${new Date(
+              results.finalisedAt
+            ).toLocaleTimeString()}`}
           </Tag>
         )}
       </Flex>
