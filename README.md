@@ -4,7 +4,7 @@
   <h1>Better Call SOL</h1>
   <p>
     <h3>The Missing Solana Client</h3>
-    <p><i>For when you have had enough glass</i></p>
+    <p><i>For when you have had enough glass...</i></p>
   </p>
   <p>
     <!-- TODO badges -->

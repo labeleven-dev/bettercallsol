@@ -49,6 +49,21 @@ export const useTransactionStore = create<AppState>((set) => {
 });
 
 useTransactionStore.subscribe((state) => {
-  const { set: _set, addInstruction: _addInstruction, ...theRest } = state;
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(theRest));
+  // exclude functions
+  const { transactionOptions, transaction, results, appOptions, uiState } =
+    state;
+
+  // in progress should not survive page reloads
+  const { inProgress: _inProgress, ...restOfResults } = results;
+
+  localStorage.setItem(
+    LOCAL_STORAGE_KEY,
+    JSON.stringify({
+      transactionOptions,
+      transaction,
+      results: restOfResults,
+      appOptions,
+      uiState,
+    })
+  );
 });
