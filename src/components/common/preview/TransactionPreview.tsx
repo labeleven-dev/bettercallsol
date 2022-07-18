@@ -1,9 +1,4 @@
-import {
-  AddIcon,
-  CheckCircleIcon,
-  DragHandleIcon,
-  WarningIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -15,7 +10,11 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { ITransactionPreview } from "../../../models/preview";
+import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import {
+  ITransactionPreview,
+  mapToIInstruction,
+} from "../../../models/preview";
 import { short } from "../../../models/web3";
 import { CopyButton } from "../CopyButton";
 import { ExplorerButton } from "../ExplorerButton";
@@ -24,9 +23,15 @@ import { InstructionPreview } from "./InstructionPreview";
 
 export const TransactionPreview: React.FC<{
   transaction: ITransactionPreview;
-}> = ({
-  transaction: { signature, instructions, accountSummary, fee, error },
-}) => {
+}> = ({ transaction: { signature, instructions, accountSummary, error } }) => {
+  const addInstruction = useTransactionStore((state) => state.addInstruction);
+
+  const addInstructions = () => {
+    instructions.forEach((instruction) => {
+      addInstruction(mapToIInstruction(instruction));
+    });
+  };
+
   return (
     <Grid
       border="1px"
@@ -38,7 +43,8 @@ export const TransactionPreview: React.FC<{
       borderColor={useColorModeValue("gray.200", "gray.600")}
     >
       <Flex mb="2">
-        <DragHandleIcon h="2.5" mt="1" mr="1" />
+        {/* TODO implement drag-and-drop */}
+        {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
         <TransactionIcon />
         <Tooltip label={signature}>
           <Text ml="2" mr="1" as="kbd" fontSize="sm">
@@ -70,6 +76,7 @@ export const TransactionPreview: React.FC<{
             variant="ghost"
             aria-label="Add all instructions to transaction"
             icon={<AddIcon />}
+            onClick={addInstructions}
           />
         </Tooltip>
       </Flex>

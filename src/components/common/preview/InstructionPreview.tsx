@@ -1,4 +1,4 @@
-import { AddIcon, DragHandleIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -10,7 +10,11 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { IInstructionPreview } from "../../../models/preview";
+import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import {
+  IInstructionPreview,
+  mapToIInstruction,
+} from "../../../models/preview";
 import { short } from "../../../models/web3";
 import { CopyButton } from "../CopyButton";
 import { AccountSummary } from "./AccountSummary";
@@ -18,10 +22,11 @@ import { AccountSummary } from "./AccountSummary";
 export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
-}> = ({
-  instruction: { programId, accountSummary, innerInstructions },
-  index,
-}) => {
+}> = ({ instruction, index }) => {
+  const addInstruction = useTransactionStore((state) => state.addInstruction);
+
+  const { programId, accountSummary, innerInstructions } = instruction;
+
   return (
     <Grid
       mb="2"
@@ -32,7 +37,8 @@ export const InstructionPreview: React.FC<{
       borderColor={useColorModeValue("gray.300", "gray.600")}
     >
       <Flex mb="1">
-        <DragHandleIcon h="2.5" mt="1" mr="1" />
+        {/* TODO implement drag-and-drop */}
+        {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
         <InstructionIcon />
         <Text
           ml="2"
@@ -59,6 +65,9 @@ export const InstructionPreview: React.FC<{
             variant="ghost"
             aria-label="Add to transaction"
             icon={<AddIcon />}
+            onClick={() => {
+              addInstruction(mapToIInstruction(instruction));
+            }}
           />
         </Tooltip>
       </Flex>

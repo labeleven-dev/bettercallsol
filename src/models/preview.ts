@@ -1,7 +1,15 @@
 // Models for transactions fetched from the chain, as part of import
 
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
-import { IPlainText, IPubKey } from "./web3";
+import {
+  IAccount,
+  IID,
+  IInstruction,
+  IPlainText,
+  IPubKey,
+  newAccount,
+  newInstruction,
+} from "./web3";
 
 export interface IAccountSummary {
   total: number;
@@ -96,4 +104,32 @@ const accountSummary = (accounts: IAccountPreview[]): IAccountSummary => ({
   readonlyUsigned: accounts.filter((x) => !x.isSigner && !x.isWritable).length,
 });
 
-// TODO mapToIInstruction(instruction: IInstructionPreview)
+/** Imports a preview instruction into the current transaction */
+export const mapToIInstruction = ({
+  programId,
+  accounts,
+  data,
+}: IInstructionPreview): IInstruction => {
+  const mappedAccounts: Record<IID, IAccount> = {};
+  const accountOrder: IID[] = [];
+
+  accounts.forEach(({ pubkey, isWritable, isSigner }) => {
+    const account = {
+      ...newAccount(),
+      pubkey,
+      isSigner,
+      isWritable,
+    };
+    mappedAccounts[account.id] = account;
+    accountOrder.push(account.id);
+  });
+
+  return {
+    ...newInstruction(),
+    name: "Imported Instruction",
+    programId,
+    accounts: mappedAccounts,
+    accountOrder,
+    data,
+  };
+};
