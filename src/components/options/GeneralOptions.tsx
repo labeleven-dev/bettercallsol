@@ -15,7 +15,7 @@ export const GeneralOptions: React.FC = () => {
 
   return (
     <FormControl display="flex" alignItems="center">
-      <Grid templateColumns="250px 1fr" gap="15px 5px">
+      <Grid templateColumns="270px 1fr" gap="15px 5px">
         <ChoiceOption
           id="explorer"
           name="Explorer"
@@ -24,6 +24,17 @@ export const GeneralOptions: React.FC = () => {
           set={(x) => {
             set((state) => {
               state.appOptions.explorer = x as Explorer;
+            });
+          }}
+        />
+
+        <ToggleOption
+          id="autoconnect-wallet"
+          name="Auto-connect wallet"
+          get={() => appOptions.autoConnectWallet}
+          set={(x) => {
+            set((state) => {
+              state.appOptions.autoConnectWallet = x;
             });
           }}
         />

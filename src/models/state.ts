@@ -15,6 +15,7 @@ export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
 export interface AppOptions {
   explorer: Explorer;
+  autoConnectWallet: boolean;
   disableMainnet: boolean;
 }
 
@@ -54,6 +55,7 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solscan",
+  autoConnectWallet: true,
   disableMainnet: false,
 };
 

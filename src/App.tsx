@@ -32,6 +32,9 @@ import theme from "./theme";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const App: React.FC = () => {
+  const autoConnectWallet = useTransactionStore(
+    (state) => state.appOptions.autoConnectWallet
+  );
   const {
     network,
     commitment,
@@ -64,7 +67,7 @@ export const App: React.FC = () => {
           disableRetryOnRateLimit,
         }}
       >
-        <WalletProvider wallets={wallets} autoConnect>
+        <WalletProvider wallets={wallets} autoConnect={autoConnectWallet}>
           <WalletModalProvider>
             <Flex flexDirection="column">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
@@ -77,6 +80,11 @@ export const App: React.FC = () => {
                   </AlertDescription>
                 </Alert>
               </Show>
+
+              {/* 
+                  header and footer fixed and span the entire page width
+                  Transaction and palette are independently scrollable
+               */}
 
               <Box h="55px" w="full" position="fixed" zIndex="modal">
                 <Header />

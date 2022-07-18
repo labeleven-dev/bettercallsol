@@ -15,7 +15,7 @@ export const TransactionOptions: React.FC = () => {
 
   return (
     <FormControl display="flex" alignItems="center">
-      <Grid templateColumns="250px 1fr" gap="15px 5px">
+      <Grid templateColumns="270px 1fr" gap="15px 5px">
         <ChoiceOption
           id="commitment"
           name="Commitment level"

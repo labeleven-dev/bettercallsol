@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Button,
   FormLabel,
@@ -27,6 +27,7 @@ export const ChoiceOption: React.FC<{
       <MenuList>
         {getChoices().map(({ id, name }) => (
           <MenuItem
+            icon={get().id === id ? <CheckIcon /> : undefined}
             onClick={() => {
               set(id);
             }}
