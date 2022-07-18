@@ -11,6 +11,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
 import { Cluster, clusterApiUrl, Connection } from "@solana/web3.js";
@@ -21,6 +22,7 @@ import {
   mapToTransactionPreview,
 } from "../../models/preview";
 import { DEFAULT_NETWORKS } from "../../models/web3";
+import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { TransactionPreview } from "../common/preview/TransactionPreview";
 
@@ -33,10 +35,11 @@ export const ImportTransaction: React.FC = () => {
     "4uz94jQaK9zCf1SBwg8o4nY5FtX3M75EZfEDYoM8GBBKCg9E8bN2kJHgB7uDobYqVpeasbVkD9qE3hoSLWsQfZ69"
   ); // TODO empty
   const [transaction, setTransaction] = useState<ITransactionPreview>();
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const endpoint = clusterApiUrl(network as Cluster);
   const connection = useMemo(() => {
-    // TODO more efficient?
     const {
       commitment,
       confirmTransactionInitialTimeout,
@@ -50,15 +53,26 @@ export const ImportTransaction: React.FC = () => {
   }, [endpoint, transactionOptions]);
 
   const search = useCallback(async () => {
-    // TODO error handling
-    const response = await connection.getTransaction(txnAddress, {
-      commitment: "finalized",
-    });
-    if (response) {
-      setTransaction(mapToTransactionPreview(response));
-    } else {
-      // TODO
+    if (!txnAddress) {
+      return;
     }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await connection.getTransaction(txnAddress, {
+        commitment: "finalized",
+      });
+      if (response) {
+        setTransaction(mapToTransactionPreview(response));
+      }
+    } catch (err) {
+      setLoading(false);
+      setError((err as { message: string }).message);
+    }
+
+    setLoading(false);
   }, [txnAddress, connection]);
 
   return (
@@ -99,13 +113,24 @@ export const ImportTransaction: React.FC = () => {
         </Menu>
         <Tooltip label="Search">
           <IconButton
+            isLoading={isLoading}
             aria-label="Search"
             icon={<SearchIcon />}
             onClick={search}
           />
         </Tooltip>
       </Flex>
-      {transaction && <TransactionPreview transaction={transaction} />}
+
+      <ErrorAlert
+        error={error}
+        onClose={() => {
+          setError("");
+        }}
+      />
+
+      <Skeleton height="200px" isLoaded={!isLoading}>
+        {transaction && <TransactionPreview transaction={transaction} />}
+      </Skeleton>
     </Grid>
   );
 };

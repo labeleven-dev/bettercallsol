@@ -27,6 +27,10 @@ export const useTransaction: () => () => void = () => {
   // and populate the global state.
   useInterval(
     async () => {
+      if (!results.signature) {
+        return;
+      }
+
       try {
         const status = await connection.getSignatureStatus(results?.signature);
         if (status) {
@@ -43,6 +47,7 @@ export const useTransaction: () => () => void = () => {
             );
 
             if (transaction) {
+              // TODO move to a mapper
               const { accountKeys } = transaction.transaction.message;
               const { logMessages, err, fee, preBalances, postBalances } =
                 transaction.meta!;
@@ -93,8 +98,8 @@ export const useTransaction: () => () => void = () => {
             };
           });
         }
-      } catch (e) {
-        // TODO
+      } catch (err) {
+        // this will fail a few times till transaction is confirmed?
       }
     },
     results.inProgress ? transactionOptions.pollingPeriod : null
@@ -122,6 +127,7 @@ export const useTransaction: () => () => void = () => {
       state.results = {
         inProgress: true,
         signature: "",
+        error: "",
         startedAt: new Date().getTime(),
       };
     });

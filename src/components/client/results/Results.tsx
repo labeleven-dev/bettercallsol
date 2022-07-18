@@ -1,10 +1,6 @@
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
   Box,
-  CloseButton,
   Flex,
   FormLabel,
   Grid,
@@ -24,6 +20,7 @@ import React from "react";
 import { useTransactionStore } from "../../../hooks/useTransactionStore";
 import { toSol } from "../../../models/web3";
 import { CopyButton } from "../../common/CopyButton";
+import { ErrorAlert } from "../../common/ErrorAlert";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { BalanceTable } from "./BalanceTable";
 import { ProgramLogs } from "./ProgramLogs";
@@ -68,29 +65,16 @@ export const Results: React.FC = () => {
           </Tag>
         )}
       </Flex>
-      {results.error && (
-        <Alert
-          mb="5"
-          status="error"
-          fontSize="md"
-          rounded="sm"
-          variant="left-accent"
-        >
-          <AlertIcon />
-          <AlertDescription flex="1">{results.error}</AlertDescription>
-          <CloseButton
-            alignSelf="flex-start"
-            position="relative"
-            right={-1}
-            top={-1}
-            onClick={() => {
-              set((state) => {
-                state.results.error = "";
-              });
-            }}
-          />
-        </Alert>
-      )}
+
+      <ErrorAlert
+        error={results.error}
+        onClose={() => {
+          set((state) => {
+            state.results.error = "";
+          });
+        }}
+      />
+
       <Flex>
         <FormLabel
           pt="2"
