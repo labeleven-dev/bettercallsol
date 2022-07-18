@@ -1,7 +1,15 @@
-import { Collapse, Grid, Input, useColorModeValue } from "@chakra-ui/react";
+import {
+  Collapse,
+  Grid,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
+import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemProps } from "../common/SortableItem";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
@@ -45,17 +53,27 @@ export const Instruction: React.FC<SortableItemProps> = ({
       <InstructionHeader attributes={attributes!} listeners={listeners!} />
 
       <Collapse in={uiState.expanded}>
-        <Input
-          mb="5"
-          fontFamily="mono"
-          placeholder="Program ID"
-          value={instruction.programId}
-          onChange={(e) => {
-            set((state) => {
-              getInstruction(state).programId = e.target.value;
-            });
-          }}
-        />
+        <InputGroup>
+          <Input
+            mb="5"
+            fontFamily="mono"
+            placeholder="Program ID"
+            value={instruction.programId}
+            onChange={(e) => {
+              set((state) => {
+                getInstruction(state).programId = e.target.value;
+              });
+            }}
+          />
+          <InputRightElement>
+            <ExplorerButton
+              size="sm"
+              valueType="account"
+              value={instruction.programId}
+            />
+          </InputRightElement>
+        </InputGroup>
+
         <Accounts />
         <Data />
       </Collapse>

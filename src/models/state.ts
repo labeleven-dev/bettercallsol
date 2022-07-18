@@ -11,7 +11,7 @@ import {
   ITransactionOptions,
 } from "./web3";
 
-export type Explorer = "solscan" | "solana" | "none";
+export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
 export interface AppOptions {
   explorer: Explorer;
@@ -47,6 +47,7 @@ export type AppState = {
 
 export const EXPLORERS: { id: Explorer; name: string }[] = [
   { id: "solscan", name: "Solscan" },
+  { id: "solanafm", name: "SolanaFM" },
   { id: "solana", name: "Solana Explorer" },
   { id: "none", name: "None" },
 ];
