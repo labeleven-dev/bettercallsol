@@ -13,7 +13,7 @@ import { FaWallet } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
-import { IID } from "../../models/web3";
+import { IID, newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { SortableItem } from "../common/SortableItem";
 import { Account } from "./Account";
@@ -37,14 +37,9 @@ export const Accounts: React.FC = () => {
   const addAccount = () => {
     set((state) => {
       const instruction = getInstruction(state);
-      const id = uuid();
-      instruction.accounts[id] = {
-        id,
-        pubkey: "",
-        isSigner: false,
-        isWritable: false,
-      };
-      instruction.accountOrder.push(id);
+      const account = newAccount();
+      instruction.accounts[account.id] = account;
+      instruction.accountOrder.push(account.id);
     });
   };
 

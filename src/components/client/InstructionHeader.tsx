@@ -42,6 +42,9 @@ export const InstructionHeader: React.FC<{
     (state) => state.uiState.instructions[instructionId]
   );
   const set = useTransactionStore((state) => state.set);
+  const removeInstruction = useTransactionStore(
+    (state) => state.removeInstruction
+  );
 
   const clearInstruction = () => {
     set((state) => {
@@ -49,15 +52,6 @@ export const InstructionHeader: React.FC<{
         ...newInstruction(),
         id: instructionId,
       };
-    });
-  };
-
-  const removeInstruction = () => {
-    set((state) => {
-      state.transaction.instructionOrder =
-        state.transaction.instructionOrder.filter((x) => x !== instructionId);
-      delete state.transaction.instructions[instructionId];
-      delete state.uiState.instructions[instructionId];
     });
   };
 
@@ -130,7 +124,12 @@ export const InstructionHeader: React.FC<{
           <MenuItem icon={<Icon as={FaEraser} />} onClick={clearInstruction}>
             Clear
           </MenuItem>
-          <MenuItem icon={<DeleteIcon />} onClick={removeInstruction}>
+          <MenuItem
+            icon={<DeleteIcon />}
+            onClick={() => {
+              removeInstruction(instructionId);
+            }}
+          >
             Remove
           </MenuItem>
         </MenuList>

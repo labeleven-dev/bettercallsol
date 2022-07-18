@@ -1,6 +1,11 @@
 import produce from "immer";
 import create from "zustand";
-import { AppState, DEFAULT_STATE } from "../models/state";
+import {
+  AppState,
+  DEFAULT_STATE,
+  DEFAULT_UI_INSTRUCTION_STATE,
+} from "../models/state";
+import { IID } from "../models/web3";
 
 const LOCAL_STORAGE_KEY = "bscolState";
 
@@ -18,10 +23,32 @@ export const useTransactionStore = create<AppState>((set) => {
     set: (fn) => {
       set(produce(fn));
     },
+    addInstruction: (instruction) => {
+      set(
+        produce((state) => {
+          state.transaction.instructions[instruction.id] = instruction;
+          state.transaction.instructionOrder.push(instruction.id);
+          state.uiState.instructions[instruction.id] =
+            DEFAULT_UI_INSTRUCTION_STATE;
+        })
+      );
+    },
+    removeInstruction: (instructionId) => {
+      set(
+        produce((state) => {
+          state.transaction.instructionOrder =
+            state.transaction.instructionOrder.filter(
+              (x: IID) => x !== instructionId
+            );
+          delete state.transaction.instructions[instructionId];
+          delete state.uiState.instructions[instructionId];
+        })
+      );
+    },
   };
 });
 
 useTransactionStore.subscribe((state) => {
-  const { set: _, ...theRest } = state;
+  const { set: _set, addInstruction: _addInstruction, ...theRest } = state;
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(theRest));
 });

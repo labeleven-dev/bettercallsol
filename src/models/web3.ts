@@ -34,6 +34,13 @@ export interface IAccount {
   isSigner: boolean;
 }
 
+export const newAccount = (): IAccount => ({
+  id: uuid(),
+  pubkey: "",
+  isSigner: false,
+  isWritable: false,
+});
+
 export type IPlainText = string;
 
 export interface IInstruction {

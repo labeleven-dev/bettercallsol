@@ -2,7 +2,6 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { DEFAULT_UI_INSTRUCTION_STATE } from "../../models/state";
 import { IID, newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { SortableItem } from "../common/SortableItem";
@@ -13,19 +12,11 @@ export const InstructionContext = React.createContext("");
 export const Instructions: React.FC = () => {
   const transaction = useTransactionStore((state) => state.transaction);
   const set = useTransactionStore((state) => state.set);
+  const addInstruction = useTransactionStore((state) => state.addInstruction);
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {
       state.transaction.instructionOrder = itemOrders;
-    });
-  };
-
-  const addInstruction = () => {
-    set((state) => {
-      const instruction = newInstruction();
-      state.transaction.instructions[instruction.id] = instruction;
-      state.transaction.instructionOrder.push(instruction.id);
-      state.uiState.instructions[instruction.id] = DEFAULT_UI_INSTRUCTION_STATE;
     });
   };
 
@@ -48,7 +39,9 @@ export const Instructions: React.FC = () => {
           aria-label="Add Instruction"
           icon={<AddIcon />}
           variant="ghost"
-          onClick={addInstruction}
+          onClick={() => {
+            addInstruction(newInstruction());
+          }}
         />
       </Tooltip>
     </Grid>

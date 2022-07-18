@@ -5,6 +5,7 @@ import { WritableDraft } from "immer/dist/internal";
 import {
   DEFAULT_NETWORKS,
   IID,
+  IInstruction,
   IResults,
   ITransaction,
   ITransactionOptions,
@@ -40,6 +41,8 @@ export type AppState = {
   appOptions: AppOptions;
   uiState: UIState;
   set: (fn: (state: Draft<AppState>) => void) => void;
+  addInstruction: (instruction: IInstruction) => void;
+  removeInstruction: (instructionId: IID) => void;
 };
 
 export const EXPLORERS: { id: Explorer; name: string }[] = [
@@ -124,6 +127,8 @@ export const DEFAULT_STATE: AppState = {
   appOptions: DEFAULT_APP_OPTIONS,
   uiState: DEFAULT_UI_STATE,
   set: () => {}, // set by the hook
+  addInstruction: (instruction) => {}, // set by the hook
+  removeInstruction: (id) => {}, // set by the hook
 };
 
 export const instructionGetter =
