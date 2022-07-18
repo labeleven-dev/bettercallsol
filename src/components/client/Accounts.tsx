@@ -15,6 +15,7 @@ import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
 import { IID } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
+import { SortableItem } from "../common/SortableItem";
 import { Account } from "./Account";
 import { InstructionContext } from "./Instructions";
 
@@ -93,7 +94,9 @@ export const Accounts: React.FC = () => {
           setItemOrder={setItemOrder}
         >
           {instruction.accountOrder.map((id, index) => (
-            <Account accountId={id} index={index} key={id} />
+            <SortableItem key={index}>
+              <Account id={id} index={index} />
+            </SortableItem>
           ))}
         </Sortable>
       </Box>

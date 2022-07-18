@@ -5,6 +5,7 @@ import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { DEFAULT_UI_INSTRUCTION_STATE } from "../../models/state";
 import { IID, newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
+import { SortableItem } from "../common/SortableItem";
 import { Instruction } from "./Instruction";
 
 export const InstructionContext = React.createContext("");
@@ -36,7 +37,9 @@ export const Instructions: React.FC = () => {
       >
         {transaction.instructionOrder.map((id) => (
           <InstructionContext.Provider value={id} key={id}>
-            <Instruction />
+            <SortableItem>
+              <Instruction id={id} />
+            </SortableItem>
           </InstructionContext.Provider>
         ))}
       </Sortable>

@@ -11,45 +11,34 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { ChangeEvent, useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { accountGetter } from "../../models/state";
-import { IID } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
+import { SortableItemProps } from "../common/SortableItem";
 import { ToggleIconButton } from "../common/ToggleIconButton";
 import { TruncatableEditable } from "../common/TruncatableEditable";
 import { InstructionContext } from "./Instructions";
 
-export const Account: React.FC<{ accountId: IID; index: number }> = ({
-  accountId,
+export const Account: React.FC<{ index: number } & SortableItemProps> = ({
+  id,
   index,
+  attributes,
+  listeners,
+  setNodeRef,
+  style,
 }) => {
   const instructionId = useContext(InstructionContext);
-  const getAccount = accountGetter(instructionId, accountId);
+  const getAccount = accountGetter(instructionId, id);
 
   const account = useTransactionStore(getAccount);
   const set = useTransactionStore((state) => state.set);
 
   const { publicKey: walletPubkey } = useWallet();
   const isWallet = account.pubkey === walletPubkey?.toBase58();
-
-  // Sortable item
-  // TODO find a clean way to abstract this away into their own SortableItem
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: accountId,
-      animateLayoutChanges: (args) =>
-        defaultAnimateLayoutChanges({ ...args, wasDragging: true }),
-    });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
 
   const setPubKey = (e: ChangeEvent<HTMLInputElement>) => {
     set((state) => {
@@ -63,9 +52,9 @@ export const Account: React.FC<{ accountId: IID; index: number }> = ({
     set((state) => {
       const instruction = state.transaction.instructions[instructionId];
       instruction.accountOrder = instruction.accountOrder.filter(
-        (x) => x !== accountId
+        (x) => x !== id
       );
-      delete instruction.accounts[accountId];
+      delete instruction.accounts[id];
     });
   };
 

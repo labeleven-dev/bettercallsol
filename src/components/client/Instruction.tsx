@@ -1,15 +1,19 @@
 import { Collapse, Grid, Input, useColorModeValue } from "@chakra-ui/react";
-import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import React, { useContext } from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
+import { SortableItemProps } from "../common/SortableItem";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
 import { InstructionContext } from "./Instructions";
 
-export const Instruction: React.FC = () => {
+export const Instruction: React.FC<SortableItemProps> = ({
+  attributes,
+  listeners,
+  setNodeRef,
+  style,
+}) => {
   const instructionId = useContext(InstructionContext);
   const getInstruction = instructionGetter(instructionId);
 
@@ -20,18 +24,6 @@ export const Instruction: React.FC = () => {
     (state) => state.uiState.instructions[instructionId]
   );
   const set = useTransactionStore((state) => state.set);
-
-  // TODO find a clean way to abstract this away into their own SortableItem
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: instructionId,
-      animateLayoutChanges: (args) =>
-        defaultAnimateLayoutChanges({ ...args, wasDragging: true }),
-    });
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-  };
 
   return (
     <Grid
@@ -50,7 +42,7 @@ export const Instruction: React.FC = () => {
       bgColor={useColorModeValue("", "whiteAlpha.50")}
       boxShadow={useColorModeValue("base", "")}
     >
-      <InstructionHeader attributes={attributes} listeners={listeners!} />
+      <InstructionHeader attributes={attributes!} listeners={listeners!} />
 
       <Collapse in={uiState.expanded}>
         <Input

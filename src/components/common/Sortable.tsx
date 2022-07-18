@@ -19,15 +19,21 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import React from "react";
-import { IID } from "../../models/web3";
 
+/**
+ * Sortable container. All sortable items should be under this.
+ *
+ * For this to work ensure that:
+ *   - Each item is wrapped in `<Sortable>`
+ *   - Each item accepts `SortableItemProps`
+ *
+ * See `<Accounts>` and `<Account>` for an example
+ */
 export const Sortable: React.FC<{
-  itemOrder: IID[];
-  setItemOrder: (itemOrder: IID[]) => void;
-  children: React.ReactFragment;
+  itemOrder: string[];
+  setItemOrder: (itemOrder: string[]) => void;
+  children: React.ReactNode;
 }> = ({ itemOrder, setItemOrder, children }) => {
-  // const [items, setItems] = useState(itemOrder);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -40,8 +46,8 @@ export const Sortable: React.FC<{
       setItemOrder(
         arrayMove(
           itemOrder,
-          itemOrder.indexOf(active.id as IID),
-          itemOrder.indexOf(over?.id as IID)
+          itemOrder.indexOf(active.id as string),
+          itemOrder.indexOf(over?.id as string)
         )
       );
     }
