@@ -19,6 +19,7 @@ import {
   ITransactionPreview,
   mapToTransactionPreview,
 } from "../../models/preview";
+import { DEFAULT_RPC_ENDPOINTS } from "../../models/state";
 import { IRpcEndpoint } from "../../models/web3";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
@@ -33,7 +34,9 @@ export const ImportTransaction: React.FC = () => {
     (state) => state.transactionOptions
   );
 
-  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(rpcEndpoints[2]); // mainnet
+  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
+    DEFAULT_RPC_ENDPOINTS[2] // mainnet
+  );
   const [txnAddress, setTxnAddress] = useState(
     "4uz94jQaK9zCf1SBwg8o4nY5FtX3M75EZfEDYoM8GBBKCg9E8bN2kJHgB7uDobYqVpeasbVkD9qE3hoSLWsQfZ69"
   ); // TODO empty

@@ -3,7 +3,8 @@
 import { clusterApiUrl } from "@solana/web3.js";
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
-import { IID, toSortableCollection } from "./sortable";
+import { v4 as uuid } from "uuid";
+import { IID, SortableCollection, toSortableCollection } from "./sortable";
 import {
   IInstruction,
   IResults,
@@ -20,7 +21,7 @@ export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 export interface AppOptions {
   readonly explorer: Explorer;
   readonly autoConnectWallet: boolean;
-  readonly rpcEndpoints: IRpcEndpoint[];
+  readonly rpcEndpoints: SortableCollection<IRpcEndpoint>;
 }
 
 export interface UIInstructionState {
@@ -59,6 +60,7 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
+    id: uuid(),
     provider: "Solana",
     network: "devnet",
     url: clusterApiUrl("devnet"),
@@ -66,6 +68,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     custom: false,
   },
   {
+    id: uuid(),
     provider: "Solana",
     network: "testnet",
     url: clusterApiUrl("testnet"),
@@ -73,6 +76,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     custom: false,
   },
   {
+    id: uuid(),
     provider: "Solana",
     network: "mainnet-beta",
     url: clusterApiUrl("mainnet-beta"),
@@ -80,6 +84,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     custom: false,
   },
   {
+    id: uuid(),
     provider: "Serum",
     network: "mainnet-beta",
     url: "https://solana-api.projectserum.com",
@@ -87,6 +92,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     custom: false,
   },
   {
+    id: uuid(),
     provider: "You",
     network: "local",
     url: "http://0.0.0.0:8899",
@@ -98,15 +104,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
 export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solanafm",
   autoConnectWallet: true,
-  rpcEndpoints: DEFAULT_RPC_ENDPOINTS,
-};
-
-export const DEFAULT_UI_STATE: UIState = {
-  instructions: {
-    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": DEFAULT_UI_INSTRUCTION_STATE,
-  },
-  paletteOpen: false,
-  optionsOpen: false,
+  rpcEndpoints: toSortableCollection(DEFAULT_RPC_ENDPOINTS),
 };
 
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
@@ -126,12 +124,12 @@ const DEFAULT_TRANSACTION: ITransaction = {
   name: "Baby's First Transaction",
   instructions: toSortableCollection([
     {
-      id: "ba928274-35b6-48c4-a16c-c4346f0ffaf2",
+      id: uuid(),
       name: "Memo",
       programId: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo",
       accounts: toSortableCollection([
         {
-          id: "36683e70-f3ec-4d6d-a727-a08eefb549ed",
+          id: uuid(),
           name: "Signer",
           pubkey: "EQPzCaaYtoCRqaeHkahZWHaX6kyC6K3ytu9t86WvR4Y3",
           isWritable: true,
@@ -157,6 +155,14 @@ const DEFAULT_TRANSACTION: ITransaction = {
 //     },
 //   }
 // }
+
+export const DEFAULT_UI_STATE: UIState = {
+  instructions: {
+    [DEFAULT_TRANSACTION.instructions.map[0].id]: DEFAULT_UI_INSTRUCTION_STATE,
+  },
+  paletteOpen: false,
+  optionsOpen: false,
+};
 
 export const DEFAULT_STATE: AppState = {
   transaction: DEFAULT_TRANSACTION,

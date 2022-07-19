@@ -11,7 +11,7 @@ import {
   TransactionResponse,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-import { IID, SortableCollection, toOrderedArray } from "./sortable";
+import { IID, SortableCollection, toSortedArray } from "./sortable";
 import { UIInstructionState } from "./state";
 
 /** Converts lamports to SOL */
@@ -62,6 +62,7 @@ export const newInstruction = (): IInstruction => ({
 export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
 
 export interface IRpcEndpoint {
+  id: IID;
   provider: string;
   network: INetwork;
   url: string;
@@ -131,14 +132,14 @@ export const mapToTransaction = (
   // TODO filter out empty fields
   const transaction = new Transaction();
 
-  toOrderedArray(transactionData.instructions).forEach(
+  toSortedArray(transactionData.instructions).forEach(
     ({ id, programId, accounts, data }) => {
       if (uiInstructions[id].disabled || !programId) return;
 
       transaction.add(
         new TransactionInstruction({
           programId: new PublicKey(programId),
-          keys: toOrderedArray(accounts).map(
+          keys: toSortedArray(accounts).map(
             ({ pubkey, isWritable, isSigner }) => ({
               pubkey: new PublicKey(pubkey),
               isWritable,

@@ -11,7 +11,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useContext } from "react";
 import { FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { addTo, toOrderedArray } from "../../models/sortable";
+import { addTo, toSortedArray } from "../../models/sortable";
 import { instructionGetter } from "../../models/state";
 import { newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
@@ -72,7 +72,7 @@ export const Accounts: React.FC = () => {
             });
           }}
         >
-          {toOrderedArray(instruction.accounts).map((account, index) => (
+          {toSortedArray(instruction.accounts).map((account, index) => (
             <SortableItem key={account.id}>
               <Account data={account} index={index} />
             </SortableItem>

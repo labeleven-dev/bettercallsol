@@ -1,6 +1,6 @@
 // Models for the transaction to be exported
 
-import { toOrderedArray } from "./sortable";
+import { toSortedArray } from "./sortable";
 import { IAccount, IPlainText, IPubKey, ITransaction } from "./web3";
 
 export interface IInstructionExport {
@@ -20,11 +20,11 @@ const mapToTransactionExport = ({
   instructions,
 }: ITransaction): ITransactionExport => ({
   name,
-  instructions: toOrderedArray(instructions).map(
+  instructions: toSortedArray(instructions).map(
     ({ name, programId, accounts, data }) => ({
       name,
       programId,
-      accounts: toOrderedArray(accounts),
+      accounts: toSortedArray(accounts),
       data,
     })
   ),

@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { toSortedArray } from "../../models/sortable";
 
 export const RpcEndpointOptions: React.FC = () => {
   const rpcEndpoints = useTransactionStore(
@@ -21,7 +22,7 @@ export const RpcEndpointOptions: React.FC = () => {
   return (
     <Grid>
       <Text mb="2">Add or remove custom RPC points, or re-order the list:</Text>
-      {rpcEndpoints.map(
+      {toSortedArray(rpcEndpoints).map(
         ({ network, provider, url, custom, enabled }, index) => (
           <Flex m="1" key={index}>
             <DragHandleIcon h="3" w="3" mt="12" mr="1" />

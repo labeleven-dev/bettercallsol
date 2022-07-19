@@ -43,6 +43,6 @@ export const removeFrom = <T extends Identifiable>(
   delete collection.map[itemId];
 };
 
-export const toOrderedArray = <T extends Identifiable>(
+export const toSortedArray = <T extends Identifiable>(
   collection: SortableCollection<T>
 ) => collection.order.map((id) => collection.map[id]);
