@@ -12,10 +12,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { WritableDraft } from "immer/dist/internal";
 import React, { ChangeEvent, useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { accountGetter } from "../../models/state";
+import { AppState } from "../../models/state";
 import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemProps } from "../common/SortableItem";
@@ -27,7 +28,8 @@ export const Account: React.FC<
   { data: IAccount; index: number } & SortableItemProps
 > = ({ data, index, attributes, listeners, setNodeRef, style }) => {
   const instruction = useContext(InstructionContext);
-  const getAccount = accountGetter(instruction.id, data.id);
+  const account = (state: WritableDraft<AppState>) =>
+    state.transaction.instructions[instruction.id].accounts[data.id];
 
   const network = useTransactionStore(
     (state) => state.transactionOptions.rpcEndpoint.network
@@ -39,7 +41,7 @@ export const Account: React.FC<
 
   const setPubKey = (e: ChangeEvent<HTMLInputElement>) => {
     set((state) => {
-      getAccount(state).pubkey = e.target.value;
+      account(state).pubkey = e.target.value;
     });
   };
 
@@ -71,7 +73,7 @@ export const Account: React.FC<
         value={data.name}
         onChange={(value: string) => {
           set((state) => {
-            getAccount(state).name = value;
+            account(state).name = value;
           });
         }}
       ></TruncatableEditable>
@@ -108,7 +110,7 @@ export const Account: React.FC<
         toggled={data.isWritable}
         onToggle={(toggled) => {
           set((state) => {
-            getAccount(state).isWritable = toggled;
+            account(state).isWritable = toggled;
           });
         }}
       />
@@ -119,7 +121,7 @@ export const Account: React.FC<
         toggled={data.isSigner}
         onToggle={(toggled) => {
           set((state) => {
-            getAccount(state).isSigner = toggled;
+            account(state).isSigner = toggled;
           });
         }}
       />

@@ -8,7 +8,9 @@ export const Data: React.FC = () => {
   const instruction = useContext(InstructionContext);
   const getInstruction = instructionGetter(instruction.id);
 
-  const { data } = useTransactionStore(getInstruction);
+  const { data } = useTransactionStore(
+    (state) => state.transaction.instructions[instruction.id]
+  );
 
   const set = useTransactionStore((state) => state.set);
 

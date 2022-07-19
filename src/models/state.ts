@@ -15,15 +15,18 @@ export type IID = string;
 
 export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
+// We mutate state using immerjs. All state fields are set to readonly
+// so we don't by mistake try to mutate outside immerjs.
+
 export interface AppOptions {
-  explorer: Explorer;
-  autoConnectWallet: boolean;
-  rpcEndpoints: IRpcEndpoint[];
+  readonly explorer: Explorer;
+  readonly autoConnectWallet: boolean;
+  readonly rpcEndpoints: IRpcEndpoint[];
 }
 
 export interface UIInstructionState {
-  disabled: boolean;
-  expanded: boolean;
+  readonly disabled: boolean;
+  readonly expanded: boolean;
 }
 
 export const DEFAULT_UI_INSTRUCTION_STATE = {
@@ -32,17 +35,17 @@ export const DEFAULT_UI_INSTRUCTION_STATE = {
 };
 
 export interface UIState {
-  instructions: Record<IID, UIInstructionState>;
-  paletteOpen: boolean;
-  optionsOpen: boolean;
+  readonly instructions: Record<IID, UIInstructionState>;
+  readonly paletteOpen: boolean;
+  readonly optionsOpen: boolean;
 }
 
 export type AppState = {
-  transactionOptions: ITransactionOptions;
-  transaction: ITransaction;
-  results: IResults;
-  appOptions: AppOptions;
-  uiState: UIState;
+  readonly transactionOptions: ITransactionOptions;
+  readonly transaction: ITransaction;
+  readonly results: IResults;
+  readonly appOptions: AppOptions;
+  readonly uiState: UIState;
   set: (fn: (state: Draft<AppState>) => void) => void;
   addInstruction: (instruction: IInstruction) => void;
   removeInstruction: (instructionId: IID) => void;
@@ -174,10 +177,5 @@ export const DEFAULT_STATE: AppState = {
 };
 
 export const instructionGetter =
-  (id: IID) => (state: AppState | WritableDraft<AppState>) =>
+  (id: IID) => (state: WritableDraft<AppState>) =>
     state.transaction.instructions[id];
-
-export const accountGetter =
-  (instructionId: IID, accountId: IID) =>
-  (state: AppState | WritableDraft<AppState>) =>
-    state.transaction.instructions[instructionId].accounts[accountId];
