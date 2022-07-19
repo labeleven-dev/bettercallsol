@@ -12,17 +12,16 @@ import React, { useContext } from "react";
 import { FaWallet } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { instructionGetter } from "../../models/state";
-import { IID, newAccount } from "../../models/web3";
+import { IID, instructionGetter } from "../../models/state";
+import { newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { SortableItem } from "../common/SortableItem";
 import { Account } from "./Account";
 import { InstructionContext } from "./Instructions";
 
 export const Accounts: React.FC = () => {
-  const instructionId = useContext(InstructionContext);
-  const getInstruction = instructionGetter(instructionId);
-  const instruction = useTransactionStore(getInstruction);
+  const instruction = useContext(InstructionContext);
+  const getInstruction = instructionGetter(instruction.id);
 
   const set = useTransactionStore((state) => state.set);
 

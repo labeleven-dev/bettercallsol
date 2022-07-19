@@ -22,19 +22,16 @@ export const Instruction: React.FC<SortableItemProps> = ({
   setNodeRef,
   style,
 }) => {
-  const instructionId = useContext(InstructionContext);
-  const getInstruction = instructionGetter(instructionId);
-
-  const instruction = useTransactionStore(
-    (state) => state.transaction.instructions[instructionId]
-  );
+  const instruction = useContext(InstructionContext);
   const network = useTransactionStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
   const uiState = useTransactionStore(
-    (state) => state.uiState.instructions[instructionId]
+    (state) => state.uiState.instructions[instruction.id]
   );
   const set = useTransactionStore((state) => state.set);
+
+  const getInstruction = instructionGetter(instruction.id);
 
   return (
     <Grid

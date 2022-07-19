@@ -1,9 +1,9 @@
 // Models for transactions fetched from the chain, as part of import
 
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
+import { IID } from "./state";
 import {
   IAccount,
-  IID,
   IInstruction,
   INetwork,
   IPlainText,

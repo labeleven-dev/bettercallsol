@@ -31,8 +31,8 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
   setNodeRef,
   style,
 }) => {
-  const instructionId = useContext(InstructionContext);
-  const getAccount = accountGetter(instructionId, id);
+  const instruction = useContext(InstructionContext);
+  const getAccount = accountGetter(instruction.id, id);
 
   const account = useTransactionStore(getAccount);
   const network = useTransactionStore(
@@ -53,11 +53,9 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
 
   const removeAccount = () => {
     set((state) => {
-      const instruction = state.transaction.instructions[instructionId];
-      instruction.accountOrder = instruction.accountOrder.filter(
-        (x) => x !== id
-      );
-      delete instruction.accounts[id];
+      const ixn = state.transaction.instructions[instruction.id];
+      ixn.accountOrder = instruction.accountOrder.filter((x) => x !== id);
+      delete ixn.accounts[id];
     });
   };
 

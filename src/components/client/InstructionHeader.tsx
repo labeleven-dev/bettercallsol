@@ -32,25 +32,22 @@ export const InstructionHeader: React.FC<{
   attributes: DraggableAttributes;
   listeners: SyntheticListenerMap;
 }> = ({ attributes, listeners }) => {
-  const instructionId = useContext(InstructionContext);
-  const getInstruction = instructionGetter(instructionId);
-
-  const instruction = useTransactionStore(
-    (state) => state.transaction.instructions[instructionId]
-  );
+  const instruction = useContext(InstructionContext);
   const uiState = useTransactionStore(
-    (state) => state.uiState.instructions[instructionId]
+    (state) => state.uiState.instructions[instruction.id]
   );
   const set = useTransactionStore((state) => state.set);
   const removeInstruction = useTransactionStore(
     (state) => state.removeInstruction
   );
 
+  const getInstruction = instructionGetter(instruction.id);
+
   const clearInstruction = () => {
     set((state) => {
-      state.transaction.instructions[instructionId] = {
+      state.transaction.instructions[instruction.id] = {
         ...newInstruction(),
-        id: instructionId,
+        id: instruction.id,
       };
     });
   };
@@ -73,7 +70,7 @@ export const InstructionHeader: React.FC<{
         variant="ghost"
         onClick={() => {
           set((state) => {
-            state.uiState.instructions[instructionId].expanded =
+            state.uiState.instructions[instruction.id].expanded =
               !uiState.expanded;
           });
         }}
@@ -106,7 +103,7 @@ export const InstructionHeader: React.FC<{
           }
           onClick={() => {
             set((state) => {
-              state.uiState.instructions[instructionId].disabled =
+              state.uiState.instructions[instruction.id].disabled =
                 !uiState.disabled;
             });
           }}
@@ -127,7 +124,7 @@ export const InstructionHeader: React.FC<{
           <MenuItem
             icon={<DeleteIcon />}
             onClick={() => {
-              removeInstruction(instructionId);
+              removeInstruction(instruction.id);
             }}
           >
             Remove

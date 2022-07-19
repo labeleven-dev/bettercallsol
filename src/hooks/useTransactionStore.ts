@@ -4,8 +4,8 @@ import {
   AppState,
   DEFAULT_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
+  IID,
 } from "../models/state";
-import { IID } from "../models/web3";
 
 const LOCAL_STORAGE_KEY = "bscolState";
 

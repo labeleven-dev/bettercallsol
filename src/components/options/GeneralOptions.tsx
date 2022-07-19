@@ -9,10 +9,6 @@ export const GeneralOptions: React.FC = () => {
   const appOptions = useTransactionStore((state) => state.appOptions);
   const set = useTransactionStore((state) => state.set);
 
-  // explorer: Explorer;
-  // hideNumbering: boolean;
-  // disableMainnet: boolean;
-
   return (
     <FormControl display="flex" alignItems="center">
       <Grid templateColumns="270px 1fr" gap="15px 5px">

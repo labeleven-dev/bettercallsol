@@ -5,8 +5,8 @@ import { instructionGetter } from "../../models/state";
 import { InstructionContext } from "./Instructions";
 
 export const Data: React.FC = () => {
-  const instructionId = useContext(InstructionContext);
-  const getInstruction = instructionGetter(instructionId);
+  const instruction = useContext(InstructionContext);
+  const getInstruction = instructionGetter(instruction.id);
 
   const { data } = useTransactionStore(getInstruction);
 

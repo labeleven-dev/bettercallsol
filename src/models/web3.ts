@@ -11,7 +11,7 @@ import {
   TransactionResponse,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-import { UIInstructionState } from "./state";
+import { IID, UIInstructionState } from "./state";
 
 /** Converts lamports to SOL */
 export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
@@ -23,7 +23,6 @@ export const short = (pubkey: string) =>
     pubkey.length - SHORT_TRUNC_TO
   )}`;
 
-export type IID = string;
 export type IPubKey = string;
 
 export interface IAccount {

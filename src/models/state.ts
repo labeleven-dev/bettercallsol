@@ -4,13 +4,14 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import {
-  IID,
   IInstruction,
   IResults,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
 } from "./web3";
+
+export type IID = string;
 
 export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
