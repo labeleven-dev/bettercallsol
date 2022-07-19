@@ -3,6 +3,7 @@ import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React from "react";
+import { IID } from "../../models/state";
 
 /**
  * Each sortable item should accept these props
@@ -10,7 +11,7 @@ import React from "react";
  * `id` should be provided by user. The rest is set by `<SortableItem>`
  */
 export type SortableItemProps = {
-  id: string;
+  id: IID;
   attributes?: DraggableAttributes;
   listeners?: SyntheticListenerMap;
   setNodeRef?: (node: HTMLElement | null) => void;

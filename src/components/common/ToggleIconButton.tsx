@@ -4,17 +4,16 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 export const ToggleIconButton: React.FC<
   {
     icon: React.ReactElement;
     label: string;
-    initialToggled?: boolean;
-    onToggled?: (toggled: boolean) => void;
+    toggled?: boolean;
+    onToggle?: (toggled: boolean) => void;
   } & Omit<IconButtonProps, "aria-label">
-> = ({ icon, label, initialToggled = false, onToggled, ...theRest }) => {
-  const [toggled, setToggled] = useState(initialToggled);
+> = ({ icon, label, toggled = false, onToggle, ...theRest }) => {
   const bgColour = useColorModeValue("main.200", "main.800");
 
   return (
@@ -25,8 +24,7 @@ export const ToggleIconButton: React.FC<
         variant="ghost"
         backgroundColor={toggled ? bgColour : ""}
         onClick={() => {
-          if (onToggled) onToggled(!toggled);
-          setToggled(!toggled);
+          if (onToggle) onToggle(!toggled);
         }}
         {...theRest}
       />

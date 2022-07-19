@@ -12,7 +12,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import React, { ChangeEvent, useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
@@ -46,8 +45,6 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
   const setPubKey = (e: ChangeEvent<HTMLInputElement>) => {
     set((state) => {
       getAccount(state).pubkey = e.target.value;
-      if (PublicKey.isOnCurve(e.target.value)) {
-      }
     });
   };
 
@@ -92,7 +89,6 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
           />
         )}
         <Input
-          id={account.id}
           flex="1"
           ml="2"
           fontFamily="mono"
@@ -114,8 +110,8 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
         ml="1"
         label="Writable"
         icon={<EditIcon />}
-        initialToggled={account.isWritable}
-        onToggled={(toggled) => {
+        toggled={account.isWritable}
+        onToggle={(toggled) => {
           set((state) => {
             getAccount(state).isWritable = toggled;
           });
@@ -125,8 +121,8 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
         ml="1"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
-        initialToggled={account.isSigner}
-        onToggled={(toggled) => {
+        toggled={account.isSigner}
+        onToggle={(toggled) => {
           set((state) => {
             getAccount(state).isSigner = toggled;
           });

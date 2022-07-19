@@ -30,8 +30,8 @@ import React from "react";
  * See `<Accounts>` and `<Account>` for an example
  */
 export const Sortable: React.FC<{
-  itemOrder: string[];
-  setItemOrder: (itemOrder: string[]) => void;
+  itemOrder: IID[];
+  setItemOrder: (itemOrder: IID[]) => void;
   children: React.ReactNode;
 }> = ({ itemOrder, setItemOrder, children }) => {
   const sensors = useSensors(
@@ -46,8 +46,8 @@ export const Sortable: React.FC<{
       setItemOrder(
         arrayMove(
           itemOrder,
-          itemOrder.indexOf(active.id as string),
-          itemOrder.indexOf(over?.id as string)
+          itemOrder.indexOf(active.id as IID),
+          itemOrder.indexOf(over?.id as IID)
         )
       );
     }
