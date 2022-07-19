@@ -3,6 +3,7 @@
 import { clusterApiUrl } from "@solana/web3.js";
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
+import { IID, toSortableCollection } from "./sortable";
 import {
   IInstruction,
   IResults,
@@ -10,8 +11,6 @@ import {
   ITransaction,
   ITransactionOptions,
 } from "./web3";
-
-export type IID = string;
 
 export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
@@ -125,25 +124,23 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 // TODO just for testing
 const DEFAULT_TRANSACTION: ITransaction = {
   name: "Baby's First Transaction",
-  instructionOrder: ["ba928274-35b6-48c4-a16c-c4346f0ffaf2"],
-  instructions: {
-    "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
+  instructions: toSortableCollection([
+    {
       id: "ba928274-35b6-48c4-a16c-c4346f0ffaf2",
       name: "Memo",
       programId: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo",
-      accountOrder: ["111"],
-      accounts: {
-        "111": {
-          id: "111",
+      accounts: toSortableCollection([
+        {
+          id: "36683e70-f3ec-4d6d-a727-a08eefb549ed",
           name: "Signer",
           pubkey: "EQPzCaaYtoCRqaeHkahZWHaX6kyC6K3ytu9t86WvR4Y3",
           isWritable: true,
           isSigner: true,
         },
-      },
+      ]),
       data: "hello",
     },
-  },
+  ]),
 };
 
 // const DEFAULT_TRANSACTION: ITransaction = {
@@ -178,4 +175,4 @@ export const DEFAULT_STATE: AppState = {
 
 export const instructionGetter =
   (id: IID) => (state: WritableDraft<AppState>) =>
-    state.transaction.instructions[id];
+    state.transaction.instructions.map[id];

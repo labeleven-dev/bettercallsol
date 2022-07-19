@@ -45,7 +45,7 @@ export const InstructionHeader: React.FC<{
 
   const clearInstruction = () => {
     set((state) => {
-      state.transaction.instructions[instruction.id] = {
+      state.transaction.instructions.map[instruction.id] = {
         ...newInstruction(),
         id: instruction.id,
       };

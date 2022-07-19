@@ -9,7 +9,7 @@ export const Data: React.FC = () => {
   const getInstruction = instructionGetter(instruction.id);
 
   const { data } = useTransactionStore(
-    (state) => state.transaction.instructions[instruction.id]
+    (state) => state.transaction.instructions.map[instruction.id]
   );
 
   const set = useTransactionStore((state) => state.set);

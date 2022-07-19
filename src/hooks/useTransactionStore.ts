@@ -1,10 +1,10 @@
 import produce from "immer";
 import create from "zustand";
+import { addTo, removeFrom } from "../models/sortable";
 import {
   AppState,
   DEFAULT_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
-  IID,
 } from "../models/state";
 
 const LOCAL_STORAGE_KEY = "bscolState";
@@ -23,11 +23,11 @@ export const useTransactionStore = create<AppState>((set) => {
     set: (fn) => {
       set(produce(fn));
     },
+    // define these helpers since they interact with different slices of state
     addInstruction: (instruction) => {
       set(
         produce((state) => {
-          state.transaction.instructions[instruction.id] = instruction;
-          state.transaction.instructionOrder.push(instruction.id);
+          addTo(state.transaction.instructions, instruction);
           state.uiState.instructions[instruction.id] =
             DEFAULT_UI_INSTRUCTION_STATE;
         })
@@ -36,11 +36,7 @@ export const useTransactionStore = create<AppState>((set) => {
     removeInstruction: (instructionId) => {
       set(
         produce((state) => {
-          state.transaction.instructionOrder =
-            state.transaction.instructionOrder.filter(
-              (x: IID) => x !== instructionId
-            );
-          delete state.transaction.instructions[instructionId];
+          removeFrom(state.transaction.instructions, instructionId);
           delete state.uiState.instructions[instructionId];
         })
       );

@@ -2,7 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { IID } from "../../models/state";
+import { IID, toOrderedArray } from "../../models/sortable";
 import { newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { SortableItem } from "../common/SortableItem";
@@ -17,21 +17,19 @@ export const Instructions: React.FC = () => {
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {
-      state.transaction.instructionOrder = itemOrders;
+      state.transaction.instructions.order = itemOrders;
     });
   };
 
   return (
     <Grid>
       <Sortable
-        itemOrder={transaction.instructionOrder}
+        itemOrder={transaction.instructions.order}
         setItemOrder={setOrderItem}
       >
-        {transaction.instructionOrder.map((id, index) => (
-          <InstructionContext.Provider
-            value={transaction.instructions[id]}
-            key={id}
-          >
+        {toOrderedArray(transaction.instructions).map((instruction) => (
+          // key must be stable so it can't be loop index
+          <InstructionContext.Provider value={instruction} key={instruction.id}>
             <SortableItem>
               <Instruction />
             </SortableItem>

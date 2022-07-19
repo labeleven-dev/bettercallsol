@@ -13,9 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WritableDraft } from "immer/dist/internal";
-import React, { ChangeEvent, useContext } from "react";
+import React, { useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { removeFrom } from "../../models/sortable";
 import { AppState } from "../../models/state";
 import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
@@ -29,7 +30,7 @@ export const Account: React.FC<
 > = ({ data, index, attributes, listeners, setNodeRef, style }) => {
   const instruction = useContext(InstructionContext);
   const account = (state: WritableDraft<AppState>) =>
-    state.transaction.instructions[instruction.id].accounts[data.id];
+    state.transaction.instructions.map[instruction.id].accounts.map[data.id];
 
   const network = useTransactionStore(
     (state) => state.transactionOptions.rpcEndpoint.network
@@ -38,20 +39,6 @@ export const Account: React.FC<
 
   const { publicKey: walletPubkey } = useWallet();
   const isWallet = data.pubkey === walletPubkey?.toBase58();
-
-  const setPubKey = (e: ChangeEvent<HTMLInputElement>) => {
-    set((state) => {
-      account(state).pubkey = e.target.value;
-    });
-  };
-
-  const removeAccount = () => {
-    set((state) => {
-      const ixn = state.transaction.instructions[instruction.id];
-      ixn.accountOrder = instruction.accountOrder.filter((x) => x !== data.id);
-      delete ixn.accounts[data.id];
-    });
-  };
 
   return (
     <Flex mb="2" ref={setNodeRef} style={style}>
@@ -91,7 +78,11 @@ export const Account: React.FC<
           fontFamily="mono"
           placeholder="Account Public Key"
           value={data.pubkey}
-          onChange={setPubKey}
+          onChange={(e) => {
+            set((state) => {
+              account(state).pubkey = e.target.value;
+            });
+          }}
         ></Input>
         <InputRightElement>
           <ExplorerButton
@@ -130,7 +121,14 @@ export const Account: React.FC<
           aria-label="Remove"
           icon={<DeleteIcon />}
           variant="ghost"
-          onClick={removeAccount}
+          onClick={() => {
+            set((state) => {
+              removeFrom(
+                state.transaction.instructions.map[instruction.id].accounts,
+                data.id
+              );
+            });
+          }}
         />
       </Tooltip>
     </Flex>

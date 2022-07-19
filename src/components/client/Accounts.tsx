@@ -10,9 +10,9 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useContext } from "react";
 import { FaWallet } from "react-icons/fa";
-import { v4 as uuid } from "uuid";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { IID, instructionGetter } from "../../models/state";
+import { addTo, toOrderedArray } from "../../models/sortable";
+import { instructionGetter } from "../../models/state";
 import { newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { SortableItem } from "../common/SortableItem";
@@ -22,39 +22,8 @@ import { InstructionContext } from "./Instructions";
 export const Accounts: React.FC = () => {
   const instruction = useContext(InstructionContext);
   const getInstruction = instructionGetter(instruction.id);
-
   const set = useTransactionStore((state) => state.set);
-
   const { publicKey: walletPubkey } = useWallet();
-
-  const setItemOrder = (itemOrder: IID[]) => {
-    set((state) => {
-      getInstruction(state).accountOrder = itemOrder;
-    });
-  };
-
-  const addAccount = () => {
-    set((state) => {
-      const instruction = getInstruction(state);
-      const account = newAccount();
-      instruction.accounts[account.id] = account;
-      instruction.accountOrder.push(account.id);
-    });
-  };
-
-  const addWalletAccount = () => {
-    set((state) => {
-      const instruction = getInstruction(state);
-      const id = uuid();
-      instruction.accounts[id] = {
-        id,
-        pubkey: walletPubkey?.toBase58() || "",
-        isSigner: true,
-        isWritable: false,
-      };
-      instruction.accountOrder.push(id);
-    });
-  };
 
   return (
     <>
@@ -69,7 +38,11 @@ export const Accounts: React.FC = () => {
             icon={<AddIcon />}
             variant="outline"
             size="sm"
-            onClick={addAccount}
+            onClick={() => {
+              set((state) => {
+                addTo(getInstruction(state).accounts, newAccount());
+              });
+            }}
           />
         </Tooltip>
         <Tooltip label="Add Wallet Account">
@@ -78,18 +51,30 @@ export const Accounts: React.FC = () => {
             icon={<Icon as={FaWallet} />}
             variant="outline"
             size="sm"
-            onClick={addWalletAccount}
+            onClick={() => {
+              set((state) => {
+                addTo(getInstruction(state).accounts, {
+                  ...newAccount(),
+                  pubkey: walletPubkey?.toBase58() || "",
+                  isSigner: true,
+                });
+              });
+            }}
           />
         </Tooltip>
       </Flex>
       <Box>
         <Sortable
-          itemOrder={instruction.accountOrder}
-          setItemOrder={setItemOrder}
+          itemOrder={instruction.accounts.order}
+          setItemOrder={(itemOrder) => {
+            set((state) => {
+              getInstruction(state).accounts.order = itemOrder;
+            });
+          }}
         >
-          {instruction.accountOrder.map((id, index) => (
-            <SortableItem key={id}>
-              <Account data={instruction.accounts[id]} index={index} />
+          {toOrderedArray(instruction.accounts).map((account, index) => (
+            <SortableItem key={account.id}>
+              <Account data={account} index={index} />
             </SortableItem>
           ))}
         </Sortable>

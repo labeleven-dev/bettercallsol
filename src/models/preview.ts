@@ -1,9 +1,8 @@
 // Models for transactions fetched from the chain, as part of import
 
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
-import { IID } from "./state";
+import { toSortableCollection } from "./sortable";
 import {
-  IAccount,
   IInstruction,
   INetwork,
   IPlainText,
@@ -113,27 +112,17 @@ export const mapToIInstruction = ({
   programId,
   accounts,
   data,
-}: IInstructionPreview): IInstruction => {
-  const mappedAccounts: Record<IID, IAccount> = {};
-  const accountOrder: IID[] = [];
-
-  accounts.forEach(({ pubkey, isWritable, isSigner }) => {
-    const account = {
+}: IInstructionPreview): IInstruction => ({
+  ...newInstruction(),
+  name: "Imported Instruction",
+  programId,
+  accounts: toSortableCollection(
+    accounts.map(({ pubkey, isWritable, isSigner }) => ({
       ...newAccount(),
       pubkey,
       isSigner,
       isWritable,
-    };
-    mappedAccounts[account.id] = account;
-    accountOrder.push(account.id);
-  });
-
-  return {
-    ...newInstruction(),
-    name: "Imported Instruction",
-    programId,
-    accounts: mappedAccounts,
-    accountOrder,
-    data,
-  };
-};
+    }))
+  ),
+  data,
+});

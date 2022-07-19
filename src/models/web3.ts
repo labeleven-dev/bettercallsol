@@ -11,7 +11,8 @@ import {
   TransactionResponse,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-import { IID, UIInstructionState } from "./state";
+import { IID, SortableCollection, toOrderedArray } from "./sortable";
+import { UIInstructionState } from "./state";
 
 /** Converts lamports to SOL */
 export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
@@ -46,9 +47,7 @@ export interface IInstruction {
   id: IID;
   name?: string;
   programId: IPubKey;
-  // The map and id array is to cater for Sortable component
-  accountOrder: IID[];
-  accounts: Record<IID, IAccount>;
+  accounts: SortableCollection<IAccount>;
   data: IPlainText; // TODO anchor
 }
 
@@ -57,8 +56,7 @@ export const newInstruction = (): IInstruction => ({
   name: "New Instruction",
   programId: "",
   data: "",
-  accounts: {},
-  accountOrder: [],
+  accounts: { map: {}, order: [] },
 });
 
 export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
@@ -73,9 +71,7 @@ export interface IRpcEndpoint {
 
 export interface ITransaction {
   name?: string;
-  // The map and id array is to cater for Sortable component
-  instructionOrder: IID[];
-  instructions: Record<IID, IInstruction>;
+  instructions: SortableCollection<IInstruction>;
 }
 
 export interface IBalance {
@@ -135,27 +131,25 @@ export const mapToTransaction = (
   // TODO filter out empty fields
   const transaction = new Transaction();
 
-  transactionData.instructionOrder.forEach((id) => {
-    const { programId, accountOrder, accounts, data } =
-      transactionData.instructions[id];
+  toOrderedArray(transactionData.instructions).forEach(
+    ({ id, programId, accounts, data }) => {
+      if (uiInstructions[id].disabled || !programId) return;
 
-    if (uiInstructions[id].disabled || !programId) return;
-
-    transaction.add(
-      new TransactionInstruction({
-        programId: new PublicKey(programId),
-        keys: accountOrder.map((id) => {
-          const { pubkey, isWritable, isSigner } = accounts[id];
-          return {
-            pubkey: new PublicKey(pubkey),
-            isWritable,
-            isSigner,
-          };
-        }),
-        data: Buffer.from(data),
-      })
-    );
-  });
+      transaction.add(
+        new TransactionInstruction({
+          programId: new PublicKey(programId),
+          keys: toOrderedArray(accounts).map(
+            ({ pubkey, isWritable, isSigner }) => ({
+              pubkey: new PublicKey(pubkey),
+              isWritable,
+              isSigner,
+            })
+          ),
+          data: Buffer.from(data),
+        })
+      );
+    }
+  );
 
   return transaction;
 };

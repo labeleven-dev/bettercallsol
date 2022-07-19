@@ -1,5 +1,6 @@
 // Models for the transaction to be exported
 
+import { toOrderedArray } from "./sortable";
 import { IAccount, IPlainText, IPubKey, ITransaction } from "./web3";
 
 export interface IInstructionExport {
@@ -16,19 +17,17 @@ export interface ITransactionExport {
 
 const mapToTransactionExport = ({
   name,
-  instructionOrder,
   instructions,
 }: ITransaction): ITransactionExport => ({
   name,
-  instructions: instructionOrder.map((id) => {
-    const { name, programId, accountOrder, accounts, data } = instructions[id];
-    return {
+  instructions: toOrderedArray(instructions).map(
+    ({ name, programId, accounts, data }) => ({
       name,
       programId,
-      accounts: accountOrder.map((id) => accounts[id]),
+      accounts: toOrderedArray(accounts),
       data,
-    };
-  }),
+    })
+  ),
 });
 
 // const mapFromTransactionExport = (

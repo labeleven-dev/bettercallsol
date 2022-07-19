@@ -19,7 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import React from "react";
-import { IID } from "../../models/state";
+import { IID } from "../../models/sortable";
 
 export const SortableItemContext = React.createContext("");
 
