@@ -70,6 +70,15 @@ export interface IRpcEndpoint {
   custom: boolean;
 }
 
+export const newRpcEndpoint = (): IRpcEndpoint => ({
+  id: uuid(),
+  provider: "",
+  network: "devnet",
+  url: "",
+  enabled: true,
+  custom: true,
+});
+
 export interface ITransaction {
   name?: string;
   instructions: SortableCollection<IInstruction>;

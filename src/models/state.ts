@@ -158,7 +158,7 @@ const DEFAULT_TRANSACTION: ITransaction = {
 
 export const DEFAULT_UI_STATE: UIState = {
   instructions: {
-    [DEFAULT_TRANSACTION.instructions.map[0].id]: DEFAULT_UI_INSTRUCTION_STATE,
+    [DEFAULT_TRANSACTION.instructions.order[0]]: DEFAULT_UI_INSTRUCTION_STATE,
   },
   paletteOpen: false,
   optionsOpen: false,

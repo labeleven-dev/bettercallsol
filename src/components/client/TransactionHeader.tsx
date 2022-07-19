@@ -114,7 +114,9 @@ export const TransactionHeader: React.FC = () => {
             as={Button}
             rightIcon={<ChevronDownIcon />}
           >
-            {`${rpcEndpoint.network} (${rpcEndpoint.provider})`}
+            {`${rpcEndpoint.network}${
+              rpcEndpoint.provider ? " (" + rpcEndpoint.provider + ")" : ""
+            }`}
           </MenuButton>
         </Tooltip>
         <RpcEndpointMenuList

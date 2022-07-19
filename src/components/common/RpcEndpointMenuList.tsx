@@ -14,7 +14,7 @@ export const RpcEndpointMenuList: React.FC<{
   return (
     <MenuList fontSize="md">
       {toSortedArray(rpcEndpoints)
-        .filter(({ enabled }) => enabled)
+        .filter(({ enabled, url }) => enabled && url)
         .map((it, index) => (
           <MenuItem
             icon={endpoint.url === it.url ? <CheckIcon /> : undefined}
