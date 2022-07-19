@@ -30,7 +30,7 @@ export const Instructions: React.FC = () => {
         {transaction.instructionOrder.map((id, index) => (
           <InstructionContext.Provider
             value={transaction.instructions[id]}
-            key={index}
+            key={id}
           >
             <SortableItem>
               <Instruction id={id} />

@@ -19,6 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import React from "react";
+import { IID } from "../../models/state";
 
 /**
  * Sortable container. All sortable items should be under this.
