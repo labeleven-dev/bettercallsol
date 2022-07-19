@@ -20,6 +20,7 @@ import {
   DEFAUT_TRANSACTION_OPTIONS,
 } from "../../models/state";
 import { GeneralOptions } from "./GeneralOptions";
+import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
@@ -45,11 +46,15 @@ export const Options: React.FC = () => {
           <Tabs isFitted>
             <TabList mb="1em">
               <Tab>General</Tab>
+              <Tab>RPC Endpoints</Tab>
               <Tab>Transaction</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
                 <GeneralOptions />
+              </TabPanel>
+              <TabPanel>
+                <RpcEndpointOptions />
               </TabPanel>
               <TabPanel>
                 <TransactionOptions />
