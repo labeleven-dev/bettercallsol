@@ -1,6 +1,6 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { mapTransaction } from "../models/web3";
+import { mapToIResults, mapToTransaction } from "../models/web3";
 import { useTransactionStore } from "./useTransactionStore";
 
 /**
@@ -47,40 +47,8 @@ export const useTransaction: () => () => void = () => {
             );
 
             if (transaction) {
-              // TODO move to a mapper
-              const { accountKeys } = transaction.transaction.message;
-              const { logMessages, err, fee, preBalances, postBalances } =
-                transaction.meta!;
-
-              // determine balances
-              const accounts = Object.values(
-                transactionData.instructions
-              ).flatMap((instruction) => Object.values(instruction.accounts));
-              let balances = accountKeys.map((address, index) => ({
-                address: address.toBase58(),
-                names: accounts
-                  .filter(
-                    (account) =>
-                      account.pubkey === address.toBase58() && account.name
-                  )
-                  .map((account) => account.name!),
-                before: preBalances[index],
-                after: postBalances[index],
-              }));
-
               set((state) => {
-                state.results = {
-                  inProgress: false,
-                  signature: results.signature,
-                  confirmationStatus: "finalized",
-                  finalisedAt: new Date().getTime(),
-                  blockTime: transaction.blockTime || undefined,
-                  slot: transaction?.slot,
-                  balances,
-                  logs: logMessages || [],
-                  error: err as string,
-                  fee,
-                };
+                state.results = mapToIResults(transaction);
               });
             }
           }
@@ -135,7 +103,10 @@ export const useTransaction: () => () => void = () => {
     });
 
     try {
-      const transaction = mapTransaction(transactionData, uiState.instructions);
+      const transaction = mapToTransaction(
+        transactionData,
+        uiState.instructions
+      );
       const signature = await sendTransaction(transaction, connection, {
         skipPreflight: transactionOptions.skipPreflight,
         maxRetries: transactionOptions.maxRetries,

@@ -9,6 +9,7 @@ import {
   Transaction,
   TransactionConfirmationStatus,
   TransactionInstruction,
+  TransactionResponse,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
 import { UIInstructionState } from "./state";
@@ -87,7 +88,6 @@ export interface ITransaction {
 
 export interface IBalance {
   address: string;
-  names: string[];
   before: number;
   after: number;
 }
@@ -137,7 +137,7 @@ export interface ITransactionOptions {
 }
 
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
-export const mapTransaction = (
+export const mapToTransaction = (
   transactionData: ITransaction,
   uiInstructions: Record<IID, UIInstructionState>
 ): Transaction => {
@@ -163,4 +163,30 @@ export const mapTransaction = (
     );
   });
   return transaction;
+};
+
+export const mapToIResults = (transaction: TransactionResponse): IResults => {
+  const { accountKeys } = transaction.transaction.message;
+  const { logMessages, err, fee, preBalances, postBalances } =
+    transaction.meta!;
+
+  // determine balances
+  let balances = accountKeys.map((address, index) => ({
+    address: address.toBase58(),
+    before: preBalances[index],
+    after: postBalances[index],
+  }));
+
+  return {
+    inProgress: false,
+    signature: transaction.transaction.signatures[0],
+    confirmationStatus: "finalized",
+    finalisedAt: new Date().getTime(),
+    blockTime: transaction.blockTime || undefined,
+    slot: transaction?.slot,
+    balances,
+    logs: logMessages || [],
+    error: err as string,
+    fee,
+  };
 };

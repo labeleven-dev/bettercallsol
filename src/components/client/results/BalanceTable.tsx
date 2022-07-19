@@ -5,7 +5,6 @@ import {
   Switch,
   Table,
   TableContainer,
-  Tag,
   Tbody,
   Td,
   Th,
@@ -49,17 +48,18 @@ export const BalanceTable: React.FC<{
             .filter(
               ({ before, after }) => !showOnlyChanges || after - before !== 0
             )
-            .map(({ address, names, before, after }, index) => {
+            .map(({ address, before, after }, index) => {
               const change = after - before;
 
               return (
                 <Tr key={index}>
                   <Td>
                     {address}
-                    <br />
+                    {/* TODO tag with account names from instructions */}
+                    {/* <br />
                     {names.map((name, index) => (
                       <Tag key={index}>{name}</Tag>
-                    ))}
+                    ))} */}
                   </Td>
                   <Td isNumeric>{toSol(before)}</Td>
                   <Td isNumeric>{toSol(after)}</Td>
