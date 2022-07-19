@@ -8,14 +8,12 @@ export const RpcEndpointMenuList: React.FC<{
   endpoint: IRpcEndpoint;
   setEndpoint: (endpoint: IRpcEndpoint) => void;
 }> = ({ endpoint, setEndpoint }) => {
-  const { rpcEndpoints, disableMainnet } = useTransactionStore(
-    (state) => state.appOptions
-  );
+  const { rpcEndpoints } = useTransactionStore((state) => state.appOptions);
 
   return (
     <MenuList fontSize="md">
       {rpcEndpoints
-        .filter(({ network }) => !disableMainnet || network !== "mainnet-beta")
+        .filter(({ enabled }) => enabled)
         .map((it, index) => (
           <MenuItem
             icon={endpoint.url === it.url ? <CheckIcon /> : undefined}

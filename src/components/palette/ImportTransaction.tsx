@@ -78,7 +78,7 @@ export const ImportTransaction: React.FC = () => {
     }
 
     setLoading(false);
-  }, [txnAddress, transactionOptions, rpcEndpoint]);
+  }, [txnAddress, rpcEndpoint, connection]);
 
   return (
     <Grid>

@@ -38,17 +38,6 @@ export const GeneralOptions: React.FC = () => {
             });
           }}
         />
-
-        <ToggleOption
-          id="disable-mainnet"
-          name="Remove Mainnet RPC endpoints from the list"
-          get={() => appOptions.disableMainnet}
-          set={(x) => {
-            set((state) => {
-              state.appOptions.disableMainnet = x;
-            });
-          }}
-        />
       </Grid>
     </FormControl>
   );

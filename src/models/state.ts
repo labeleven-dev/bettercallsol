@@ -1,9 +1,9 @@
 // Models for non-transaction app state
 
+import { clusterApiUrl } from "@solana/web3.js";
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import {
-  DEFAULT_RPC_ENDPOINTS,
   IID,
   IInstruction,
   IResults,
@@ -17,7 +17,6 @@ export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 export interface AppOptions {
   explorer: Explorer;
   autoConnectWallet: boolean;
-  disableMainnet: boolean;
   rpcEndpoints: IRpcEndpoint[];
 }
 
@@ -55,10 +54,47 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
   { id: "none", name: "None" },
 ];
 
+export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
+  {
+    provider: "Solana",
+    network: "devnet",
+    url: clusterApiUrl("devnet"),
+    enabled: true,
+    custom: false,
+  },
+  {
+    provider: "Solana",
+    network: "testnet",
+    url: clusterApiUrl("testnet"),
+    enabled: true,
+    custom: false,
+  },
+  {
+    provider: "Solana",
+    network: "mainnet-beta",
+    url: clusterApiUrl("mainnet-beta"),
+    enabled: false,
+    custom: false,
+  },
+  {
+    provider: "Serum",
+    network: "mainnet-beta",
+    url: "https://solana-api.projectserum.com",
+    enabled: false,
+    custom: false,
+  },
+  {
+    provider: "You",
+    network: "local",
+    url: "http://0.0.0.0:8899",
+    enabled: true,
+    custom: true,
+  },
+];
+
 export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solanafm",
   autoConnectWallet: true,
-  disableMainnet: false,
   rpcEndpoints: DEFAULT_RPC_ENDPOINTS,
 };
 

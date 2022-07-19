@@ -2,7 +2,6 @@
 // Use as intermediate for other models and for tracking transaction state in the app
 
 import {
-  clusterApiUrl,
   Commitment,
   LAMPORTS_PER_SOL,
   PublicKey,
@@ -72,37 +71,6 @@ export interface IRpcEndpoint {
   enabled: boolean;
   custom: boolean;
 }
-
-export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
-  {
-    provider: "Solana",
-    network: "devnet",
-    url: clusterApiUrl("devnet"),
-    enabled: true,
-    custom: false,
-  },
-  {
-    provider: "Solana",
-    network: "testnet",
-    url: clusterApiUrl("testnet"),
-    enabled: true,
-    custom: false,
-  },
-  {
-    provider: "Solana",
-    network: "mainnet-beta",
-    url: clusterApiUrl("mainnet-beta"),
-    enabled: true,
-    custom: false,
-  },
-  {
-    provider: "Serum",
-    network: "mainnet-beta",
-    url: "https://solana-api.projectserum.com",
-    enabled: true,
-    custom: false,
-  },
-];
 
 export interface ITransaction {
   name?: string;
