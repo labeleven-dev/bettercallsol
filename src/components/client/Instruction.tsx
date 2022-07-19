@@ -28,6 +28,9 @@ export const Instruction: React.FC<SortableItemProps> = ({
   const instruction = useTransactionStore(
     (state) => state.transaction.instructions[instructionId]
   );
+  const network = useTransactionStore(
+    (state) => state.transactionOptions.rpcEndpoint.network
+  );
   const uiState = useTransactionStore(
     (state) => state.uiState.instructions[instructionId]
   );
@@ -65,11 +68,15 @@ export const Instruction: React.FC<SortableItemProps> = ({
               });
             }}
           />
-          <InputRightElement>
+          <InputRightElement
+            // bug where it's set to 2 and goes in front of network selector menu :(
+            zIndex="base"
+          >
             <ExplorerButton
               size="sm"
               valueType="account"
               value={instruction.programId}
+              network={network}
             />
           </InputRightElement>
         </InputGroup>

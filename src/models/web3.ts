@@ -63,19 +63,44 @@ export const newInstruction = (): IInstruction => ({
   accountOrder: [],
 });
 
-export interface INetwork {
-  id: "devnet" | "testnet" | "mainnet-beta";
-  name: "Devnet" | "Testnet" | "Mainnet-beta" | "Custom";
+export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
+
+export interface IRpcEndpoint {
+  provider: string;
+  network: INetwork;
   url: string;
+  enabled: boolean;
+  custom: boolean;
 }
 
-export const DEFAULT_NETWORKS: INetwork[] = [
-  { id: "devnet", name: "Devnet", url: clusterApiUrl("devnet") },
-  { id: "testnet", name: "Testnet", url: clusterApiUrl("testnet") },
+export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
-    id: "mainnet-beta",
-    name: "Mainnet-beta",
+    provider: "Solana",
+    network: "devnet",
+    url: clusterApiUrl("devnet"),
+    enabled: true,
+    custom: false,
+  },
+  {
+    provider: "Solana",
+    network: "testnet",
+    url: clusterApiUrl("testnet"),
+    enabled: true,
+    custom: false,
+  },
+  {
+    provider: "Solana",
+    network: "mainnet-beta",
     url: clusterApiUrl("mainnet-beta"),
+    enabled: true,
+    custom: false,
+  },
+  {
+    provider: "Serum",
+    network: "mainnet-beta",
+    url: "https://solana-api.projectserum.com",
+    enabled: true,
+    custom: false,
   },
 ];
 
@@ -124,8 +149,7 @@ export const COMMITMENT_LEVELS = [
 ];
 
 export interface ITransactionOptions {
-  network: INetwork;
-  customNetworks: INetwork[];
+  rpcEndpoint: IRpcEndpoint;
   skipPreflight: boolean;
   commitment: Commitment;
   maxRetries: number;
@@ -143,10 +167,13 @@ export const mapToTransaction = (
 ): Transaction => {
   // TODO filter out empty fields
   const transaction = new Transaction();
+
   transactionData.instructionOrder.forEach((id) => {
     const { programId, accountOrder, accounts, data } =
       transactionData.instructions[id];
+
     if (uiInstructions[id].disabled || !programId) return;
+
     transaction.add(
       new TransactionInstruction({
         programId: new PublicKey(programId),
@@ -162,6 +189,7 @@ export const mapToTransaction = (
       })
     );
   });
+
   return transaction;
 };
 

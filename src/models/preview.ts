@@ -5,6 +5,7 @@ import {
   IAccount,
   IID,
   IInstruction,
+  INetwork,
   IPlainText,
   IPubKey,
   newAccount,
@@ -35,6 +36,7 @@ export interface IInstructionPreview {
 
 export interface ITransactionPreview {
   signature: IPubKey;
+  network: INetwork;
   instructions: IInstructionPreview[];
   accountSummary: IAccountSummary;
   fee?: number;
@@ -58,7 +60,8 @@ export interface ITransactionPreview {
 
 /** Maps a web3.js transaction from the chain into a transaction preview, suitable for importing **/
 export const mapToTransactionPreview = (
-  response: TransactionResponse
+  response: TransactionResponse,
+  network: INetwork
 ): ITransactionPreview => {
   const { accountKeys, instructions } = response.transaction.message;
 
@@ -84,6 +87,7 @@ export const mapToTransactionPreview = (
 
   return {
     signature: response.transaction.signatures[0],
+    network,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
     error: (response.meta?.err as string) || undefined,

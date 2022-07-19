@@ -41,7 +41,7 @@ export const GeneralOptions: React.FC = () => {
 
         <ToggleOption
           id="disable-mainnet"
-          name="Remove Mainnet from the list"
+          name="Remove Mainnet RPC endpoints from the list"
           get={() => appOptions.disableMainnet}
           set={(x) => {
             set((state) => {

@@ -3,10 +3,11 @@
 import { Draft } from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import {
-  DEFAULT_NETWORKS,
+  DEFAULT_RPC_ENDPOINTS,
   IID,
   IInstruction,
   IResults,
+  IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
 } from "./web3";
@@ -17,6 +18,7 @@ export interface AppOptions {
   explorer: Explorer;
   autoConnectWallet: boolean;
   disableMainnet: boolean;
+  rpcEndpoints: IRpcEndpoint[];
 }
 
 export interface UIInstructionState {
@@ -54,9 +56,10 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
 ];
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
-  explorer: "solscan",
+  explorer: "solanafm",
   autoConnectWallet: true,
   disableMainnet: false,
+  rpcEndpoints: DEFAULT_RPC_ENDPOINTS,
 };
 
 export const DEFAULT_UI_STATE: UIState = {
@@ -68,8 +71,7 @@ export const DEFAULT_UI_STATE: UIState = {
 };
 
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
-  network: DEFAULT_NETWORKS[0],
-  customNetworks: [],
+  rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   skipPreflight: true,
   commitment: "processed",
   preflightCommitment: "processed",

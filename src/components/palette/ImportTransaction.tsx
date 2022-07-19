@@ -1,4 +1,4 @@
-import { CheckIcon, SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
@@ -9,28 +9,31 @@ import {
   InputRightElement,
   Menu,
   MenuButton,
-  MenuItem,
-  MenuList,
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { Cluster, clusterApiUrl, Connection } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
 import { useCallback, useMemo, useState } from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import {
   ITransactionPreview,
   mapToTransactionPreview,
 } from "../../models/preview";
-import { DEFAULT_NETWORKS } from "../../models/web3";
+import { IRpcEndpoint } from "../../models/web3";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { TransactionPreview } from "../common/preview/TransactionPreview";
+import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const ImportTransaction: React.FC = () => {
+  const rpcEndpoints = useTransactionStore(
+    (state) => state.appOptions.rpcEndpoints
+  );
   const transactionOptions = useTransactionStore(
     (state) => state.transactionOptions
   );
-  const [network, setNetwork] = useState("mainnet-beta");
+
+  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(rpcEndpoints[2]); // mainnet
   const [txnAddress, setTxnAddress] = useState(
     "4uz94jQaK9zCf1SBwg8o4nY5FtX3M75EZfEDYoM8GBBKCg9E8bN2kJHgB7uDobYqVpeasbVkD9qE3hoSLWsQfZ69"
   ); // TODO empty
@@ -38,19 +41,18 @@ export const ImportTransaction: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const endpoint = clusterApiUrl(network as Cluster);
   const connection = useMemo(() => {
     const {
       commitment,
       confirmTransactionInitialTimeout,
       disableRetryOnRateLimit,
     } = transactionOptions;
-    return new Connection(endpoint, {
+    return new Connection(rpcEndpoint.url, {
       commitment,
       confirmTransactionInitialTimeout,
       disableRetryOnRateLimit,
     });
-  }, [endpoint, transactionOptions]);
+  }, [rpcEndpoint, transactionOptions]);
 
   const search = useCallback(async () => {
     if (!txnAddress) {
@@ -65,7 +67,10 @@ export const ImportTransaction: React.FC = () => {
         commitment: "finalized",
       });
       if (response) {
-        setTransaction(mapToTransactionPreview(response));
+        setTransaction(mapToTransactionPreview(response, rpcEndpoint.network));
+      } else {
+        setError("Transaction not found");
+        setTransaction(undefined);
       }
     } catch (err) {
       setLoading(false);
@@ -73,7 +78,7 @@ export const ImportTransaction: React.FC = () => {
     }
 
     setLoading(false);
-  }, [txnAddress, connection]);
+  }, [txnAddress, transactionOptions, rpcEndpoint]);
 
   return (
     <Grid>
@@ -88,28 +93,24 @@ export const ImportTransaction: React.FC = () => {
             }}
           ></Input>
           <InputRightElement>
-            <ExplorerButton size="sm" valueType="tx" value={txnAddress} />
+            <ExplorerButton
+              size="sm"
+              valueType="tx"
+              value={txnAddress}
+              network={rpcEndpoint.network}
+            />
           </InputRightElement>
         </InputGroup>
         <Menu>
           <MenuButton mr="0.5" as={Button}>
-            {network[0].toUpperCase()}
+            {rpcEndpoint.network[0].toUpperCase()}
           </MenuButton>
-          <MenuList>
-            {DEFAULT_NETWORKS.slice()
-              .reverse()
-              .map(({ id, name }) => (
-                <MenuItem
-                  icon={network === id ? <CheckIcon /> : undefined}
-                  onClick={() => {
-                    setNetwork(id);
-                  }}
-                  key={id}
-                >
-                  {name}
-                </MenuItem>
-              ))}
-          </MenuList>
+          <RpcEndpointMenuList
+            endpoint={rpcEndpoint}
+            setEndpoint={(endpoint) => {
+              setRpcEndpoint(endpoint);
+            }}
+          />
         </Menu>
         <Tooltip label="Search">
           <IconButton

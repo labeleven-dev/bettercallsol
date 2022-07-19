@@ -24,7 +24,7 @@ export const Transaction: React.FC = () => {
 
         {/* TODO remove once out of beta */}
         <Collapse
-          in={transactionOptions.network.id === "mainnet-beta"}
+          in={transactionOptions.rpcEndpoint.provider === "mainnet-beta"}
           unmountOnExit
         >
           <Alert

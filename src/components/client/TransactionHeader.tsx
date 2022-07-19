@@ -1,5 +1,6 @@
-import { DownloadIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, DownloadIcon } from "@chakra-ui/icons";
 import {
+  Button,
   Editable,
   EditableInput,
   EditablePreview,
@@ -25,10 +26,13 @@ import {
 } from "react-icons/fa";
 import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { NetworkSelector } from "./NetworkSelector";
+import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const TransactionHeader: React.FC = () => {
   const transactionData = useTransactionStore((state) => state.transaction);
+  const rpcEndpoint = useTransactionStore(
+    (state) => state.transactionOptions.rpcEndpoint
+  );
   const results = useTransactionStore((state) => state.results);
   const set = useTransactionStore((state) => state.set);
 
@@ -101,7 +105,28 @@ export const TransactionHeader: React.FC = () => {
           <MenuItem icon={<Icon as={FaEraser} />}>Clear</MenuItem>
         </MenuList>
       </Menu>
-      <NetworkSelector />
+
+      <Menu>
+        <Tooltip label={rpcEndpoint.url}>
+          <MenuButton
+            minW="180px"
+            maxW="250px"
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+          >
+            {`${rpcEndpoint.network} (${rpcEndpoint.provider})`}
+          </MenuButton>
+        </Tooltip>
+        <RpcEndpointMenuList
+          endpoint={rpcEndpoint}
+          setEndpoint={(endpoint) => {
+            set((state) => {
+              state.transactionOptions.rpcEndpoint = endpoint;
+            });
+          }}
+        />
+      </Menu>
+
       <Tooltip label="Run Program">
         <IconButton
           isLoading={results.inProgress}

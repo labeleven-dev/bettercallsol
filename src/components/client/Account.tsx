@@ -35,6 +35,9 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
   const getAccount = accountGetter(instructionId, id);
 
   const account = useTransactionStore(getAccount);
+  const network = useTransactionStore(
+    (state) => state.transactionOptions.rpcEndpoint.network
+  );
   const set = useTransactionStore((state) => state.set);
 
   const { publicKey: walletPubkey } = useWallet();
@@ -104,6 +107,7 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
             size="sm"
             valueType="account"
             value={account.pubkey}
+            network={network}
           />
         </InputRightElement>
       </InputGroup>

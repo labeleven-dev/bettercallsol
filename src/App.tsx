@@ -36,7 +36,7 @@ export const App: React.FC = () => {
     (state) => state.appOptions.autoConnectWallet
   );
   const {
-    network,
+    rpcEndpoint,
     commitment,
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
@@ -50,17 +50,17 @@ export const App: React.FC = () => {
       new GlowWalletAdapter(),
       new SlopeWalletAdapter(),
       new SolflareWalletAdapter({
-        network: network.id as WalletAdapterNetwork,
+        network: rpcEndpoint.network as WalletAdapterNetwork,
       }),
       new TorusWalletAdapter(),
     ],
-    [network]
+    [rpcEndpoint]
   );
 
   return (
     <ChakraProvider theme={theme}>
       <ConnectionProvider
-        endpoint={network.url}
+        endpoint={rpcEndpoint.url}
         config={{
           commitment,
           confirmTransactionInitialTimeout,

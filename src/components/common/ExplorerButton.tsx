@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { CustomIconButtonProps } from "../../chakra";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { INetwork } from "../../models/web3";
 
 export type AddressType = "tx" | "account";
 
@@ -45,12 +46,10 @@ export const ExplorerButton: React.FC<
   {
     value: string;
     valueType: AddressType;
+    network: INetwork;
   } & CustomIconButtonProps
-> = ({ value, valueType, size, ...theRest }) => {
+> = ({ value, valueType, network, size, ...theRest }) => {
   const explorer = useTransactionStore((state) => state.appOptions.explorer);
-  const network = useTransactionStore(
-    (state) => state.transactionOptions.network.id
-  );
 
   if (explorer === "none") return null; // hide
   const opts = explorerOpts[explorer];
