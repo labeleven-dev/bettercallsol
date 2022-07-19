@@ -89,7 +89,7 @@ export const Accounts: React.FC = () => {
         >
           {instruction.accountOrder.map((id, index) => (
             <SortableItem key={id}>
-              <Account id={id} index={index} />
+              <Account data={instruction.accounts[id]} index={index} />
             </SortableItem>
           ))}
         </Sortable>

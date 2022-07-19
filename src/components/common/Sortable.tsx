@@ -21,6 +21,8 @@ import {
 import React from "react";
 import { IID } from "../../models/state";
 
+export const SortableItemContext = React.createContext("");
+
 /**
  * Sortable container. All sortable items should be under this.
  *
@@ -63,7 +65,11 @@ export const Sortable: React.FC<{
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={itemOrder} strategy={verticalListSortingStrategy}>
-        {children}
+        {React.Children.map(children, (child, index) => (
+          <SortableItemContext.Provider value={itemOrder[index]}>
+            {child}
+          </SortableItemContext.Provider>
+        ))}
       </SortableContext>
     </DndContext>
   );

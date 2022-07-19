@@ -16,31 +16,26 @@ import React, { ChangeEvent, useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { accountGetter } from "../../models/state";
+import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemProps } from "../common/SortableItem";
 import { ToggleIconButton } from "../common/ToggleIconButton";
 import { TruncatableEditable } from "../common/TruncatableEditable";
 import { InstructionContext } from "./Instructions";
 
-export const Account: React.FC<{ index: number } & SortableItemProps> = ({
-  id,
-  index,
-  attributes,
-  listeners,
-  setNodeRef,
-  style,
-}) => {
+export const Account: React.FC<
+  { data: IAccount; index: number } & SortableItemProps
+> = ({ data, index, attributes, listeners, setNodeRef, style }) => {
   const instruction = useContext(InstructionContext);
-  const getAccount = accountGetter(instruction.id, id);
+  const getAccount = accountGetter(instruction.id, data.id);
 
-  const account = useTransactionStore(getAccount);
   const network = useTransactionStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
   const set = useTransactionStore((state) => state.set);
 
   const { publicKey: walletPubkey } = useWallet();
-  const isWallet = account.pubkey === walletPubkey?.toBase58();
+  const isWallet = data.pubkey === walletPubkey?.toBase58();
 
   const setPubKey = (e: ChangeEvent<HTMLInputElement>) => {
     set((state) => {
@@ -51,8 +46,8 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
   const removeAccount = () => {
     set((state) => {
       const ixn = state.transaction.instructions[instruction.id];
-      ixn.accountOrder = instruction.accountOrder.filter((x) => x !== id);
-      delete ixn.accounts[id];
+      ixn.accountOrder = instruction.accountOrder.filter((x) => x !== data.id);
+      delete ixn.accounts[data.id];
     });
   };
 
@@ -73,7 +68,7 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
         width="100px"
         textAlign="right"
         fontSize="sm"
-        value={account.name}
+        value={data.name}
         onChange={(value: string) => {
           set((state) => {
             getAccount(state).name = value;
@@ -93,14 +88,14 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
           ml="2"
           fontFamily="mono"
           placeholder="Account Public Key"
-          value={account.pubkey}
+          value={data.pubkey}
           onChange={setPubKey}
         ></Input>
         <InputRightElement>
           <ExplorerButton
             size="sm"
             valueType="account"
-            value={account.pubkey}
+            value={data.pubkey}
             network={network}
           />
         </InputRightElement>
@@ -110,7 +105,7 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
         ml="1"
         label="Writable"
         icon={<EditIcon />}
-        toggled={account.isWritable}
+        toggled={data.isWritable}
         onToggle={(toggled) => {
           set((state) => {
             getAccount(state).isWritable = toggled;
@@ -121,7 +116,7 @@ export const Account: React.FC<{ index: number } & SortableItemProps> = ({
         ml="1"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
-        toggled={account.isSigner}
+        toggled={data.isSigner}
         onToggle={(toggled) => {
           set((state) => {
             getAccount(state).isSigner = toggled;

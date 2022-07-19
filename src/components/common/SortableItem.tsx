@@ -2,8 +2,8 @@ import { DraggableAttributes } from "@dnd-kit/core";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import React from "react";
-import { IID } from "../../models/state";
+import React, { useContext } from "react";
+import { SortableItemContext } from "./Sortable";
 
 /**
  * Each sortable item should accept these props
@@ -11,7 +11,6 @@ import { IID } from "../../models/state";
  * `id` should be provided by user. The rest is set by `<SortableItem>`
  */
 export type SortableItemProps = {
-  id: IID;
   attributes?: DraggableAttributes;
   listeners?: SyntheticListenerMap;
   setNodeRef?: (node: HTMLElement | null) => void;
@@ -28,9 +27,10 @@ export type SortableItemProps = {
 export const SortableItem: React.FC<{
   children: React.ReactElement<SortableItemProps>;
 }> = ({ children }) => {
+  const id = useContext(SortableItemContext);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
-      id: children.props.id,
+      id,
       animateLayoutChanges: (args) =>
         defaultAnimateLayoutChanges({ ...args, wasDragging: true }),
     });

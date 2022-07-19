@@ -33,7 +33,7 @@ export const Instructions: React.FC = () => {
             key={id}
           >
             <SortableItem>
-              <Instruction id={id} />
+              <Instruction />
             </SortableItem>
           </InstructionContext.Provider>
         ))}
