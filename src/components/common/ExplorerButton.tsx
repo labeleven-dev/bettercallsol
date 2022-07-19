@@ -1,12 +1,12 @@
 import {
   Icon,
   IconButton,
+  IconButtonProps,
   Link,
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { CustomIconButtonProps } from "../../chakra";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { INetwork } from "../../models/web3";
 
@@ -47,7 +47,7 @@ export const ExplorerButton: React.FC<
     value: string;
     valueType: AddressType;
     network: INetwork;
-  } & CustomIconButtonProps
+  } & Omit<IconButtonProps, "aria-label">
 > = ({ value, valueType, network, size, ...theRest }) => {
   const explorer = useTransactionStore((state) => state.appOptions.explorer);
 
