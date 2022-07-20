@@ -24,17 +24,19 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const TransactionHeader: React.FC = () => {
   const transactionData = useTransactionStore((state) => state.transaction);
-  const rpcEndpoint = useTransactionStore(
+  const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
   const results = useTransactionStore((state) => state.results);
-  const set = useTransactionStore((state) => state.set);
+  const setTransaction = useTransactionStore((state) => state.set);
+  const setOptions = useOptionsStore((state) => state.set);
 
   const transact = useTransaction();
 
@@ -44,7 +46,7 @@ export const TransactionHeader: React.FC = () => {
         <Editable
           defaultValue={transactionData.name}
           onChange={(value) =>
-            set((state) => {
+            setTransaction((state) => {
               state.transaction.name = value;
             })
           }
@@ -63,7 +65,7 @@ export const TransactionHeader: React.FC = () => {
           icon={<Icon as={FaExpandAlt} />}
           variant="ghost"
           onClick={() => {
-            set((state) => {
+            setTransaction((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = true;
               });
@@ -77,7 +79,7 @@ export const TransactionHeader: React.FC = () => {
           icon={<Icon as={FaExpand} />}
           variant="ghost"
           onClick={() => {
-            set((state) => {
+            setTransaction((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = false;
               });
@@ -122,7 +124,7 @@ export const TransactionHeader: React.FC = () => {
         <RpcEndpointMenuList
           endpoint={rpcEndpoint}
           setEndpoint={(endpoint) => {
-            set((state) => {
+            setOptions((state) => {
               state.transactionOptions.rpcEndpoint = endpoint;
             });
           }}

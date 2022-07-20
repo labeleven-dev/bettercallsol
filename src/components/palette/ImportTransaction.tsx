@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Connection } from "@solana/web3.js";
 import { useCallback, useMemo, useState } from "react";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import {
   ITransactionPreview,
   mapToTransactionPreview,
@@ -27,10 +27,7 @@ import { TransactionPreview } from "../common/preview/TransactionPreview";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const ImportTransaction: React.FC = () => {
-  const rpcEndpoints = useTransactionStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
-  const transactionOptions = useTransactionStore(
+  const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
 

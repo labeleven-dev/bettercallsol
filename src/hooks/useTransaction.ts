@@ -1,6 +1,7 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { mapToIResults, mapToTransaction } from "../models/web3";
+import { useOptionsStore } from "./useOptionsStore";
 import { useTransactionStore } from "./useTransactionStore";
 
 /**
@@ -13,7 +14,7 @@ import { useTransactionStore } from "./useTransactionStore";
  */
 export const useTransaction: () => () => void = () => {
   const uiState = useTransactionStore((state) => state.uiState);
-  const transactionOptions = useTransactionStore(
+  const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
   const transactionData = useTransactionStore((state) => state.transaction);

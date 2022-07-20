@@ -26,13 +26,14 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
+import { useOptionsStore } from "./hooks/useOptionsStore";
 import { useTransactionStore } from "./hooks/useTransactionStore";
 import theme from "./theme";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const App: React.FC = () => {
-  const autoConnectWallet = useTransactionStore(
+  const autoConnectWallet = useOptionsStore(
     (state) => state.appOptions.autoConnectWallet
   );
   const {
@@ -40,7 +41,7 @@ export const App: React.FC = () => {
     commitment,
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
-  } = useTransactionStore((state) => state.transactionOptions);
+  } = useOptionsStore((state) => state.transactionOptions);
   const paletteOpen = useTransactionStore((state) => state.uiState.paletteOpen);
 
   // TODO support RPC URL

@@ -2,21 +2,19 @@ import produce from "immer";
 import create from "zustand";
 import { addTo, removeFrom } from "../models/sortable";
 import {
-  AppState,
-  DEFAULT_STATE,
+  DEFAULT_TRANSACTION_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
+  TransactionState,
 } from "../models/state";
 
-const LOCAL_STORAGE_KEY = "bscolState";
+const LOCAL_STORAGE_KEY = "bscolTransactionState";
 
-export const useTransactionStore = create<AppState>((set) => {
+export const useTransactionStore = create<TransactionState>((set) => {
   // retrieve local storage
   const existingStateString = localStorage.getItem(LOCAL_STORAGE_KEY);
   const state = existingStateString
     ? JSON.parse(existingStateString)
-    : DEFAULT_STATE;
-
-  // TODO capture that it's the first time and display something helpful
+    : DEFAULT_TRANSACTION_STATE;
 
   return {
     ...state,
@@ -46,8 +44,7 @@ export const useTransactionStore = create<AppState>((set) => {
 
 useTransactionStore.subscribe((state) => {
   // exclude functions
-  const { transactionOptions, transaction, results, appOptions, uiState } =
-    state;
+  const { transaction, results, uiState } = state;
 
   // in progress should not survive page reloads
   const { inProgress: _inProgress, ...restOfResults } = results;
@@ -55,10 +52,8 @@ useTransactionStore.subscribe((state) => {
   localStorage.setItem(
     LOCAL_STORAGE_KEY,
     JSON.stringify({
-      transactionOptions,
       transaction,
       results: restOfResults,
-      appOptions,
       uiState,
     })
   );

@@ -1,17 +1,17 @@
 import { FormControl, Grid } from "@chakra-ui/react";
 import { Commitment } from "@solana/web3.js";
 import React from "react";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { COMMITMENT_LEVELS } from "../../models/web3";
 import { ChoiceOption } from "../common/options/ChoiceOption";
 import { NumberOption } from "../common/options/NumberOption";
 import { ToggleOption } from "../common/options/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
-  const transactionOptions = useTransactionStore(
+  const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
-  const set = useTransactionStore((state) => state.set);
+  const set = useOptionsStore((state) => state.set);
 
   return (
     <FormControl display="flex" alignItems="center">

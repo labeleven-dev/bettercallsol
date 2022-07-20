@@ -15,9 +15,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { removeFrom } from "../../models/sortable";
-import { AppState } from "../../models/state";
+import { TransactionState } from "../../models/state";
 import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemProps } from "../common/SortableItem";
@@ -29,10 +30,10 @@ export const Account: React.FC<
   { data: IAccount; index: number } & SortableItemProps
 > = ({ data, index, attributes, listeners, setNodeRef, style }) => {
   const instruction = useContext(InstructionContext);
-  const account = (state: WritableDraft<AppState>) =>
+  const account = (state: WritableDraft<TransactionState>) =>
     state.transaction.instructions.map[instruction.id].accounts.map[data.id];
 
-  const network = useTransactionStore(
+  const network = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
   const set = useTransactionStore((state) => state.set);

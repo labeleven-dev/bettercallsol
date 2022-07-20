@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { removeFrom } from "../../../models/sortable";
 import { IRpcEndpoint } from "../../../models/web3";
 
@@ -33,7 +33,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
 }) => {
   // TODO is this best way?
   const [notValidatedUrl, setNotValidatedUrl] = useState(url);
-  const set = useTransactionStore((state) => state.set);
+  const set = useOptionsStore((state) => state.set);
 
   const setUrl = (url: string) => {
     if (!isValidUrl(url)) return;

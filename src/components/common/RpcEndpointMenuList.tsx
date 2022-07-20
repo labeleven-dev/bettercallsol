@@ -1,7 +1,7 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { toSortedArray } from "../../models/sortable";
 import { IRpcEndpoint } from "../../models/web3";
 
@@ -9,7 +9,7 @@ export const RpcEndpointMenuList: React.FC<{
   endpoint: IRpcEndpoint;
   setEndpoint: (endpoint: IRpcEndpoint) => void;
 }> = ({ endpoint, setEndpoint }) => {
-  const { rpcEndpoints } = useTransactionStore((state) => state.appOptions);
+  const { rpcEndpoints } = useOptionsStore((state) => state.appOptions);
 
   return (
     <MenuList fontSize="md">

@@ -7,6 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
 import { ExplorerButton } from "../common/ExplorerButton";
@@ -23,7 +24,7 @@ export const Instruction: React.FC<SortableItemProps> = ({
   style,
 }) => {
   const instruction = useContext(InstructionContext);
-  const network = useTransactionStore(
+  const network = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
   const uiState = useTransactionStore(

@@ -18,6 +18,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
+import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../../hooks/useTransactionStore";
 import { toSol } from "../../../models/web3";
 import { CopyButton } from "../../common/CopyButton";
@@ -28,7 +29,7 @@ import { ProgramLogs } from "./ProgramLogs";
 
 export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
-  const network = useTransactionStore(
+  const network = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
   const set = useTransactionStore((state) => state.set);

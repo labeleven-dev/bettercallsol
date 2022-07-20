@@ -7,13 +7,13 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
-  const transactionOptions = useTransactionStore(
+  const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
 

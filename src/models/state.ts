@@ -40,13 +40,17 @@ export interface UIState {
   readonly optionsOpen: boolean;
 }
 
-export type AppState = {
+export type OptionsState = {
   readonly transactionOptions: ITransactionOptions;
+  readonly appOptions: AppOptions;
+  set: (fn: (state: Draft<OptionsState>) => void) => void;
+};
+
+export type TransactionState = {
   readonly transaction: ITransaction;
   readonly results: IResults;
-  readonly appOptions: AppOptions;
   readonly uiState: UIState;
-  set: (fn: (state: Draft<AppState>) => void) => void;
+  set: (fn: (state: Draft<TransactionState>) => void) => void;
   addInstruction: (instruction: IInstruction) => void;
   removeInstruction: (instructionId: IID) => void;
 };
@@ -164,21 +168,25 @@ export const DEFAULT_UI_STATE: UIState = {
   optionsOpen: false,
 };
 
-export const DEFAULT_STATE: AppState = {
+export const DEFAULT_TRANSACTION_STATE: TransactionState = {
   transaction: DEFAULT_TRANSACTION,
   results: {
     inProgress: false,
     signature: "",
     logs: ["Run a transaction to see logs"],
   },
-  transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
-  appOptions: DEFAULT_APP_OPTIONS,
   uiState: DEFAULT_UI_STATE,
   set: () => {}, // set by the hook
-  addInstruction: (instruction) => {}, // set by the hook
-  removeInstruction: (id) => {}, // set by the hook
+  addInstruction: (_) => {}, // set by the hook
+  removeInstruction: (_) => {}, // set by the hook
+};
+
+export const DEFAULT_OPTIONS_STATE: OptionsState = {
+  transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
+  appOptions: DEFAULT_APP_OPTIONS,
+  set: () => {}, // set by the hook
 };
 
 export const instructionGetter =
-  (id: IID) => (state: WritableDraft<AppState>) =>
+  (id: IID) => (state: WritableDraft<TransactionState>) =>
     state.transaction.instructions.map[id];
