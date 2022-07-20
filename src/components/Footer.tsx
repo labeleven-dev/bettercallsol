@@ -26,7 +26,7 @@ export const Footer: React.FC = () => (
         <LabElevenIcon />
       </Link>
       <Spacer />
-      <Text fontSize="xs">vXXXX</Text> {/* TODO get from package.json */}
+      <Text fontSize="xs">v{process.env.REACT_APP_VERSION || "???"}</Text>
     </Flex>
   </Box>
 );
