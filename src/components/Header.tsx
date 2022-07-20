@@ -22,7 +22,13 @@ export const Header: React.FC = () => {
     <Flex p="2" bgColor="main.800">
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
-        <Text m="2" as="strong" color="white">
+        <Text
+          ml="2"
+          mt="1"
+          color="white"
+          fontFamily="'Dancing Script', cursive;"
+          fontSize="3xl"
+        >
           Better Call SOL
         </Text>
         <Spacer />
