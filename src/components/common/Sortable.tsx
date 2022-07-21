@@ -1,36 +1,44 @@
+import { Box } from "@chakra-ui/react";
 import {
   closestCenter,
   DndContext,
   DragEndEvent,
+  DraggableAttributes,
   KeyboardSensor,
   MeasuringStrategy,
   PointerSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import {
   restrictToParentElement,
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import {
   arrayMove,
+  defaultAnimateLayoutChanges,
   SortableContext,
   sortableKeyboardCoordinates,
+  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import React from "react";
 import { IID } from "../../models/sortable";
 
-export const SortableItemContext = React.createContext("");
+export const SortableItemContext = React.createContext<{
+  attributes?: DraggableAttributes;
+  listeners?: SyntheticListenerMap;
+}>({});
 
 /**
- * Sortable container. All sortable items should be under this.
+ * Makes the children into a drag-n-drop sortable vertical list.
  *
- * For this to work ensure that:
- *   - Each item is wrapped in `<Sortable>`
- *   - Each item accepts `SortableItemProps`
+ * The only thing the child items need to do is to explode `attributes`
+ * and `listeners` from `SortableItemContext` into the drag handle.
  *
- * See `<Accounts>` and `<Account>` for an example
+ * See `<Accounts>` and `<Account>` for an example.
  */
 export const Sortable: React.FC<{
   itemOrder: IID[];
@@ -66,11 +74,36 @@ export const Sortable: React.FC<{
     >
       <SortableContext items={itemOrder} strategy={verticalListSortingStrategy}>
         {React.Children.map(children, (child, index) => (
-          <SortableItemContext.Provider value={itemOrder[index]}>
+          <SortableItem id={itemOrder[index]} key={itemOrder[index]}>
             {child}
-          </SortableItemContext.Provider>
+          </SortableItem>
         ))}
       </SortableContext>
     </DndContext>
+  );
+};
+
+const SortableItem: React.FC<{
+  id: IID;
+  children: React.ReactNode;
+}> = ({ id, children }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id,
+      animateLayoutChanges: (args) =>
+        defaultAnimateLayoutChanges({ ...args, wasDragging: true }),
+    });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
+  return (
+    <Box ref={setNodeRef} style={style}>
+      <SortableItemContext.Provider value={{ attributes, listeners }}>
+        {children}
+      </SortableItemContext.Provider>
+    </Box>
   );
 };

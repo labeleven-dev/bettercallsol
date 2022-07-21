@@ -5,7 +5,6 @@ import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { IID, toSortedArray } from "../../models/sortable";
 import { newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
-import { SortableItem } from "../common/SortableItem";
 import { Instruction } from "./Instruction";
 
 export const InstructionContext = React.createContext(newInstruction());
@@ -30,9 +29,7 @@ export const Instructions: React.FC = () => {
         {toSortedArray(transaction.instructions).map((instruction) => (
           // key must be stable so it can't be loop index
           <InstructionContext.Provider value={instruction} key={instruction.id}>
-            <SortableItem>
-              <Instruction />
-            </SortableItem>
+            <Instruction />
           </InstructionContext.Provider>
         ))}
       </Sortable>

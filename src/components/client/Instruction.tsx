@@ -11,19 +11,15 @@ import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { instructionGetter } from "../../models/state";
 import { ExplorerButton } from "../common/ExplorerButton";
-import { SortableItemProps } from "../common/SortableItem";
+import { SortableItemContext } from "../common/Sortable";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
 import { InstructionContext } from "./Instructions";
 
-export const Instruction: React.FC<SortableItemProps> = ({
-  attributes,
-  listeners,
-  setNodeRef,
-  style,
-}) => {
+export const Instruction: React.FC = () => {
   const instruction = useContext(InstructionContext);
+  const { listeners, attributes } = useContext(SortableItemContext);
   const network = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint.network
   );
@@ -36,8 +32,6 @@ export const Instruction: React.FC<SortableItemProps> = ({
 
   return (
     <Grid
-      ref={setNodeRef}
-      style={style}
       mb="2"
       p="5"
       border="1px"

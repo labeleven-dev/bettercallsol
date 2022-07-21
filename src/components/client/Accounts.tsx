@@ -15,7 +15,6 @@ import { addTo, toSortedArray } from "../../models/sortable";
 import { instructionGetter } from "../../models/state";
 import { newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
-import { SortableItem } from "../common/SortableItem";
 import { Account } from "./Account";
 import { InstructionContext } from "./Instructions";
 
@@ -73,9 +72,7 @@ export const Accounts: React.FC = () => {
           }}
         >
           {toSortedArray(instruction.accounts).map((account, index) => (
-            <SortableItem key={account.id}>
-              <Account data={account} index={index} />
-            </SortableItem>
+            <Account data={account} index={index} key={account.id} />
           ))}
         </Sortable>
       </Box>

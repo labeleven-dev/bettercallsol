@@ -21,15 +21,17 @@ import { removeFrom } from "../../models/sortable";
 import { TransactionState } from "../../models/state";
 import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
-import { SortableItemProps } from "../common/SortableItem";
+import { SortableItemContext } from "../common/Sortable";
 import { ToggleIconButton } from "../common/ToggleIconButton";
 import { TruncatableEditable } from "../common/TruncatableEditable";
 import { InstructionContext } from "./Instructions";
 
-export const Account: React.FC<
-  { data: IAccount; index: number } & SortableItemProps
-> = ({ data, index, attributes, listeners, setNodeRef, style }) => {
+export const Account: React.FC<{ data: IAccount; index: number }> = ({
+  data,
+  index,
+}) => {
   const instruction = useContext(InstructionContext);
+  const { listeners, attributes } = useContext(SortableItemContext);
   const account = (state: WritableDraft<TransactionState>) =>
     state.transaction.instructions.map[instruction.id].accounts.map[data.id];
 
@@ -42,7 +44,7 @@ export const Account: React.FC<
   const isWallet = data.pubkey === walletPubkey?.toBase58();
 
   return (
-    <Flex mb="2" ref={setNodeRef} style={style}>
+    <Flex mb="2">
       <DragHandleIcon h="3" w="3" mt="3.5" {...attributes} {...listeners} />
       <Text
         ml="2"
