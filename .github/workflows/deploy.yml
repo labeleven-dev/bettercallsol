@@ -4,9 +4,8 @@ on:
     branches: [ alpha ]
 
 jobs:
-  deployProd:
+  build:
     runs-on: ubuntu-latest
-    environment: prod
     steps:
       # setup
       - uses: actions/checkout@v3
@@ -15,33 +14,46 @@ jobs:
         with:
           node-version: 16.x
       - run: npm ci
-      
+
+      # determine version
+      - id: semantic-version
+        run: npm run release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # default to the latest tag version if no new release
+      - id: version
+        run: |
+          if [[ '${{ steps.semantic-version.outputs.new-release-published == 'true' }}' ]]; then
+            echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }}'
+          else
+            LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
+            echo "::set-output name=version::${LATEST_TAG}"
+          fi
+
       # test
       # TODO
       # - run: npm test
       # - run: npm run lint
 
-      # determine version
-      - run: |
-          npm run release && \
-          REACT_APP_VERSION="$(cat .version | tr -d '\n') (Build ${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT})"
-          echo "REACT_APP_VERSION=$REACT_APP_VERSION" >> $GITHUB_ENV
-        env:
-          CI_VERSION_ONLY: 1
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       # build
       - run: npm run build
-        # TODO uncomment before public release
-        # env:
-        #   GENERATE_SOURCEMAP: false
+        env:
+          # TODO uncomment before public release?
+          # GENERATE_SOURCEMAP: false
+          REACT_APP_VERSION: "${{ steps.version.outputs.version }} (Build ${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT})"
       
-      # version
+      # release
       - run: npm run release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      # deploy
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # TODO deployDev
+
+  deployProd:
+    runs-on: ubuntu-latest
+    environment: prod
+    needs: build
+    steps:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"

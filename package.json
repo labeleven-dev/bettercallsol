@@ -61,6 +61,7 @@
     "@types/uuid": "^8.3.4",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.1",
-    "semantic-release": "^19.0.3"
+    "semantic-release": "^19.0.3",
+    "semantic-release-export-data": "^1.0.0"
   }
 }
