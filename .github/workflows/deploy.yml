@@ -1,59 +1,22 @@
 name: Deploy
 on:
   push:
-    branches: [ alpha ]
+    branches:
+      - alpha
+      # - beta
+      # - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      # setup
-      - uses: actions/checkout@v3
-      - name: Use Node.js 16.x (LTS)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-      - run: npm ci
-
-      # determine version
-      - id: semantic-version
-        run: npm run release --dry-run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # default to the latest tag version if no new release
-      - id: version
-        run: |
-          if [[ '${{ steps.semantic-version.outputs.new-release-published == 'true' }}' ]]; then
-            echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }}'
-          else
-            LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
-            echo "::set-output name=version::${LATEST_TAG}"
-          fi
-
-      # test
-      # TODO
-      # - run: npm test
-      # - run: npm run lint
-
-      # build
-      - run: npm run build
-        env:
-          # TODO uncomment before public release?
-          # GENERATE_SOURCEMAP: false
-          REACT_APP_VERSION: "${{ steps.version.outputs.version }} (Build ${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT})"
-      
-      # release
-      - run: npm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   # TODO deployDev
 
   deployProd:
     runs-on: ubuntu-latest
     environment: prod
-    needs: build
     steps:
+      # build
+      - uses: ./.github/workflows/build.yml
+
+      # deploy
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
