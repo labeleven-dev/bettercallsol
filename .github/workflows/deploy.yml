@@ -32,9 +32,11 @@ jobs:
       - id: version
         run: |
           if [[ '${{ steps.semantic-version.outputs.new-release-published == 'true' }}' ]]; then
+            echo "New version: ${{ steps.semantic-version.outputs.new-release-version }}"
             echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }}'
           else
             LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
+            echo "Existing version: ${LATEST_TAG}"
             echo "::set-output name=version::${LATEST_TAG}"
           fi
 
@@ -48,7 +50,7 @@ jobs:
         env:
           # TODO uncomment before public release?
           # GENERATE_SOURCEMAP: false
-          REACT_APP_VERSION: "${{ steps.version.outputs.version }} (Build ${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT})"
+          REACT_APP_VERSION: "${{ steps.version.outputs.version }} (Build ${{ github.run_number }}-${{ github.run_attempt	}})"
       
       # release
       - run: npm run release
