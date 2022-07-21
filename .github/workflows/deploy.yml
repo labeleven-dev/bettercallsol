@@ -31,7 +31,7 @@ jobs:
       # default to the latest tag version if no new release
       - id: version
         run: |
-          if [[ '${{ steps.semantic-version.outputs.new-release-published == 'true' }}' ]]; then
+          if [[ ${{ steps.semantic-version.outputs.new-release-published }} = 'true' ]]; then
             echo "New version: ${{ steps.semantic-version.outputs.new-release-version }}"
             echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }}'
           else
