@@ -6,6 +6,7 @@ import {
   Icon,
   IconButton,
   Spacer,
+  Tag,
   Text,
   Tooltip,
   useColorModeValue,
@@ -65,6 +66,9 @@ export const TransactionPreview: React.FC<{
             <CheckCircleIcon mt="0.5" color="green.400" />
           </Tooltip>
         )}
+        <Tag ml="1" size="sm" colorScheme="yellow">
+          {rpcEndpoint.network}
+        </Tag>
 
         <Spacer />
 
