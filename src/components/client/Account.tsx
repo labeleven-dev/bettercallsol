@@ -35,8 +35,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
   const account = (state: WritableDraft<TransactionState>) =>
     state.transaction.instructions.map[instruction.id].accounts.map[data.id];
 
-  const network = useOptionsStore(
-    (state) => state.transactionOptions.rpcEndpoint.network
+  const rpcEndpoint = useOptionsStore(
+    (state) => state.transactionOptions.rpcEndpoint
   );
   const set = useTransactionStore((state) => state.set);
 
@@ -92,7 +92,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
             size="sm"
             valueType="account"
             value={data.pubkey}
-            network={network}
+            rpcEndpoint={rpcEndpoint}
           />
         </InputRightElement>
       </InputGroup>

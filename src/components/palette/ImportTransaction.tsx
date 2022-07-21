@@ -67,7 +67,7 @@ export const ImportTransaction: React.FC = () => {
         commitment: "finalized",
       });
       if (response) {
-        setTransaction(mapToTransactionPreview(response, rpcEndpoint.network));
+        setTransaction(mapToTransactionPreview(response, rpcEndpoint));
       } else {
         setError("Transaction not found");
         setTransaction(undefined);
@@ -97,7 +97,7 @@ export const ImportTransaction: React.FC = () => {
               size="sm"
               valueType="tx"
               value={txnAddress}
-              network={rpcEndpoint.network}
+              rpcEndpoint={rpcEndpoint}
             />
           </InputRightElement>
         </InputGroup>

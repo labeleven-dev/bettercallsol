@@ -29,8 +29,8 @@ import { ProgramLogs } from "./ProgramLogs";
 
 export const Results: React.FC = () => {
   const results = useTransactionStore((state) => state.results);
-  const network = useOptionsStore(
-    (state) => state.transactionOptions.rpcEndpoint.network
+  const rpcEndpoint = useOptionsStore(
+    (state) => state.transactionOptions.rpcEndpoint
   );
   const set = useTransactionStore((state) => state.set);
 
@@ -112,7 +112,7 @@ export const Results: React.FC = () => {
               valueType="tx"
               isDisabled={!results.signature}
               value={results.signature}
-              network={network}
+              rpcEndpoint={rpcEndpoint}
             />
           </InputRightElement>
         </InputGroup>

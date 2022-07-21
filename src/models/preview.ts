@@ -4,9 +4,9 @@ import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
 import { toSortableCollection } from "./sortable";
 import {
   IInstruction,
-  INetwork,
   IPlainText,
   IPubKey,
+  IRpcEndpoint,
   newAccount,
   newInstruction,
 } from "./web3";
@@ -35,7 +35,7 @@ export interface IInstructionPreview {
 
 export interface ITransactionPreview {
   signature: IPubKey;
-  network: INetwork;
+  rpcEndpoint: IRpcEndpoint;
   instructions: IInstructionPreview[];
   accountSummary: IAccountSummary;
   fee?: number;
@@ -60,7 +60,7 @@ export interface ITransactionPreview {
 /** Maps a web3.js transaction from the chain into a transaction preview, suitable for importing **/
 export const mapToTransactionPreview = (
   response: TransactionResponse,
-  network: INetwork
+  rpcEndpoint: IRpcEndpoint
 ): ITransactionPreview => {
   const { accountKeys, instructions } = response.transaction.message;
 
@@ -86,7 +86,7 @@ export const mapToTransactionPreview = (
 
   return {
     signature: response.transaction.signatures[0],
-    network,
+    rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
     error: (response.meta?.err as string) || undefined,

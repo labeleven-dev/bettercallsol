@@ -24,7 +24,7 @@ import { InstructionPreview } from "./InstructionPreview";
 export const TransactionPreview: React.FC<{
   transaction: ITransactionPreview;
 }> = ({
-  transaction: { signature, network, instructions, accountSummary, error },
+  transaction: { signature, rpcEndpoint, instructions, accountSummary, error },
 }) => {
   const addInstruction = useTransactionStore((state) => state.addInstruction);
 
@@ -73,7 +73,7 @@ export const TransactionPreview: React.FC<{
             size="xs"
             valueType="tx"
             value={signature}
-            network={network}
+            rpcEndpoint={rpcEndpoint}
           />
         </Box>
         <Tooltip label="Add all instructions to transaction">

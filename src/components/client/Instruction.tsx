@@ -20,8 +20,8 @@ import { InstructionContext } from "./Instructions";
 export const Instruction: React.FC = () => {
   const instruction = useContext(InstructionContext);
   const { listeners, attributes } = useContext(SortableItemContext);
-  const network = useOptionsStore(
-    (state) => state.transactionOptions.rpcEndpoint.network
+  const rpcEndpoint = useOptionsStore(
+    (state) => state.transactionOptions.rpcEndpoint
   );
   const uiState = useTransactionStore(
     (state) => state.uiState.instructions[instruction.id]
@@ -68,7 +68,7 @@ export const Instruction: React.FC = () => {
               size="sm"
               valueType="account"
               value={instruction.programId}
-              network={network}
+              rpcEndpoint={rpcEndpoint}
             />
           </InputRightElement>
         </InputGroup>

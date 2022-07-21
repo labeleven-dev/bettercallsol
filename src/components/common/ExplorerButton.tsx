@@ -8,34 +8,36 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { INetwork } from "../../models/web3";
+import { IRpcEndpoint } from "../../models/web3";
 
 export type AddressType = "tx" | "account";
 
 const explorerOpts: Record<string, any> = {
   solscan: {
     label: "Open in Solscan",
-    url: (valueType: AddressType, value: string, network: string) =>
-      `https://solscan.io/${valueType}/${value}?cluster=${network}`,
+    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
+      `https://solscan.io/${valueType}/${value}?cluster=${
+        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
+      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
   },
   solana: {
     label: "Open in Solana Explorer",
-    url: (valueType: AddressType, value: string, network: string) =>
+    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
       `https://explorer.solana.com/${
         valueType === "account" ? "address" : valueType
-      }/${value}?cluster=${network}`,
+      }/${value}?cluster=${rpcEndpoint.network}`,
   },
   solanafm: {
     label: "Open in SolanaFM",
-    url: (valueType: AddressType, value: string, network: string) =>
+    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
       `https://solana.fm/${
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
-        // use SolanaFM Quicknode for now
-        // TOOD update once we have more sophisticated env management
-        network === "devnet"
+        rpcEndpoint.custom
+          ? rpcEndpoint.custom
+          : rpcEndpoint.network === "devnet"
           ? "devnet-qn1"
-          : network === "testnet"
+          : rpcEndpoint.network === "testnet"
           ? "testnet-qn1"
           : "mainnet-qn1"
       }`,
@@ -46,9 +48,9 @@ export const ExplorerButton: React.FC<
   {
     value: string;
     valueType: AddressType;
-    network: INetwork;
+    rpcEndpoint: IRpcEndpoint;
   } & Omit<IconButtonProps, "aria-label">
-> = ({ value, valueType, network, size, ...theRest }) => {
+> = ({ value, valueType, rpcEndpoint, size, ...theRest }) => {
   const explorer = useOptionsStore((state) => state.appOptions.explorer);
 
   if (explorer === "none") return null; // hide
@@ -77,7 +79,7 @@ export const ExplorerButton: React.FC<
       {theRest.isDisabled ? (
         <Link>{button}</Link>
       ) : (
-        <Link href={opts.url(valueType, value, network)} isExternal>
+        <Link href={opts.url(valueType, value, rpcEndpoint)} isExternal>
           {button}
         </Link>
       )}
