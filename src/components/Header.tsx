@@ -9,13 +9,17 @@ import {
   Spacer,
   Text,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useState } from "react";
 import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
 import { useTransactionStore } from "../hooks/useTransactionStore";
 import { ColorModeSwitcher } from "./common/ColorModeSwitcher";
 
 export const Header: React.FC = () => {
+  const [funTitle, setFunTitle] = useState(false);
+  const toast = useToast();
   const set = useTransactionStore((state) => state.set);
 
   return (
@@ -24,10 +28,22 @@ export const Header: React.FC = () => {
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
         <Text
           ml="2"
-          mt="1"
+          mt={funTitle ? "1" : "2"}
           color="white"
-          fontFamily="'Dancing Script', cursive;"
-          fontSize="3xl"
+          fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
+          fontWeight="extrabold"
+          fontSize={funTitle ? "3xl" : "xl"}
+          onClick={() => {
+            toast({
+              title: funTitle
+                ? "Serious Business Mode™️ enabled!"
+                : "Serious Business Mode™️ disabled!",
+              status: funTitle ? "warning" : "success",
+              duration: 1000,
+              isClosable: true,
+            });
+            setFunTitle(!funTitle);
+          }}
         >
           Better Call SOL
         </Text>
