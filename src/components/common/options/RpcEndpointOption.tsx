@@ -8,11 +8,12 @@ import {
   Select,
   Tooltip,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { removeFrom } from "../../../models/sortable";
 import { IRpcEndpoint } from "../../../models/web3";
+import { SortableItemContext } from "../Sortable";
 
 const isValidUrl = (url: string) => {
   try {
@@ -31,6 +32,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   custom,
   enabled,
 }) => {
+  const { listeners, attributes } = useContext(SortableItemContext);
   // TODO is this best way?
   const [notValidatedUrl, setNotValidatedUrl] = useState(url);
   const set = useOptionsStore((state) => state.set);
@@ -44,7 +46,14 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
 
   return (
     <Flex>
-      <DragHandleIcon h="3" w="3" mt="12" mr="1" />
+      <DragHandleIcon
+        h="3"
+        w="3"
+        mt="12"
+        mr="1"
+        {...attributes}
+        {...listeners}
+      />
 
       <Grid
         p="4"

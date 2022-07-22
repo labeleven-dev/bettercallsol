@@ -4,6 +4,7 @@ import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { addTo, toSortedArray } from "../../models/sortable";
 import { newRpcEndpoint } from "../../models/web3";
 import { RpcEndpointOption } from "../common/options/RpcEndpointOption";
+import { Sortable } from "../common/Sortable";
 
 export const RpcEndpointOptions: React.FC = () => {
   const rpcEndpoints = useOptionsStore(
@@ -14,9 +15,18 @@ export const RpcEndpointOptions: React.FC = () => {
   return (
     <Grid>
       <Text mb="2">Add or remove custom RPC points, or re-order the list:</Text>
-      {toSortedArray(rpcEndpoints).map((rpcEndpoint, index) => (
-        <RpcEndpointOption key={index} {...rpcEndpoint} />
-      ))}
+      <Sortable
+        itemOrder={rpcEndpoints.order}
+        setItemOrder={(itemOrder) => {
+          set((state) => {
+            state.appOptions.rpcEndpoints.order = itemOrder;
+          });
+        }}
+      >
+        {toSortedArray(rpcEndpoints).map((rpcEndpoint, index) => (
+          <RpcEndpointOption key={index} {...rpcEndpoint} />
+        ))}
+      </Sortable>
 
       <Tooltip label="Add RPC Endpoint">
         <IconButton
