@@ -23,6 +23,7 @@ export const ToggleIconButton: React.FC<
         icon={icon}
         variant="ghost"
         backgroundColor={toggled ? bgColour : ""}
+        _hover={{ borderWidth: "1px" }}
         onClick={() => {
           if (onToggle) onToggle(!toggled);
         }}

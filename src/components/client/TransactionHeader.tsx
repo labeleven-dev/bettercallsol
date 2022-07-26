@@ -48,6 +48,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
     <Flex mb="5">
       <Tooltip label="Click to edit" placement="top-start">
         <Editable
+          flex="1"
           defaultValue={transaction.name}
           onChange={(value) =>
             setTransaction((state) => {
@@ -56,7 +57,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           }
         >
           <Heading size="md">
-            <EditablePreview minW="100px" minH="23px" />
+            <EditablePreview minW="200px" minH="23px" />
             <EditableInput />
           </Heading>
         </Editable>

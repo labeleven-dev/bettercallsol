@@ -6,6 +6,7 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  TabProps,
   Tabs,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -20,13 +21,18 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
 }) => {
   const { update } = useInstruction();
 
-  const tabStyle = {
+  const tabStyle: TabProps = {
     mr: "1",
     fontWeight: "semibold",
     color: useColorModeValue("blackAlpha.600", "whiteAlpha.600"),
+    borderWidth: "1px",
+    borderColor: "transparent",
     _selected: {
       color: "chakra-body-text",
       background: useColorModeValue("main.200", "main.800"),
+    },
+    _hover: {
+      borderColor: "chakra-border-color",
     },
   };
 
