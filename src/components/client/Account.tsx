@@ -15,33 +15,33 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
+import { useInstruction } from "../../hooks/useInstruction";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { removeFrom } from "../../models/sortable";
-import { TransactionState } from "../../models/state";
 import { IAccount } from "../../models/web3";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemContext } from "../common/Sortable";
 import { ToggleIconButton } from "../common/ToggleIconButton";
 import { TruncatableEditable } from "../common/TruncatableEditable";
-import { InstructionContext } from "./Instructions";
 
 export const Account: React.FC<{ data: IAccount; index: number }> = ({
   data,
   index,
 }) => {
-  const instruction = useContext(InstructionContext);
+  const { update } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
-  const account = (state: WritableDraft<TransactionState>) =>
-    state.transaction.instructions.map[instruction.id].accounts.map[data.id];
-
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const set = useTransactionStore((state) => state.set);
-
   const { publicKey: walletPubkey } = useWallet();
+
   const isWallet = data.pubkey === walletPubkey?.toBase58();
+
+  const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
+    update((state) => {
+      fn(state.accounts.map[data.id]);
+    });
+  };
 
   return (
     <Flex mb="2">
@@ -62,8 +62,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         fontSize="sm"
         value={data.name}
         onChange={(value: string) => {
-          set((state) => {
-            account(state).name = value;
+          updateAccount((state) => {
+            state.name = value;
           });
         }}
       ></TruncatableEditable>
@@ -82,8 +82,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           placeholder="Account Public Key"
           value={data.pubkey}
           onChange={(e) => {
-            set((state) => {
-              account(state).pubkey = e.target.value;
+            updateAccount((state) => {
+              state.pubkey = e.target.value;
             });
           }}
         ></Input>
@@ -103,8 +103,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         icon={<EditIcon />}
         toggled={data.isWritable}
         onToggle={(toggled) => {
-          set((state) => {
-            account(state).isWritable = toggled;
+          updateAccount((state) => {
+            state.isWritable = toggled;
           });
         }}
       />
@@ -114,8 +114,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         icon={<Icon as={FaPenNib} />}
         toggled={data.isSigner}
         onToggle={(toggled) => {
-          set((state) => {
-            account(state).isSigner = toggled;
+          updateAccount((state) => {
+            state.isSigner = toggled;
           });
         }}
       />
@@ -125,11 +125,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           icon={<DeleteIcon />}
           variant="ghost"
           onClick={() => {
-            set((state) => {
-              removeFrom(
-                state.transaction.instructions.map[instruction.id].accounts,
-                data.id
-              );
+            update((state) => {
+              removeFrom(state.accounts, data.id);
             });
           }}
         />

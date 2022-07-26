@@ -7,28 +7,20 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
+import { useInstruction } from "../../hooks/useInstruction";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { instructionGetter } from "../../models/state";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { SortableItemContext } from "../common/Sortable";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
-import { InstructionContext } from "./Instructions";
 
 export const Instruction: React.FC = () => {
-  const instruction = useContext(InstructionContext);
+  const { instruction, uiState, update } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const uiState = useTransactionStore(
-    (state) => state.uiState.instructions[instruction.id]
-  );
-  const set = useTransactionStore((state) => state.set);
-
-  const getInstruction = instructionGetter(instruction.id);
 
   return (
     <Grid
@@ -55,8 +47,8 @@ export const Instruction: React.FC = () => {
             placeholder="Program ID"
             value={instruction.programId}
             onChange={(e) => {
-              set((state) => {
-                getInstruction(state).programId = e.target.value;
+              update((state) => {
+                state.programId = e.target.value;
               });
             }}
           />
@@ -74,7 +66,7 @@ export const Instruction: React.FC = () => {
         </InputGroup>
 
         <Accounts />
-        <Data />
+        <Data data={instruction.data} />
       </Collapse>
     </Grid>
   );

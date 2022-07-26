@@ -5,6 +5,7 @@ import {
   Box,
   ChakraProvider,
   Flex,
+  Hide,
   Show,
 } from "@chakra-ui/react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
           <WalletModalProvider>
             <Flex flexDirection="column">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
-              <Show below="sm">
+              <Show below="md">
                 <Alert status="warning" variant="left-accent">
                   <AlertIcon />
                   <AlertDescription>
@@ -96,9 +97,11 @@ export const App: React.FC = () => {
                   <Transaction />
                 </Box>
                 {paletteOpen && (
-                  <Box flex="5" h="90vh" overflow="scroll">
-                    <Palette />
-                  </Box>
+                  <Hide below="md">
+                    <Box flex="5" h="90vh" overflow="scroll">
+                      <Palette />
+                    </Box>
+                  </Hide>
                 )}
               </Flex>
 

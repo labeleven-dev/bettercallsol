@@ -8,20 +8,16 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { useContext } from "react";
+import React from "react";
 import { FaWallet } from "react-icons/fa";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useInstruction } from "../../hooks/useInstruction";
 import { addTo, toSortedArray } from "../../models/sortable";
-import { instructionGetter } from "../../models/state";
 import { newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { Account } from "./Account";
-import { InstructionContext } from "./Instructions";
 
 export const Accounts: React.FC = () => {
-  const instruction = useContext(InstructionContext);
-  const getInstruction = instructionGetter(instruction.id);
-  const set = useTransactionStore((state) => state.set);
+  const { instruction, update } = useInstruction();
   const { publicKey: walletPubkey } = useWallet();
 
   return (
@@ -38,8 +34,8 @@ export const Accounts: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={() => {
-              set((state) => {
-                addTo(getInstruction(state).accounts, newAccount());
+              update((state) => {
+                addTo(state.accounts, newAccount());
               });
             }}
           />
@@ -51,8 +47,8 @@ export const Accounts: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={() => {
-              set((state) => {
-                addTo(getInstruction(state).accounts, {
+              update((state) => {
+                addTo(state.accounts, {
                   ...newAccount(),
                   pubkey: walletPubkey?.toBase58() || "",
                   isSigner: true,
@@ -66,8 +62,8 @@ export const Accounts: React.FC = () => {
         <Sortable
           itemOrder={instruction.accounts.order}
           setItemOrder={(itemOrder) => {
-            set((state) => {
-              getInstruction(state).accounts.order = itemOrder;
+            update((state) => {
+              state.accounts.order = itemOrder;
             });
           }}
         >

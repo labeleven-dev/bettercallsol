@@ -21,36 +21,19 @@ import {
 } from "@chakra-ui/react";
 import { DraggableAttributes } from "@dnd-kit/core";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import React, { useContext } from "react";
+import React from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useInstruction } from "../../hooks/useInstruction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { instructionGetter } from "../../models/state";
-import { newInstruction } from "../../models/web3";
-import { InstructionContext } from "./Instructions";
 
 export const InstructionHeader: React.FC<{
   attributes: DraggableAttributes;
   listeners: SyntheticListenerMap;
 }> = ({ attributes, listeners }) => {
-  const instruction = useContext(InstructionContext);
-  const uiState = useTransactionStore(
-    (state) => state.uiState.instructions[instruction.id]
-  );
-  const set = useTransactionStore((state) => state.set);
+  const { instruction, uiState, update, updateUi, reset } = useInstruction();
   const removeInstruction = useTransactionStore(
     (state) => state.removeInstruction
   );
-
-  const getInstruction = instructionGetter(instruction.id);
-
-  const clearInstruction = () => {
-    set((state) => {
-      state.transaction.instructions.map[instruction.id] = {
-        ...newInstruction(),
-        id: instruction.id,
-      };
-    });
-  };
 
   return (
     <Flex>
@@ -69,9 +52,8 @@ export const InstructionHeader: React.FC<{
         }
         variant="ghost"
         onClick={() => {
-          set((state) => {
-            state.uiState.instructions[instruction.id].expanded =
-              !uiState.expanded;
+          updateUi((state) => {
+            state.expanded = !uiState.expanded;
           });
         }}
       />
@@ -80,8 +62,8 @@ export const InstructionHeader: React.FC<{
           mb="5"
           value={instruction.name}
           onChange={(value) => {
-            set((state) => {
-              getInstruction(state).name = value;
+            update((state) => {
+              state.name = value;
             });
           }}
         >
@@ -102,9 +84,8 @@ export const InstructionHeader: React.FC<{
             uiState.disabled ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />
           }
           onClick={() => {
-            set((state) => {
-              state.uiState.instructions[instruction.id].disabled =
-                !uiState.disabled;
+            updateUi((state) => {
+              state.disabled = !uiState.disabled;
             });
           }}
         />
@@ -118,7 +99,12 @@ export const InstructionHeader: React.FC<{
           variant="ghost"
         />
         <MenuList>
-          <MenuItem icon={<Icon as={FaEraser} />} onClick={clearInstruction}>
+          <MenuItem
+            icon={<Icon as={FaEraser} />}
+            onClick={() => {
+              reset();
+            }}
+          >
             Clear
           </MenuItem>
           <MenuItem
