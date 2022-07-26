@@ -2,8 +2,8 @@ import { FormControl, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { Explorer, EXPLORERS } from "../../models/state";
-import { ChoiceOption } from "../common/options/ChoiceOption";
-import { ToggleOption } from "../common/options/ToggleOption";
+import { ChoiceOption } from "./common/ChoiceOption";
+import { ToggleOption } from "./common/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
   const appOptions = useOptionsStore((state) => state.appOptions);

@@ -10,7 +10,7 @@ import React from "react";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { ExplorerButton } from "../common/ExplorerButton";
-import { Accounts } from "./Accounts";
+import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
 import { InstructionHeader } from "./InstructionHeader";
 

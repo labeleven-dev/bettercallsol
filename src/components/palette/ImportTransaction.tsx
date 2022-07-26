@@ -22,8 +22,8 @@ import {
 import { IRpcEndpoint } from "../../models/web3";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
-import { TransactionPreview } from "../common/preview/TransactionPreview";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
+import { TransactionPreview } from "./preview/TransactionPreview";
 
 export const ImportTransaction: React.FC = () => {
   const rpcEndpoints = useOptionsStore(

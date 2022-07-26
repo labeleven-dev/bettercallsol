@@ -11,14 +11,14 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import { FaWallet } from "react-icons/fa";
-import { useInstruction } from "../../hooks/useInstruction";
+import { useInstruction } from "../../../hooks/useInstruction";
 import {
   addTo,
   SortableCollection,
   toSortedArray,
-} from "../../models/sortable";
-import { IAccount, newAccount } from "../../models/web3";
-import { Sortable } from "../common/Sortable";
+} from "../../../models/sortable";
+import { IAccount, newAccount } from "../../../models/web3";
+import { Sortable } from "../../common/Sortable";
 import { Account } from "./Account";
 
 export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({

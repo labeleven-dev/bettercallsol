@@ -2,18 +2,18 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
+import { useInstruction } from "../../../../hooks/useInstruction";
 import {
   addTo,
   SortableCollection,
   toSortedArray,
-} from "../../../models/sortable";
+} from "../../../../models/sortable";
 import {
   DataFormat,
   IInstrctionDataField,
   newDataField,
-} from "../../../models/web3";
-import { Sortable } from "../Sortable";
+} from "../../../../models/web3";
+import { Sortable } from "../../../common/Sortable";
 import { DataField } from "./DataField";
 
 export const DataEditor: React.FC<{

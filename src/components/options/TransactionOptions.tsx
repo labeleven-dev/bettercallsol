@@ -3,9 +3,9 @@ import { Commitment } from "@solana/web3.js";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { COMMITMENT_LEVELS } from "../../models/web3";
-import { ChoiceOption } from "../common/options/ChoiceOption";
-import { NumberOption } from "../common/options/NumberOption";
-import { ToggleOption } from "../common/options/ToggleOption";
+import { ChoiceOption } from "./common/ChoiceOption";
+import { NumberOption } from "./common/NumberOption";
+import { ToggleOption } from "./common/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
   const transactionOptions = useOptionsStore(

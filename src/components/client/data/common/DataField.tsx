@@ -2,16 +2,16 @@ import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Select, Tooltip } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { removeFrom, SortableCollection } from "../../../models/sortable";
+import { useInstruction } from "../../../../hooks/useInstruction";
+import { removeFrom, SortableCollection } from "../../../../models/sortable";
 import {
   DataFormat,
   IInstrctionDataField,
   InstructionDataFieldType,
-} from "../../../models/web3";
-import { Numbering } from "../Numbering";
-import { SortableItemContext } from "../Sortable";
-import { TruncatableEditable } from "../TruncatableEditable";
+} from "../../../../models/web3";
+import { Numbering } from "../../../common/Numbering";
+import { SortableItemContext } from "../../../common/Sortable";
+import { TruncatableEditable } from "../../../common/TruncatableEditable";
 
 const DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> = {
   borsh: [

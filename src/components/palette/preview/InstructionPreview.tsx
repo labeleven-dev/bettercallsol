@@ -16,7 +16,7 @@ import {
   mapToIInstruction,
 } from "../../../models/preview";
 import { short } from "../../../models/web3";
-import { CopyButton } from "../CopyButton";
+import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
 
 export const InstructionPreview: React.FC<{

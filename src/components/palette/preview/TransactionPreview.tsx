@@ -17,8 +17,8 @@ import {
   mapToIInstruction,
 } from "../../../models/preview";
 import { short } from "../../../models/web3";
-import { CopyButton } from "../CopyButton";
-import { ExplorerButton } from "../ExplorerButton";
+import { CopyButton } from "../../common/CopyButton";
+import { ExplorerButton } from "../../common/ExplorerButton";
 import { AccountSummary } from "./AccountSummary";
 import { InstructionPreview } from "./InstructionPreview";
 

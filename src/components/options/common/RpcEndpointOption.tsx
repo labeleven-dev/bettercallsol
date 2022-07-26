@@ -13,7 +13,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { removeFrom } from "../../../models/sortable";
 import { IRpcEndpoint } from "../../../models/web3";
-import { SortableItemContext } from "../Sortable";
+import { SortableItemContext } from "../../common/Sortable";
 
 const isValidUrl = (url: string) => {
   try {

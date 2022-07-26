@@ -13,15 +13,15 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { FaPenNib, FaWallet } from "react-icons/fa";
-import { useInstruction } from "../../hooks/useInstruction";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { removeFrom } from "../../models/sortable";
-import { IAccount } from "../../models/web3";
-import { ExplorerButton } from "../common/ExplorerButton";
-import { Numbering } from "../common/Numbering";
-import { SortableItemContext } from "../common/Sortable";
-import { ToggleIconButton } from "../common/ToggleIconButton";
-import { TruncatableEditable } from "../common/TruncatableEditable";
+import { useInstruction } from "../../../hooks/useInstruction";
+import { useOptionsStore } from "../../../hooks/useOptionsStore";
+import { removeFrom } from "../../../models/sortable";
+import { IAccount } from "../../../models/web3";
+import { ExplorerButton } from "../../common/ExplorerButton";
+import { Numbering } from "../../common/Numbering";
+import { SortableItemContext } from "../../common/Sortable";
+import { ToggleIconButton } from "../../common/ToggleIconButton";
+import { TruncatableEditable } from "../../common/TruncatableEditable";
 
 export const Account: React.FC<{ data: IAccount; index: number }> = ({
   data,

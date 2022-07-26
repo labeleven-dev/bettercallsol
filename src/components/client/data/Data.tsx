@@ -12,7 +12,7 @@ import {
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { IInstructionData } from "../../../models/web3";
-import { DataEditor } from "../../common/data/DataEditor";
+import { DataEditor } from "./common/DataEditor";
 import { RawData } from "./RawData";
 
 export const Data: React.FC<{ data: IInstructionData }> = ({
