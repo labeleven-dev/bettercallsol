@@ -1,13 +1,13 @@
 // Models for the transaction to be exported
 
 import { toSortedArray } from "./sortable";
-import { IAccount, IPlainText, IPubKey, ITransaction } from "./web3";
+import { IAccount, IPubKey, ITransaction } from "./web3";
 
 export interface IInstructionExport {
   name?: string;
   programId: IPubKey;
   accounts: IAccount[];
-  data: IPlainText;
+  // TODO data
 }
 
 export interface ITransactionExport {

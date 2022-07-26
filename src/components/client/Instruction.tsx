@@ -11,7 +11,7 @@ import { useInstruction } from "../../hooks/useInstruction";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./Accounts";
-import { Data } from "./Data";
+import { Data } from "./data/Data";
 import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {

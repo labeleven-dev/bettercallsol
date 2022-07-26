@@ -3,8 +3,8 @@
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
 import { toSortableCollection } from "./sortable";
 import {
+  EMPTY_INSTRUCTION_DATA,
   IInstruction,
-  IPlainText,
   IPubKey,
   IRpcEndpoint,
   newAccount,
@@ -28,7 +28,7 @@ export interface IAccountPreview {
 export interface IInstructionPreview {
   programId: IPubKey;
   accounts: IAccountPreview[];
-  data: IPlainText;
+  data: string;
   accountSummary: IAccountSummary;
   innerInstructions?: IInstructionPreview[];
 }
@@ -124,5 +124,9 @@ export const mapToIInstruction = ({
       isWritable,
     }))
   ),
-  data,
+  data: {
+    ...EMPTY_INSTRUCTION_DATA,
+    format: "raw",
+    raw: data,
+  },
 });

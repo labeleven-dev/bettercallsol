@@ -12,6 +12,7 @@ export const useOptionsStore = create<OptionsState>((set) => {
     : DEFAULT_OPTIONS_STATE;
 
   // TODO capture that it's the first time and display something helpful
+  // TODO save options if first time
 
   return {
     ...state,

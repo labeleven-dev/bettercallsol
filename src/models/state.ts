@@ -6,6 +6,7 @@ import { WritableDraft } from "immer/dist/internal";
 import { v4 as uuid } from "uuid";
 import { IID, SortableCollection, toSortableCollection } from "./sortable";
 import {
+  EMPTY_INSTRUCTION_DATA,
   IInstruction,
   IResults,
   IRpcEndpoint,
@@ -140,7 +141,11 @@ const DEFAULT_TRANSACTION: ITransaction = {
           isSigner: true,
         },
       ]),
-      data: "hello",
+      data: {
+        ...EMPTY_INSTRUCTION_DATA,
+        format: "raw",
+        raw: "hello",
+      },
     },
   ]),
 };

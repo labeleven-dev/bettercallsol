@@ -11,7 +11,14 @@ import {
   TransactionResponse,
 } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-import { IID, SortableCollection, toSortedArray } from "./sortable";
+import { BorshCoder } from "../coders/borsh";
+import { BufferLayoutCoder } from "../coders/buffer-layout";
+import {
+  IID,
+  SortableCollection,
+  toSortableCollection,
+  toSortedArray,
+} from "./sortable";
 import { UIInstructionState } from "./state";
 
 /** Converts lamports to SOL */
@@ -41,22 +48,65 @@ export const newAccount = (): IAccount => ({
   isWritable: false,
 });
 
-export type IPlainText = string;
+export type InstructionDataFieldType =
+  | "u8"
+  | "i8"
+  | "u16"
+  | "i16"
+  | "u32"
+  | "i32"
+  | "u64"
+  | "i64"
+  // | "u128"
+  // | "i128"
+  | "bool"
+  | "publicKey"
+  | "string";
+
+export interface IInstrctionDataField {
+  id: IID;
+  name?: string;
+  type?: InstructionDataFieldType;
+  value: any;
+}
+
+export const newDataField = (): IInstrctionDataField => ({
+  id: uuid(),
+  name: "New Data",
+  type: "string",
+  value: "",
+});
+
+export type DataFormat = "raw" | "bufferLayout" | "borsh";
+
+export interface IInstructionData {
+  format: DataFormat;
+  raw: string;
+  borsh: SortableCollection<IInstrctionDataField>;
+  bufferLayout: SortableCollection<IInstrctionDataField>;
+}
+
+export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
+  format: "raw",
+  raw: "",
+  borsh: toSortableCollection([]),
+  bufferLayout: toSortableCollection([]),
+};
 
 export interface IInstruction {
   id: IID;
   name?: string;
   programId: IPubKey;
   accounts: SortableCollection<IAccount>;
-  data: IPlainText; // TODO anchor
+  data: IInstructionData;
 }
 
 export const newInstruction = (): IInstruction => ({
   id: uuid(),
   name: "New Instruction",
   programId: "",
-  data: "",
   accounts: { map: {}, order: [] },
+  data: EMPTY_INSTRUCTION_DATA,
 });
 
 export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
@@ -133,6 +183,8 @@ export interface ITransactionOptions {
   pollingPeriod: number; // used in our app, rather than passed to web3.js stuff
 }
 
+///// Mappers /////
+
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
 export const mapToTransaction = (
   transactionData: ITransaction,
@@ -145,6 +197,19 @@ export const mapToTransaction = (
     ({ id, programId, accounts, data }) => {
       if (uiInstructions[id].disabled || !programId) return;
 
+      let buffer;
+      if (data.format === "borsh" && data.borsh) {
+        buffer = new BorshCoder().encode(toSortedArray(data.borsh));
+      } else if (data.format === "bufferLayout" && data.bufferLayout) {
+        buffer = new BufferLayoutCoder().encode(
+          toSortedArray(data.bufferLayout)
+        );
+      } else if (data.format === "raw" && data.raw) {
+        buffer = Buffer.from(data.raw);
+      } else {
+        // TODO
+      }
+
       transaction.add(
         new TransactionInstruction({
           programId: new PublicKey(programId),
@@ -155,7 +220,7 @@ export const mapToTransaction = (
               isSigner,
             })
           ),
-          data: Buffer.from(data),
+          data: buffer,
         })
       );
     }
