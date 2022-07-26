@@ -22,7 +22,7 @@ export const useTransaction: () => () => void = () => {
   const set = useTransactionStore((state) => state.set);
 
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  const { sendTransaction } = useWallet();
 
   // check if transaction is finalised, then fetch the confirmed transaction
   // and populate the global state.
@@ -84,12 +84,6 @@ export const useTransaction: () => () => void = () => {
     ) {
       set((state) => {
         state.results.error = "No instructions provided";
-      });
-      return;
-    }
-    if (!publicKey) {
-      set((state) => {
-        state.results.error = "Wallet is not connected";
       });
       return;
     }

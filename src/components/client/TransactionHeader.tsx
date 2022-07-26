@@ -15,6 +15,7 @@ import {
   Spacer,
   Tooltip,
 } from "@chakra-ui/react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import {
   FaEllipsisV,
@@ -40,6 +41,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const setTransaction = useTransactionStore((state) => state.set);
   const setOptions = useOptionsStore((state) => state.set);
 
+  const { publicKey: walletPublicKey } = useWallet();
   const transact = useTransaction();
 
   return (
@@ -133,9 +135,16 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         />
       </Menu>
 
-      <Tooltip label="Run Program">
+      <Tooltip
+        shouldWrapChildren
+        hasArrow={!walletPublicKey}
+        label={
+          walletPublicKey ? "Run Program" : "Please connect wallet to contiune"
+        }
+      >
         <IconButton
           isLoading={results.inProgress}
+          isDisabled={!walletPublicKey}
           ml="2"
           mr="2"
           colorScheme="main"
