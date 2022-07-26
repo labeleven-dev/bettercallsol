@@ -82,7 +82,7 @@ export const App: React.FC = () => {
               </Box>
 
               <Flex mt="55px">
-                <Box flex="10" h="90vh" overflow="scroll">
+                <Box flex="10" h="92vh" overflow="scroll">
                   {/* TODO it's Solana wallet button's fault, we need to replace it */}
                   <Show below="md">
                     <Alert status="warning" variant="left-accent">
@@ -97,7 +97,7 @@ export const App: React.FC = () => {
                 </Box>
                 {paletteOpen && (
                   <Hide below="md">
-                    <Box flex="5" h="90vh" overflow="scroll">
+                    <Box flex="5" h="92vh" overflow="scroll">
                       <Palette />
                     </Box>
                   </Hide>
@@ -107,7 +107,7 @@ export const App: React.FC = () => {
               <Box
                 position="fixed"
                 bottom="0px"
-                h="70px"
+                h="40px"
                 w="full"
                 zIndex="modal"
               >

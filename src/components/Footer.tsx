@@ -2,6 +2,7 @@ import {
   Box,
   Center,
   Flex,
+  Grid,
   Icon,
   Link,
   Spacer,
@@ -11,24 +12,32 @@ import {
 import { FaGithub, FaTwitter } from "react-icons/fa";
 
 export const Footer: React.FC = () => (
-  <Box p="5" backgroundColor={useColorModeValue("gray.100", "gray.900")}>
-    <Center>
-      <Link mr="4" href="https://github.com/labeleven-dev" isExternal>
-        <Icon as={FaGithub} />
-      </Link>
-      <Link mr="4" href="https://twitter.com/labeleven_dev" isExternal>
-        <Icon as={FaTwitter} />
-      </Link>
-    </Center>
+  <Grid
+    p="3"
+    templateColumns="repeat(3,1fr)"
+    backgroundColor={useColorModeValue("gray.100", "gray.900")}
+  >
     <Flex>
       <Text fontSize="xs">© {new Date().getFullYear()}</Text>
-      <Link ml="1" mt="-1.5" href="https://labeleven.dev" isExternal>
+      <Link ml="2" mt="-1.5" href="https://labeleven.dev" isExternal>
         <LabElevenIcon />
       </Link>
+    </Flex>
+    <Box>
+      <Center>
+        <Link mr="4" href="https://github.com/labeleven-dev" isExternal>
+          <Icon as={FaGithub} />
+        </Link>
+        <Link href="https://twitter.com/labeleven_dev" isExternal>
+          <Icon as={FaTwitter} />
+        </Link>
+      </Center>
+    </Box>
+    <Flex>
       <Spacer />
       <Text fontSize="xs">v{process.env.REACT_APP_VERSION || "???"}</Text>
     </Flex>
-  </Box>
+  </Grid>
 );
 
 const LabElevenIcon: React.FC = () => {
