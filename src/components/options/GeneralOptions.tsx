@@ -34,6 +34,17 @@ export const GeneralOptions: React.FC = () => {
             });
           }}
         />
+
+        <ToggleOption
+          id="enable-numbering"
+          name="Enable numbering"
+          get={() => appOptions.enableNumbering}
+          set={(x) => {
+            set((state) => {
+              state.appOptions.enableNumbering = x;
+            });
+          }}
+        />
       </Grid>
     </FormControl>
   );

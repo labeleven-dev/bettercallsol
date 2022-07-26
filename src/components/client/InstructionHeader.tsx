@@ -18,12 +18,12 @@ import {
   MenuList,
   Spacer,
   Tooltip,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { Numbering } from "../common/Numbering";
 import { SortableItemContext } from "../common/Sortable";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
@@ -56,14 +56,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           });
         }}
       />
-      <Heading
-        mt="0.5"
-        size="md"
-        mr="2"
-        textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
-      >
-        #{index + 1}
-      </Heading>
+      <Numbering index={index} mt="0.5" size="md" mr="2" />
       <Tooltip label="Click to edit" placement="top-start">
         <Editable
           mb="5"

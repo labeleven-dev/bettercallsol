@@ -1,13 +1,5 @@
 import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons";
-import {
-  Flex,
-  IconButton,
-  Input,
-  Select,
-  Text,
-  Tooltip,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Flex, IconButton, Input, Select, Tooltip } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
@@ -17,6 +9,7 @@ import {
   IInstrctionDataField,
   InstructionDataFieldType,
 } from "../../../models/web3";
+import { Numbering } from "../Numbering";
 import { SortableItemContext } from "../Sortable";
 import { TruncatableEditable } from "../TruncatableEditable";
 
@@ -73,15 +66,7 @@ export const DataField: React.FC<{
   return (
     <Flex mb="2">
       <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
-      <Text
-        ml="2"
-        mt="2"
-        w="30px"
-        textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
-        fontSize="sm"
-      >
-        #{index + 1}
-      </Text>
+      <Numbering index={index} ml="2" mt="2" w="30px" fontSize="sm" />
       <TruncatableEditable
         ml="2"
         mt="1"

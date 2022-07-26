@@ -22,6 +22,7 @@ export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 export interface AppOptions {
   readonly explorer: Explorer;
   readonly autoConnectWallet: boolean;
+  readonly enableNumbering: boolean;
   readonly rpcEndpoints: SortableCollection<IRpcEndpoint>;
 }
 
@@ -109,6 +110,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
 export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solanafm",
   autoConnectWallet: true,
+  enableNumbering: false,
   rpcEndpoints: toSortableCollection(DEFAULT_RPC_ENDPOINTS),
 };
 
