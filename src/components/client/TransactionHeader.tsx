@@ -27,10 +27,12 @@ import {
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { ITransaction } from "../../models/web3";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
-export const TransactionHeader: React.FC = () => {
-  const transactionData = useTransactionStore((state) => state.transaction);
+export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
+  transaction,
+}) => {
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
@@ -44,7 +46,7 @@ export const TransactionHeader: React.FC = () => {
     <Flex mb="5">
       <Tooltip label="Click to edit" placement="top-start">
         <Editable
-          defaultValue={transactionData.name}
+          defaultValue={transaction.name}
           onChange={(value) =>
             setTransaction((state) => {
               state.transaction.name = value;

@@ -6,18 +6,16 @@ import {
   InputRightElement,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React from "react";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { ExplorerButton } from "../common/ExplorerButton";
-import { SortableItemContext } from "../common/Sortable";
 import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC = () => {
   const { instruction, uiState, update } = useInstruction();
-  const { listeners, attributes } = useContext(SortableItemContext);
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
@@ -37,7 +35,7 @@ export const Instruction: React.FC = () => {
       bgColor={useColorModeValue("", "whiteAlpha.50")}
       boxShadow={useColorModeValue("base", "")}
     >
-      <InstructionHeader attributes={attributes!} listeners={listeners!} />
+      <InstructionHeader />
 
       <Collapse in={uiState.expanded}>
         <InputGroup>
@@ -65,7 +63,8 @@ export const Instruction: React.FC = () => {
           </InputRightElement>
         </InputGroup>
 
-        <Accounts />
+        <Accounts accounts={instruction.accounts} />
+
         <Data data={instruction.data} />
       </Collapse>
     </Grid>

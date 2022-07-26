@@ -11,13 +11,19 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import { FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
-import { addTo, toSortedArray } from "../../models/sortable";
-import { newAccount } from "../../models/web3";
+import {
+  addTo,
+  SortableCollection,
+  toSortedArray,
+} from "../../models/sortable";
+import { IAccount, newAccount } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { Account } from "./Account";
 
-export const Accounts: React.FC = () => {
-  const { instruction, update } = useInstruction();
+export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
+  accounts,
+}) => {
+  const { update } = useInstruction();
   const { publicKey: walletPubkey } = useWallet();
 
   return (
@@ -60,14 +66,14 @@ export const Accounts: React.FC = () => {
       </Flex>
       <Box>
         <Sortable
-          itemOrder={instruction.accounts.order}
+          itemOrder={accounts.order}
           setItemOrder={(itemOrder) => {
             update((state) => {
               state.accounts.order = itemOrder;
             });
           }}
         >
-          {toSortedArray(instruction.accounts).map((account, index) => (
+          {toSortedArray(accounts).map((account, index) => (
             <Account data={account} index={index} key={account.id} />
           ))}
         </Sortable>

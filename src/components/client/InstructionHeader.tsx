@@ -19,18 +19,16 @@ import {
   Spacer,
   Tooltip,
 } from "@chakra-ui/react";
-import { DraggableAttributes } from "@dnd-kit/core";
-import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import React from "react";
+import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { SortableItemContext } from "../common/Sortable";
 
-export const InstructionHeader: React.FC<{
-  attributes: DraggableAttributes;
-  listeners: SyntheticListenerMap;
-}> = ({ attributes, listeners }) => {
+export const InstructionHeader: React.FC = () => {
   const { instruction, uiState, update, updateUi, reset } = useInstruction();
+  const { listeners, attributes } = useContext(SortableItemContext);
+
   const removeInstruction = useTransactionStore(
     (state) => state.removeInstruction
   );

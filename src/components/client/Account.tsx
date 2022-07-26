@@ -48,9 +48,10 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       <DragHandleIcon h="3" w="3" mt="3.5" {...attributes} {...listeners} />
       <Text
         ml="2"
-        mt="2"
+        mt="3"
         w="50px"
         textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
+        fontSize="sm"
       >
         #{index + 1}
       </Text>

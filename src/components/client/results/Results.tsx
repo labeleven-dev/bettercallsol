@@ -71,11 +71,13 @@ export const Results: React.FC = () => {
         )}
         <Spacer />
         {results.finalisedAt && (
-          <Tag height="20px">
-            {`Finalised @ ${new Date(
-              results.finalisedAt
-            ).toLocaleTimeString()}`}
-          </Tag>
+          <Tooltip label={new Date(results.finalisedAt).toLocaleString()}>
+            <Tag height="20px">
+              {`Finalised @ ${new Date(
+                results.finalisedAt
+              ).toLocaleTimeString()}`}
+            </Tag>
+          </Tooltip>
         )}
       </Flex>
 
@@ -140,7 +142,7 @@ export const Results: React.FC = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ProgramLogs />
+            <ProgramLogs results={results} />
           </TabPanel>
           <TabPanel>
             <BalanceTable balances={results.balances || []} />

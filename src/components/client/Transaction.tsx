@@ -8,11 +8,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
+  const transaction = useTransactionStore((state) => state.transaction);
   const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
@@ -20,7 +22,7 @@ export const Transaction: React.FC = () => {
   return (
     <Grid m="2">
       <Box p="5">
-        <TransactionHeader />
+        <TransactionHeader transaction={transaction} />
 
         {/* TODO remove once out of beta */}
         <Collapse
@@ -40,7 +42,7 @@ export const Transaction: React.FC = () => {
           </Alert>
         </Collapse>
 
-        <Instructions />
+        <Instructions instructions={transaction.instructions} />
       </Box>
       <Divider />
       <Box mt="5">

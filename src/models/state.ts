@@ -84,7 +84,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     provider: "Solana",
     network: "mainnet-beta",
     url: clusterApiUrl("mainnet-beta"),
-    enabled: false,
+    enabled: true,
     custom: false,
   },
   {
@@ -92,7 +92,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     provider: "Serum",
     network: "mainnet-beta",
     url: "https://solana-api.projectserum.com",
-    enabled: false,
+    enabled: true,
     custom: false,
   },
   {
