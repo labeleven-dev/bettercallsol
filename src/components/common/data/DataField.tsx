@@ -66,7 +66,7 @@ export const DataField: React.FC<{
   return (
     <Flex mb="2">
       <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
-      <Numbering index={index} ml="2" mt="2" w="30px" fontSize="sm" />
+      <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
       <TruncatableEditable
         ml="2"
         mt="1"

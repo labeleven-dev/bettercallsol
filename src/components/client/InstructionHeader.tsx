@@ -56,7 +56,14 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           });
         }}
       />
-      <Numbering index={index} mt="0.5" size="md" mr="2" />
+      <Numbering
+        index={index}
+        pt="1"
+        fontSize="md"
+        mr="2"
+        minW="30px"
+        maxH="30px"
+      />
       <Tooltip label="Click to edit" placement="top-start">
         <Editable
           mb="5"

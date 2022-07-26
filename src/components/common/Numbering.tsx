@@ -1,8 +1,8 @@
-import { Heading, HeadingProps, useColorModeValue } from "@chakra-ui/react";
+import { Badge, BadgeProps, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 
-export const Numbering: React.FC<{ index: number } & HeadingProps> = ({
+export const Numbering: React.FC<{ index: number } & BadgeProps> = ({
   index,
   ...theRest
 }) => {
@@ -12,8 +12,15 @@ export const Numbering: React.FC<{ index: number } & HeadingProps> = ({
   if (!enableNumbering) return null;
 
   return (
-    <Heading {...theRest} textColor={textColor}>
-      #{index + 1}
-    </Heading>
+    <Badge
+      variant="subtle"
+      colorScheme="main"
+      textColor={textColor}
+      textAlign="center"
+      rounded="xl"
+      {...theRest}
+    >
+      {index + 1}
+    </Badge>
   );
 };
