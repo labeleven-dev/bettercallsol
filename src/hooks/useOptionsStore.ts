@@ -2,7 +2,18 @@ import produce from "immer";
 import create from "zustand";
 import { DEFAULT_OPTIONS_STATE, OptionsState } from "../models/state";
 
-const LOCAL_STORAGE_KEY = "bscolOptionsState";
+const LOCAL_STORAGE_KEY = "bcsolOptionsState";
+
+// excludes functions
+const saveState = ({ transactionOptions, appOptions }: OptionsState) => {
+  localStorage.setItem(
+    LOCAL_STORAGE_KEY,
+    JSON.stringify({
+      transactionOptions,
+      appOptions,
+    })
+  );
+};
 
 export const useOptionsStore = create<OptionsState>((set) => {
   // retrieve local storage
@@ -11,8 +22,10 @@ export const useOptionsStore = create<OptionsState>((set) => {
     ? JSON.parse(existingStateString)
     : DEFAULT_OPTIONS_STATE;
 
-  // TODO capture that it's the first time and display something helpful
-  // TODO save options if first time
+  if (!existingStateString) {
+    // TODO display a welcome
+    saveState(state);
+  }
 
   return {
     ...state,
@@ -23,14 +36,5 @@ export const useOptionsStore = create<OptionsState>((set) => {
 });
 
 useOptionsStore.subscribe((state) => {
-  // exclude functions
-  const { transactionOptions, appOptions } = state;
-
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY,
-    JSON.stringify({
-      transactionOptions,
-      appOptions,
-    })
-  );
+  saveState(state);
 });

@@ -7,7 +7,22 @@ import {
   TransactionState,
 } from "../models/state";
 
-const LOCAL_STORAGE_KEY = "bscolTransactionState";
+const LOCAL_STORAGE_KEY = "bcsolTransactionState";
+
+// exclude functions
+const saveState = ({ transaction, results, uiState }: TransactionState) => {
+  // in progress should not survive page reloads
+  const { inProgress: _inProgress, ...restOfResults } = results;
+
+  localStorage.setItem(
+    LOCAL_STORAGE_KEY,
+    JSON.stringify({
+      transaction,
+      results: restOfResults,
+      uiState,
+    })
+  );
+};
 
 export const useTransactionStore = create<TransactionState>((set) => {
   // retrieve local storage
@@ -15,6 +30,10 @@ export const useTransactionStore = create<TransactionState>((set) => {
   const state = existingStateString
     ? JSON.parse(existingStateString)
     : DEFAULT_TRANSACTION_STATE;
+
+  if (!existingStateString) {
+    saveState(state);
+  }
 
   return {
     ...state,
@@ -43,18 +62,5 @@ export const useTransactionStore = create<TransactionState>((set) => {
 });
 
 useTransactionStore.subscribe((state) => {
-  // exclude functions
-  const { transaction, results, uiState } = state;
-
-  // in progress should not survive page reloads
-  const { inProgress: _inProgress, ...restOfResults } = results;
-
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY,
-    JSON.stringify({
-      transaction,
-      results: restOfResults,
-      uiState,
-    })
-  );
+  saveState(state);
 });
