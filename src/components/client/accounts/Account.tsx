@@ -1,4 +1,4 @@
-import { DeleteIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
+import { CloseIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Icon,
@@ -68,7 +68,6 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           />
         )}
         <Input
-          flex="1"
           ml="2"
           fontFamily="mono"
           placeholder="Account Public Key"
@@ -115,9 +114,11 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       />
       <Tooltip label="Remove">
         <IconButton
-          size="sm"
+          mt="1"
+          ml="3"
+          size="xs"
           aria-label="Remove"
-          icon={<DeleteIcon />}
+          icon={<CloseIcon />}
           variant="ghost"
           onClick={() => {
             update((state) => {

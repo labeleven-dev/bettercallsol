@@ -8,11 +8,12 @@ import {
   Select,
   Tooltip,
 } from "@chakra-ui/react";
+import { WritableDraft } from "immer/dist/internal";
 import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { removeFrom } from "../../../models/sortable";
-import { IRpcEndpoint } from "../../../models/web3";
+import { INetwork, IRpcEndpoint } from "../../../models/web3";
 import { SortableItemContext } from "../../common/Sortable";
 
 const isValidUrl = (url: string) => {
@@ -33,10 +34,16 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   enabled,
 }) => {
   const { listeners, attributes } = useContext(SortableItemContext);
-  // TODO is this best way?
-  const [notValidatedUrl, setNotValidatedUrl] = useState(url);
   const set = useOptionsStore((state) => state.set);
 
+  const updateEndpoint = (fn: (state: WritableDraft<IRpcEndpoint>) => void) => {
+    set((state) => {
+      fn(state.appOptions.rpcEndpoints.map[id]);
+    });
+  };
+
+  // TODO is this best way?
+  const [notValidatedUrl, setNotValidatedUrl] = useState(url);
   const setUrl = (url: string) => {
     if (!isValidUrl(url)) return;
     set((state) => {
@@ -67,9 +74,20 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
         }
       >
         <Flex mb="1">
-          <Select minW="150px" maxW="130px" mr="1" isDisabled={!custom}>
+          <Select
+            minW="150px"
+            maxW="130px"
+            mr="1"
+            isDisabled={!custom}
+            value={network}
+            onChange={(e) =>
+              updateEndpoint((state) => {
+                state.network = e.target.value as INetwork;
+              })
+            }
+          >
             {["devnet", "testnet", "mainnet-beta"].map((n) => (
-              <option key={n} value={n} selected={network === n}>
+              <option key={n} value={n}>
                 {n}
               </option>
             ))}
@@ -81,8 +99,8 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
             value={provider}
             isReadOnly={!custom}
             onChange={(e) => {
-              set((state) => {
-                state.appOptions.rpcEndpoints.map[id].provider = e.target.value;
+              updateEndpoint((state) => {
+                state.provider = e.target.value;
               });
             }}
           />
@@ -93,8 +111,8 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
               variant="ghost"
               icon={enabled ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />}
               onClick={() => {
-                set((state) => {
-                  state.appOptions.rpcEndpoints.map[id].enabled = !enabled;
+                updateEndpoint((state) => {
+                  state.enabled = !enabled;
                 });
               }}
             />
