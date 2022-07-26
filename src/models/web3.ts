@@ -10,6 +10,7 @@ import {
   TransactionInstruction,
   TransactionResponse,
 } from "@solana/web3.js";
+import BigNumber from "bignumber.js";
 import { v4 as uuid } from "uuid";
 import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
@@ -22,7 +23,8 @@ import {
 import { UIInstructionState } from "./state";
 
 /** Converts lamports to SOL */
-export const toSol = (x: number) => x / LAMPORTS_PER_SOL;
+export const toSol = (x: number): BigNumber =>
+  new BigNumber(x).div(new BigNumber(LAMPORTS_PER_SOL));
 
 const SHORT_TRUNC_TO = 7;
 /** Shortens public keys to a truncated format */
@@ -66,7 +68,7 @@ export type InstructionDataFieldType =
 export interface IInstrctionDataField {
   id: IID;
   name?: string;
-  type?: InstructionDataFieldType;
+  type: InstructionDataFieldType;
   value: any;
 }
 

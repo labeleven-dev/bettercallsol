@@ -129,7 +129,7 @@ export const Results: React.FC = () => {
         )}
         {results.fee && (
           <Tag mr="1">
-            <strong>Fee:&nbsp;</strong> {toSol(results.fee)}{" "}
+            <strong>Fee:&nbsp;</strong> {toSol(results.fee).toFixed()}{" "}
             {/* TODO with logo */}
           </Tag>
         )}

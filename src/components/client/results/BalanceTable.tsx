@@ -61,10 +61,10 @@ export const BalanceTable: React.FC<{
                       <Tag key={index}>{name}</Tag>
                     ))} */}
                   </Td>
-                  <Td isNumeric>{toSol(before)}</Td>
-                  <Td isNumeric>{toSol(after)}</Td>
+                  <Td isNumeric>{toSol(before).toFixed()}</Td>
+                  <Td isNumeric>{toSol(after).toFixed()}</Td>
                   <Td isNumeric>
-                    {toSol(change)}&nbsp;
+                    {toSol(change).toFixed()}&nbsp;
                     {change > 0 ? (
                       <ArrowUpIcon color="green" />
                     ) : change < 0 ? (

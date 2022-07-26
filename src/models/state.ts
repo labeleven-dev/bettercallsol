@@ -128,12 +128,12 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 
 // TODO just for testing
 const DEFAULT_TRANSACTION: ITransaction = {
-  name: "Baby's First Transaction",
+  name: "Baby's First Solana Transaction",
   instructions: toSortableCollection([
     {
       id: uuid(),
-      name: "Memo",
-      programId: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo",
+      name: "Transfer",
+      programId: "11111111111111111111111111111111",
       accounts: toSortableCollection([
         {
           id: uuid(),
@@ -142,11 +142,31 @@ const DEFAULT_TRANSACTION: ITransaction = {
           isWritable: true,
           isSigner: true,
         },
+        {
+          id: uuid(),
+          name: "Signer",
+          pubkey: "GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV",
+          isWritable: true,
+          isSigner: false,
+        },
       ]),
       data: {
         ...EMPTY_INSTRUCTION_DATA,
-        format: "raw",
-        raw: "hello",
+        format: "bufferLayout",
+        bufferLayout: toSortableCollection([
+          {
+            id: uuid(),
+            name: "instruction",
+            type: "u32",
+            value: 2,
+          },
+          {
+            id: uuid(),
+            name: "lamports",
+            type: "u64",
+            value: 1,
+          },
+        ]),
       },
     },
   ]),
