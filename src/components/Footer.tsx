@@ -25,6 +25,7 @@ export const Footer: React.FC = () => (
     </Flex>
     <Box>
       <Center>
+        {/* TODO update to repo url */}
         <Link mr="4" href="https://github.com/labeleven-dev" isExternal>
           <Icon as={FaGithub} />
         </Link>
