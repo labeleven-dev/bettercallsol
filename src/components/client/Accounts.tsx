@@ -1,6 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Divider,
   Flex,
   Heading,
   Icon,
@@ -63,6 +64,7 @@ export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
             }}
           />
         </Tooltip>
+        <Divider flex="1" ml="5" mt="3.5" />
       </Flex>
       <Box>
         <Sortable

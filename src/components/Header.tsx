@@ -3,6 +3,7 @@ import {
   Box,
   DarkMode,
   Flex,
+  Hide,
   Icon,
   IconButton,
   Image,
@@ -45,7 +46,7 @@ export const Header: React.FC = () => {
             setFunTitle(!funTitle);
           }}
         >
-          Better Call SOL
+          <Hide below="md">Better Call SOL</Hide>
         </Text>
         <Spacer />
         {/* TODO implement */}

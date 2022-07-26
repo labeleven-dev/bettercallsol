@@ -72,17 +72,6 @@ export const App: React.FC = () => {
         <WalletProvider wallets={wallets} autoConnect={autoConnectWallet}>
           <WalletModalProvider>
             <Flex flexDirection="column">
-              {/* TODO it's Solana wallet button's fault, we need to replace it */}
-              <Show below="md">
-                <Alert status="warning" variant="left-accent">
-                  <AlertIcon />
-                  <AlertDescription>
-                    This app is optimised for desktop. It may look wonky on your
-                    mobile device.
-                  </AlertDescription>
-                </Alert>
-              </Show>
-
               {/* 
                   header and footer fixed and span the entire page width
                   Transaction and palette are independently scrollable
@@ -94,6 +83,16 @@ export const App: React.FC = () => {
 
               <Flex mt="55px">
                 <Box flex="10" h="90vh" overflow="scroll">
+                  {/* TODO it's Solana wallet button's fault, we need to replace it */}
+                  <Show below="md">
+                    <Alert status="warning" variant="left-accent">
+                      <AlertIcon />
+                      <AlertDescription>
+                        This app is optimised for desktop. It may look wonky on
+                        your mobile device.
+                      </AlertDescription>
+                    </Alert>
+                  </Show>
                   <Transaction />
                 </Box>
                 {paletteOpen && (

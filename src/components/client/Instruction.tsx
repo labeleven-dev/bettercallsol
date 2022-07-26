@@ -14,7 +14,7 @@ import { Accounts } from "./Accounts";
 import { Data } from "./Data";
 import { InstructionHeader } from "./InstructionHeader";
 
-export const Instruction: React.FC = () => {
+export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, uiState, update } = useInstruction();
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
@@ -35,7 +35,7 @@ export const Instruction: React.FC = () => {
       bgColor={useColorModeValue("", "whiteAlpha.50")}
       boxShadow={useColorModeValue("base", "")}
     >
-      <InstructionHeader />
+      <InstructionHeader index={index} />
 
       <Collapse in={uiState.expanded}>
         <InputGroup>

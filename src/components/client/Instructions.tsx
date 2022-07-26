@@ -24,10 +24,10 @@ export const Instructions: React.FC<{
   return (
     <Grid>
       <Sortable itemOrder={instructions.order} setItemOrder={setOrderItem}>
-        {toSortedArray(instructions).map((instruction) => (
+        {toSortedArray(instructions).map((instruction, index) => (
           // key must be stable so it can't be loop index
           <InstructionContext.Provider value={instruction} key={instruction.id}>
-            <Instruction />
+            <Instruction index={index} />
           </InstructionContext.Provider>
         ))}
       </Sortable>

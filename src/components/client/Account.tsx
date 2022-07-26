@@ -45,11 +45,11 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 
   return (
     <Flex mb="2">
-      <DragHandleIcon h="3" w="3" mt="3.5" {...attributes} {...listeners} />
+      <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
       <Text
         ml="2"
-        mt="3"
-        w="50px"
+        mt="2"
+        w="30px"
         textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
         fontSize="sm"
       >
@@ -57,7 +57,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       </Text>
       <TruncatableEditable
         ml="2"
-        mt="2"
+        mt="1"
         width="100px"
         textAlign="right"
         fontSize="sm"
@@ -68,7 +68,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           });
         }}
       ></TruncatableEditable>
-      <InputGroup>
+      <InputGroup size="sm">
         {isWallet && (
           <InputLeftElement
             pointerEvents="none"
@@ -100,6 +100,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 
       <ToggleIconButton
         ml="1"
+        size="sm"
         label="Writable"
         icon={<EditIcon />}
         toggled={data.isWritable}
@@ -111,6 +112,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       />
       <ToggleIconButton
         ml="1"
+        size="sm"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
         toggled={data.isSigner}
@@ -122,6 +124,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       />
       <Tooltip label="Remove">
         <IconButton
+          size="sm"
           aria-label="Remove"
           icon={<DeleteIcon />}
           variant="ghost"

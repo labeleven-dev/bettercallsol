@@ -18,6 +18,7 @@ import {
   MenuList,
   Spacer,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -25,7 +26,7 @@ import { useInstruction } from "../../hooks/useInstruction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { SortableItemContext } from "../common/Sortable";
 
-export const InstructionHeader: React.FC = () => {
+export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, uiState, update, updateUi, reset } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
 
@@ -34,7 +35,7 @@ export const InstructionHeader: React.FC = () => {
   );
 
   return (
-    <Flex>
+    <Flex h={!uiState.expanded ? "30px" : undefined}>
       <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
       <IconButton
         h="8"
@@ -55,6 +56,14 @@ export const InstructionHeader: React.FC = () => {
           });
         }}
       />
+      <Heading
+        mt="0.5"
+        size="md"
+        mr="2"
+        textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
+      >
+        #{index + 1}
+      </Heading>
       <Tooltip label="Click to edit" placement="top-start">
         <Editable
           mb="5"
