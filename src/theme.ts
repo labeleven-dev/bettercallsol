@@ -1,6 +1,9 @@
-import { extendTheme, theme } from "@chakra-ui/react";
+import { extendTheme, theme, ThemeConfig } from "@chakra-ui/react";
 
 export default extendTheme({
+  // use system colours, otherwise fallback to dark
+  useSystemColorMode: true,
+  initialColorMode: "dark",
   colors: {
     main: theme.colors.purple,
   },
@@ -20,4 +23,4 @@ export default extendTheme({
     "8xl": "4.5rem",
     "9xl": "6rem",
   },
-});
+} as ThemeConfig);

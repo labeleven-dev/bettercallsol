@@ -88,7 +88,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           aria-label={uiState.disabled ? "Enable" : "Disable"}
           variant="ghost"
           icon={
-            uiState.disabled ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />
+            uiState.disabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />
           }
           onClick={() => {
             updateUi((state) => {

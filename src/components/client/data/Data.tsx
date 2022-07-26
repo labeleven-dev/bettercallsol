@@ -64,13 +64,13 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
           </Tab>
         </TabList>
         <TabPanels>
-          <TabPanel p="0" pt="2">
+          <TabPanel p="0" pt="3">
             <DataEditor format="borsh" fields={borsh} />
           </TabPanel>
-          <TabPanel p="0" pt="2">
+          <TabPanel p="0" pt="3">
             <DataEditor format="bufferLayout" fields={bufferLayout} />
           </TabPanel>
-          <TabPanel p="0" pt="2">
+          <TabPanel p="0" pt="3">
             <RawData data={raw} />
           </TabPanel>
         </TabPanels>

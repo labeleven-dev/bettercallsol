@@ -91,7 +91,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
               mr="1"
               aria-label={enabled ? "Disable" : "Enable"}
               variant="ghost"
-              icon={enabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />}
+              icon={enabled ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />}
               onClick={() => {
                 set((state) => {
                   state.appOptions.rpcEndpoints.map[id].enabled = !enabled;
