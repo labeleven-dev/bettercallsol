@@ -25,4 +25,4 @@ Contribution
 
 If you are a core committer, see [CONTRIB.md](CONTRIB.md).
 
-<sub>Logo attribution: <a href="https://www.flaticon.com/free-icons/sports-and-competition" title="sports and competition icons">Sports and competition icons created by Freepik - Flaticon</a></sub>
+<sub>Logo attribution: <a href="https://www.flaticon.com/free-icons/phone" title="phone icons">Phone icons created by Freepik - Flaticon</a></sub>
