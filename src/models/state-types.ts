@@ -40,11 +40,15 @@ export type OptionsState = {
   set: (fn: (state: Draft<OptionsState>) => void) => void;
 };
 
+// TODO split ITransaction out of the rest of the state
+// TODO implement undo/redo using https://github.com/charkour/zundo
+
 export type TransactionState = {
   readonly transaction: ITransaction;
   readonly results: IResults;
   readonly uiState: UIState;
   set: (fn: (state: Draft<TransactionState>) => void) => void;
+  setTransaction: (transaction: ITransaction) => void;
   addInstruction: (instruction: IInstruction) => void;
   removeInstruction: (instructionId: IID) => void;
 };

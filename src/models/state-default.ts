@@ -99,6 +99,7 @@ export const DEFAULT_TRANSACTION_STATE: TransactionState = {
     welcomeOpen: true,
   },
   set: () => {}, // set by the hook
+  setTransaction: (_) => {}, // set by the hook
   addInstruction: (_) => {}, // set by the hook
   removeInstruction: (_) => {}, // set by the hook
 };

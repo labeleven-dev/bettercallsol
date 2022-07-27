@@ -1,11 +1,12 @@
 import produce from "immer";
+import { WritableDraft } from "immer/dist/internal";
 import create from "zustand";
-import { addTo, removeFrom } from "../models/sortable";
+import { addTo, IID, removeFrom } from "../models/sortable";
 import {
   DEFAULT_TRANSACTION_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
 } from "../models/state-default";
-import { TransactionState } from "../models/state-types";
+import { TransactionState, UIInstructionState } from "../models/state-types";
 
 const LOCAL_STORAGE_KEY = "bcsolTransactionState";
 
@@ -41,9 +42,23 @@ export const useTransactionStore = create<TransactionState>((set) => {
       set(produce(fn));
     },
     // define these helpers since they interact with different slices of state
+    setTransaction: (transaction) => {
+      set(
+        produce((state: WritableDraft<TransactionState>) => {
+          state.transaction = transaction;
+          state.uiState.instructions = transaction.instructions.order.reduce(
+            (acc, id) => {
+              acc[id] = DEFAULT_UI_INSTRUCTION_STATE;
+              return acc;
+            },
+            {} as Record<IID, UIInstructionState>
+          );
+        })
+      );
+    },
     addInstruction: (instruction) => {
       set(
-        produce((state) => {
+        produce((state: WritableDraft<TransactionState>) => {
           addTo(state.transaction.instructions, instruction);
           state.uiState.instructions[instruction.id] =
             DEFAULT_UI_INSTRUCTION_STATE;
@@ -52,7 +67,7 @@ export const useTransactionStore = create<TransactionState>((set) => {
     },
     removeInstruction: (instructionId) => {
       set(
-        produce((state) => {
+        produce((state: WritableDraft<TransactionState>) => {
           removeFrom(state.transaction.instructions, instructionId);
           delete state.uiState.instructions[instructionId];
         })

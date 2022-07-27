@@ -15,7 +15,7 @@ import { useState } from "react";
 import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Example } from "./Example";
+import { Example } from "./Examples";
 import { WalletButton } from "./WalletButton";
 
 export const Header: React.FC = () => {
