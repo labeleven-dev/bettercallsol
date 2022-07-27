@@ -19,7 +19,8 @@ import { useTransactionStore } from "../../hooks/useTransactionStore";
 import {
   DEFAULT_APP_OPTIONS,
   DEFAUT_TRANSACTION_OPTIONS,
-} from "../../models/state";
+} from "../../models/state-default";
+import {} from "../../models/state-types";
 import { GeneralOptions } from "./GeneralOptions";
 import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";

@@ -12,8 +12,8 @@ import { WritableDraft } from "immer/dist/internal";
 import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
+import { INetwork, IRpcEndpoint } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
-import { INetwork, IRpcEndpoint } from "../../../models/web3";
 import { SortableItemContext } from "../../common/Sortable";
 
 const isValidUrl = (url: string) => {

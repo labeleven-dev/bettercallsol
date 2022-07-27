@@ -12,7 +12,8 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { IBalance, toSol } from "../../../models/web3";
+import { IBalance } from "../../../models/internal-types";
+import { toSol } from "../../../models/web3js-mappers";
 
 export const BalanceTable: React.FC<{
   balances: IBalance[];

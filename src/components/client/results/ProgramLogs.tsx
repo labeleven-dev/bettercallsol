@@ -1,6 +1,6 @@
 import { Code, Grid, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
-import { IResults } from "../../../models/web3";
+import { IResults } from "../../../models/internal-types";
 
 export const ProgramLogs: React.FC<{ results: IResults }> = ({
   results: { inProgress, logs },

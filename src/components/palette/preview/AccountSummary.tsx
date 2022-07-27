@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { IAccountSummary } from "../../../models/preview";
+import { IAccountSummary } from "../../../models/preview-types";
 
 export const AccountSummary: React.FC<{
   summary: IAccountSummary;

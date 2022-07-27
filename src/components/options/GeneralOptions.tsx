@@ -1,7 +1,8 @@
 import { FormControl, Grid } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { Explorer, EXPLORERS } from "../../models/state";
+import { Explorer } from "../../models/state-types";
+import { EXPLORERS } from "../../models/ui-constants";
 import { ChoiceOption } from "./common/ChoiceOption";
 import { ToggleOption } from "./common/ToggleOption";
 

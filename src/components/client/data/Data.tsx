@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { IInstructionData } from "../../../models/web3";
+import { IInstructionData } from "../../../models/internal-types";
 import { DataEditor } from "./common/DataEditor";
 import { RawData } from "./RawData";
 

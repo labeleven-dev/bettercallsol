@@ -1,5 +1,5 @@
 import * as BufferLayout from "@solana/buffer-layout";
-import { IInstrctionDataField } from "../models/web3";
+import { IInstrctionDataField } from "../models/internal-types";
 
 export interface Coder {
   encode(fields: IInstrctionDataField[]): Buffer;

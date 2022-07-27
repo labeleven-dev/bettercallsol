@@ -12,12 +12,13 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import { FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
+import { newAccount } from "../../../models/internal-mappers";
+import { IAccount } from "../../../models/internal-types";
 import {
   addTo,
   SortableCollection,
   toSortedArray,
 } from "../../../models/sortable";
-import { IAccount, newAccount } from "../../../models/web3";
 import { Sortable } from "../../common/Sortable";
 import { Account } from "./Account";
 

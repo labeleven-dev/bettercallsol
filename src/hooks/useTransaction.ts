@@ -1,6 +1,6 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { mapToIResults, mapToTransaction } from "../models/web3";
+import { mapToIResults, mapToTransaction } from "../models/web3js-mappers";
 import { useOptionsStore } from "./useOptionsStore";
 import { useTransactionStore } from "./useTransactionStore";
 

@@ -2,7 +2,7 @@ import { FormControl, Grid } from "@chakra-ui/react";
 import { Commitment } from "@solana/web3.js";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { COMMITMENT_LEVELS } from "../../models/web3";
+import { COMMITMENT_LEVELS } from "../../models/ui-constants";
 import { ChoiceOption } from "./common/ChoiceOption";
 import { NumberOption } from "./common/NumberOption";
 import { ToggleOption } from "./common/ToggleOption";

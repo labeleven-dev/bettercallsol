@@ -2,8 +2,9 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { newInstruction } from "../../models/internal-mappers";
+import { IInstruction } from "../../models/internal-types";
 import { IID, SortableCollection, toSortedArray } from "../../models/sortable";
-import { IInstruction, newInstruction } from "../../models/web3";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 

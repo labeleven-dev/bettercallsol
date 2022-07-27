@@ -2,8 +2,8 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { IRpcEndpoint } from "../../models/internal-types";
 import { toSortedArray } from "../../models/sortable";
-import { IRpcEndpoint } from "../../models/web3";
 
 export const RpcEndpointMenuList: React.FC<{
   endpoint: IRpcEndpoint;

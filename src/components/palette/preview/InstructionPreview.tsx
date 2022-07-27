@@ -11,11 +11,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useTransactionStore } from "../../../hooks/useTransactionStore";
-import {
-  IInstructionPreview,
-  mapToIInstruction,
-} from "../../../models/preview";
-import { short } from "../../../models/web3";
+import { mapToIInstruction } from "../../../models/preview-mappers";
+import { IInstructionPreview } from "../../../models/preview-types";
+import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
 

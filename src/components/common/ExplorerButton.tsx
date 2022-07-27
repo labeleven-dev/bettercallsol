@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { IRpcEndpoint } from "../../models/web3";
+import { IRpcEndpoint } from "../../models/internal-types";
 
 export type AddressType = "tx" | "account";
 

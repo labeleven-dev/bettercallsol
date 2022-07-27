@@ -1,6 +1,7 @@
 import produce from "immer";
 import create from "zustand";
-import { DEFAULT_OPTIONS_STATE, OptionsState } from "../models/state";
+import { DEFAULT_OPTIONS_STATE } from "../models/state-default";
+import { OptionsState } from "../models/state-types";
 
 const LOCAL_STORAGE_KEY = "bcsolOptionsState";
 

@@ -2,7 +2,7 @@ import { IdlCoder } from "@project-serum/anchor/dist/cjs/coder/borsh/idl";
 import { IdlType } from "@project-serum/anchor/dist/cjs/idl";
 import * as Borsh from "@project-serum/borsh";
 import { Coder } from ".";
-import { IInstrctionDataField } from "../models/web3";
+import { IInstrctionDataField } from "../models/internal-types";
 
 export class BorshCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {

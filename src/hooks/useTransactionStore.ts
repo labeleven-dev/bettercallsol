@@ -4,8 +4,8 @@ import { addTo, removeFrom } from "../models/sortable";
 import {
   DEFAULT_TRANSACTION_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
-  TransactionState,
-} from "../models/state";
+} from "../models/state-default";
+import { TransactionState } from "../models/state-types";
 
 const LOCAL_STORAGE_KEY = "bcsolTransactionState";
 

@@ -12,11 +12,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useTransactionStore } from "../../../hooks/useTransactionStore";
-import {
-  ITransactionPreview,
-  mapToIInstruction,
-} from "../../../models/preview";
-import { short } from "../../../models/web3";
+import { mapToIInstruction } from "../../../models/preview-mappers";
+import { ITransactionPreview } from "../../../models/preview-types";
+import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { AccountSummary } from "./AccountSummary";

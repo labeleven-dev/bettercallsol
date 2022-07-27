@@ -15,11 +15,9 @@ import {
 import { Connection } from "@solana/web3.js";
 import { useCallback, useMemo, useState } from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import {
-  ITransactionPreview,
-  mapToTransactionPreview,
-} from "../../models/preview";
-import { IRpcEndpoint } from "../../models/web3";
+import { IRpcEndpoint } from "../../models/internal-types";
+import { mapToTransactionPreview } from "../../models/preview-mappers";
+import { ITransactionPreview } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";

@@ -28,7 +28,7 @@ import {
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
-import { ITransaction } from "../../models/web3";
+import { ITransaction } from "../../models/internal-types";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({

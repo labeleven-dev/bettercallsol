@@ -16,12 +16,16 @@ import {
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
-import { removeFrom, SortableCollection } from "../../../../models/sortable";
 import {
   DataFormat,
   IInstrctionDataField,
   InstructionDataFieldType,
-} from "../../../../models/web3";
+} from "../../../../models/internal-types";
+import { removeFrom, SortableCollection } from "../../../../models/sortable";
+import {
+  FORMAT_DATA_TYPES,
+  NUMERICAL_DATA_TYPES,
+} from "../../../../models/ui-constants";
 import { Numbering } from "../../../common/Numbering";
 import { SortableItemContext } from "../../../common/Sortable";
 import { TruncatableEditable } from "../../../common/TruncatableEditable";
@@ -75,7 +79,7 @@ export const DataField: React.FC<{
           });
         }}
       >
-        {DATA_TYPES[format].map((type) => (
+        {FORMAT_DATA_TYPES[format].map((type) => (
           <option value={type} key={type}>
             {type}
           </option>
@@ -146,44 +150,3 @@ export const DataField: React.FC<{
     </Flex>
   );
 };
-
-const DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> = {
-  borsh: [
-    "u8",
-    "i8",
-    "u16",
-    "i16",
-    "u32",
-    "i32",
-    "u64",
-    "i64",
-    "bool",
-    "publicKey",
-    "string",
-  ],
-  bufferLayout: [
-    "u8",
-    "i8",
-    "u16",
-    "i16",
-    "u32",
-    "i32",
-    "u64",
-    "i64",
-    "bool",
-    "publicKey",
-    "string",
-  ],
-  raw: [],
-};
-
-const NUMERICAL_DATA_TYPES: InstructionDataFieldType[] = [
-  "u8",
-  "i8",
-  "u16",
-  "i16",
-  "u32",
-  "i32",
-  "u64",
-  "i64",
-];

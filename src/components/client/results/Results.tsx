@@ -20,7 +20,7 @@ import {
 import React from "react";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../../hooks/useTransactionStore";
-import { toSol } from "../../../models/web3";
+import { toSol } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { ErrorAlert } from "../../common/ErrorAlert";
 import { ExplorerButton } from "../../common/ExplorerButton";

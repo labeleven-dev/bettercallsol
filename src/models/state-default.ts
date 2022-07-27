@@ -1,66 +1,13 @@
-// Models for non-transaction app state
-
 import { clusterApiUrl } from "@solana/web3.js";
-import { Draft } from "immer";
 import { v4 as uuid } from "uuid";
-import { IID, SortableCollection, toSortableCollection } from "./sortable";
+import { newAccount, newInstruction } from "./internal-mappers";
 import {
-  IInstruction,
-  IResults,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
-  newAccount,
-  newInstruction,
-} from "./web3";
-
-export type Explorer = "solscan" | "solanafm" | "solana" | "none";
-
-// We mutate state using immerjs. All state fields are set to readonly
-// so we don't by mistake try to mutate outside immerjs.
-
-export interface AppOptions {
-  readonly explorer: Explorer;
-  readonly autoConnectWallet: boolean;
-  readonly enableNumbering: boolean;
-  readonly rpcEndpoints: SortableCollection<IRpcEndpoint>;
-}
-
-export interface UIInstructionState {
-  readonly disabled: boolean;
-  readonly expanded: boolean;
-}
-
-export interface UIState {
-  readonly instructions: Record<IID, UIInstructionState>;
-  readonly paletteOpen: boolean;
-  readonly optionsOpen: boolean;
-  readonly welcomeOpen: boolean;
-}
-
-export type OptionsState = {
-  readonly transactionOptions: ITransactionOptions;
-  readonly appOptions: AppOptions;
-  set: (fn: (state: Draft<OptionsState>) => void) => void;
-};
-
-export type TransactionState = {
-  readonly transaction: ITransaction;
-  readonly results: IResults;
-  readonly uiState: UIState;
-  set: (fn: (state: Draft<TransactionState>) => void) => void;
-  addInstruction: (instruction: IInstruction) => void;
-  removeInstruction: (instructionId: IID) => void;
-};
-
-export const EXPLORERS: { id: Explorer; name: string }[] = [
-  { id: "solscan", name: "Solscan" },
-  { id: "solanafm", name: "SolanaFM" },
-  { id: "solana", name: "Solana Explorer" },
-  { id: "none", name: "None" },
-];
-
-///// Default state //////
+} from "./internal-types";
+import { toSortableCollection } from "./sortable";
+import { AppOptions, OptionsState, TransactionState } from "./state-types";
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
