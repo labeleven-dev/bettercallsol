@@ -15,13 +15,13 @@ export const EXAMPLES: Record<
         programId: "11111111111111111111111111111111",
         accounts: [
           {
-            name: "From",
+            name: "Payer",
             pubkey: walletPublicKey,
             isWritable: true,
             isSigner: true,
           },
           {
-            name: "To",
+            name: "New Account",
             pubkey: Keypair.generate().publicKey.toBase58(),
             isWritable: true,
             isSigner: false,
@@ -48,7 +48,7 @@ export const EXAMPLES: Record<
             {
               name: "Program ID",
               type: "publicKey",
-              value: 100,
+              value: "11111111111111111111111111111111",
             },
           ],
         },

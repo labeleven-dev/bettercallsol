@@ -1,6 +1,5 @@
 import { CloseIcon, DragHandleIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Flex,
   IconButton,
   Input,
@@ -86,48 +85,50 @@ export const DataField: React.FC<{
         ))}
       </Select>
 
-      <Box ml="2">
-        {NUMERICAL_DATA_TYPES.includes(type) ? (
-          <NumberInput
-            size="sm"
-            value={value}
-            onChange={(_, value) => {
-              updateField((state) => {
-                state.value = value;
-              });
-            }}
-          >
-            <NumberInputField fontFamily="mono" />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        ) : type === "bool" ? (
-          <Switch
-            mt="0.5"
-            size="sm"
-            value={value}
-            onChange={() => {
-              updateField((state) => {
-                state.value = !value;
-              });
-            }}
-          />
-        ) : (
-          <Input
-            size="sm"
-            fontFamily="mono"
-            placeholder="Field Value"
-            value={value}
-            onChange={(e) => {
-              updateField((state) => {
-                state.value = e.target.value;
-              });
-            }}
-          />
-        )}
-      </Box>
+      {NUMERICAL_DATA_TYPES.includes(type) ? (
+        <NumberInput
+          ml="2"
+          size="sm"
+          value={value}
+          onChange={(_, value) => {
+            updateField((state) => {
+              state.value = value;
+            });
+          }}
+        >
+          <NumberInputField fontFamily="mono" />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      ) : type === "bool" ? (
+        <Switch
+          ml="2"
+          mt="0.5"
+          size="sm"
+          value={value}
+          onChange={() => {
+            updateField((state) => {
+              state.value = !value;
+            });
+          }}
+        />
+      ) : (
+        <Input
+          flex="1"
+          ml="2"
+          size="sm"
+          fontFamily="mono"
+          placeholder="Field Value"
+          value={value}
+          onChange={(e) => {
+            updateField((state) => {
+              state.value = e.target.value;
+            });
+          }}
+        />
+      )}
 
       <Tooltip label="Remove">
         <IconButton

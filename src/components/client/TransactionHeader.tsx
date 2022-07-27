@@ -12,7 +12,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Spacer,
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -62,7 +61,6 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           </Heading>
         </Editable>
       </Tooltip>
-      <Spacer />
       <Tooltip label="Expand All">
         <IconButton
           ml="2"
