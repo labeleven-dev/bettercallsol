@@ -2,16 +2,16 @@
 
 import { clusterApiUrl } from "@solana/web3.js";
 import { Draft } from "immer";
-import { WritableDraft } from "immer/dist/internal";
 import { v4 as uuid } from "uuid";
 import { IID, SortableCollection, toSortableCollection } from "./sortable";
 import {
-  EMPTY_INSTRUCTION_DATA,
   IInstruction,
   IResults,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
+  newAccount,
+  newInstruction,
 } from "./web3";
 
 export type Explorer = "solscan" | "solanafm" | "solana" | "none";
@@ -31,15 +31,11 @@ export interface UIInstructionState {
   readonly expanded: boolean;
 }
 
-export const DEFAULT_UI_INSTRUCTION_STATE = {
-  disabled: false,
-  expanded: true,
-};
-
 export interface UIState {
   readonly instructions: Record<IID, UIInstructionState>;
   readonly paletteOpen: boolean;
   readonly optionsOpen: boolean;
+  readonly welcomeOpen: boolean;
 }
 
 export type OptionsState = {
@@ -63,6 +59,8 @@ export const EXPLORERS: { id: Explorer; name: string }[] = [
   { id: "solana", name: "Solana Explorer" },
   { id: "none", name: "None" },
 ];
+
+///// Default state //////
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -126,73 +124,16 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
   pollingPeriod: 1_000,
 };
 
-// TODO just for testing
 const DEFAULT_TRANSACTION: ITransaction = {
-  name: "Baby's First Solana Transaction",
+  name: "New Transcation",
   instructions: toSortableCollection([
-    {
-      id: uuid(),
-      name: "Transfer",
-      programId: "11111111111111111111111111111111",
-      accounts: toSortableCollection([
-        {
-          id: uuid(),
-          name: "Signer",
-          pubkey: "EQPzCaaYtoCRqaeHkahZWHaX6kyC6K3ytu9t86WvR4Y3",
-          isWritable: true,
-          isSigner: true,
-        },
-        {
-          id: uuid(),
-          name: "Signer",
-          pubkey: "GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV",
-          isWritable: true,
-          isSigner: false,
-        },
-      ]),
-      data: {
-        ...EMPTY_INSTRUCTION_DATA,
-        format: "bufferLayout",
-        bufferLayout: toSortableCollection([
-          {
-            id: uuid(),
-            name: "instruction",
-            type: "u32",
-            value: 2,
-          },
-          {
-            id: uuid(),
-            name: "lamports",
-            type: "u64",
-            value: 1,
-          },
-        ]),
-      },
-    },
+    { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
   ]),
 };
 
-// const DEFAULT_TRANSACTION: ITransaction = {
-//   name: "My Transcation",
-//   instructionOrder: ["ba928274-35b6-48c4-a16c-c4346f0ffaf2"],
-//   instructions: {
-//     "ba928274-35b6-48c4-a16c-c4346f0ffaf2": {
-//       id:"ba928274-35b6-48c4-a16c-c4346f0ffaf2",
-//       name: "Instruction #1",
-//       programId: "",
-//       accountOrder: [],
-//       accounts: {},
-//       data: "",
-//     },
-//   }
-// }
-
-export const DEFAULT_UI_STATE: UIState = {
-  instructions: {
-    [DEFAULT_TRANSACTION.instructions.order[0]]: DEFAULT_UI_INSTRUCTION_STATE,
-  },
-  paletteOpen: false,
-  optionsOpen: false,
+export const DEFAULT_UI_INSTRUCTION_STATE = {
+  disabled: false,
+  expanded: true,
 };
 
 export const DEFAULT_TRANSACTION_STATE: TransactionState = {
@@ -202,7 +143,14 @@ export const DEFAULT_TRANSACTION_STATE: TransactionState = {
     signature: "",
     logs: ["Run a transaction to see logs"],
   },
-  uiState: DEFAULT_UI_STATE,
+  uiState: {
+    instructions: {
+      [DEFAULT_TRANSACTION.instructions.order[0]]: DEFAULT_UI_INSTRUCTION_STATE,
+    },
+    paletteOpen: false,
+    optionsOpen: false,
+    welcomeOpen: true,
+  },
   set: () => {}, // set by the hook
   addInstruction: (_) => {}, // set by the hook
   removeInstruction: (_) => {}, // set by the hook
@@ -213,7 +161,3 @@ export const DEFAULT_OPTIONS_STATE: OptionsState = {
   appOptions: DEFAULT_APP_OPTIONS,
   set: () => {}, // set by the hook
 };
-
-export const instructionGetter =
-  (id: IID) => (state: WritableDraft<TransactionState>) =>
-    state.transaction.instructions.map[id];

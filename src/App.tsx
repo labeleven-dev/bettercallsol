@@ -24,7 +24,7 @@ import {
 import React, { useMemo } from "react";
 import { Transaction } from "./components/client/Transaction";
 import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { Header } from "./components/header/Header";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
 import { useOptionsStore } from "./hooks/useOptionsStore";

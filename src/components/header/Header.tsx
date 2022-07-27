@@ -1,6 +1,5 @@
 import { HamburgerIcon, QuestionIcon } from "@chakra-ui/icons";
 import {
-  Box,
   DarkMode,
   Flex,
   Hide,
@@ -12,11 +11,12 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useState } from "react";
 import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
-import { useTransactionStore } from "../hooks/useTransactionStore";
-import { ColorModeSwitcher } from "./common/ColorModeSwitcher";
+import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { Example } from "./Example";
+import { WalletButton } from "./WalletButton";
 
 export const Header: React.FC = () => {
   const [funTitle, setFunTitle] = useState(false);
@@ -27,8 +27,10 @@ export const Header: React.FC = () => {
     <Flex p="2" bgColor="main.800">
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
+
         <Text
           ml="2"
+          mr="6"
           mt={funTitle ? "1" : "2"}
           color="white"
           fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
@@ -48,7 +50,11 @@ export const Header: React.FC = () => {
         >
           <Hide below="md">Better Call SOL</Hide>
         </Text>
+
+        <Example />
+
         <Spacer />
+
         {/* TODO implement */}
         <Tooltip label="Undo">
           <IconButton
@@ -60,6 +66,7 @@ export const Header: React.FC = () => {
             isDisabled
           />
         </Tooltip>
+
         {/* TODO implement */}
         <Tooltip label="Redo">
           <IconButton
@@ -72,7 +79,9 @@ export const Header: React.FC = () => {
           />
         </Tooltip>
       </DarkMode>
+
       <ColorModeSwitcher justifySelf="flex-end" />
+
       <DarkMode>
         <Tooltip label="Options">
           <IconButton
@@ -88,6 +97,7 @@ export const Header: React.FC = () => {
             }}
           />
         </Tooltip>
+
         {/* TODO implement */}
         <Tooltip label="Help">
           <IconButton
@@ -99,9 +109,11 @@ export const Header: React.FC = () => {
             isDisabled
           />
         </Tooltip>
-        <Box mr="0.5" sx={{ ".wallet-adapter-button": { height: "40px" } }}>
-          <WalletMultiButton />
-        </Box>
+      </DarkMode>
+
+      <WalletButton />
+
+      <DarkMode>
         <Tooltip label="Palette">
           <IconButton
             mr="0.5"

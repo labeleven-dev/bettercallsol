@@ -140,7 +140,9 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         shouldWrapChildren
         hasArrow={!walletPublicKey}
         label={
-          walletPublicKey ? "Run Program" : "Please connect wallet to contiune"
+          walletPublicKey
+            ? "Run Program"
+            : "Please connect a wallet to contiune"
         }
       >
         <IconButton
