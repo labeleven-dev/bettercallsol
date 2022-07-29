@@ -7,8 +7,7 @@ import { ChoiceOption } from "./fields/ChoiceOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
-  const appOptions = useOptionsStore((state) => state.appOptions);
-  const set = useOptionsStore((state) => state.set);
+  const { appOptions, set } = useOptionsStore((state) => state);
 
   return (
     <FormControl display="flex" alignItems="center">

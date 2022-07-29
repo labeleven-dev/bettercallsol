@@ -28,11 +28,10 @@ import { BalanceTable } from "./BalanceTable";
 import { ProgramLogs } from "./ProgramLogs";
 
 export const Results: React.FC = () => {
-  const results = useTransactionStore((state) => state.results);
+  const { results, set } = useTransactionStore((state) => state);
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const set = useTransactionStore((state) => state.set);
 
   return (
     <Grid p="5">

@@ -20,8 +20,10 @@ import { FaLightbulb, FaWallet } from "react-icons/fa";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 
 export const WalletButton: React.FC = () => {
-  const isOpen = useTransactionStore((state) => state.uiState.welcomeOpen);
-  const set = useTransactionStore((state) => state.set);
+  const {
+    uiState: { welcomeOpen: isOpen },
+    set,
+  } = useTransactionStore((state) => state);
 
   return (
     <Popover

@@ -8,10 +8,7 @@ import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
-  const transactionOptions = useOptionsStore(
-    (state) => state.transactionOptions
-  );
-  const set = useOptionsStore((state) => state.set);
+  const { transactionOptions, set } = useOptionsStore((state) => state);
 
   return (
     <FormControl display="flex" alignItems="center">

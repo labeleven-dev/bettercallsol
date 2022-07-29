@@ -26,8 +26,10 @@ import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
-  const isOpen = useTransactionStore((state) => state.uiState.optionsOpen);
-  const setTransaction = useTransactionStore((state) => state.set);
+  const {
+    uiState: { optionsOpen: isOpen },
+    set,
+  } = useTransactionStore((state) => state);
   const setOptions = useOptionsStore((state) => state.set);
 
   return (
@@ -35,7 +37,7 @@ export const Options: React.FC = () => {
       size="xl"
       isOpen={isOpen}
       onClose={() => {
-        setTransaction((state) => {
+        set((state) => {
           state.uiState.optionsOpen = false;
         });
       }}

@@ -13,8 +13,7 @@ export const InstructionContext = React.createContext(newInstruction());
 export const Instructions: React.FC<{
   instructions: SortableCollection<IInstruction>;
 }> = ({ instructions }) => {
-  const set = useTransactionStore((state) => state.set);
-  const addInstruction = useTransactionStore((state) => state.addInstruction);
+  const { addInstruction, set } = useTransactionStore((state) => state);
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {

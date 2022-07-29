@@ -36,8 +36,9 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const results = useTransactionStore((state) => state.results);
-  const setTransaction = useTransactionStore((state) => state.set);
+  const { results, set: setTransaction } = useTransactionStore(
+    (state) => state
+  );
   const setOptions = useOptionsStore((state) => state.set);
 
   const { publicKey: walletPublicKey } = useWallet();

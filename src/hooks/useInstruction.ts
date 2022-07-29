@@ -12,22 +12,22 @@ export const useInstruction = () => {
   const uiState = useTransactionStore(
     (state) => state.uiState.instructions[instruction.id]
   );
-  const setTransaction = useTransactionStore((state) => state.set);
+  const set = useTransactionStore((state) => state.set);
 
   const update = (fn: (state: WritableDraft<IInstruction>) => void) => {
-    setTransaction((state) => {
+    set((state) => {
       fn(state.transaction.instructions.map[instruction.id]);
     });
   };
 
   const updateUi = (fn: (state: WritableDraft<UIInstructionState>) => void) => {
-    setTransaction((state) => {
+    set((state) => {
       fn(state.uiState.instructions[instruction.id]);
     });
   };
 
   const reset = () => {
-    setTransaction((state) => {
+    set((state) => {
       state.transaction.instructions.map[instruction.id] = {
         ...newInstruction(),
         id: instruction.id,
