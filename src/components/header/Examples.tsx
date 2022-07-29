@@ -48,17 +48,17 @@ export const Example: React.FC = () => {
       <MenuList fontSize="md">
         <MenuItem
           onClick={() => {
-            loadExample("systemProgramCreateAccount");
-          }}
-        >
-          System Program: Create Account
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
             loadExample("systemProgramTransfer");
           }}
         >
           System Program: Transfer SOL
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            loadExample("systemProgramCreateAccount");
+          }}
+        >
+          System Program: Create Account
         </MenuItem>
 
         {/* TODO more examples */}

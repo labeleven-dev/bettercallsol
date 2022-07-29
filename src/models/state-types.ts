@@ -3,6 +3,7 @@
 import { Draft } from "immer";
 import {
   IInstruction,
+  IPubKey,
   IResults,
   IRpcEndpoint,
   ITransaction,
@@ -51,4 +52,9 @@ export type TransactionState = {
   setTransaction: (transaction: ITransaction) => void;
   addInstruction: (instruction: IInstruction) => void;
   removeInstruction: (instructionId: IID) => void;
+};
+
+export type MemoryOnlyState = {
+  readonly keypairs: Record<IPubKey, Uint8Array>;
+  set: (fn: (state: Draft<MemoryOnlyState>) => void) => void;
 };

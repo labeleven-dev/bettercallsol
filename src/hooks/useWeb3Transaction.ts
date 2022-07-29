@@ -1,10 +1,12 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey, Signer } from "@solana/web3.js";
 import {
   mapFromSignatureStatus,
   mapFromTransactionResponse,
   mapToTransaction,
 } from "../models/web3js-mappers";
+import { useMemoryOnlyState } from "./useMemoryOnlyStore";
 import { useOptionsStore } from "./useOptionsStore";
 import { useTransactionStore } from "./useTransactionStore";
 
@@ -17,14 +19,16 @@ import { useTransactionStore } from "./useTransactionStore";
  * @returns the function that will run the transaction
  */
 export const useWeb3Transaction: () => () => void = () => {
-  const uiState = useTransactionStore((state) => state.uiState);
   const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
   );
-  const transactionData = useTransactionStore((state) => state.transaction);
-  const results = useTransactionStore((state) => state.results);
-  const set = useTransactionStore((state) => state.set);
-
+  const {
+    transaction: transactionData,
+    results,
+    uiState,
+    set,
+  } = useTransactionStore((state) => state);
+  const keypairs = useMemoryOnlyState((state) => state.keypairs);
   const { connection } = useConnection();
   const { sendTransaction } = useWallet();
 
@@ -110,7 +114,23 @@ export const useWeb3Transaction: () => () => void = () => {
         transactionData,
         uiState.instructions
       );
+
+      // add additional signers
+      const signerPubkeys = Object.values(transactionData.instructions.map)
+        .flatMap((instruction) => Object.values(instruction.accounts.map))
+        .filter((account) => account.isSigner && keypairs[account.pubkey])
+        .map((account) => account.pubkey);
+
+      const additionalSigners = [...new Set(signerPubkeys)].map(
+        (pubkey) =>
+          ({
+            publicKey: new PublicKey(pubkey),
+            secretKey: keypairs[pubkey],
+          } as Signer)
+      );
+
       const signature = await sendTransaction(transaction, connection, {
+        signers: additionalSigners || undefined,
         skipPreflight: transactionOptions.skipPreflight,
         maxRetries: transactionOptions.maxRetries,
         preflightCommitment: transactionOptions.preflightCommitment,

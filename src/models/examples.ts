@@ -1,4 +1,3 @@
-import { Keypair } from "@solana/web3.js";
 import { ITransactionExt } from "./external-types";
 
 // TODO use export model instead and map across
@@ -22,9 +21,9 @@ export const EXAMPLES: Record<
           },
           {
             name: "New Account",
-            pubkey: Keypair.generate().publicKey.toBase58(),
+            pubkey: "", // they need to generate a keypair
             isWritable: true,
-            isSigner: false,
+            isSigner: true,
           },
         ],
         data: {
@@ -43,7 +42,7 @@ export const EXAMPLES: Record<
             {
               name: "Space",
               type: "u64",
-              value: 100,
+              value: 64,
             },
             {
               name: "Program ID",

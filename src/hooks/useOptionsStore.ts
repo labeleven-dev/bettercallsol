@@ -24,7 +24,6 @@ export const useOptionsStore = create<OptionsState>((set) => {
     : DEFAULT_OPTIONS_STATE;
 
   if (!existingStateString) {
-    // TODO display a welcome
     saveState(state);
   }
 

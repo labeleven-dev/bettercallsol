@@ -7,7 +7,12 @@ import {
   ITransactionOptions,
 } from "./internal-types";
 import { toSortableCollection } from "./sortable";
-import { AppOptions, OptionsState, TransactionState } from "./state-types";
+import {
+  AppOptions,
+  MemoryOnlyState,
+  OptionsState,
+  TransactionState,
+} from "./state-types";
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -107,5 +112,10 @@ export const DEFAULT_TRANSACTION_STATE: TransactionState = {
 export const DEFAULT_OPTIONS_STATE: OptionsState = {
   transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
   appOptions: DEFAULT_APP_OPTIONS,
+  set: () => {}, // set by the hook
+};
+
+export const DEFAULT_MEMORY_ONLY_STATE: MemoryOnlyState = {
+  keypairs: {},
   set: () => {}, // set by the hook
 };

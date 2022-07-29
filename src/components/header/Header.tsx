@@ -29,13 +29,13 @@ export const Header: React.FC = () => {
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
 
         <Text
-          ml="2"
-          mr="6"
-          mt={funTitle ? "1" : "2"}
+          ml="3"
+          mr="9"
+          mt={funTitle ? "1.5" : "2"}
           color="white"
           fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
-          fontWeight="extrabold"
-          fontSize={funTitle ? "3xl" : "xl"}
+          fontWeight="bold"
+          fontSize={funTitle ? "xl" : "lg"}
           onClick={() => {
             toast({
               title: funTitle

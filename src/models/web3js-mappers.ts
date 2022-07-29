@@ -40,6 +40,7 @@ export const mapToTransaction = (
     ({ id, programId, accounts, data }) => {
       if (uiInstructions[id].disabled || !programId) return;
 
+      // handle instruction data
       let buffer;
       if (data.format === "borsh" && data.borsh) {
         buffer = new BorshCoder().encode(toSortedArray(data.borsh));
@@ -53,6 +54,7 @@ export const mapToTransaction = (
         // TODO
       }
 
+      // add transcation
       transaction.add(
         new TransactionInstruction({
           programId: new PublicKey(programId),
@@ -113,6 +115,8 @@ export const mapFromTransactionResponse = (
 };
 
 const mapError = (err: any): string => {
+  if (!err) return "";
+
   let error = "Unexpected error";
 
   if (typeof err === "string" || err instanceof String) {

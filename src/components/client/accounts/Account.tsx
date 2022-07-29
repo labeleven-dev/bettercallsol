@@ -8,15 +8,19 @@ import {
   InputLeftElement,
   InputRightElement,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { Keypair } from "@solana/web3.js";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
-import { FaPenNib, FaWallet } from "react-icons/fa";
+import { FaKey, FaParachuteBox, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
+import { useMemoryOnlyState } from "../../../hooks/useMemoryOnlyStore";
 import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { IAccount } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
+import { isValidPublicKey } from "../../../models/web3js-mappers";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { Numbering } from "../../common/Numbering";
 import { SortableItemContext } from "../../common/Sortable";
@@ -33,8 +37,12 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     (state) => state.transactionOptions.rpcEndpoint
   );
   const { publicKey: walletPubkey } = useWallet();
+  const { keypairs, set: setMemoryOnly } = useMemoryOnlyState((state) => state);
+  const toast = useToast();
 
+  const isValid = isValidPublicKey(data.pubkey);
   const isWallet = data.pubkey === walletPubkey?.toBase58();
+  const hasPrivateKey = Object.keys(keypairs).includes(data.pubkey);
 
   const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
     update((state) => {
@@ -42,10 +50,43 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     });
   };
 
+  const removeAccount = () => {
+    update((state) => {
+      removeFrom(state.accounts, data.id);
+    });
+    if (hasPrivateKey) {
+      setMemoryOnly((state) => {
+        delete state.keypairs[data.pubkey];
+      });
+    }
+  };
+
+  const generateKeypair = () => {
+    const keypair = Keypair.generate();
+    const publicKey = keypair.publicKey.toBase58();
+    setMemoryOnly((state) => {
+      state.keypairs[publicKey] = keypair.secretKey;
+    });
+    updateAccount((state) => {
+      state.pubkey = publicKey;
+      state.isSigner = true;
+    });
+    toast({
+      title: "Keypair has been successfully created!",
+      description:
+        "Private keys are stored in memory only. They will not survive page reloads.",
+      status: "info",
+      duration: 8000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Flex mb="2">
       <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
+
       <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
+
       <TruncatableEditable
         ml="2"
         mt="1"
@@ -59,6 +100,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           });
         }}
       ></TruncatableEditable>
+
       <InputGroup size="sm">
         {isWallet && (
           <InputLeftElement
@@ -66,6 +108,11 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
             ml="2"
             children={<Icon as={FaWallet} color="gray.400" />}
           />
+        )}
+        {hasPrivateKey && (
+          <InputLeftElement pointerEvents="none" ml="2">
+            <Icon as={FaKey} color="gray.400" />
+          </InputLeftElement>
         )}
         <Input
           ml="2"
@@ -78,13 +125,48 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
             });
           }}
         ></Input>
-        <InputRightElement>
-          <ExplorerButton
-            size="sm"
-            valueType="account"
-            value={data.pubkey}
-            rpcEndpoint={rpcEndpoint}
-          />
+        <InputRightElement w="65px">
+          {isValid ? (
+            <>
+              <Tooltip label="Airdrop SOL">
+                <IconButton
+                  ml="1"
+                  size="xs"
+                  variant="ghost"
+                  aria-label="Airdrop SOL"
+                  icon={<FaParachuteBox />}
+                  isDisabled={rpcEndpoint.network === "mainnet-beta"}
+                />
+              </Tooltip>
+              <ExplorerButton
+                size="xs"
+                valueType="account"
+                value={data.pubkey}
+                rpcEndpoint={rpcEndpoint}
+              />
+            </>
+          ) : (
+            <>
+              <Tooltip label="Use Wallet">
+                <IconButton
+                  ml="1"
+                  size="xs"
+                  variant="ghost"
+                  aria-label="Use Wallet"
+                  icon={<Icon as={FaWallet} />}
+                />
+              </Tooltip>
+              <Tooltip label="Generate Keypair">
+                <IconButton
+                  size="xs"
+                  variant="ghost"
+                  aria-label="Generate Keypair"
+                  icon={<Icon as={FaKey} />}
+                  onClick={generateKeypair}
+                />
+              </Tooltip>
+            </>
+          )}
         </InputRightElement>
       </InputGroup>
 
@@ -100,6 +182,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           });
         }}
       />
+
       <ToggleIconButton
         ml="1"
         size="sm"
@@ -112,6 +195,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           });
         }}
       />
+
       <Tooltip label="Remove">
         <IconButton
           mt="1"
@@ -120,11 +204,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           aria-label="Remove"
           icon={<CloseIcon />}
           variant="ghost"
-          onClick={() => {
-            update((state) => {
-              removeFrom(state.accounts, data.id);
-            });
-          }}
+          onClick={removeAccount}
         />
       </Tooltip>
     </Flex>
