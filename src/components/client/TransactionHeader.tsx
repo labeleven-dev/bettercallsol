@@ -36,7 +36,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const { results, set: setTransaction } = useTransactionStore(
+  const { results, set, clearTransaction } = useTransactionStore(
     (state) => state
   );
   const setOptions = useOptionsStore((state) => state.set);
@@ -51,7 +51,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           flex="1"
           defaultValue={transaction.name}
           onChange={(value) =>
-            setTransaction((state) => {
+            set((state) => {
               state.transaction.name = value;
             })
           }
@@ -69,7 +69,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           icon={<Icon as={FaExpandAlt} />}
           variant="ghost"
           onClick={() => {
-            setTransaction((state) => {
+            set((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = true;
               });
@@ -83,7 +83,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           icon={<Icon as={FaExpand} />}
           variant="ghost"
           onClick={() => {
-            setTransaction((state) => {
+            set((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = false;
               });
@@ -108,7 +108,14 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <MenuItem icon={<DownloadIcon />} isDisabled>
             Download
           </MenuItem>
-          <MenuItem icon={<Icon as={FaEraser} />}>Clear</MenuItem>
+          <MenuItem
+            icon={<Icon as={FaEraser} />}
+            onClick={() => {
+              clearTransaction();
+            }}
+          >
+            Clear
+          </MenuItem>
         </MenuList>
       </Menu>
 

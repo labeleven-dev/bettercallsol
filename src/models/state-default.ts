@@ -76,7 +76,7 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
   pollingPeriod: 1_000,
 };
 
-const DEFAULT_TRANSACTION: ITransaction = {
+export const DEFAULT_TRANSACTION: ITransaction = {
   name: "New Transcation",
   instructions: toSortableCollection([
     { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
@@ -88,13 +88,15 @@ export const DEFAULT_UI_INSTRUCTION_STATE = {
   expanded: true,
 };
 
+export const DEFAULT_RESULTS = {
+  inProgress: false,
+  signature: "",
+  logs: ["Run a transaction to see logs"],
+};
+
 export const DEFAULT_TRANSACTION_STATE: TransactionState = {
   transaction: DEFAULT_TRANSACTION,
-  results: {
-    inProgress: false,
-    signature: "",
-    logs: ["Run a transaction to see logs"],
-  },
+  results: DEFAULT_RESULTS,
   uiState: {
     instructions: {
       [DEFAULT_TRANSACTION.instructions.order[0]]: DEFAULT_UI_INSTRUCTION_STATE,
@@ -104,6 +106,7 @@ export const DEFAULT_TRANSACTION_STATE: TransactionState = {
     welcomeOpen: true,
   },
   set: () => {}, // set by the hook
+  clearTransaction: () => {}, // set by the hook
   setTransaction: (_) => {}, // set by the hook
   addInstruction: (_) => {}, // set by the hook
   removeInstruction: (_) => {}, // set by the hook

@@ -1,8 +1,11 @@
 import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import create from "zustand";
+import { ITransaction } from "../models/internal-types";
 import { addTo, IID, removeFrom } from "../models/sortable";
 import {
+  DEFAULT_RESULTS,
+  DEFAULT_TRANSACTION,
   DEFAULT_TRANSACTION_STATE,
   DEFAULT_UI_INSTRUCTION_STATE,
 } from "../models/state-default";
@@ -36,26 +39,36 @@ export const useTransactionStore = create<TransactionState>((set) => {
     saveState(state);
   }
 
+  const setTransaction = (transaction: ITransaction) => {
+    set(
+      produce((state: WritableDraft<TransactionState>) => {
+        state.transaction = transaction;
+        state.uiState.instructions = transaction.instructions.order.reduce(
+          (acc, id) => {
+            acc[id] = DEFAULT_UI_INSTRUCTION_STATE;
+            return acc;
+          },
+          {} as Record<IID, UIInstructionState>
+        );
+      })
+    );
+  };
+
   return {
     ...state,
     set: (fn) => {
       set(produce(fn));
     },
     // define these helpers since they interact with different slices of state
-    setTransaction: (transaction) => {
+    clearTransaction: () => {
+      setTransaction(DEFAULT_TRANSACTION);
       set(
         produce((state: WritableDraft<TransactionState>) => {
-          state.transaction = transaction;
-          state.uiState.instructions = transaction.instructions.order.reduce(
-            (acc, id) => {
-              acc[id] = DEFAULT_UI_INSTRUCTION_STATE;
-              return acc;
-            },
-            {} as Record<IID, UIInstructionState>
-          );
+          state.results = DEFAULT_RESULTS;
         })
       );
     },
+    setTransaction,
     addInstruction: (instruction) => {
       set(
         produce((state: WritableDraft<TransactionState>) => {

@@ -15,9 +15,12 @@ import { mapFromTransactionExt } from "../../models/external-mappers";
 
 export const Example: React.FC = () => {
   const { publicKey: walletPublicKey } = useWallet();
-  const setTransaction = useTransactionStore((state) => state.setTransaction);
+  const { clearTransaction, setTransaction } = useTransactionStore(
+    (state) => state
+  );
 
   const loadExample = (name: string) => {
+    clearTransaction();
     setTransaction(
       mapFromTransactionExt(EXAMPLES[name](walletPublicKey?.toBase58()!))
     );

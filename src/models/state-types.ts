@@ -49,6 +49,7 @@ export type TransactionState = {
   readonly results: IResults;
   readonly uiState: UIState;
   set: (fn: (state: Draft<TransactionState>) => void) => void;
+  clearTransaction: () => void;
   setTransaction: (transaction: ITransaction) => void;
   addInstruction: (instruction: IInstruction) => void;
   removeInstruction: (instructionId: IID) => void;
