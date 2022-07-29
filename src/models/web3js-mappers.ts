@@ -1,11 +1,13 @@
 import {
   LAMPORTS_PER_SOL,
   PublicKey,
+  SignatureStatus,
   Transaction,
   TransactionInstruction,
   TransactionResponse,
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
+import bs58 from "bs58";
 import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
 import { IResults, ITransaction } from "./internal-types";
@@ -22,6 +24,9 @@ export const short = (pubkey: string) =>
   `${pubkey.substring(0, SHORT_TRUNC_TO)}...${pubkey.substring(
     pubkey.length - SHORT_TRUNC_TO
   )}`;
+
+export const isValidPublicKey = (key: string): boolean =>
+  bs58.decode(key).length === 32;
 
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
 export const mapToTransaction = (
@@ -67,7 +72,21 @@ export const mapToTransaction = (
   return transaction;
 };
 
-export const mapToIResults = (transaction: TransactionResponse): IResults => {
+export const mapFromSignatureStatus = ({
+  slot,
+  confirmationStatus,
+  confirmations,
+  err,
+}: SignatureStatus): Partial<IResults> => ({
+  slot,
+  confirmationStatus,
+  confirmations: confirmations || undefined,
+  error: mapError(err),
+});
+
+export const mapFromTransactionResponse = (
+  transaction: TransactionResponse
+): IResults => {
   const { accountKeys } = transaction.transaction.message;
   const { logMessages, err, fee, preBalances, postBalances } =
     transaction.meta!;
@@ -88,7 +107,23 @@ export const mapToIResults = (transaction: TransactionResponse): IResults => {
     slot: transaction?.slot,
     balances,
     logs: logMessages || [],
-    error: err as string,
+    error: mapError(err),
     fee,
   };
+};
+
+const mapError = (err: any): string => {
+  let error = "Unexpected error";
+
+  if (typeof err === "string" || err instanceof String) {
+    error = err as string;
+  } else {
+    // this doesn't seem to match web3.js types but still comes back from RPC endpoint 🤷
+    const errObject = err as Record<string, any>;
+    if (errObject?.InstructionError) {
+      error = `Instruction Error: ${errObject.InstructionError[1]} (${errObject.InstructionError[0]})`;
+    }
+  }
+
+  return error;
 };

@@ -1,6 +1,10 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { mapToIResults, mapToTransaction } from "../models/web3js-mappers";
+import {
+  mapFromSignatureStatus,
+  mapFromTransactionResponse,
+  mapToTransaction,
+} from "../models/web3js-mappers";
 import { useOptionsStore } from "./useOptionsStore";
 import { useTransactionStore } from "./useTransactionStore";
 
@@ -12,7 +16,7 @@ import { useTransactionStore } from "./useTransactionStore";
  *
  * @returns the function that will run the transaction
  */
-export const useTransaction: () => () => void = () => {
+export const useWeb3Transaction: () => () => void = () => {
   const uiState = useTransactionStore((state) => state.uiState);
   const transactionOptions = useOptionsStore(
     (state) => state.transactionOptions
@@ -34,13 +38,15 @@ export const useTransaction: () => () => void = () => {
 
       try {
         const status = await connection.getSignatureStatus(results?.signature);
-        if (status) {
+        if (status && status.value) {
           set((state) => {
-            state.results.slot = status.value?.slot;
-            state.results.confirmationStatus = status.value?.confirmationStatus;
-            state.results.confirmations = status.value?.confirmations!;
+            state.results = {
+              ...state.results,
+              ...mapFromSignatureStatus(status.value!),
+            };
           });
 
+          // finalised - let's get the transaction details
           if (status.value?.confirmationStatus === "finalized") {
             const transaction = await connection.getTransaction(
               results.signature,
@@ -49,12 +55,14 @@ export const useTransaction: () => () => void = () => {
 
             if (transaction) {
               set((state) => {
-                state.results = mapToIResults(transaction);
+                state.results = mapFromTransactionResponse(transaction);
               });
             }
           }
         }
 
+        // check if timeout and stop
+        // TODO this should be reflected in confirmation status, not transaction error
         if (
           results.startedAt! + transactionOptions.confirmTransactionTimeout <
           new Date().getTime()

@@ -1,12 +1,19 @@
 import * as BufferLayout from "@solana/buffer-layout";
+import { PublicKey } from "@solana/web3.js";
 import { Coder, rustString } from ".";
 import { IInstrctionDataField } from "../models/internal-types";
 
 export class BufferLayoutCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {
     const layout = BufferLayout.struct<any>(fields.map(mapToLayout));
-    const values = fields.reduce((acc, { name, value }) => {
-      acc[name!] = value;
+    const values = fields.reduce((acc, { name, type, value }) => {
+      let encoded = value;
+
+      if (type === "publicKey") {
+        encoded = new PublicKey(encoded).toBuffer();
+      }
+
+      acc[name!] = encoded;
       return acc;
     }, {} as Record<string, any>);
 

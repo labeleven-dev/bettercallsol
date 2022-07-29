@@ -25,8 +25,8 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransaction } from "../../hooks/useTransaction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useWeb3Transaction } from "../../hooks/useWeb3Transaction";
 import { ITransaction } from "../../models/internal-types";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
@@ -41,7 +41,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const setOptions = useOptionsStore((state) => state.set);
 
   const { publicKey: walletPublicKey } = useWallet();
-  const transact = useTransaction();
+  const transact = useWeb3Transaction();
 
   return (
     <Flex mb="5">
