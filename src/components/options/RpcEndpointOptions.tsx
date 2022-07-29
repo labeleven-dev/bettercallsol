@@ -4,7 +4,7 @@ import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { newRpcEndpoint } from "../../models/internal-mappers";
 import { addTo, toSortedArray } from "../../models/sortable";
 import { Sortable } from "../common/Sortable";
-import { RpcEndpointOption } from "./common/RpcEndpointOption";
+import { RpcEndpointOption } from "./fields/RpcEndpointOption";
 
 export const RpcEndpointOptions: React.FC = () => {
   const rpcEndpoints = useOptionsStore(

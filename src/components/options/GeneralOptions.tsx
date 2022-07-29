@@ -3,8 +3,8 @@ import React from "react";
 import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { Explorer } from "../../models/state-types";
 import { EXPLORERS } from "../../models/ui-constants";
-import { ChoiceOption } from "./common/ChoiceOption";
-import { ToggleOption } from "./common/ToggleOption";
+import { ChoiceOption } from "./fields/ChoiceOption";
+import { ToggleOption } from "./fields/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
   const appOptions = useOptionsStore((state) => state.appOptions);
