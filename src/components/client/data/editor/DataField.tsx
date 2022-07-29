@@ -25,9 +25,9 @@ import {
   FORMAT_DATA_TYPES,
   NUMERICAL_DATA_TYPES,
 } from "../../../../models/ui-constants";
+import { EditableName } from "../../../common/EditableName";
 import { Numbering } from "../../../common/Numbering";
 import { SortableItemContext } from "../../../common/Sortable";
-import { TruncatableEditable } from "../../../common/TruncatableEditable";
 
 export const DataField: React.FC<{
   field: IInstrctionDataField;
@@ -50,20 +50,23 @@ export const DataField: React.FC<{
   return (
     <Flex mb="2">
       <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
+
       <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
-      <TruncatableEditable
+
+      <EditableName
         ml="2"
         mt="1"
         w="100px"
         textAlign="right"
         fontSize="sm"
+        placeholder="Unnamed"
         value={name}
         onChange={(value: string) => {
           updateField((state) => {
             state.name = value;
           });
         }}
-      ></TruncatableEditable>
+      />
 
       <Select
         ml="2"

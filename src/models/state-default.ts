@@ -77,7 +77,7 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 };
 
 export const DEFAULT_TRANSACTION: ITransaction = {
-  name: "New Transcation",
+  name: "",
   instructions: toSortableCollection([
     { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
   ]),

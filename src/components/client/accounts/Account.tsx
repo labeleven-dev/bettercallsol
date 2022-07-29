@@ -21,11 +21,11 @@ import { useOptionsStore } from "../../../hooks/useOptionsStore";
 import { IAccount } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
 import { isValidPublicKey } from "../../../models/web3js-mappers";
+import { EditableName } from "../../common/EditableName";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { Numbering } from "../../common/Numbering";
 import { SortableItemContext } from "../../common/Sortable";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
-import { TruncatableEditable } from "../../common/TruncatableEditable";
 
 export const Account: React.FC<{ data: IAccount; index: number }> = ({
   data,
@@ -87,19 +87,20 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 
       <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
 
-      <TruncatableEditable
+      <EditableName
         ml="2"
         mt="1"
         width="100px"
         textAlign="right"
         fontSize="sm"
+        placeholder="Unnamed"
         value={data.name}
         onChange={(value: string) => {
           updateAccount((state) => {
             state.name = value;
           });
         }}
-      ></TruncatableEditable>
+      />
 
       <InputGroup size="sm">
         {isWallet && (

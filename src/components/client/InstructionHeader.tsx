@@ -5,9 +5,6 @@ import {
   DragHandleIcon,
 } from "@chakra-ui/icons";
 import {
-  Editable,
-  EditableInput,
-  EditablePreview,
   Flex,
   Heading,
   Icon,
@@ -16,13 +13,13 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Spacer,
   Tooltip,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
 import { SortableItemContext } from "../common/Sortable";
 
@@ -37,6 +34,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   return (
     <Flex h={!uiState.expanded ? "30px" : undefined}>
       <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
+
       <IconButton
         h="8"
         w="8"
@@ -56,6 +54,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           });
         }}
       />
+
       <Numbering
         index={index}
         pt="1"
@@ -64,23 +63,21 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         minW="30px"
         maxH="30px"
       />
-      <Tooltip label="Click to edit" placement="top-start">
-        <Editable
+
+      <Heading flex="1" size="md">
+        <EditableName
           mb="5"
+          tooltip="Click to edit"
+          placeholder="Unnamed Instruction"
           value={instruction.name}
           onChange={(value) => {
             update((state) => {
               state.name = value;
             });
           }}
-        >
-          <Heading size="md">
-            <EditablePreview minW="100px" minH="23px" />
-            <EditableInput />
-          </Heading>
-        </Editable>
-      </Tooltip>
-      <Spacer />
+        />
+      </Heading>
+
       <Tooltip label={uiState.disabled ? "Enable" : "Disable"}>
         <IconButton
           mt="-2"
@@ -97,6 +94,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           }}
         />
       </Tooltip>
+
       <Menu>
         <MenuButton
           mt="-2"

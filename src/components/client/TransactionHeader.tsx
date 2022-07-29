@@ -1,9 +1,6 @@
 import { ChevronDownIcon, DownloadIcon } from "@chakra-ui/icons";
 import {
   Button,
-  Editable,
-  EditableInput,
-  EditablePreview,
   Flex,
   Heading,
   Icon,
@@ -28,6 +25,7 @@ import { useOptionsStore } from "../../hooks/useOptionsStore";
 import { useTransactionStore } from "../../hooks/useTransactionStore";
 import { useWeb3Transaction } from "../../hooks/useWeb3Transaction";
 import { ITransaction } from "../../models/internal-types";
+import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
@@ -36,9 +34,11 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const rpcEndpoint = useOptionsStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const { results, set, clearTransaction } = useTransactionStore(
-    (state) => state
-  );
+  const {
+    results,
+    set: setTransaction,
+    clearTransaction,
+  } = useTransactionStore((state) => state);
   const setOptions = useOptionsStore((state) => state.set);
 
   const { publicKey: walletPublicKey } = useWallet();
@@ -46,22 +46,19 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
 
   return (
     <Flex mb="5">
-      <Tooltip label="Click to edit" placement="top-start">
-        <Editable
-          flex="1"
-          defaultValue={transaction.name}
+      <Heading flex="1" size="lg">
+        <EditableName
+          tooltip="Click to edit"
+          placeholder="Unnamed Tranasction"
+          value={transaction.name}
           onChange={(value) =>
-            set((state) => {
+            setTransaction((state) => {
               state.transaction.name = value;
             })
           }
-        >
-          <Heading size="md">
-            <EditablePreview minW="200px" minH="23px" />
-            <EditableInput />
-          </Heading>
-        </Editable>
-      </Tooltip>
+        />
+      </Heading>
+
       <Tooltip label="Expand All">
         <IconButton
           ml="2"
@@ -69,7 +66,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           icon={<Icon as={FaExpandAlt} />}
           variant="ghost"
           onClick={() => {
-            set((state) => {
+            setTransaction((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = true;
               });
@@ -77,13 +74,14 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           }}
         />
       </Tooltip>
+
       <Tooltip label="Collapse All">
         <IconButton
           aria-label="Collapse All"
           icon={<Icon as={FaExpand} />}
           variant="ghost"
           onClick={() => {
-            set((state) => {
+            setTransaction((state) => {
               Object.keys(state.uiState.instructions).forEach((id) => {
                 state.uiState.instructions[id].expanded = false;
               });
@@ -91,6 +89,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           }}
         />
       </Tooltip>
+
       <Menu>
         <MenuButton
           mr="2"

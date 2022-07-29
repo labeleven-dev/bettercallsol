@@ -21,7 +21,7 @@ export const newRpcEndpoint = (): IRpcEndpoint => ({
 
 export const newDataField = (): IInstrctionDataField => ({
   id: uuid(),
-  name: "New Data",
+  name: "",
   type: "string",
   value: "",
 });
@@ -42,7 +42,7 @@ export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
 
 export const newInstruction = (): IInstruction => ({
   id: uuid(),
-  name: "New Instruction",
+  name: "",
   programId: "",
   accounts: { map: {}, order: [] },
   data: EMPTY_INSTRUCTION_DATA,
