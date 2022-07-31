@@ -27,17 +27,17 @@ export interface UIState {
   readonly optionsOpen: boolean;
 }
 
-export type PersistentState = {
+export interface PersistentState {
   readonly transactionOptions: ITransactionOptions;
   readonly appOptions: AppOptions;
   readonly firstTime: boolean;
   set: (fn: (state: Draft<PersistentState>) => void) => void;
-};
+}
 
-export type SessionState = {
+export interface SessionState {
   readonly transaction: ITransaction;
   readonly results: IResults;
   readonly uiState: UIState;
   readonly keypairs: Record<IPubKey, Uint8Array>;
   set: (fn: (state: Draft<SessionState>) => void) => void;
-};
+}
