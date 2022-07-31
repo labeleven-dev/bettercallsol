@@ -1,14 +1,14 @@
 import { FormControl, Grid } from "@chakra-ui/react";
 import { Commitment } from "@solana/web3.js";
 import React from "react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { COMMITMENT_LEVELS } from "../../models/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
-  const { transactionOptions, set } = useOptionsStore((state) => state);
+  const { transactionOptions, set } = usePersistentStore((state) => state);
 
   return (
     <FormControl display="flex" alignItems="center">

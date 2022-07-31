@@ -46,4 +46,6 @@ export const newInstruction = (): IInstruction => ({
   programId: "",
   accounts: { map: {}, order: [] },
   data: EMPTY_INSTRUCTION_DATA,
+  disabled: false,
+  expanded: true,
 });

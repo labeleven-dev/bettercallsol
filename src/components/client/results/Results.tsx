@@ -18,8 +18,8 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import { useOptionsStore } from "../../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useSessionStore } from "../../../hooks/useSessionStore";
 import { toSol } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { ErrorAlert } from "../../common/ErrorAlert";
@@ -28,8 +28,8 @@ import { BalanceTable } from "./BalanceTable";
 import { ProgramLogs } from "./ProgramLogs";
 
 export const Results: React.FC = () => {
-  const { results, set } = useTransactionStore((state) => state);
-  const rpcEndpoint = useOptionsStore(
+  const { results, set } = useSessionStore((state) => state);
+  const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
 

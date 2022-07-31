@@ -7,12 +7,7 @@ import {
   ITransactionOptions,
 } from "./internal-types";
 import { toSortableCollection } from "./sortable";
-import {
-  AppOptions,
-  MemoryOnlyState,
-  OptionsState,
-  TransactionState,
-} from "./state-types";
+import { AppOptions, PersistentState, SessionState } from "./state-types";
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -83,42 +78,26 @@ export const DEFAULT_TRANSACTION: ITransaction = {
   ]),
 };
 
-export const DEFAULT_UI_INSTRUCTION_STATE = {
-  disabled: false,
-  expanded: true,
-};
-
 export const DEFAULT_RESULTS = {
   inProgress: false,
   signature: "",
   logs: ["Run a transaction to see logs"],
 };
 
-export const DEFAULT_TRANSACTION_STATE: TransactionState = {
+export const DEFAULT_SESSION_STATE: SessionState = {
   transaction: DEFAULT_TRANSACTION,
   results: DEFAULT_RESULTS,
   uiState: {
-    instructions: {
-      [DEFAULT_TRANSACTION.instructions.order[0]]: DEFAULT_UI_INSTRUCTION_STATE,
-    },
     paletteOpen: false,
     optionsOpen: false,
-    welcomeOpen: true,
   },
+  keypairs: {},
   set: () => {}, // set by the hook
-  clearTransaction: () => {}, // set by the hook
-  setTransaction: (_) => {}, // set by the hook
-  addInstruction: (_) => {}, // set by the hook
-  removeInstruction: (_) => {}, // set by the hook
 };
 
-export const DEFAULT_OPTIONS_STATE: OptionsState = {
+export const DEFAULT_PERSISTENT_STATE: PersistentState = {
   transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
   appOptions: DEFAULT_APP_OPTIONS,
-  set: () => {}, // set by the hook
-};
-
-export const DEFAULT_MEMORY_ONLY_STATE: MemoryOnlyState = {
-  keypairs: {},
+  firstTime: true,
   set: () => {}, // set by the hook
 };

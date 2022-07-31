@@ -6,9 +6,8 @@ import {
   mapFromTransactionResponse,
   mapToTransaction,
 } from "../models/web3js-mappers";
-import { useMemoryOnlyState } from "./useMemoryOnlyStore";
-import { useOptionsStore } from "./useOptionsStore";
-import { useTransactionStore } from "./useTransactionStore";
+import { usePersistentStore } from "./usePersistentStore";
+import { useSessionStore } from "./useSessionStore";
 
 /**
  * The actual logic of sending a transaction to the chain.
@@ -19,16 +18,15 @@ import { useTransactionStore } from "./useTransactionStore";
  * @returns the function that will run the transaction
  */
 export const useWeb3Transaction: () => () => void = () => {
-  const transactionOptions = useOptionsStore(
+  const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
   const {
     transaction: transactionData,
     results,
-    uiState,
+    keypairs,
     set,
-  } = useTransactionStore((state) => state);
-  const keypairs = useMemoryOnlyState((state) => state.keypairs);
+  } = useSessionStore((state) => state);
   const { connection } = useConnection();
   const { sendTransaction } = useWallet();
 
@@ -91,8 +89,8 @@ export const useWeb3Transaction: () => () => void = () => {
   // send the transaction to the chain
   const transact = async () => {
     if (
-      !transactionData.instructions ||
-      Object.values(uiState.instructions).every((x) => x.disabled)
+      !transactionData.instructions.map ||
+      Object.values(transactionData.instructions.map).every((x) => x.disabled)
     ) {
       set((state) => {
         state.results.error = "No instructions provided";
@@ -110,10 +108,7 @@ export const useWeb3Transaction: () => () => void = () => {
     });
 
     try {
-      const transaction = mapToTransaction(
-        transactionData,
-        uiState.instructions
-      );
+      const transaction = mapToTransaction(transactionData);
 
       // add additional signers
       const signerPubkeys = Object.values(transactionData.instructions.map)

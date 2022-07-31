@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Example } from "./Examples";
 import { WalletButton } from "./WalletButton";
@@ -21,7 +21,7 @@ import { WalletButton } from "./WalletButton";
 export const Header: React.FC = () => {
   const [funTitle, setFunTitle] = useState(false);
   const toast = useToast();
-  const set = useTransactionStore((state) => state.set);
+  const set = useSessionStore((state) => state.set);
 
   return (
     <Flex p="2" bgColor="main.800">

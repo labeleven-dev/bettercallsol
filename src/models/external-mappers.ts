@@ -84,6 +84,8 @@ export const mapFromTransactionExt = ({
             : []
         ),
       },
+      disabled: false,
+      expanded: true,
     }))
   ),
 });

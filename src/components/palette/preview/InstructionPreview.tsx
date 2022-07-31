@@ -10,9 +10,10 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import { useSessionStore } from "../../../hooks/useSessionStore";
 import { mapToIInstruction } from "../../../models/preview-mappers";
 import { IInstructionPreview } from "../../../models/preview-types";
+import { addTo } from "../../../models/sortable";
 import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
@@ -21,7 +22,7 @@ export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
 }> = ({ instruction, index }) => {
-  const addInstruction = useTransactionStore((state) => state.addInstruction);
+  const set = useSessionStore((state) => state.set);
 
   const { programId, accountSummary, innerInstructions } = instruction;
 
@@ -64,7 +65,12 @@ export const InstructionPreview: React.FC<{
             aria-label="Add to transaction"
             icon={<AddIcon />}
             onClick={() => {
-              addInstruction(mapToIInstruction(instruction));
+              set((state) => {
+                addTo(
+                  state.transaction.instructions,
+                  mapToIInstruction(instruction)
+                );
+              });
             }}
           />
         </Tooltip>

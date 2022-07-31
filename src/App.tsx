@@ -27,25 +27,24 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/header/Header";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
-import { useOptionsStore } from "./hooks/useOptionsStore";
-import { useTransactionStore } from "./hooks/useTransactionStore";
+import { usePersistentStore } from "./hooks/usePersistentStore";
+import { useSessionStore } from "./hooks/useSessionStore";
 import theme from "./theme";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const App: React.FC = () => {
-  const autoConnectWallet = useOptionsStore(
-    (state) => state.appOptions.autoConnectWallet
-  );
+  const paletteOpen = useSessionStore((state) => state.uiState.paletteOpen);
   const {
-    rpcEndpoint,
-    commitment,
-    confirmTransactionInitialTimeout,
-    disableRetryOnRateLimit,
-  } = useOptionsStore((state) => state.transactionOptions);
-  const paletteOpen = useTransactionStore((state) => state.uiState.paletteOpen);
+    transactionOptions: {
+      rpcEndpoint,
+      commitment,
+      confirmTransactionInitialTimeout,
+      disableRetryOnRateLimit,
+    },
+    appOptions: { autoConnectWallet },
+  } = usePersistentStore((state) => state);
 
-  // TODO support RPC URL
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),

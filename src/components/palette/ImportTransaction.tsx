@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Connection } from "@solana/web3.js";
 import { useCallback, useMemo, useState } from "react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { IRpcEndpoint } from "../../models/internal-types";
 import { mapToTransactionPreview } from "../../models/preview-mappers";
 import { ITransactionPreview } from "../../models/preview-types";
@@ -24,12 +24,10 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 import { TransactionPreview } from "./preview/TransactionPreview";
 
 export const ImportTransaction: React.FC = () => {
-  const rpcEndpoints = useOptionsStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
-  const transactionOptions = useOptionsStore(
-    (state) => state.transactionOptions
-  );
+  const {
+    appOptions: { rpcEndpoints },
+    transactionOptions,
+  } = usePersistentStore((state) => state);
 
   const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
     rpcEndpoints.map[rpcEndpoints.order[0]]

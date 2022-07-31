@@ -18,21 +18,20 @@ import {
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
+import { removeFrom } from "../../models/sortable";
 import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
 import { SortableItemContext } from "../common/Sortable";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
-  const { instruction, uiState, update, updateUi, reset } = useInstruction();
+  const { instruction, update, reset } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
 
-  const removeInstruction = useTransactionStore(
-    (state) => state.removeInstruction
-  );
+  const set = useSessionStore((state) => state.set);
 
   return (
-    <Flex h={!uiState.expanded ? "30px" : undefined}>
+    <Flex h={!instruction.expanded ? "30px" : undefined}>
       <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
 
       <IconButton
@@ -41,7 +40,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         mr="2"
         aria-label="Collapse"
         icon={
-          uiState.expanded ? (
+          instruction.expanded ? (
             <ChevronDownIcon h="6" w="6" />
           ) : (
             <ChevronRightIcon h="6" w="6" />
@@ -49,8 +48,8 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         }
         variant="ghost"
         onClick={() => {
-          updateUi((state) => {
-            state.expanded = !uiState.expanded;
+          update((state) => {
+            state.expanded = !state.expanded;
           });
         }}
       />
@@ -78,18 +77,22 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         />
       </Heading>
 
-      <Tooltip label={uiState.disabled ? "Enable" : "Disable"}>
+      <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
         <IconButton
           mt="-2"
           ml="2"
-          aria-label={uiState.disabled ? "Enable" : "Disable"}
+          aria-label={instruction.disabled ? "Enable" : "Disable"}
           variant="ghost"
           icon={
-            uiState.disabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />
+            instruction.disabled ? (
+              <Icon as={FaEyeSlash} />
+            ) : (
+              <Icon as={FaEye} />
+            )
           }
           onClick={() => {
-            updateUi((state) => {
-              state.disabled = !uiState.disabled;
+            update((state) => {
+              state.disabled = !state.disabled;
             });
           }}
         />
@@ -115,7 +118,9 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           <MenuItem
             icon={<DeleteIcon />}
             onClick={() => {
-              removeInstruction(instruction.id);
+              set((state) => {
+                removeFrom(state.transaction.instructions, instruction.id);
+              });
             }}
           >
             Remove

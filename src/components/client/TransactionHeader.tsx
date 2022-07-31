@@ -21,28 +21,36 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
 import { useWeb3Transaction } from "../../hooks/useWeb3Transaction";
 import { ITransaction } from "../../models/internal-types";
+import {
+  DEFAULT_RESULTS,
+  DEFAULT_TRANSACTION,
+} from "../../models/state-default";
 import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   transaction,
 }) => {
-  const rpcEndpoint = useOptionsStore(
+  const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
-  const {
-    results,
-    set: setTransaction,
-    clearTransaction,
-  } = useTransactionStore((state) => state);
-  const setOptions = useOptionsStore((state) => state.set);
+  const { results, set: setSession } = useSessionStore((state) => state);
+  const setPersistent = usePersistentStore((state) => state.set);
 
   const { publicKey: walletPublicKey } = useWallet();
   const transact = useWeb3Transaction();
+
+  const setAllExpanded = (value: boolean) => () => {
+    setSession((state) => {
+      state.transaction.instructions.order.forEach((id) => {
+        state.transaction.instructions.map[id].expanded = value;
+      });
+    });
+  };
 
   return (
     <Flex mb="5">
@@ -52,7 +60,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           placeholder="Unnamed Tranasction"
           value={transaction.name}
           onChange={(value) =>
-            setTransaction((state) => {
+            setSession((state) => {
               state.transaction.name = value;
             })
           }
@@ -65,13 +73,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           aria-label="Expand All"
           icon={<Icon as={FaExpandAlt} />}
           variant="ghost"
-          onClick={() => {
-            setTransaction((state) => {
-              Object.keys(state.uiState.instructions).forEach((id) => {
-                state.uiState.instructions[id].expanded = true;
-              });
-            });
-          }}
+          onClick={setAllExpanded(true)}
         />
       </Tooltip>
 
@@ -80,13 +82,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           aria-label="Collapse All"
           icon={<Icon as={FaExpand} />}
           variant="ghost"
-          onClick={() => {
-            setTransaction((state) => {
-              Object.keys(state.uiState.instructions).forEach((id) => {
-                state.uiState.instructions[id].expanded = false;
-              });
-            });
-          }}
+          onClick={setAllExpanded(false)}
         />
       </Tooltip>
 
@@ -110,7 +106,10 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <MenuItem
             icon={<Icon as={FaEraser} />}
             onClick={() => {
-              clearTransaction();
+              setSession((state) => {
+                state.transaction = DEFAULT_TRANSACTION;
+                state.results = DEFAULT_RESULTS;
+              });
             }}
           >
             Clear
@@ -134,7 +133,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         <RpcEndpointMenuList
           endpoint={rpcEndpoint}
           setEndpoint={(endpoint) => {
-            setOptions((state) => {
+            setPersistent((state) => {
               state.transactionOptions.rpcEndpoint = endpoint;
             });
           }}

@@ -14,8 +14,8 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import React from "react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
 import {
   DEFAULT_APP_OPTIONS,
   DEFAUT_TRANSACTION_OPTIONS,
@@ -28,16 +28,16 @@ import { TransactionOptions } from "./TransactionOptions";
 export const Options: React.FC = () => {
   const {
     uiState: { optionsOpen: isOpen },
-    set,
-  } = useTransactionStore((state) => state);
-  const setOptions = useOptionsStore((state) => state.set);
+    set: setSession,
+  } = useSessionStore((state) => state);
+  const setPersistent = usePersistentStore((state) => state.set);
 
   return (
     <Modal
       size="xl"
       isOpen={isOpen}
       onClose={() => {
-        set((state) => {
+        setSession((state) => {
           state.uiState.optionsOpen = false;
         });
       }}
@@ -72,7 +72,7 @@ export const Options: React.FC = () => {
           <Button
             colorScheme="gray"
             onClick={() => {
-              setOptions((state) => {
+              setPersistent((state) => {
                 state.appOptions = DEFAULT_APP_OPTIONS;
                 state.transactionOptions = DEFAUT_TRANSACTION_OPTIONS;
               });

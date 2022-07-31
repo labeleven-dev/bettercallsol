@@ -1,6 +1,6 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Text, Tooltip } from "@chakra-ui/react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { newRpcEndpoint } from "../../models/internal-mappers";
 import { addTo, toSortedArray } from "../../models/sortable";
 import { Sortable } from "../common/Sortable";
@@ -10,7 +10,7 @@ export const RpcEndpointOptions: React.FC = () => {
   const {
     appOptions: { rpcEndpoints },
     set,
-  } = useOptionsStore((state) => state);
+  } = usePersistentStore((state) => state);
 
   return (
     <Grid>

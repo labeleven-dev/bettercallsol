@@ -2,14 +2,13 @@
 
 import { Draft } from "immer";
 import {
-  IInstruction,
   IPubKey,
   IResults,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
 } from "./internal-types";
-import { IID, SortableCollection } from "./sortable";
+import { SortableCollection } from "./sortable";
 
 export type Explorer = "solscan" | "solanafm" | "solana" | "none";
 
@@ -23,39 +22,22 @@ export interface AppOptions {
   readonly rpcEndpoints: SortableCollection<IRpcEndpoint>;
 }
 
-export interface UIInstructionState {
-  readonly disabled: boolean;
-  readonly expanded: boolean;
-}
-
 export interface UIState {
-  readonly instructions: Record<IID, UIInstructionState>;
   readonly paletteOpen: boolean;
   readonly optionsOpen: boolean;
-  readonly welcomeOpen: boolean;
 }
 
-export type OptionsState = {
+export type PersistentState = {
   readonly transactionOptions: ITransactionOptions;
   readonly appOptions: AppOptions;
-  set: (fn: (state: Draft<OptionsState>) => void) => void;
+  readonly firstTime: boolean;
+  set: (fn: (state: Draft<PersistentState>) => void) => void;
 };
 
-// TODO split ITransaction out of the rest of the state
-// TODO implement undo/redo using https://github.com/charkour/zundo
-
-export type TransactionState = {
+export type SessionState = {
   readonly transaction: ITransaction;
   readonly results: IResults;
   readonly uiState: UIState;
-  set: (fn: (state: Draft<TransactionState>) => void) => void;
-  clearTransaction: () => void;
-  setTransaction: (transaction: ITransaction) => void;
-  addInstruction: (instruction: IInstruction) => void;
-  removeInstruction: (instructionId: IID) => void;
-};
-
-export type MemoryOnlyState = {
   readonly keypairs: Record<IPubKey, Uint8Array>;
-  set: (fn: (state: Draft<MemoryOnlyState>) => void) => void;
+  set: (fn: (state: Draft<SessionState>) => void) => void;
 };

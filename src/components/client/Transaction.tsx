@@ -7,15 +7,15 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
-  const transaction = useTransactionStore((state) => state.transaction);
-  const transactionOptions = useOptionsStore(
+  const transaction = useSessionStore((state) => state.transaction);
+  const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
 

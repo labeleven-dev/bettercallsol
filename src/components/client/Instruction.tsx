@@ -8,15 +8,15 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../hooks/useInstruction";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
 import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
-  const { instruction, uiState, update } = useInstruction();
-  const rpcEndpoint = useOptionsStore(
+  const { instruction, update } = useInstruction();
+  const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
 
@@ -28,7 +28,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.600")}
       bg={
-        uiState.disabled
+        instruction.disabled
           ? "repeating-linear-gradient(-45deg, transparent, transparent 40px, #85858510 40px, #85858510 80px)"
           : ""
       }
@@ -37,7 +37,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
     >
       <InstructionHeader index={index} />
 
-      <Collapse in={uiState.expanded}>
+      <Collapse in={instruction.expanded}>
         <InputGroup>
           <Input
             mb="5"

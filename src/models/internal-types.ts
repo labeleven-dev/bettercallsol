@@ -51,6 +51,10 @@ export interface IInstruction {
   programId: IPubKey;
   accounts: SortableCollection<IAccount>;
   data: IInstructionData;
+
+  // UI state
+  readonly disabled: boolean;
+  readonly expanded: boolean;
 }
 
 export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";

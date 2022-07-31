@@ -11,7 +11,7 @@ import {
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useOptionsStore } from "../../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { INetwork, IRpcEndpoint } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
 import { SortableItemContext } from "../../common/Sortable";
@@ -34,7 +34,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   enabled,
 }) => {
   const { listeners, attributes } = useContext(SortableItemContext);
-  const set = useOptionsStore((state) => state.set);
+  const set = usePersistentStore((state) => state.set);
 
   const updateEndpoint = (fn: (state: WritableDraft<IRpcEndpoint>) => void) => {
     set((state) => {

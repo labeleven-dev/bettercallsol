@@ -1,10 +1,15 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { useSessionStore } from "../../hooks/useSessionStore";
 import { newInstruction } from "../../models/internal-mappers";
 import { IInstruction } from "../../models/internal-types";
-import { IID, SortableCollection, toSortedArray } from "../../models/sortable";
+import {
+  addTo,
+  IID,
+  SortableCollection,
+  toSortedArray,
+} from "../../models/sortable";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 
@@ -13,7 +18,7 @@ export const InstructionContext = React.createContext(newInstruction());
 export const Instructions: React.FC<{
   instructions: SortableCollection<IInstruction>;
 }> = ({ instructions }) => {
-  const { addInstruction, set } = useTransactionStore((state) => state);
+  const set = useSessionStore((state) => state.set);
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {
@@ -37,7 +42,9 @@ export const Instructions: React.FC<{
           icon={<AddIcon />}
           variant="ghost"
           onClick={() => {
-            addInstruction(newInstruction());
+            set((state) => {
+              addTo(state.transaction.instructions, newInstruction());
+            });
           }}
         />
       </Tooltip>

@@ -17,22 +17,19 @@ import {
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import React from "react";
 import { FaLightbulb, FaWallet } from "react-icons/fa";
-import { useTransactionStore } from "../../hooks/useTransactionStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 
 export const WalletButton: React.FC = () => {
-  const {
-    uiState: { welcomeOpen: isOpen },
-    set,
-  } = useTransactionStore((state) => state);
+  const { firstTime, set } = usePersistentStore((state) => state);
 
   return (
     <Popover
       placement="bottom-start"
       closeOnBlur={false}
-      isOpen={isOpen}
+      isOpen={firstTime}
       onClose={() => {
         set((state) => {
-          state.uiState.welcomeOpen = false;
+          state.firstTime = false;
         });
       }}
     >

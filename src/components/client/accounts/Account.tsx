@@ -16,8 +16,8 @@ import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { FaKey, FaParachuteBox, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { useMemoryOnlyState } from "../../../hooks/useMemoryOnlyStore";
-import { useOptionsStore } from "../../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useSessionStore } from "../../../hooks/useSessionStore";
 import { IAccount } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
 import { isValidPublicKey } from "../../../models/web3js-mappers";
@@ -33,11 +33,11 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 }) => {
   const { update } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
-  const rpcEndpoint = useOptionsStore(
+  const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
   const { publicKey: walletPubkey } = useWallet();
-  const { keypairs, set: setMemoryOnly } = useMemoryOnlyState((state) => state);
+  const { keypairs, set: setSession } = useSessionStore((state) => state);
   const toast = useToast();
 
   const isValid = isValidPublicKey(data.pubkey);
@@ -55,7 +55,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       removeFrom(state.accounts, data.id);
     });
     if (hasPrivateKey) {
-      setMemoryOnly((state) => {
+      setSession((state) => {
         delete state.keypairs[data.pubkey];
       });
     }
@@ -64,7 +64,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
   const generateKeypair = () => {
     const keypair = Keypair.generate();
     const publicKey = keypair.publicKey.toBase58();
-    setMemoryOnly((state) => {
+    setSession((state) => {
       state.keypairs[publicKey] = keypair.secretKey;
     });
     updateAccount((state) => {

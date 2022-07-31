@@ -11,9 +11,10 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useTransactionStore } from "../../../hooks/useTransactionStore";
+import { useSessionStore } from "../../../hooks/useSessionStore";
 import { mapToIInstruction } from "../../../models/preview-mappers";
 import { ITransactionPreview } from "../../../models/preview-types";
+import { addTo } from "../../../models/sortable";
 import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { ExplorerButton } from "../../common/ExplorerButton";
@@ -25,11 +26,13 @@ export const TransactionPreview: React.FC<{
 }> = ({
   transaction: { signature, rpcEndpoint, instructions, accountSummary, error },
 }) => {
-  const addInstruction = useTransactionStore((state) => state.addInstruction);
+  const set = useSessionStore((state) => state.set);
 
   const addInstructions = () => {
-    instructions.forEach((instruction) => {
-      addInstruction(mapToIInstruction(instruction));
+    set((state) => {
+      instructions.forEach((instruction) => {
+        addTo(state.transaction.instructions, mapToIInstruction(instruction));
+      });
     });
   };
 

@@ -11,8 +11,7 @@ import bs58 from "bs58";
 import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
 import { IResults, ITransaction } from "./internal-types";
-import { IID, toSortedArray } from "./sortable";
-import { UIInstructionState } from "./state-types";
+import { toSortedArray } from "./sortable";
 
 /** Converts lamports to SOL */
 export const toSol = (x: number): BigNumber =>
@@ -30,15 +29,14 @@ export const isValidPublicKey = (key: string): boolean =>
 
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
 export const mapToTransaction = (
-  transactionData: ITransaction,
-  uiInstructions: Record<IID, UIInstructionState>
+  transactionData: ITransaction
 ): Transaction => {
   // TODO filter out empty fields
   const transaction = new Transaction();
 
   toSortedArray(transactionData.instructions).forEach(
-    ({ id, programId, accounts, data }) => {
-      if (uiInstructions[id].disabled || !programId) return;
+    ({ programId, accounts, data, disabled }) => {
+      if (disabled || !programId) return;
 
       // handle instruction data
       let buffer;

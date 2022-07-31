@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { useOptionsStore } from "../../hooks/useOptionsStore";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { IRpcEndpoint } from "../../models/internal-types";
 
 export type AddressType = "tx" | "account";
@@ -51,7 +51,7 @@ export const ExplorerButton: React.FC<
     rpcEndpoint: IRpcEndpoint;
   } & Omit<IconButtonProps, "aria-label">
 > = ({ value, valueType, rpcEndpoint, size, ...theRest }) => {
-  const explorer = useOptionsStore((state) => state.appOptions.explorer);
+  const explorer = usePersistentStore((state) => state.appOptions.explorer);
 
   if (explorer === "none") return null; // hide
   const opts = explorerOpts[explorer];
