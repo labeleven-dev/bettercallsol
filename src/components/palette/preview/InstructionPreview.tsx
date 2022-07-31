@@ -10,7 +10,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useSessionStore } from "../../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { mapToIInstruction } from "../../../models/preview-mappers";
 import { IInstructionPreview } from "../../../models/preview-types";
 import { addTo } from "../../../models/sortable";
@@ -22,7 +22,7 @@ export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
 }> = ({ instruction, index }) => {
-  const set = useSessionStore((state) => state.set);
+  const set = useSessionStoreWithUndo((state) => state.set);
 
   const { programId, accountSummary, innerInstructions } = instruction;
 

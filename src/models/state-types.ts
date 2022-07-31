@@ -34,10 +34,14 @@ export interface PersistentState {
   set: (fn: (state: Draft<PersistentState>) => void) => void;
 }
 
-export interface SessionState {
+export interface SessionStateWithUndo {
   readonly transaction: ITransaction;
+  readonly keypairs: Record<IPubKey, Uint8Array>;
+  set: (fn: (state: Draft<SessionStateWithUndo>) => void) => void;
+}
+
+export interface SessionStateWithoutUndo {
   readonly results: IResults;
   readonly uiState: UIState;
-  readonly keypairs: Record<IPubKey, Uint8Array>;
-  set: (fn: (state: Draft<SessionState>) => void) => void;
+  set: (fn: (state: Draft<SessionStateWithoutUndo>) => void) => void;
 }

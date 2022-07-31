@@ -1,7 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { newInstruction } from "../../models/internal-mappers";
 import { IInstruction } from "../../models/internal-types";
 import {
@@ -18,7 +18,7 @@ export const InstructionContext = React.createContext(newInstruction());
 export const Instructions: React.FC<{
   instructions: SortableCollection<IInstruction>;
 }> = ({ instructions }) => {
-  const set = useSessionStore((state) => state.set);
+  const set = useSessionStoreWithUndo((state) => state.set);
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {

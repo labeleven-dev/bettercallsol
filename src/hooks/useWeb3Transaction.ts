@@ -7,7 +7,10 @@ import {
   mapToTransaction,
 } from "../models/web3js-mappers";
 import { usePersistentStore } from "./usePersistentStore";
-import { useSessionStore } from "./useSessionStore";
+import {
+  useSessionStoreWithoutUndo,
+  useSessionStoreWithUndo,
+} from "./useSessionStore";
 
 /**
  * The actual logic of sending a transaction to the chain.
@@ -21,12 +24,11 @@ export const useWeb3Transaction: () => () => void = () => {
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
-  const {
-    transaction: transactionData,
-    results,
-    keypairs,
-    set,
-  } = useSessionStore((state) => state);
+  const { transaction: transactionData, keypairs } = useSessionStoreWithUndo(
+    (state) => state
+  );
+  const { results, set } = useSessionStoreWithoutUndo((state) => state);
+
   const { connection } = useConnection();
   const { sendTransaction } = useWallet();
 

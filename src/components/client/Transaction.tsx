@@ -8,13 +8,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
-  const transaction = useSessionStore((state) => state.transaction);
+  const transaction = useSessionStoreWithUndo((state) => state.transaction);
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );

@@ -22,7 +22,10 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import {
+  useSessionStoreWithoutUndo,
+  useSessionStoreWithUndo,
+} from "../../hooks/useSessionStore";
 import { useWeb3Transaction } from "../../hooks/useWeb3Transaction";
 import { ITransaction } from "../../models/internal-types";
 import {
@@ -35,17 +38,20 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   transaction,
 }) => {
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
+  const { results, set: setResults } = useSessionStoreWithoutUndo(
+    (state) => state
   );
-  const { results, set: setSession } = useSessionStore((state) => state);
-  const setPersistent = usePersistentStore((state) => state.set);
+  const setTransaction = useSessionStoreWithUndo((state) => state.set);
+  const {
+    transactionOptions: { rpcEndpoint },
+    set: setPersistent,
+  } = usePersistentStore((state) => state);
 
   const { publicKey: walletPublicKey } = useWallet();
   const transact = useWeb3Transaction();
 
   const setAllExpanded = (value: boolean) => () => {
-    setSession((state) => {
+    setTransaction((state) => {
       state.transaction.instructions.order.forEach((id) => {
         state.transaction.instructions.map[id].expanded = value;
       });
@@ -60,7 +66,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           placeholder="Unnamed Tranasction"
           value={transaction.name}
           onChange={(value) =>
-            setSession((state) => {
+            setTransaction((state) => {
               state.transaction.name = value;
             })
           }
@@ -106,8 +112,10 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <MenuItem
             icon={<Icon as={FaEraser} />}
             onClick={() => {
-              setSession((state) => {
+              setTransaction((state) => {
                 state.transaction = DEFAULT_TRANSACTION;
+              });
+              setResults((state) => {
                 state.results = DEFAULT_RESULTS;
               });
             }}

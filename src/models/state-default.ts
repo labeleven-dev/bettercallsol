@@ -7,7 +7,12 @@ import {
   ITransactionOptions,
 } from "./internal-types";
 import { toSortableCollection } from "./sortable";
-import { AppOptions, PersistentState, SessionState } from "./state-types";
+import {
+  AppOptions,
+  PersistentState,
+  SessionStateWithoutUndo,
+  SessionStateWithUndo,
+} from "./state-types";
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -84,14 +89,18 @@ export const DEFAULT_RESULTS = {
   logs: ["Run a transaction to see logs"],
 };
 
-export const DEFAULT_SESSION_STATE: SessionState = {
+export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
+  keypairs: {},
+  set: () => {}, // set by the hook
+};
+
+export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
   results: DEFAULT_RESULTS,
   uiState: {
     paletteOpen: false,
     optionsOpen: false,
   },
-  keypairs: {},
   set: () => {}, // set by the hook
 };
 

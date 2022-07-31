@@ -17,7 +17,7 @@ import React, { useContext } from "react";
 import { FaKey, FaParachuteBox, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
-import { useSessionStore } from "../../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { IAccount } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
 import { isValidPublicKey } from "../../../models/web3js-mappers";
@@ -37,7 +37,9 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     (state) => state.transactionOptions.rpcEndpoint
   );
   const { publicKey: walletPubkey } = useWallet();
-  const { keypairs, set: setSession } = useSessionStore((state) => state);
+  const { keypairs, set: setSession } = useSessionStoreWithUndo(
+    (state) => state
+  );
   const toast = useToast();
 
   const isValid = isValidPublicKey(data.pubkey);

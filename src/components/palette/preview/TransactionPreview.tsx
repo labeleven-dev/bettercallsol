@@ -11,7 +11,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useSessionStore } from "../../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { mapToIInstruction } from "../../../models/preview-mappers";
 import { ITransactionPreview } from "../../../models/preview-types";
 import { addTo } from "../../../models/sortable";
@@ -26,7 +26,7 @@ export const TransactionPreview: React.FC<{
 }> = ({
   transaction: { signature, rpcEndpoint, instructions, accountSummary, error },
 }) => {
-  const set = useSessionStore((state) => state.set);
+  const set = useSessionStoreWithUndo((state) => state.set);
 
   const addInstructions = () => {
     set((state) => {

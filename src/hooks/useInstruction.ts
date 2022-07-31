@@ -4,11 +4,11 @@ import { InstructionContext } from "../components/client/Instructions";
 import { newAccount, newInstruction } from "../models/internal-mappers";
 import { IInstruction } from "../models/internal-types";
 import { toSortableCollection } from "../models/sortable";
-import { useSessionStore } from "./useSessionStore";
+import { useSessionStoreWithUndo } from "./useSessionStore";
 
 export const useInstruction = () => {
   const instruction = useContext(InstructionContext);
-  const set = useSessionStore((state) => state.set);
+  const set = useSessionStoreWithUndo((state) => state.set);
 
   const update = (fn: (state: WritableDraft<IInstruction>) => void) => {
     set((state) => {

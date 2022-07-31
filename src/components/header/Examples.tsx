@@ -9,20 +9,26 @@ import {
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import {
+  useSessionStoreWithoutUndo,
+  useSessionStoreWithUndo,
+} from "../../hooks/useSessionStore";
 import { EXAMPLES } from "../../models/examples";
 import { mapFromTransactionExt } from "../../models/external-mappers";
 import { DEFAULT_RESULTS } from "../../models/state-default";
 
 export const Example: React.FC = () => {
   const { publicKey: walletPublicKey } = useWallet();
-  const set = useSessionStore((state) => state.set);
+  const setTransaction = useSessionStoreWithUndo((state) => state.set);
+  const setResults = useSessionStoreWithoutUndo((state) => state.set);
 
   const loadExample = (name: string) => {
-    set((state) => {
+    setTransaction((state) => {
       state.transaction = mapFromTransactionExt(
         EXAMPLES[name](walletPublicKey?.toBase58()!)
       );
+    });
+    setResults((state) => {
       state.results = DEFAULT_RESULTS;
     });
   };

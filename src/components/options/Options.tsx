@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 import {
   DEFAULT_APP_OPTIONS,
   DEFAUT_TRANSACTION_OPTIONS,
@@ -29,7 +29,7 @@ export const Options: React.FC = () => {
   const {
     uiState: { optionsOpen: isOpen },
     set: setSession,
-  } = useSessionStore((state) => state);
+  } = useSessionStoreWithoutUndo((state) => state);
   const setPersistent = usePersistentStore((state) => state.set);
 
   return (

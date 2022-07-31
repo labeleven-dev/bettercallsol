@@ -18,7 +18,7 @@ import {
 import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
-import { useSessionStore } from "../../hooks/useSessionStore";
+import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { removeFrom } from "../../models/sortable";
 import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
@@ -28,7 +28,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, update, reset } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
 
-  const set = useSessionStore((state) => state.set);
+  const set = useSessionStoreWithUndo((state) => state.set);
 
   return (
     <Flex h={!instruction.expanded ? "30px" : undefined}>

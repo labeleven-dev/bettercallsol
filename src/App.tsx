@@ -28,13 +28,15 @@ import { Header } from "./components/header/Header";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
 import { usePersistentStore } from "./hooks/usePersistentStore";
-import { useSessionStore } from "./hooks/useSessionStore";
+import { useSessionStoreWithoutUndo } from "./hooks/useSessionStore";
 import theme from "./theme";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const App: React.FC = () => {
-  const paletteOpen = useSessionStore((state) => state.uiState.paletteOpen);
+  const paletteOpen = useSessionStoreWithoutUndo(
+    (state) => state.uiState.paletteOpen
+  );
   const {
     transactionOptions: {
       rpcEndpoint,
