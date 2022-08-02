@@ -20,11 +20,12 @@ export const useGetWeb3Transaction = ({
   inProgress: boolean;
   startedAt?: number;
   finalisedAt?: number;
-  start: (signature: IPubKey) => void;
+  start: (signature: IPubKey, skipPolling?: boolean) => void;
   cancel: () => void;
 } => {
   const [signature, setSignature] = useState("");
   const [inProgress, setInProgress] = useState(false);
+  const [skipPolling, setSkipPolling] = useState(false);
 
   const [startedAt, setStartedAt] = useState<number>();
   const [finalisedAt, setFinalisedAt] = useState<number>();
@@ -41,21 +42,24 @@ export const useGetWeb3Transaction = ({
       }
 
       try {
-        const status = await connection.getSignatureStatus(signature);
-        if (status && status.value && onStatus) {
-          onStatus(status.value);
+        let status: SignatureStatus | null = null;
+        if (!skipPolling) {
+          status = (await connection.getSignatureStatus(signature)).value;
+          if (status && onStatus) {
+            onStatus(status);
+          }
+        }
 
-          // TODO status from option?
-          if (status.value?.confirmationStatus === "finalized") {
-            const transaction = await connection.getTransaction(signature, {
-              commitment: "finalized",
-            });
+        // TODO status from option?
+        if (skipPolling || status?.confirmationStatus === "finalized") {
+          const transaction = await connection.getTransaction(signature, {
+            commitment: "finalized",
+          });
 
-            if (transaction) {
-              setFinalisedAt(new Date().getTime());
-              setInProgress(false);
-              onFinalised && onFinalised(transaction);
-            }
+          if (transaction) {
+            setFinalisedAt(new Date().getTime());
+            setInProgress(false);
+            onFinalised && onFinalised(transaction);
           }
         }
 
@@ -80,9 +84,10 @@ export const useGetWeb3Transaction = ({
     inProgress,
     startedAt,
     finalisedAt,
-    start: (signature) => {
-      setSignature(signature);
+    start: (signature, skipPolling = false) => {
       setStartedAt(new Date().getTime());
+      setSignature(signature);
+      setSkipPolling(skipPolling);
       setFinalisedAt(undefined);
       setInProgress(true);
     },

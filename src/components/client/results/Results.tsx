@@ -95,10 +95,10 @@ export const Results: React.FC = () => {
     },
   });
 
-  const start = (signature: string) => {
+  const start = (signature: string, skipPolling: boolean = false) => {
     if (!signature) return;
     setResults({});
-    startWeb3Transaction(signature);
+    startWeb3Transaction(signature, skipPolling);
   };
 
   // start confirming the tranaction when signature is set
@@ -106,7 +106,9 @@ export const Results: React.FC = () => {
   useEffect(() => {
     useSessionStoreWithoutUndo.subscribe(
       (state) => state.transactionRun.signature,
-      start
+      (signature) => {
+        start(signature);
+      }
     );
   });
 
@@ -185,7 +187,7 @@ export const Results: React.FC = () => {
               size="sm"
               isDisabled={!signature || inProgress}
               onClick={() => {
-                start(signature);
+                start(signature, true);
               }}
             />
           </Tooltip>

@@ -117,20 +117,22 @@ export const Header: React.FC = () => {
       <WalletButton />
 
       <DarkMode>
-        <Tooltip label="Palette">
-          <IconButton
-            mr="0.5"
-            aria-label="Palette"
-            icon={<HamburgerIcon />}
-            variant="ghost"
-            color="white"
-            onClick={() => {
-              set((state) => {
-                state.uiState.paletteOpen = !state.uiState.paletteOpen;
-              });
-            }}
-          />
-        </Tooltip>
+        <Hide below="md">
+          <Tooltip label="Palette">
+            <IconButton
+              mr="0.5"
+              aria-label="Palette"
+              icon={<HamburgerIcon />}
+              variant="ghost"
+              color="white"
+              onClick={() => {
+                set((state) => {
+                  state.uiState.paletteOpen = !state.uiState.paletteOpen;
+                });
+              }}
+            />
+          </Tooltip>
+        </Hide>
       </DarkMode>
     </Flex>
   );
