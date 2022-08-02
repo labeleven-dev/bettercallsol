@@ -16,7 +16,6 @@ import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
 import { FaKey, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { IAccount } from "../../../models/internal-types";
 import { removeFrom } from "../../../models/sortable";
@@ -34,14 +33,10 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 }) => {
   const { update } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
-  );
   const { publicKey: walletPubkey } = useWallet();
-  const [keypairs, setSession] = useSessionStoreWithUndo((state) => [
-    state.keypairs,
-    state.set,
-  ]);
+  const [rpcEndpoint, keypairs, setSession] = useSessionStoreWithUndo(
+    (state) => [state.rpcEndpoint, state.keypairs, state.set]
+  );
   const toast = useToast();
 
   const isValid = isValidPublicKey(data.pubkey);

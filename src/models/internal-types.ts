@@ -91,7 +91,6 @@ export interface ICommitment {
 }
 
 export interface ITransactionOptions {
-  rpcEndpoint: IRpcEndpoint;
   skipPreflight: boolean;
   commitment: Commitment;
   maxRetries: number;

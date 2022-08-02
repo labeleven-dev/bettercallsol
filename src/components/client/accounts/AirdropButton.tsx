@@ -31,7 +31,7 @@ import { PublicKey } from "@solana/web3.js";
 import React, { useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { IPubKey } from "../../../models/internal-types";
 import { short, toLamports } from "../../../models/web3js-mappers";
 import { ExplorerButton } from "../../common/ExplorerButton";
@@ -44,9 +44,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   const [status, setStatus] = useState<
     "idle" | "running" | "success" | "fail" | "cancelled"
   >("idle");
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
-  );
+  const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
 
   const { connection } = useConnection();
   const {

@@ -170,24 +170,26 @@ export const Results: React.FC = () => {
             </Tag>
           </Tooltip>
         )}
-        {inProgress && (
+        {inProgress ? (
           <Button color="red.600" variant="outline" size="xs" onClick={cancel}>
             Cancel
           </Button>
+        ) : (
+          <Tooltip label="Refresh">
+            <IconButton
+              ml="1"
+              mt="-1"
+              aria-label="Refresh"
+              icon={<RepeatIcon />}
+              variant="ghost"
+              size="sm"
+              isDisabled={!signature || inProgress}
+              onClick={() => {
+                start(signature);
+              }}
+            />
+          </Tooltip>
         )}
-        <Tooltip label="Refresh">
-          <IconButton
-            mt="-1"
-            aria-label="Refresh"
-            icon={<RepeatIcon />}
-            variant="ghost"
-            size="sm"
-            isDisabled={!signature || inProgress}
-            onClick={() => {
-              start(signature);
-            }}
-          />
-        </Tooltip>
       </Flex>
 
       <ErrorAlert

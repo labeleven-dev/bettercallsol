@@ -21,7 +21,6 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
   useSessionStoreWithoutUndo,
@@ -41,9 +40,8 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const [transactionRun, setTransactionRun] = useSessionStoreWithoutUndo(
     (state) => [state.transactionRun, state.set]
   );
-  const setTransaction = useSessionStoreWithUndo((state) => state.set);
-  const [rpcEndpoint, setPersistent] = usePersistentStore((state) => [
-    state.transactionOptions.rpcEndpoint,
+  const [rpcEndpoint, setSession] = useSessionStoreWithUndo((state) => [
+    state.rpcEndpoint,
     state.set,
   ]);
 
@@ -62,7 +60,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   });
 
   const setAllExpanded = (value: boolean) => () => {
-    setTransaction((state) => {
+    setSession((state) => {
       state.transaction.instructions.order.forEach((id) => {
         state.transaction.instructions.map[id].expanded = value;
       });
@@ -77,7 +75,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           placeholder="Unnamed Tranasction"
           value={transaction.name}
           onChange={(value) =>
-            setTransaction((state) => {
+            setSession((state) => {
               state.transaction.name = value;
             })
           }
@@ -123,7 +121,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <MenuItem
             icon={<Icon as={FaEraser} />}
             onClick={() => {
-              setTransaction((state) => {
+              setSession((state) => {
                 state.transaction = DEFAULT_TRANSACTION;
               });
               setTransactionRun((state) => {
@@ -152,8 +150,8 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         <RpcEndpointMenuList
           endpoint={rpcEndpoint}
           setEndpoint={(endpoint) => {
-            setPersistent((state) => {
-              state.transactionOptions.rpcEndpoint = endpoint;
+            setSession((state) => {
+              state.rpcEndpoint = endpoint;
             });
           }}
         />

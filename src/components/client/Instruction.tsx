@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../hooks/useInstruction";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
@@ -16,9 +16,7 @@ import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, update } = useInstruction();
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
-  );
+  const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
 
   return (
     <Grid

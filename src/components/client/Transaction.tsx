@@ -7,17 +7,16 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { Instructions } from "./Instructions";
 import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
-  const transaction = useSessionStoreWithUndo((state) => state.transaction);
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
-  );
+  const [transaction, rpcEndpoint] = useSessionStoreWithUndo((state) => [
+    state.transaction,
+    state.rpcEndpoint,
+  ]);
 
   return (
     <Grid m="2">

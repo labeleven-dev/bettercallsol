@@ -66,7 +66,6 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
 };
 
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
-  rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   skipPreflight: true,
   commitment: "finalized",
   preflightCommitment: "processed",
@@ -92,6 +91,7 @@ export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
 
 export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
+  rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   keypairs: {},
   set: () => {}, // set by the hook
 };

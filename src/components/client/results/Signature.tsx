@@ -8,7 +8,7 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { toSol } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { ExplorerButton } from "../../common/ExplorerButton";
@@ -18,9 +18,7 @@ export const Signature: React.FC<{
   slot?: number;
   fee?: number;
 }> = ({ signature, slot, fee }) => {
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
-  );
+  const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
 
   return (
     <>

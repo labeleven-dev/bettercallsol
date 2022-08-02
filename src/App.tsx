@@ -28,7 +28,10 @@ import { Header } from "./components/header/Header";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
 import { usePersistentStore } from "./hooks/usePersistentStore";
-import { useSessionStoreWithoutUndo } from "./hooks/useSessionStore";
+import {
+  useSessionStoreWithoutUndo,
+  useSessionStoreWithUndo,
+} from "./hooks/useSessionStore";
 import theme from "./theme";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -37,15 +40,18 @@ export const App: React.FC = () => {
   const paletteOpen = useSessionStoreWithoutUndo(
     (state) => state.uiState.paletteOpen
   );
-  const {
-    transactionOptions: {
-      rpcEndpoint,
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    },
-    appOptions: { autoConnectWallet },
-  } = usePersistentStore((state) => state);
+  const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
+  const [
+    commitment,
+    confirmTransactionInitialTimeout,
+    disableRetryOnRateLimit,
+    autoConnectWallet,
+  ] = usePersistentStore((state) => [
+    state.transactionOptions.commitment,
+    state.transactionOptions.confirmTransactionInitialTimeout,
+    state.transactionOptions.disableRetryOnRateLimit,
+    state.appOptions.autoConnectWallet,
+  ]);
 
   const wallets = useMemo(
     () => [

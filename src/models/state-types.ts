@@ -41,6 +41,7 @@ export interface PersistentState {
 
 export interface SessionStateWithUndo {
   readonly transaction: ITransaction;
+  readonly rpcEndpoint: IRpcEndpoint;
   readonly keypairs: Record<IPubKey, Uint8Array>;
   set: (fn: (state: Draft<SessionStateWithUndo>) => void) => void;
 }
