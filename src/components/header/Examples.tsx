@@ -15,7 +15,7 @@ import {
 } from "../../hooks/useSessionStore";
 import { EXAMPLES } from "../../models/examples";
 import { mapFromTransactionExt } from "../../models/external-mappers";
-import { DEFAULT_RESULTS } from "../../models/state-default";
+import { DEFAULT_TRANSACTION_RUN } from "../../models/state-default";
 
 export const Example: React.FC = () => {
   const { publicKey: walletPublicKey } = useWallet();
@@ -29,7 +29,7 @@ export const Example: React.FC = () => {
       );
     });
     setResults((state) => {
-      state.results = DEFAULT_RESULTS;
+      state.transactionRun = DEFAULT_TRANSACTION_RUN;
     });
   };
 

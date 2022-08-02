@@ -1,13 +1,9 @@
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
-  Box,
+  Button,
   Flex,
-  FormLabel,
   Grid,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Spacer,
   Tab,
   TabList,
@@ -17,21 +13,107 @@ import {
   Tag,
   Tooltip,
 } from "@chakra-ui/react";
-import React from "react";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { TransactionConfirmationStatus } from "@solana/web3.js";
+import React, { useEffect, useState } from "react";
+import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
-import { toSol } from "../../../models/web3js-mappers";
-import { CopyButton } from "../../common/CopyButton";
+import { IBalance } from "../../../models/internal-types";
+import {
+  mapBalances,
+  mapTransactionError,
+} from "../../../models/web3js-mappers";
 import { ErrorAlert } from "../../common/ErrorAlert";
-import { ExplorerButton } from "../../common/ExplorerButton";
 import { BalanceTable } from "./BalanceTable";
 import { ProgramLogs } from "./ProgramLogs";
+import { Signature } from "./Signature";
+
+type State = {
+  startedAt?: number;
+  finalisedAt?: number;
+  slot?: number;
+  confirmations?: number;
+  confirmationStatus?: TransactionConfirmationStatus;
+  blockTime?: number;
+  fee?: number;
+  balances?: IBalance[];
+  error?: string;
+  logs?: string[];
+};
 
 export const Results: React.FC = () => {
-  const { results, set } = useSessionStoreWithoutUndo((state) => state);
-  const rpcEndpoint = usePersistentStore(
-    (state) => state.transactionOptions.rpcEndpoint
+  const [results, setResults] = useState<State>({});
+
+  const setInProgress = useSessionStoreWithoutUndo(
+    (state) => (value: boolean) => {
+      state.set((state) => {
+        state.transactionRun.inProgress = value;
+      });
+    }
   );
+
+  const {
+    signature,
+    inProgress,
+    start: startWeb3Transaction,
+    cancel: cancelWeb3Transaction,
+  } = useGetWeb3Transaction({
+    onStatus: ({ slot, confirmationStatus, confirmations, err }) => {
+      setResults({
+        ...results,
+        slot,
+        confirmationStatus,
+        confirmations: confirmations || undefined,
+        error: mapTransactionError(err),
+      });
+    },
+    onFinalised: (response) => {
+      setResults({
+        confirmationStatus: "finalized",
+        blockTime: response.blockTime || undefined,
+        slot: response.slot,
+        balances: mapBalances(response),
+        logs: response.meta?.logMessages || [],
+        error: mapTransactionError(response.meta?.err),
+        fee: response.meta?.fee,
+      });
+      setInProgress(false);
+    },
+    onTimeout: () => {
+      // TODO should be reflected in the badge instead
+      setResults({
+        ...results,
+        error: "Transcation faield to confirm",
+      });
+      setInProgress(false);
+    },
+    onError: (error) => {
+      setResults({
+        ...results,
+        error: error.message,
+      });
+      setInProgress(false);
+    },
+  });
+
+  const start = (signature: string) => {
+    if (!signature) return;
+    setResults({});
+    startWeb3Transaction(signature);
+  };
+
+  // start confirming the tranaction when signature is set
+  // by TransactionHeader component
+  useEffect(() => {
+    useSessionStoreWithoutUndo.subscribe(
+      (state) => state.transactionRun.signature,
+      start
+    );
+  });
+
+  const cancel = () => {
+    cancelWeb3Transaction();
+    setInProgress(false);
+  };
 
   return (
     <Grid p="5">
@@ -49,6 +131,18 @@ export const Results: React.FC = () => {
               <CheckCircleIcon mt="1" mr="1" color="green.400" />
             </Tooltip>
           ))}
+        {results.finalisedAt && (
+          <Tooltip label={new Date(results.finalisedAt).toLocaleString()}>
+            <Tag height="20px">
+              {`Finalised @ ${new Date(
+                results.finalisedAt
+              ).toLocaleTimeString()}`}
+            </Tag>
+          </Tooltip>
+        )}
+
+        <Spacer />
+
         {results.confirmationStatus && (
           <Tag
             mr="1"
@@ -64,75 +158,31 @@ export const Results: React.FC = () => {
             {results.confirmationStatus === "processed"
               ? "Processed"
               : results.confirmationStatus === "confirmed"
-              ? `Confirmed by ${results.confirmations}`
+              ? `Confirmed by ${results.confirmations || 0}`
               : `Finalised by max confirmations`}
           </Tag>
         )}
-        <Spacer />
-        {results.finalisedAt && (
-          <Tooltip label={new Date(results.finalisedAt).toLocaleString()}>
-            <Tag height="20px">
-              {`Finalised @ ${new Date(
-                results.finalisedAt
-              ).toLocaleTimeString()}`}
-            </Tag>
-          </Tooltip>
+        {inProgress && (
+          <Button color="red.600" variant="outline" size="xs" onClick={cancel}>
+            Cancel
+          </Button>
         )}
       </Flex>
 
       <ErrorAlert
         error={results.error}
         onClose={() => {
-          set((state) => {
-            state.results.error = "";
-          });
+          setResults({ ...results, error: "" });
         }}
       />
 
-      <Flex>
-        <FormLabel
-          pt="2"
-          mb="3"
-          htmlFor="signature"
-          textAlign="right"
-          fontSize="sm"
-        >
-          Signature
-        </FormLabel>
-        <InputGroup flex="1" mr="1" size="sm">
-          <Input
-            id="signature"
-            fontFamily="mono"
-            placeholder="Transaction Signature"
-            isReadOnly
-            value={results.signature}
-          />
-          <InputRightElement>
-            <ExplorerButton
-              size="xs"
-              valueType="tx"
-              isDisabled={!results.signature}
-              value={results.signature}
-              rpcEndpoint={rpcEndpoint}
-            />
-          </InputRightElement>
-        </InputGroup>
-        <CopyButton isDisabled={!results.signature} value={results.signature} />
-      </Flex>
-      <Flex mb="4">
-        <Box width="70px" />
-        {results.slot && (
-          <Tag mr="1">
-            <strong>Slot:&nbsp;</strong> {results.slot}
-          </Tag>
-        )}
-        {results.fee && (
-          <Tag mr="1">
-            <strong>Fee:&nbsp;</strong> {toSol(results.fee).toFixed()}{" "}
-            {/* TODO with logo */}
-          </Tag>
-        )}
-      </Flex>
+      <Signature
+        signature={signature}
+        inProgress={inProgress}
+        refresh={start}
+        slot={results.slot}
+        fee={results.fee}
+      />
 
       <Tabs colorScheme="main" variant="enclosed">
         <TabList>
@@ -141,7 +191,7 @@ export const Results: React.FC = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ProgramLogs results={results} />
+            <ProgramLogs inProgress={inProgress} logs={results.logs} />
           </TabPanel>
           <TabPanel>
             <BalanceTable balances={results.balances || []} />

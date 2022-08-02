@@ -1,7 +1,6 @@
 import {
   LAMPORTS_PER_SOL,
   PublicKey,
-  SignatureStatus,
   Transaction,
   TransactionInstruction,
   TransactionResponse,
@@ -10,7 +9,7 @@ import BigNumber from "bignumber.js";
 import bs58 from "bs58";
 import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
-import { IResults, ITransaction } from "./internal-types";
+import { IBalance, ITransaction } from "./internal-types";
 import { toSortedArray } from "./sortable";
 
 /** Converts lamports to SOL */
@@ -72,47 +71,18 @@ export const mapToTransaction = (
   return transaction;
 };
 
-export const mapFromSignatureStatus = ({
-  slot,
-  confirmationStatus,
-  confirmations,
-  err,
-}: SignatureStatus): Partial<IResults> => ({
-  slot,
-  confirmationStatus,
-  confirmations: confirmations || undefined,
-  error: mapError(err),
-});
-
-export const mapFromTransactionResponse = (
-  transaction: TransactionResponse
-): IResults => {
+export const mapBalances = (transaction: TransactionResponse): IBalance[] => {
   const { accountKeys } = transaction.transaction.message;
-  const { logMessages, err, fee, preBalances, postBalances } =
-    transaction.meta!;
+  const { preBalances, postBalances } = transaction.meta!;
 
-  // determine balances
-  let balances = accountKeys.map((address, index) => ({
+  return accountKeys.map((address, index) => ({
     address: address.toBase58(),
     before: preBalances[index],
     after: postBalances[index],
   }));
-
-  return {
-    inProgress: false,
-    signature: transaction.transaction.signatures[0],
-    confirmationStatus: "finalized",
-    finalisedAt: new Date().getTime(),
-    blockTime: transaction.blockTime || undefined,
-    slot: transaction?.slot,
-    balances,
-    logs: logMessages || [],
-    error: mapError(err),
-    fee,
-  };
 };
 
-const mapError = (err: any): string => {
+export const mapTransactionError = (err: any): string => {
   if (!err) return "";
 
   let error = "Unexpected error";

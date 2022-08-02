@@ -3,10 +3,10 @@
 import { Draft } from "immer";
 import {
   IPubKey,
-  IResults,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
+  ITransactionRun,
 } from "./internal-types";
 import { SortableCollection } from "./sortable";
 
@@ -41,7 +41,7 @@ export interface SessionStateWithUndo {
 }
 
 export interface SessionStateWithoutUndo {
-  readonly results: IResults;
+  readonly transactionRun: ITransactionRun;
   readonly uiState: UIState;
   set: (fn: (state: Draft<SessionStateWithoutUndo>) => void) => void;
 }

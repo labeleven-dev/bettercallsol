@@ -1,10 +1,10 @@
 import { Code, Grid, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
-import { IResults } from "../../../models/internal-types";
 
-export const ProgramLogs: React.FC<{ results: IResults }> = ({
-  results: { inProgress, logs },
-}) => {
+export const ProgramLogs: React.FC<{
+  inProgress: boolean;
+  logs?: string[];
+}> = ({ inProgress, logs }) => {
   if (inProgress) {
     return (
       <Stack>

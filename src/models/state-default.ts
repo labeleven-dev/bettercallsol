@@ -5,6 +5,7 @@ import {
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
+  ITransactionRun,
 } from "./internal-types";
 import { toSortableCollection } from "./sortable";
 import {
@@ -67,7 +68,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
   rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   skipPreflight: true,
-  commitment: "processed",
+  commitment: "finalized",
   preflightCommitment: "processed",
   confirmTransactionInitialTimeout: 30_000,
   confirmTransactionTimeout: 30_000,
@@ -83,10 +84,10 @@ export const DEFAULT_TRANSACTION: ITransaction = {
   ]),
 };
 
-export const DEFAULT_RESULTS = {
+export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
   inProgress: false,
   signature: "",
-  logs: ["Run a transaction to see logs"],
+  error: "",
 };
 
 export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
@@ -96,7 +97,7 @@ export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
 };
 
 export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
-  results: DEFAULT_RESULTS,
+  transactionRun: DEFAULT_TRANSACTION_RUN,
   uiState: {
     paletteOpen: false,
     optionsOpen: false,

@@ -1,5 +1,6 @@
 import produce from "immer";
 import create from "zustand";
+import { subscribeWithSelector } from "zustand/middleware";
 import {
   DEFAULT_SESSION_STATE_WITHOUT_UNDO,
   DEFAULT_SESSION_STATE_WITH_UNDO,
@@ -18,11 +19,11 @@ export const useSessionStoreWithUndo = create<SessionStateWithUndo>((set) => ({
   },
 }));
 
-export const useSessionStoreWithoutUndo = create<SessionStateWithoutUndo>(
-  (set) => ({
+export const useSessionStoreWithoutUndo = create<SessionStateWithoutUndo>()(
+  subscribeWithSelector((set) => ({
     ...DEFAULT_SESSION_STATE_WITHOUT_UNDO,
     set: (fn) => {
       set(produce(fn));
     },
-  })
+  }))
 );

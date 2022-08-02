@@ -22,15 +22,15 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
-import { useWeb3Transaction } from "../../hooks/useWeb3Transaction";
 import { ITransaction } from "../../models/internal-types";
 import {
-  DEFAULT_RESULTS,
   DEFAULT_TRANSACTION,
+  DEFAULT_TRANSACTION_RUN,
 } from "../../models/state-default";
 import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
@@ -38,8 +38,8 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   transaction,
 }) => {
-  const { results, set: setResults } = useSessionStoreWithoutUndo(
-    (state) => state
+  const [transactionRun, setTransactionRun] = useSessionStoreWithoutUndo(
+    (state) => [state.transactionRun, state.set]
   );
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
   const {
@@ -48,7 +48,18 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   } = usePersistentStore((state) => state);
 
   const { publicKey: walletPublicKey } = useWallet();
-  const transact = useWeb3Transaction();
+  const { send } = useSendWeb3Transaction({
+    onSent: (signature) => {
+      setTransactionRun((state) => {
+        state.transactionRun = { inProgress: true, signature };
+      });
+    },
+    onError: (error) => {
+      setTransactionRun((state) => {
+        state.transactionRun.error = error.message;
+      });
+    },
+  });
 
   const setAllExpanded = (value: boolean) => () => {
     setTransaction((state) => {
@@ -115,8 +126,8 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
               setTransaction((state) => {
                 state.transaction = DEFAULT_TRANSACTION;
               });
-              setResults((state) => {
-                state.results = DEFAULT_RESULTS;
+              setTransactionRun((state) => {
+                state.transactionRun = DEFAULT_TRANSACTION_RUN;
               });
             }}
           >
@@ -158,7 +169,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         }
       >
         <IconButton
-          isLoading={results.inProgress}
+          isLoading={transactionRun.inProgress}
           isDisabled={!walletPublicKey}
           ml="2"
           mr="2"
@@ -168,7 +179,9 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           variant="outline"
           aria-label="Run Program"
           icon={<Icon as={FaPlay} />}
-          onClick={transact}
+          onClick={() => {
+            send(transaction);
+          }}
         />
       </Tooltip>
     </Flex>
