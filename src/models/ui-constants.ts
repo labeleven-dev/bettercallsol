@@ -3,9 +3,10 @@ import { Explorer } from "./state-types";
 
 // for explorer option drop-down
 export const EXPLORERS: { id: Explorer; name: string }[] = [
-  { id: "solscan", name: "Solscan" },
-  { id: "solanafm", name: "SolanaFM" },
   { id: "solana", name: "Solana Explorer" },
+  { id: "solanaBeach", name: "Solana Beach" },
+  { id: "solanafm", name: "SolanaFM" },
+  { id: "solscan", name: "Solscan" },
   { id: "none", name: "None" },
 ];
 

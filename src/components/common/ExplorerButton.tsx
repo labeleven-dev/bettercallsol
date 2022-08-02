@@ -8,28 +8,35 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { IRpcEndpoint } from "../../models/internal-types";
+import { INetwork, IRpcEndpoint } from "../../models/internal-types";
+import { Explorer } from "../../models/state-types";
 
 export type AddressType = "tx" | "account";
 
-const explorerOpts: Record<string, any> = {
-  solscan: {
-    label: "Open in Solscan",
-    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
-      `https://solscan.io/${valueType}/${value}?cluster=${
-        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
-      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
-  },
+const explorerOpts: Record<
+  Exclude<Explorer, "none">,
+  {
+    label: string;
+    supportedNetworks: INetwork[];
+    url: (
+      valueType: AddressType,
+      value: string,
+      rpcEndpoint: IRpcEndpoint
+    ) => string;
+  }
+> = {
   solana: {
     label: "Open in Solana Explorer",
-    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta"],
+    url: (valueType, value, rpcEndpoint) =>
       `https://explorer.solana.com/${
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${rpcEndpoint.network}`,
   },
   solanafm: {
     label: "Open in SolanaFM",
-    url: (valueType: AddressType, value: string, rpcEndpoint: IRpcEndpoint) =>
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
+    url: (valueType, value, rpcEndpoint) =>
       `https://solana.fm/${
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
@@ -42,6 +49,26 @@ const explorerOpts: Record<string, any> = {
           : "mainnet-qn1"
       }`,
   },
+  solanaBeach: {
+    label: "Open in Solana Beach",
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta"],
+    url: (valueType, value, rpcEndpoint) =>
+      `https://solanabeach.io/${
+        valueType === "account" ? "address" : "transaction"
+      }/${value}${
+        rpcEndpoint.network === "devnet" || rpcEndpoint.network === "testnet"
+          ? "?cluster=" + rpcEndpoint.network
+          : ""
+      }`,
+  },
+  solscan: {
+    label: "Open in Solscan",
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
+    url: (valueType, value, rpcEndpoint) =>
+      `https://solscan.io/${valueType}/${value}?cluster=${
+        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
+      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
+  },
 };
 
 export const ExplorerButton: React.FC<
@@ -50,11 +77,13 @@ export const ExplorerButton: React.FC<
     valueType: AddressType;
     rpcEndpoint: IRpcEndpoint;
   } & Omit<IconButtonProps, "aria-label">
-> = ({ value, valueType, rpcEndpoint, size, ...theRest }) => {
+> = ({ value, valueType, rpcEndpoint, size, isDisabled, ...theRest }) => {
   const explorer = usePersistentStore((state) => state.appOptions.explorer);
 
   if (explorer === "none") return null; // hide
   const opts = explorerOpts[explorer];
+  const disabled =
+    isDisabled || !opts.supportedNetworks.includes(rpcEndpoint.network);
 
   const button = (
     <IconButton
@@ -64,19 +93,22 @@ export const ExplorerButton: React.FC<
           <SolscanIcon size={size} />
         ) : explorer === "solanafm" ? (
           <SolanaFmIcon size={size} />
+        ) : explorer === "solanaBeach" ? (
+          <SolanaBeachIcon size={size} />
         ) : (
           <SolanaExplorerIcon size={size} />
         )
       }
       aria-label={opts.label}
       size={size}
+      isDisabled={disabled}
       {...theRest}
     />
   );
 
   return (
-    <Tooltip label={opts.label} isDisabled={theRest.isDisabled}>
-      {theRest.isDisabled ? (
+    <Tooltip label={opts.label} isDisabled={disabled}>
+      {disabled ? (
         <Link>{button}</Link>
       ) : (
         <Link href={opts.url(valueType, value, rpcEndpoint)} isExternal>
@@ -162,3 +194,80 @@ const SolanaFmIcon: React.FC<{ size: any }> = ({ size }) => {
     </Icon>
   );
 };
+
+const SolanaBeachIcon: React.FC<{ size: any }> = ({ size }) => (
+  <Icon
+    w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
+    h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
+    viewBox="0 0 44 42"
+  >
+    <defs>
+      <linearGradient
+        id="icon-copy-a"
+        x1="50%"
+        x2="50%"
+        y1="-12.918%"
+        y2="157.443%"
+      >
+        <stop offset="0%" stop-color="#F7C300"></stop>
+        <stop offset="100%" stop-color="#FA006A"></stop>
+      </linearGradient>
+      <linearGradient
+        id="icon-copy-b"
+        x1="50%"
+        x2="50%"
+        y1="-386.528%"
+        y2="591.984%"
+      >
+        <stop offset="0%" stop-color="#F7C300"></stop>
+        <stop offset="100%" stop-color="#FA006A"></stop>
+      </linearGradient>
+      <linearGradient
+        id="icon-copy-c"
+        x1="50%"
+        x2="50%"
+        y1="-386.528%"
+        y2="591.984%"
+      >
+        <stop offset="0%" stop-color="#F7C300"></stop>
+        <stop offset="100%" stop-color="#FA006A"></stop>
+      </linearGradient>
+      <linearGradient
+        id="icon-copy-d"
+        x1="50%"
+        x2="50%"
+        y1="-386.528%"
+        y2="591.984%"
+      >
+        <stop offset="0%" stop-color="#F7C300"></stop>
+        <stop offset="100%" stop-color="#FA006A"></stop>
+      </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+      <path
+        fill="url(#icon-copy-a)"
+        d="M22.4000003,-5.68434197e-14 C34.1084372,-5.68434197e-14 43.6000006,9.49156345 43.6000006,21.2000003 C43.6000006,21.7345818 43.5043869,22.7036924 43.3131593,24.1073321 C43.2591173,24.5037052 42.9206106,24.7992548 42.5205705,24.7992992 L36.2,24.8000004 L36.2,24.8000004 C35.8686297,24.8000004 35.6000005,25.0686295 35.6000005,25.4000004 C35.6000005,25.7118788 35.8379558,25.9681799 36.1422165,25.9972538 L36.2,26 L42.4163847,25.9992538 C42.6754512,25.9992364 42.8854913,26.2092261 42.8855224,26.4682926 C42.8855263,26.5006762 42.8821768,26.5329731 42.8755274,26.5646666 C42.8755274,26.5646666 42.8755274,26.5646666 42.8755274,26.5646666 C42.797805,26.9351188 42.4710911,27.2004002 42.0925735,27.2004002 L2.70743038,27.2004002 C2.70743038,27.2004002 2.70743038,27.2004002 2.70743038,27.2004002 C2.37574982,27.2004002 2.1068696,26.93152 2.1068696,26.5998394 C2.1068696,26.2681588 2.37574982,25.9992786 2.70743038,25.9992786 C2.70744739,25.9992786 2.7074644,25.9992786 2.70748141,25.9992614 L11.4000002,26 L11.4000002,26 C11.731371,26 12.0000002,25.7313712 12.0000002,25.4000004 C12.0000002,25.0881219 11.7620449,24.8318209 11.4577842,24.802747 L11.4000002,24.8000004 L2.19114952,24.7992703 C1.84143808,24.7992426 1.54376732,24.5446958 1.48945142,24.1992282 C1.44491226,23.915944 1.6384534,23.6501906 1.92173766,23.6056514 C1.94844742,23.601452 1.9754444,23.5993452 2.00248227,23.5993504 L5.40000008,23.6000004 L5.40000008,23.6000004 C5.73137094,23.6000004 6.00000009,23.3313712 6.00000009,23 C6.00000009,22.6881219 5.76204485,22.4318209 5.45778409,22.402747 L5.40000008,22.4000003 L2.0113955,22.3996411 C1.58384682,22.3995598 1.23190785,22.0633297 1.21235342,21.6362284 C1.20411782,21.4563492 1.20000002,21.3109398 1.20000002,21.2000003 C1.20000002,9.49156345 10.6915635,-5.68434197e-14 22.4000003,-5.68434197e-14 Z M40.2000005,22.4000003 L35.8000005,22.4000003 C35.4686297,22.4000003 35.2000005,22.6686295 35.2000005,23.0000003 C35.2000005,23.3118788 35.4379558,23.5681798 35.7422165,23.5972537 L35.8000005,23.6000004 L40.2000005,23.6000004 C40.5313715,23.6000004 40.8000006,23.3313712 40.8000006,23.0000003 C40.8000006,22.6881219 40.5620454,22.4318209 40.2577846,22.402747 L40.2000005,22.4000003 Z"
+      ></path>
+      <path
+        fill="url(#icon-copy-b)"
+        d="M27.0000004,35.6000005 C27.3313713,35.6000005 27.6000004,35.8686297 27.6000004,36.2000005 C27.6000004,36.5313714 27.3313713,36.8000005 27.0000004,36.8000005 L11.4000002,36.8000005 C11.0686293,36.8000005 10.8000002,36.5313714 10.8000002,36.2000005 C10.8000002,35.8686297 11.0686293,35.6000005 11.4000002,35.6000005 L27.0000004,35.6000005 Z M39.0000006,33.2000005 C39.3313714,33.2000005 39.6000006,33.4686296 39.6000006,33.8000005 C39.6000006,34.1313714 39.3313714,34.4000005 39.0000006,34.4000005 L31.4000005,34.4000005 C31.0686296,34.4000005 30.8000005,34.1313714 30.8000005,33.8000005 C30.8000005,33.4686296 31.0686296,33.2000005 31.4000005,33.2000005 L39.0000006,33.2000005 Z M25.8000001,33.2000005 C26.1313709,33.2000005 26.4000001,33.4686296 26.4000001,33.8000005 C26.4000001,34.1313714 26.1313709,34.4000005 25.8000001,34.4000005 L5.00000007,34.4000005 C4.66862922,34.4000005 4.40000007,34.1313714 4.40000007,33.8000005 C4.40000007,33.4686296 4.66862922,33.2000005 5.00000007,33.2000005 L25.8000001,33.2000005 Z M8.20000012,30.8000005 C8.53137098,30.8000005 8.80000013,31.0686296 8.80000013,31.4000005 C8.80000013,31.7313713 8.53137098,32.0000005 8.20000012,32.0000005 L0.600000009,32.0000005 C0.268629154,32.0000005 4.05812257e-17,31.7313713 0,31.4000005 C-4.05812257e-17,31.0686296 0.268629154,30.8000005 0.600000009,30.8000005 L8.20000012,30.8000005 Z M28.2000004,30.8000005 C28.5313713,30.8000005 28.8000004,31.0686296 28.8000004,31.4000005 C28.8000004,31.7313713 28.5313713,32.0000005 28.2000004,32.0000005 L15.0000002,32.0000005 C14.6686294,32.0000005 14.4000002,31.7313713 14.4000002,31.4000005 C14.4000002,31.0686296 14.6686294,30.8000005 15.0000002,30.8000005 L28.2000004,30.8000005 Z M43.4000006,30.8000005 C43.7313715,30.8000005 44.0000007,31.0686296 44.0000007,31.4000005 C44.0000007,31.7313713 43.7313715,32.0000005 43.4000006,32.0000005 L35.8000005,32.0000005 C35.4686297,32.0000005 35.2000005,31.7313713 35.2000005,31.4000005 C35.2000005,31.0686296 35.4686297,30.8000005 35.8000005,30.8000005 L43.4000006,30.8000005 Z M12.6000002,30.8000005 C12.931371,30.8000005 13.2000002,31.0686296 13.2000002,31.4000005 C13.2000002,31.7313713 12.931371,32.0000005 12.6000002,32.0000005 L10.6000002,32.0000005 C10.2686293,32.0000005 10.0000001,31.7313713 10.0000001,31.4000005 C10.0000001,31.0686296 10.2686293,30.8000005 10.6000002,30.8000005 L12.6000002,30.8000005 Z M33.0000005,30.8000005 C33.3313713,30.8000005 33.6000005,31.0686296 33.6000005,31.4000005 C33.6000005,31.7313713 33.3313713,32.0000005 33.0000005,32.0000005 L31.0000005,32.0000005 C30.6686296,32.0000005 30.4000005,31.7313713 30.4000005,31.4000005 C30.4000005,31.0686296 30.6686296,30.8000005 31.0000005,30.8000005 L33.0000005,30.8000005 Z M41.4,28.4000004 C41.7313709,28.4000004 42,28.6686296 42,29.0000004 C42,29.3313713 41.7313709,29.6000004 41.4,29.6000004 L2.60000004,29.6000004 C2.26862918,29.6000004 2.00000003,29.3313713 2.00000003,29.0000004 C2.00000003,28.6686296 2.26862918,28.4000004 2.60000004,28.4000004 L41.4,28.4000004 Z"
+      ></path>
+      <rect
+        width="11.6"
+        height="1.2"
+        x="17.6"
+        y="38"
+        fill="url(#icon-copy-c)"
+        rx=".6"
+      ></rect>
+      <rect
+        width="5.2"
+        height="1.2"
+        x="20"
+        y="40.4"
+        fill="url(#icon-copy-d)"
+        rx=".6"
+      ></rect>
+    </g>
+  </Icon>
+);

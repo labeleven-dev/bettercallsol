@@ -10,7 +10,12 @@ import {
 } from "./internal-types";
 import { SortableCollection } from "./sortable";
 
-export type Explorer = "solscan" | "solanafm" | "solana" | "none";
+export type Explorer =
+  | "solana"
+  | "solanafm"
+  | "solanaBeach"
+  | "solscan"
+  | "none";
 
 // We mutate state using immerjs. All state fields are set to readonly
 // so we don't by mistake try to mutate outside immerjs.
