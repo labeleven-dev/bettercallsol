@@ -8,6 +8,7 @@ import {
   InputLeftElement,
   InputRightElement,
   Tooltip,
+  useBreakpointValue,
   useToast,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -89,7 +90,12 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
       <EditableName
         ml="2"
         mt="1"
-        width="100px"
+        w={useBreakpointValue({
+          base: "50px",
+          md: "100px",
+          lg: "150px",
+          xl: "200px",
+        })}
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"

@@ -11,6 +11,7 @@ import {
   Select,
   Switch,
   Tooltip,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
@@ -56,7 +57,12 @@ export const DataField: React.FC<{
       <EditableName
         ml="2"
         mt="1"
-        w="100px"
+        w={useBreakpointValue({
+          base: "50px",
+          md: "100px",
+          lg: "150px",
+          xl: "200px",
+        })}
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"
