@@ -1,7 +1,9 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
+  Button,
+  ButtonProps,
   Icon,
   IconButton,
-  IconButtonProps,
   Link,
   Tooltip,
   useColorModeValue,
@@ -76,8 +78,17 @@ export const ExplorerButton: React.FC<
     value: string;
     valueType: AddressType;
     rpcEndpoint: IRpcEndpoint;
-  } & Omit<IconButtonProps, "aria-label">
-> = ({ value, valueType, rpcEndpoint, size, isDisabled, ...theRest }) => {
+  } & Omit<ButtonProps, "aria-label">
+> = ({
+  value,
+  valueType,
+  rpcEndpoint,
+  size,
+  isDisabled,
+  variant,
+  children,
+  ...theRest
+}) => {
   const explorer = usePersistentStore((state) => state.appOptions.explorer);
 
   if (explorer === "none") return null; // hide
@@ -85,34 +96,41 @@ export const ExplorerButton: React.FC<
   const disabled =
     isDisabled || !opts.supportedNetworks.includes(rpcEndpoint.network);
 
-  const button = (
-    <IconButton
-      variant="ghost"
-      icon={
-        explorer === "solscan" ? (
-          <SolscanIcon size={size} />
-        ) : explorer === "solanafm" ? (
-          <SolanaFmIcon size={size} />
-        ) : explorer === "solanaBeach" ? (
-          <SolanaBeachIcon size={size} />
-        ) : (
-          <SolanaExplorerIcon size={size} />
-        )
-      }
-      aria-label={opts.label}
-      size={size}
-      isDisabled={disabled}
-      {...theRest}
-    />
-  );
+  const child =
+    variant === "link" ? (
+      children || (
+        <Button variant="link" {...theRest}>
+          {value} <ExternalLinkIcon ml="1" />
+        </Button>
+      )
+    ) : (
+      <IconButton
+        variant="ghost"
+        icon={
+          explorer === "solscan" ? (
+            <SolscanIcon size={size} />
+          ) : explorer === "solanafm" ? (
+            <SolanaFmIcon size={size} />
+          ) : explorer === "solanaBeach" ? (
+            <SolanaBeachIcon size={size} />
+          ) : (
+            <SolanaExplorerIcon size={size} />
+          )
+        }
+        aria-label={opts.label}
+        size={size}
+        isDisabled={disabled}
+        {...theRest}
+      />
+    );
 
   return (
     <Tooltip label={opts.label} isDisabled={disabled}>
       {disabled ? (
-        <Link>{button}</Link>
+        <Link>{child}</Link>
       ) : (
         <Link href={opts.url(valueType, value, rpcEndpoint)} isExternal>
-          {button}
+          {child}
         </Link>
       )}
     </Tooltip>

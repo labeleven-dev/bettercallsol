@@ -12,13 +12,18 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { IBalance } from "../../../models/internal-types";
 import { toSol } from "../../../models/web3js-mappers";
+import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const BalanceTable: React.FC<{
   balances: IBalance[];
 }> = ({ balances }) => {
   const [showOnlyChanges, setShowOnlyChanges] = useState(true);
+  const rpcEndpoint = usePersistentStore(
+    (state) => state.transactionOptions.rpcEndpoint
+  );
 
   return (
     <TableContainer fontSize="sm" mb="8">
@@ -55,7 +60,14 @@ export const BalanceTable: React.FC<{
               return (
                 <Tr key={index}>
                   <Td>
-                    {address}
+                    <ExplorerButton
+                      value={address}
+                      valueType="account"
+                      rpcEndpoint={rpcEndpoint}
+                      variant="link"
+                      fontFamily="mono"
+                      fontWeight="normal"
+                    />
                     {/* TODO tag with account names from instructions */}
                     {/* <br />
                     {names.map((name, index) => (

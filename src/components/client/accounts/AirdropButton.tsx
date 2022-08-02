@@ -1,7 +1,10 @@
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  CheckCircleIcon,
+  ExternalLinkIcon,
+  WarningIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
-  Center,
   Heading,
   HStack,
   Icon,
@@ -30,29 +33,32 @@ import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { IPubKey } from "../../../models/internal-types";
-import { toLamports } from "../../../models/web3js-mappers";
+import { short, toLamports } from "../../../models/web3js-mappers";
+import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   accountPubkey,
 }) => {
   const [value, setValue] = useState("1.000000000");
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "running" | "success" | "fail">(
-    "idle"
-  );
+  const [status, setStatus] = useState<
+    "idle" | "running" | "success" | "fail" | "cancelled"
+  >("idle");
   const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
 
   const { connection } = useConnection();
   const {
-    // TODO once we have link explorer, set it in
-    // signature,
+    signature,
     start: startConfirmation,
-    cancel,
+    cancel: cancelConfirmation,
   } = useGetWeb3Transaction({
-    onStatus: (status) => {
-      setMessage(`Confirmed by ${status.confirmations || 0}`);
+    onStatus: (web3Status) => {
+      // to avoid further message changes post-cancellation
+      if (status !== "cancelled") {
+        setMessage(`Confirmed by ${web3Status.confirmations || 0}`);
+      }
     },
     onFinalised: () => {
       setMessage("Airdop has been successful");
@@ -78,6 +84,12 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
       });
   };
 
+  const cancel = () => {
+    cancelConfirmation();
+    setStatus("cancelled");
+    setMessage("Status unknown. Check transaction for status.");
+  };
+
   return (
     <Popover placement="left">
       <PopoverTrigger>
@@ -98,8 +110,20 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
           <Heading size="sm">Airdrop SOL</Heading>
         </PopoverHeader>
         <PopoverBody>
-          <VStack mt="2" mb="3">
-            <Text mb="2">Add more SOL to this account.</Text>
+          <VStack p="2" spacing="2">
+            <Text>
+              Add more SOL to{" "}
+              <ExplorerButton
+                value={accountPubkey}
+                valueType="account"
+                rpcEndpoint={rpcEndpoint}
+                variant="link"
+              >
+                <Button size="sm" variant="link" fontFamily="mono">
+                  {short(accountPubkey)} <ExternalLinkIcon ml="1" />
+                </Button>
+              </ExplorerButton>
+            </Text>
 
             <NumberInput
               size="sm"
@@ -122,27 +146,44 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
           </VStack>
         </PopoverBody>
         <PopoverFooter>
-          {message && (
-            <HStack mb="3" justifyContent="center">
-              {status === "running" && <Spinner color="blue.400" size="sm" />}
-              {status === "success" && <CheckCircleIcon color="green.400" />}
-              {status === "fail" && <WarningIcon color="red.400" />}
-              <Text
-                textColor={
-                  status === "running"
-                    ? "blue.400"
-                    : status === "success"
-                    ? "green.400"
-                    : status === "fail"
-                    ? "red.400"
-                    : undefined
-                }
+          <VStack p="2" spacing="1">
+            {message && (
+              <HStack mb="1" justifyContent="center">
+                {status === "running" && <Spinner color="blue.400" size="sm" />}
+                {status === "success" && <CheckCircleIcon color="green.400" />}
+                {status === "cancelled" && <WarningIcon color="yellow.400" />}
+                {status === "fail" && <WarningIcon color="red.400" />}
+                <Text
+                  textAlign="center"
+                  textColor={
+                    status === "running"
+                      ? "blue.400"
+                      : status === "success"
+                      ? "green.400"
+                      : status === "cancelled"
+                      ? "yellow.400"
+                      : status === "fail"
+                      ? "red.400"
+                      : undefined
+                  }
+                >
+                  {message}
+                </Text>
+              </HStack>
+            )}
+            {signature && (
+              <ExplorerButton
+                value={signature}
+                valueType="tx"
+                rpcEndpoint={rpcEndpoint}
+                variant="link"
               >
-                {message}
-              </Text>
-            </HStack>
-          )}
-          <Center mt="1" mb="1">
+                <Button mb="4" size="sm" variant="link" fontFamily="mono">
+                  {short(signature)} <ExternalLinkIcon ml="1" />
+                </Button>
+              </ExplorerButton>
+            )}
+
             {status === "running" ? (
               <Button
                 size="sm"
@@ -162,7 +203,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
                 Airdop
               </Button>
             )}
-          </Center>
+          </VStack>
         </PopoverFooter>
       </PopoverContent>
     </Popover>
