@@ -14,7 +14,7 @@ export const RpcEndpointOptions: React.FC = () => {
 
   return (
     <Grid>
-      <Text mb="2">Add or remove custom RPC points, or re-order the list:</Text>
+      <Text mb="2">Re-order RPC endpoints or manage custom endpoints.</Text>
       <Sortable
         itemOrder={rpcEndpoints.order}
         setItemOrder={(itemOrder) => {

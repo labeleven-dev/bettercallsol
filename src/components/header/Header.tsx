@@ -28,56 +28,59 @@ export const Header: React.FC = () => {
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
 
-        <Text
-          ml="3"
-          mr="9"
-          mt={funTitle ? "1.5" : "2"}
-          color="white"
-          fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
-          fontWeight="bold"
-          fontSize={funTitle ? "xl" : "lg"}
-          onClick={() => {
-            toast({
-              title: funTitle
-                ? "Serious Business Mode™️ enabled!"
-                : "Serious Business Mode™️ disabled!",
-              status: funTitle ? "warning" : "success",
-              duration: 1000,
-              isClosable: true,
-            });
-            setFunTitle(!funTitle);
-          }}
-        >
-          <Hide below="md">Better Call SOL</Hide>
-        </Text>
-
-        <Example />
+        <Hide below="md">
+          <Text
+            ml="3"
+            mr="9"
+            mt={funTitle ? "1.5" : "2"}
+            color="white"
+            fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
+            fontWeight="bold"
+            fontSize={funTitle ? "xl" : "lg"}
+            onClick={() => {
+              toast({
+                title: funTitle
+                  ? "Serious Business Mode™️ enabled!"
+                  : "Serious Business Mode™️ disabled!",
+                status: funTitle ? "warning" : "success",
+                duration: 1000,
+                isClosable: true,
+              });
+              setFunTitle(!funTitle);
+            }}
+          >
+            Better Call SOL
+          </Text>
+          <Example />
+        </Hide>
 
         <Spacer />
 
-        {/* TODO implement */}
-        <Tooltip label="Undo">
-          <IconButton
-            mr="0.5"
-            aria-label="Undo"
-            icon={<Icon as={FaUndo} />}
-            variant="ghost"
-            color="white"
-            isDisabled
-          />
-        </Tooltip>
+        <Hide below="md">
+          {/* TODO implement */}
+          <Tooltip label="Undo">
+            <IconButton
+              mr="0.5"
+              aria-label="Undo"
+              icon={<Icon as={FaUndo} />}
+              variant="ghost"
+              color="white"
+              isDisabled
+            />
+          </Tooltip>
 
-        {/* TODO implement */}
-        <Tooltip label="Redo">
-          <IconButton
-            mr="4"
-            aria-label="Redo"
-            icon={<Icon as={FaRedo} />}
-            variant="ghost"
-            color="white"
-            isDisabled
-          />
-        </Tooltip>
+          {/* TODO implement */}
+          <Tooltip label="Redo">
+            <IconButton
+              mr="4"
+              aria-label="Redo"
+              icon={<Icon as={FaRedo} />}
+              variant="ghost"
+              color="white"
+              isDisabled
+            />
+          </Tooltip>
+        </Hide>
       </DarkMode>
 
       <ColorModeSwitcher justifySelf="flex-end" />

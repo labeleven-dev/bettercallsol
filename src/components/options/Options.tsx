@@ -34,7 +34,7 @@ export const Options: React.FC = () => {
 
   return (
     <Modal
-      size="xl"
+      size="lg"
       isOpen={isOpen}
       onClose={() => {
         setSession((state) => {
