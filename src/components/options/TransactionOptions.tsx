@@ -8,7 +8,10 @@ import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
-  const { transactionOptions, set } = usePersistentStore((state) => state);
+  const [transactionOptions, set] = usePersistentStore((state) => [
+    state.transactionOptions,
+    state.set,
+  ]);
 
   return (
     <FormControl display="flex" alignItems="center">

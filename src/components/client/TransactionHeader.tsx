@@ -42,10 +42,10 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
     (state) => [state.transactionRun, state.set]
   );
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
-  const {
-    transactionOptions: { rpcEndpoint },
-    set: setPersistent,
-  } = usePersistentStore((state) => state);
+  const [rpcEndpoint, setPersistent] = usePersistentStore((state) => [
+    state.transactionOptions.rpcEndpoint,
+    state.set,
+  ]);
 
   const { publicKey: walletPublicKey } = useWallet();
   const { send } = useSendWeb3Transaction({

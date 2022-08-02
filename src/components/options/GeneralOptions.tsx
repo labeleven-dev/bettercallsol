@@ -7,7 +7,10 @@ import { ChoiceOption } from "./fields/ChoiceOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
-  const { appOptions, set } = usePersistentStore((state) => state);
+  const [appOptions, set] = usePersistentStore((state) => [
+    state.appOptions,
+    state.set,
+  ]);
 
   return (
     <FormControl display="flex" alignItems="center">

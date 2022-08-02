@@ -15,8 +15,8 @@ import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
   const transaction = useSessionStoreWithUndo((state) => state.transaction);
-  const transactionOptions = usePersistentStore(
-    (state) => state.transactionOptions
+  const rpcEndpoint = usePersistentStore(
+    (state) => state.transactionOptions.rpcEndpoint
   );
 
   return (
@@ -25,10 +25,7 @@ export const Transaction: React.FC = () => {
         <TransactionHeader transaction={transaction} />
 
         {/* TODO remove once out of beta */}
-        <Collapse
-          in={transactionOptions.rpcEndpoint.provider === "mainnet-beta"}
-          unmountOnExit
-        >
+        <Collapse in={rpcEndpoint.provider === "mainnet-beta"} unmountOnExit>
           <Alert
             mb="2"
             fontSize="sm"

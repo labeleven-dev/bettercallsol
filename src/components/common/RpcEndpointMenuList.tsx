@@ -9,7 +9,9 @@ export const RpcEndpointMenuList: React.FC<{
   endpoint: IRpcEndpoint;
   setEndpoint: (endpoint: IRpcEndpoint) => void;
 }> = ({ endpoint, setEndpoint }) => {
-  const { rpcEndpoints } = usePersistentStore((state) => state.appOptions);
+  const rpcEndpoints = usePersistentStore(
+    (state) => state.appOptions.rpcEndpoints
+  );
 
   return (
     <MenuList fontSize="md">

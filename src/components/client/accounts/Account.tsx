@@ -37,9 +37,10 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     (state) => state.transactionOptions.rpcEndpoint
   );
   const { publicKey: walletPubkey } = useWallet();
-  const { keypairs, set: setSession } = useSessionStoreWithUndo(
-    (state) => state
-  );
+  const [keypairs, setSession] = useSessionStoreWithUndo((state) => [
+    state.keypairs,
+    state.set,
+  ]);
   const toast = useToast();
 
   const isValid = isValidPublicKey(data.pubkey);

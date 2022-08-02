@@ -26,15 +26,14 @@ export const TransactionPreview: React.FC<{
 }> = ({
   transaction: { signature, rpcEndpoint, instructions, accountSummary, error },
 }) => {
-  const set = useSessionStoreWithUndo((state) => state.set);
-
-  const addInstructions = () => {
-    set((state) => {
-      instructions.forEach((instruction) => {
-        addTo(state.transaction.instructions, mapToIInstruction(instruction));
-      });
-    });
-  };
+  const addInstructions = useSessionStoreWithUndo(
+    (state) => () =>
+      state.set((state) => {
+        instructions.forEach((instruction) => {
+          addTo(state.transaction.instructions, mapToIInstruction(instruction));
+        });
+      })
+  );
 
   return (
     <Grid

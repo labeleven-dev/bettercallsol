@@ -17,7 +17,7 @@ export const useSendWeb3Transaction = ({
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
-  const { keypairs } = useSessionStoreWithUndo((state) => state);
+  const keypairs = useSessionStoreWithUndo((state) => state.keypairs);
 
   const { connection } = useConnection();
   const { sendTransaction } = useWallet();

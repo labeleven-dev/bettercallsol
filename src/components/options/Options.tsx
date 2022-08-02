@@ -26,10 +26,10 @@ import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
-  const {
-    uiState: { optionsOpen: isOpen },
-    set: setSession,
-  } = useSessionStoreWithoutUndo((state) => state);
+  const [isOpen, setSession] = useSessionStoreWithoutUndo((state) => [
+    state.uiState.optionsOpen,
+    state.set,
+  ]);
   const setPersistent = usePersistentStore((state) => state.set);
 
   return (

@@ -7,10 +7,10 @@ import { Sortable } from "../common/Sortable";
 import { RpcEndpointOption } from "./fields/RpcEndpointOption";
 
 export const RpcEndpointOptions: React.FC = () => {
-  const {
-    appOptions: { rpcEndpoints },
-    set,
-  } = usePersistentStore((state) => state);
+  const [rpcEndpoints, set] = usePersistentStore((state) => [
+    state.appOptions.rpcEndpoints,
+    state.set,
+  ]);
 
   return (
     <Grid>

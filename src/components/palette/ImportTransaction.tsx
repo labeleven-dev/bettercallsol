@@ -24,10 +24,10 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 import { TransactionPreview } from "./preview/TransactionPreview";
 
 export const ImportTransaction: React.FC = () => {
-  const {
-    appOptions: { rpcEndpoints },
-    transactionOptions,
-  } = usePersistentStore((state) => state);
+  const [rpcEndpoints, transactionOptions] = usePersistentStore((state) => [
+    state.appOptions.rpcEndpoints,
+    state.transactionOptions,
+  ]);
 
   const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
     rpcEndpoints.map[rpcEndpoints.order[0]]
