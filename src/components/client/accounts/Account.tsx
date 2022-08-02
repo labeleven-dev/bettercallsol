@@ -14,7 +14,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair } from "@solana/web3.js";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useContext } from "react";
-import { FaKey, FaParachuteBox, FaPenNib, FaWallet } from "react-icons/fa";
+import { FaKey, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
@@ -26,6 +26,7 @@ import { ExplorerButton } from "../../common/ExplorerButton";
 import { Numbering } from "../../common/Numbering";
 import { SortableItemContext } from "../../common/Sortable";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
+import { AirdropButton } from "./AirdropButton";
 
 export const Account: React.FC<{ data: IAccount; index: number }> = ({
   data,
@@ -129,19 +130,10 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
             });
           }}
         ></Input>
-        <InputRightElement w="65px">
+        <InputRightElement w="60px">
           {isValid ? (
             <>
-              <Tooltip label="Airdrop SOL">
-                <IconButton
-                  ml="1"
-                  size="xs"
-                  variant="ghost"
-                  aria-label="Airdrop SOL"
-                  icon={<FaParachuteBox />}
-                  isDisabled={rpcEndpoint.network === "mainnet-beta"}
-                />
-              </Tooltip>
+              <AirdropButton accountPubkey={data.pubkey} />
               <ExplorerButton
                 size="xs"
                 valueType="account"

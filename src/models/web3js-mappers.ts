@@ -16,6 +16,9 @@ import { toSortedArray } from "./sortable";
 export const toSol = (x: number): BigNumber =>
   new BigNumber(x).div(new BigNumber(LAMPORTS_PER_SOL));
 
+export const toLamports = (x: number | string): BigNumber =>
+  new BigNumber(x).multipliedBy(new BigNumber(LAMPORTS_PER_SOL));
+
 const SHORT_TRUNC_TO = 7;
 /** Shortens public keys to a truncated format */
 export const short = (pubkey: string) =>

@@ -1,14 +1,11 @@
-import { RepeatIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
   FormLabel,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
   Tag,
-  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
@@ -18,11 +15,9 @@ import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const Signature: React.FC<{
   signature: string;
-  inProgress: boolean;
-  refresh: (signature: string) => void;
   slot?: number;
   fee?: number;
-}> = ({ signature, inProgress, refresh, slot, fee }) => {
+}> = ({ signature, slot, fee }) => {
   const rpcEndpoint = usePersistentStore(
     (state) => state.transactionOptions.rpcEndpoint
   );
@@ -59,19 +54,6 @@ export const Signature: React.FC<{
             />
           </InputRightElement>
         </InputGroup>
-
-        <Tooltip label="Refresh">
-          <IconButton
-            aria-label="Refresh"
-            icon={<RepeatIcon />}
-            variant="ghost"
-            size="sm"
-            isDisabled={!signature || inProgress}
-            onClick={() => {
-              refresh(signature);
-            }}
-          />
-        </Tooltip>
       </Flex>
 
       <Flex mb="4">

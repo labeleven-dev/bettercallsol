@@ -1,9 +1,15 @@
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  CheckCircleIcon,
+  QuestionIcon,
+  RepeatIcon,
+  WarningIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
   Flex,
   Grid,
   Heading,
+  IconButton,
   Spacer,
   Tab,
   TabList,
@@ -28,8 +34,6 @@ import { ProgramLogs } from "./ProgramLogs";
 import { Signature } from "./Signature";
 
 type State = {
-  startedAt?: number;
-  finalisedAt?: number;
   slot?: number;
   confirmations?: number;
   confirmationStatus?: TransactionConfirmationStatus;
@@ -54,6 +58,7 @@ export const Results: React.FC = () => {
   const {
     signature,
     inProgress,
+    finalisedAt,
     start: startWeb3Transaction,
     cancel: cancelWeb3Transaction,
   } = useGetWeb3Transaction({
@@ -79,11 +84,6 @@ export const Results: React.FC = () => {
       setInProgress(false);
     },
     onTimeout: () => {
-      // TODO should be reflected in the badge instead
-      setResults({
-        ...results,
-        error: "Transcation faield to confirm",
-      });
       setInProgress(false);
     },
     onError: (error) => {
@@ -121,24 +121,23 @@ export const Results: React.FC = () => {
         <Heading mb="6" mr="3" size="md">
           Results
         </Heading>
-        {results.confirmationStatus === "finalized" &&
-          (results.error ? (
-            <Tooltip label="Transaction returned a failure">
+        {results.confirmationStatus === "finalized" ? (
+          results.error ? (
+            <Tooltip label="Failed Transaction">
               <WarningIcon mt="0.5" mr="1" color="red.400" />
             </Tooltip>
           ) : (
-            <Tooltip label="Transaction returned a success">
+            <Tooltip label="Successful Transction">
               <CheckCircleIcon mt="1" mr="1" color="green.400" />
             </Tooltip>
-          ))}
-        {results.finalisedAt && (
-          <Tooltip label={new Date(results.finalisedAt).toLocaleString()}>
-            <Tag height="20px">
-              {`Finalised @ ${new Date(
-                results.finalisedAt
-              ).toLocaleTimeString()}`}
-            </Tag>
-          </Tooltip>
+          )
+        ) : (
+          signature &&
+          !inProgress && (
+            <Tooltip label="Unknown Transaction Status">
+              <QuestionIcon mt="1" mr="1" color="yellow.400" />
+            </Tooltip>
+          )
         )}
 
         <Spacer />
@@ -162,11 +161,33 @@ export const Results: React.FC = () => {
               : `Finalised by max confirmations`}
           </Tag>
         )}
+        {finalisedAt && (
+          <Tooltip
+            label={`Last fetched @ ${new Date(finalisedAt).toLocaleString()}`}
+          >
+            <Tag height="20px" variant="outline">
+              {new Date(finalisedAt).toLocaleTimeString()}
+            </Tag>
+          </Tooltip>
+        )}
         {inProgress && (
           <Button color="red.600" variant="outline" size="xs" onClick={cancel}>
             Cancel
           </Button>
         )}
+        <Tooltip label="Refresh">
+          <IconButton
+            mt="-1"
+            aria-label="Refresh"
+            icon={<RepeatIcon />}
+            variant="ghost"
+            size="sm"
+            isDisabled={!signature || inProgress}
+            onClick={() => {
+              start(signature);
+            }}
+          />
+        </Tooltip>
       </Flex>
 
       <ErrorAlert
@@ -176,13 +197,7 @@ export const Results: React.FC = () => {
         }}
       />
 
-      <Signature
-        signature={signature}
-        inProgress={inProgress}
-        refresh={start}
-        slot={results.slot}
-        fee={results.fee}
-      />
+      <Signature signature={signature} slot={results.slot} fee={results.fee} />
 
       <Tabs colorScheme="main" variant="enclosed">
         <TabList>
