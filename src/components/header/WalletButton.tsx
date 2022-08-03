@@ -12,6 +12,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Text,
+  useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
@@ -21,12 +22,13 @@ import { usePersistentStore } from "../../hooks/usePersistentStore";
 
 export const WalletButton: React.FC = () => {
   const { firstTime, set } = usePersistentStore((state) => state);
+  const isWideEnough = useBreakpointValue({ base: false, md: true });
 
   return (
     <Popover
       placement="bottom-start"
       closeOnBlur={false}
-      isOpen={firstTime}
+      isOpen={firstTime && isWideEnough}
       onClose={() => {
         set((state) => {
           state.firstTime = false;
