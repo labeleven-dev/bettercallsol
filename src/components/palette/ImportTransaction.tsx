@@ -12,8 +12,8 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { Connection } from "@solana/web3.js";
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
+import { useGetWeb3Transaction } from "../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { IRpcEndpoint } from "../../models/internal-types";
 import { mapToTransactionPreview } from "../../models/preview-mappers";
@@ -24,59 +24,33 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 import { TransactionPreview } from "./preview/TransactionPreview";
 
 export const ImportTransaction: React.FC = () => {
-  const [rpcEndpoints, transactionOptions] = usePersistentStore((state) => [
-    state.appOptions.rpcEndpoints,
-    state.transactionOptions,
-  ]);
-
-  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
-    rpcEndpoints.map[rpcEndpoints.order[0]]
+  const rpcEndpoints = usePersistentStore(
+    (state) => state.appOptions.rpcEndpoints
   );
-  const [txnAddress, setTxnAddress] = useState(
-    "4uz94jQaK9zCf1SBwg8o4nY5FtX3M75EZfEDYoM8GBBKCg9E8bN2kJHgB7uDobYqVpeasbVkD9qE3hoSLWsQfZ69"
-  ); // TODO empty
+  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
+    Object.values(rpcEndpoints.map).find(
+      (endpoint) => endpoint.network === "mainnet-beta"
+    )!
+  );
+  const [txnAddress, setTxnAddress] = useState("");
   const [transaction, setTransaction] = useState<ITransactionPreview>();
-  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const connection = useMemo(() => {
-    const {
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    } = transactionOptions;
-    return new Connection(rpcEndpoint.url, {
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    });
-  }, [rpcEndpoint, transactionOptions]);
+  const { start, inProgress } = useGetWeb3Transaction({
+    onFinalised: (response) => {
+      setTransaction(mapToTransactionPreview(response, rpcEndpoint));
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
 
-  const search = useCallback(async () => {
-    if (!txnAddress) {
-      return;
-    }
-
-    setLoading(true);
+  const search = () => {
+    if (!txnAddress) return;
+    setTransaction(undefined);
     setError("");
-
-    try {
-      const response = await connection.getTransaction(txnAddress, {
-        commitment: "finalized",
-      });
-      if (response) {
-        setTransaction(mapToTransactionPreview(response, rpcEndpoint));
-      } else {
-        setError("Transaction not found");
-        setTransaction(undefined);
-      }
-    } catch (err) {
-      setLoading(false);
-      setError((err as { message: string }).message);
-    }
-
-    setLoading(false);
-  }, [txnAddress, rpcEndpoint, connection]);
+    start(txnAddress, true);
+  };
 
   return (
     <Grid>
@@ -112,7 +86,7 @@ export const ImportTransaction: React.FC = () => {
         </Menu>
         <Tooltip label="Search">
           <IconButton
-            isLoading={isLoading}
+            isLoading={inProgress}
             aria-label="Search"
             icon={<SearchIcon />}
             onClick={search}
@@ -127,7 +101,7 @@ export const ImportTransaction: React.FC = () => {
         }}
       />
 
-      <Skeleton height="200px" isLoaded={!isLoading}>
+      <Skeleton height="200px" isLoaded={!inProgress}>
         {transaction && <TransactionPreview transaction={transaction} />}
       </Skeleton>
     </Grid>

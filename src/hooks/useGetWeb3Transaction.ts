@@ -60,6 +60,9 @@ export const useGetWeb3Transaction = ({
             setFinalisedAt(new Date().getTime());
             setInProgress(false);
             onFinalised && onFinalised(transaction);
+          } else {
+            setInProgress(false);
+            onError && onError(new Error("Transaction not found"));
           }
         }
 
