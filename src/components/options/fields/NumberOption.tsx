@@ -16,7 +16,7 @@ export const NumberOption: React.FC<{
   format?: (x: number) => any;
 }> = ({ id, name, get, set, format }) => (
   <>
-    <FormLabel htmlFor={id} mt="2" textAlign="right">
+    <FormLabel htmlFor={id} textAlign="right">
       {name}
     </FormLabel>
     <NumberInput

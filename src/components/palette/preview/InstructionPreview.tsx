@@ -35,9 +35,9 @@ export const InstructionPreview: React.FC<{
       rounded="md"
       borderColor={useColorModeValue("gray.300", "gray.600")}
     >
-      <Flex mb="1">
+      <Flex mb="2" alignItems="center">
         {/* TODO implement drag-and-drop */}
-        {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
+        {/* <DragHandleIcon h="2.5" mr="1" /> */}
         <InstructionIcon />
         <Text
           ml="2"
@@ -47,7 +47,7 @@ export const InstructionPreview: React.FC<{
           #{index + 1}
         </Text>
         <Tooltip label={programId}>
-          <Text ml="1" mr="1" mb="2" as="kbd" fontSize="sm">
+          <Text ml="1" mr="1" as="kbd" fontSize="sm">
             {short(programId)}
           </Text>
         </Tooltip>

@@ -52,15 +52,8 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   };
 
   return (
-    <Flex>
-      <DragHandleIcon
-        h="3"
-        w="3"
-        mt="12"
-        mr="1"
-        {...attributes}
-        {...listeners}
-      />
+    <Flex alignItems="center">
+      <DragHandleIcon h="3" w="3" mr="1" {...attributes} {...listeners} />
 
       <Grid
         p="4"

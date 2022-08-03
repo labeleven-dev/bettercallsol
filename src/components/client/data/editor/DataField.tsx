@@ -49,14 +49,13 @@ export const DataField: React.FC<{
   };
 
   return (
-    <Flex mb="2">
-      <DragHandleIcon h="2.5" w="2.5" mt="3" {...attributes} {...listeners} />
+    <Flex mb="2" alignItems="center">
+      <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
 
       <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
 
       <EditableName
         ml="2"
-        mt="1"
         w={useBreakpointValue({
           base: "50px",
           md: "100px",
@@ -114,7 +113,6 @@ export const DataField: React.FC<{
       ) : type === "bool" ? (
         <Switch
           ml="2"
-          mt="0.5"
           size="sm"
           value={value}
           onChange={() => {
@@ -141,7 +139,6 @@ export const DataField: React.FC<{
 
       <Tooltip label="Remove">
         <IconButton
-          mt="1"
           ml="3"
           size="xs"
           aria-label="Remove"

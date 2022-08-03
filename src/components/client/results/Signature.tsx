@@ -22,14 +22,8 @@ export const Signature: React.FC<{
 
   return (
     <>
-      <Flex>
-        <FormLabel
-          pt="2"
-          mb="3"
-          htmlFor="signature"
-          textAlign="right"
-          fontSize="sm"
-        >
+      <Flex alignItems="center" mb="1">
+        <FormLabel pt="2" htmlFor="signature" textAlign="right" fontSize="sm">
           Signature
         </FormLabel>
 
@@ -54,7 +48,7 @@ export const Signature: React.FC<{
         </InputGroup>
       </Flex>
 
-      <Flex mb="4">
+      <Flex mb="4" alignItems="center">
         <Box width="70px" />
         {slot && (
           <Tag mr="1">

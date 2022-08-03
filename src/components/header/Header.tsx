@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
   const set = useSessionStoreWithoutUndo((state) => state.set);
 
   return (
-    <Flex p="2" bgColor="main.800">
+    <Flex p="2" bgColor="main.800" alignItems="center">
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
 
@@ -32,7 +32,6 @@ export const Header: React.FC = () => {
           <Text
             ml="3"
             mr="9"
-            mt={funTitle ? "1.5" : "2"}
             color="white"
             fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
             fontWeight="bold"

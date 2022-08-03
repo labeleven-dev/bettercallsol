@@ -17,7 +17,7 @@ export const ChoiceOption: React.FC<{
   set: (id: string) => void;
 }> = ({ id, name, get, getChoices, set }) => (
   <>
-    <FormLabel htmlFor={id} mt="2" textAlign="right">
+    <FormLabel htmlFor={id} textAlign="right">
       {name}
     </FormLabel>
     <Menu id={id}>

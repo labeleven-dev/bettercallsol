@@ -45,7 +45,7 @@ export const TransactionPreview: React.FC<{
       boxShadow={useColorModeValue("base", "")}
       borderColor={useColorModeValue("gray.200", "gray.600")}
     >
-      <Flex mb="2">
+      <Flex mb="3" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
         <TransactionIcon />
@@ -54,25 +54,27 @@ export const TransactionPreview: React.FC<{
             {short(signature)}
           </Text>
         </Tooltip>
-        <Box mt="-1" mr="1">
+        <Box mr="1">
           <CopyButton size="xs" value={signature} />
         </Box>
         {error ? (
           <Tooltip label={`Transaction failed: ${error}`}>
-            <WarningIcon mt="0.5" color="red.400" />
+            <WarningIcon color="red.400" />
           </Tooltip>
         ) : (
           <Tooltip label="Transaction succeeded">
-            <CheckCircleIcon mt="0.5" color="green.400" />
+            <CheckCircleIcon color="green.400" />
           </Tooltip>
         )}
-        <Tag ml="1" size="sm" colorScheme="yellow">
-          {rpcEndpoint.network}
-        </Tag>
+        <Tooltip label={rpcEndpoint.network}>
+          <Tag ml="1" size="sm" colorScheme="yellow">
+            {rpcEndpoint.network[0].toUpperCase()}
+          </Tag>
+        </Tooltip>
 
         <Spacer />
 
-        <Box mt="-1.5" ml="-2">
+        <Box ml="-2">
           <ExplorerButton
             size="xs"
             valueType="tx"
@@ -82,7 +84,6 @@ export const TransactionPreview: React.FC<{
         </Box>
         <Tooltip label="Add all instructions to transaction">
           <IconButton
-            mt="-1"
             size="xs"
             variant="ghost"
             aria-label="Add all instructions to transaction"

@@ -38,11 +38,11 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
 
   return (
     <>
-      <Flex>
-        <Heading mt="5" mb="3" size="sm">
+      <Flex mt="2" mb="4" alignItems="center">
+        <Heading mr="3" size="sm">
           Data
         </Heading>
-        <Divider flex="1" ml="5" mt="7" />
+        <Divider flex="1" />
       </Flex>
 
       <Tabs

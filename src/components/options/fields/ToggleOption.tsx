@@ -8,7 +8,7 @@ export const ToggleOption: React.FC<{
   set: (x: boolean) => void;
 }> = ({ id, name, get, set }) => (
   <>
-    <FormLabel htmlFor={id} mb="0" textAlign="right">
+    <FormLabel htmlFor={id} textAlign="right">
       {name}
     </FormLabel>
     <Switch

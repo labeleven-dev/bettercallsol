@@ -16,10 +16,11 @@ export const Footer: React.FC = () => (
     p="3"
     templateColumns="repeat(3,1fr)"
     backgroundColor={useColorModeValue("gray.100", "gray.900")}
+    alignItems="center"
   >
-    <Flex>
+    <Flex alignItems="center">
       <Text fontSize="xs">© {new Date().getFullYear()}</Text>
-      <Link ml="2" mt="-1.5" href="https://labeleven.dev" isExternal>
+      <Link ml="2" mt="-1" href="https://labeleven.dev" isExternal>
         <LabElevenIcon />
       </Link>
     </Flex>

@@ -68,7 +68,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   };
 
   return (
-    <Flex mb="5">
+    <Flex mb="5" alignItems="center">
       <Heading flex="1" size="lg">
         <EditableName
           tooltip="Click to edit"

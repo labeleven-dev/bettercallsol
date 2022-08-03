@@ -27,11 +27,11 @@ export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
 
   return (
     <Grid>
-      <Flex mb="3">
-        <Heading mt="2" mb="3" mr="3" size="sm">
+      <Flex mt="2" mb="4" alignItems="center">
+        <Heading mr="3" size="sm">
           Accounts
         </Heading>
-        <Divider flex="1" ml="3" mt="3.5" />
+        <Divider flex="1" />
       </Flex>
       <Box>
         <Sortable

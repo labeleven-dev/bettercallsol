@@ -31,8 +31,8 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const set = useSessionStoreWithUndo((state) => state.set);
 
   return (
-    <Flex h={!instruction.expanded ? "30px" : undefined}>
-      <DragHandleIcon mt="1.5" mr="2" {...attributes} {...listeners} />
+    <Flex mb={instruction.expanded ? "4" : undefined} alignItems="center">
+      <DragHandleIcon mr="2" {...attributes} {...listeners} />
 
       <IconButton
         h="8"
@@ -65,7 +65,6 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
 
       <Heading flex="1" size="md">
         <EditableName
-          mb="5"
           tooltip="Click to edit"
           placeholder="Unnamed Instruction"
           value={instruction.name}
@@ -79,8 +78,6 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
 
       <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
         <IconButton
-          mt="-2"
-          ml="2"
           aria-label={instruction.disabled ? "Enable" : "Disable"}
           variant="ghost"
           icon={
@@ -100,7 +97,6 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
 
       <Menu>
         <MenuButton
-          mt="-2"
           as={IconButton}
           aria-label="Options"
           icon={<Icon as={FaEllipsisV} />}

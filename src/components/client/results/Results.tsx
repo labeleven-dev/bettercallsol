@@ -17,6 +17,7 @@ import {
   TabPanels,
   Tabs,
   Tag,
+  Text,
   Tooltip,
 } from "@chakra-ui/react";
 import { TransactionConfirmationStatus } from "@solana/web3.js";
@@ -118,27 +119,36 @@ export const Results: React.FC = () => {
   };
 
   return (
-    <Grid p="5">
-      <Flex>
-        <Heading mb="6" mr="3" size="md">
+    <Grid pt="2" pl="5" pr="5">
+      <Flex alignItems="center" mb="4">
+        <Heading mr="3" size="md">
           Results
         </Heading>
         {results.confirmationStatus === "finalized" ? (
           results.error ? (
-            <Tooltip label="Failed Transaction">
-              <WarningIcon mt="0.5" mr="1" color="red.400" />
-            </Tooltip>
+            <>
+              <WarningIcon mr="1" color="red.400" />
+              <Text color="red.400" fontSize="sm">
+                Fail
+              </Text>
+            </>
           ) : (
-            <Tooltip label="Successful Transction">
-              <CheckCircleIcon mt="1" mr="1" color="green.400" />
-            </Tooltip>
+            <>
+              <CheckCircleIcon mr="1" color="green.400" />
+              <Text color="green.400" fontSize="sm">
+                Success
+              </Text>
+            </>
           )
         ) : (
           signature &&
           !inProgress && (
-            <Tooltip label="Unknown Transaction Status">
-              <QuestionIcon mt="1" mr="1" color="yellow.400" />
-            </Tooltip>
+            <>
+              <QuestionIcon mr="1" color="yellow.400" />
+              <Text color="yellow.400" fontSize="sm">
+                Unknown
+              </Text>
+            </>
           )
         )}
 
@@ -180,7 +190,6 @@ export const Results: React.FC = () => {
           <Tooltip label="Refresh">
             <IconButton
               ml="1"
-              mt="-1"
               aria-label="Refresh"
               icon={<RepeatIcon />}
               variant="ghost"

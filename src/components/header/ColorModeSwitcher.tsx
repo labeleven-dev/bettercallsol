@@ -21,7 +21,7 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
         size="md"
         fontSize="lg"
         variant="ghost"
-        marginLeft="2"
+        ml="2"
         onClick={toggleColorMode}
         // maintain the colorMode for the element itself since the title bar is always in dark mode
         color="white"

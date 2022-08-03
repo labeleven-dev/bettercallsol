@@ -40,7 +40,9 @@ export const Transaction: React.FC = () => {
 
         <Instructions instructions={transaction.instructions} />
       </Box>
+
       <Divider />
+
       <Box mt="5">
         <Results />
       </Box>

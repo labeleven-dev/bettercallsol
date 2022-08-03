@@ -48,7 +48,7 @@ export const AccountSummary: React.FC<{
   ].filter(({ count }) => count > 0);
 
   return (
-    <Flex>
+    <Flex alignItems="center">
       <Tooltip label="Accounts">
         <Flex>
           <AccountIcon />
@@ -60,7 +60,7 @@ export const AccountSummary: React.FC<{
 
       {tags.map(({ label, tooltip, count, colourScheme }, index) => (
         <Tooltip key={index} label={tooltip}>
-          <Tag mr="1" mt="-0.5" size="sm" colorScheme={colourScheme}>
+          <Tag mr="1" size="sm" colorScheme={colourScheme}>
             {label}: {count}
           </Tag>
         </Tooltip>
