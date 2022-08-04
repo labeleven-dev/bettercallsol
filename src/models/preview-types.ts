@@ -25,7 +25,7 @@ export interface ITransactionPreview {
   description?: string;
   rpcEndpoint: IRpcEndpoint;
   instructions: IInstructionPreview[];
-  accountSummary: IAccountSummary;
+  accountSummary?: IAccountSummary; // only set in source=tx
   fee?: number;
   error?: string;
 }

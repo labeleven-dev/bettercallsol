@@ -76,27 +76,30 @@ export const JSON_SCHEMA = {
                 anyOf: [
                   { type: "string" },
                   {
-                    type: "object",
-                    properties: {
-                      name: { type: "string" },
-                      description: { type: "string" },
-                      type: {
-                        type: "string",
-                        enum: [
-                          "string",
-                          "u8",
-                          "i8",
-                          "u16",
-                          "i16",
-                          "u32",
-                          "i32",
-                          "u64",
-                          "i64",
-                          "bool",
-                          "publicKey",
-                        ],
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: { type: "string" },
+                        description: { type: "string" },
+                        type: {
+                          type: "string",
+                          enum: [
+                            "string",
+                            "u8",
+                            "i8",
+                            "u16",
+                            "i16",
+                            "u32",
+                            "i32",
+                            "u64",
+                            "i64",
+                            "bool",
+                            "publicKey",
+                          ],
+                        },
+                        value: {}, // match any
                       },
-                      value: { type: "string" },
                     },
                   },
                 ],

@@ -12,11 +12,17 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import Ajv from "ajv";
+import axios from "axios";
+import { useMemo, useState } from "react";
 import { useGetWeb3Transaction } from "../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { JSON_SCHEMA } from "../../models/external-types";
 import { IRpcEndpoint } from "../../models/internal-types";
-import { mapTransactionResponseToITransactionPreview } from "../../models/preview-mappers";
+import {
+  mapITransactionExtToITransactionPreview,
+  mapTransactionResponseToITransactionPreview,
+} from "../../models/preview-mappers";
 import { ITransactionPreview, PreviewSource } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
@@ -42,6 +48,8 @@ export const ImportTransaction: React.FC = () => {
     )!
   );
 
+  const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
+
   const { start, inProgress } = useGetWeb3Transaction({
     rpcEndpointUrl: rpcEndpoint.url,
     onFinalised: (response) => {
@@ -63,7 +71,25 @@ export const ImportTransaction: React.FC = () => {
     if (importType === "tx") {
       start(importValue, true);
     } else if (importType === "shareUrl") {
-      // TODO
+      axios
+        .get(importValue)
+        .then((response) => {
+          if (!validate(response.data)) {
+            setError(validate.errors?.map((e) => e.message).join(", ")!);
+            console.log(validate.errors);
+            return;
+          }
+          setTransaction(
+            mapITransactionExtToITransactionPreview(
+              response.data as ITransactionPreview,
+              importValue,
+              rpcEndpoint
+            )
+          );
+        })
+        .catch((err) => {
+          setError(err);
+        });
     }
   };
 

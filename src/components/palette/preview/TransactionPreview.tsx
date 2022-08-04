@@ -1,9 +1,15 @@
-import { AddIcon, CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  CheckCircleIcon,
+  ExternalLinkIcon,
+  WarningIcon,
+} from "@chakra-ui/icons";
 import {
   Flex,
   Grid,
   Icon,
   IconButton,
+  Link,
   Spacer,
   Tag,
   Text,
@@ -68,28 +74,33 @@ export const TransactionPreview: React.FC<{
               </Text>
             </Tooltip>
             <CopyButton size="xs" mr="1" value={sourceValue} />
+            {error ? (
+              <Tooltip label={`Transaction failed: ${error}`}>
+                <WarningIcon color="red.400" />
+              </Tooltip>
+            ) : (
+              <Tooltip label="Transaction succeeded">
+                <CheckCircleIcon color="green.400" />
+              </Tooltip>
+            )}
+            <Tooltip label={rpcEndpoint.network}>
+              <Tag ml="1" size="sm" colorScheme="yellow">
+                {rpcEndpoint.network[0].toUpperCase()}
+              </Tag>
+            </Tooltip>
           </>
         ) : (
-          <Text ml="2" mr="1" as="kbd" fontSize="sm">
-            {name || "Transaction"}
-          </Text>
+          <>
+            <Text ml="2" mr="1" as="kbd" fontSize="sm">
+              {name || "Transaction"}
+            </Text>
+            <Tag fontSize="xs">
+              <Link href={sourceValue} isExternal>
+                URL <ExternalLinkIcon />
+              </Link>
+            </Tag>
+          </>
         )}
-
-        {error ? (
-          <Tooltip label={`Transaction failed: ${error}`}>
-            <WarningIcon color="red.400" />
-          </Tooltip>
-        ) : (
-          <Tooltip label="Transaction succeeded">
-            <CheckCircleIcon color="green.400" />
-          </Tooltip>
-        )}
-
-        <Tooltip label={rpcEndpoint.network}>
-          <Tag ml="1" size="sm" colorScheme="yellow">
-            {rpcEndpoint.network[0].toUpperCase()}
-          </Tag>
-        </Tooltip>
 
         <Spacer />
 
@@ -104,7 +115,9 @@ export const TransactionPreview: React.FC<{
         </Tooltip>
       </Flex>
 
-      <AccountSummary ml="10" mb="5" summary={accountSummary} />
+      {accountSummary && (
+        <AccountSummary ml="10" mt="3" mb="5" summary={accountSummary} />
+      )}
 
       {instructions.map((instruction, index) => (
         <InstructionPreview

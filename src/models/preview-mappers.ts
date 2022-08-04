@@ -1,6 +1,6 @@
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
 import { mapIInstructionExtToIInstruction } from "./external-mappers";
-import { IAccountExt } from "./external-types";
+import { IAccountExt, ITransactionExt } from "./external-types";
 import { IInstruction, IRpcEndpoint } from "./internal-types";
 import {
   IAccountSummary,
@@ -65,6 +65,23 @@ export const mapTransactionResponseToITransactionPreview = (
       innerInstructions: response.meta?.innerInstructions
         ?.find(({ index }) => index === ixnIndex)
         ?.instructions.map((ixn) => mapInstruction(ixn)),
+    })),
+  };
+};
+
+export const mapITransactionExtToITransactionPreview = (
+  { name, instructions }: ITransactionExt,
+  url: string,
+  rpcEndpoint: IRpcEndpoint
+): ITransactionPreview => {
+  return {
+    source: "shareUrl",
+    sourceValue: url,
+    name,
+    rpcEndpoint,
+    instructions: instructions.map((instruction) => ({
+      ...instruction,
+      accountSummary: accountSummary(instruction.accounts),
     })),
   };
 };
