@@ -1,4 +1,4 @@
-import { ChevronDownIcon, DownloadIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
@@ -37,9 +37,10 @@ import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   transaction,
 }) => {
-  const [transactionRun, setTransactionRun] = useSessionStoreWithoutUndo(
-    (state) => [state.transactionRun, state.set]
-  );
+  const [transactionRun, setUI] = useSessionStoreWithoutUndo((state) => [
+    state.transactionRun,
+    state.set,
+  ]);
   const [rpcEndpoint, setSession] = useSessionStoreWithUndo((state) => [
     state.rpcEndpoint,
     state.set,
@@ -48,12 +49,12 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const { publicKey: walletPublicKey } = useWallet();
   const { send } = useSendWeb3Transaction({
     onSent: (signature) => {
-      setTransactionRun((state) => {
+      setUI((state) => {
         state.transactionRun = { inProgress: true, signature };
       });
     },
     onError: (error) => {
-      setTransactionRun((state) => {
+      setUI((state) => {
         state.transactionRun.error = error.message;
       });
     },
@@ -110,13 +111,15 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           variant="ghost"
         />
         <MenuList>
-          {/* TODO implement */}
-          <MenuItem icon={<Icon as={FaShareAlt} />} isDisabled>
+          <MenuItem
+            icon={<Icon as={FaShareAlt} />}
+            onClick={() => {
+              setUI((state) => {
+                state.uiState.shareOpen = true;
+              });
+            }}
+          >
             Share
-          </MenuItem>
-          {/* TODO implement */}
-          <MenuItem icon={<DownloadIcon />} isDisabled>
-            Download
           </MenuItem>
           <MenuItem
             icon={<Icon as={FaEraser} />}
@@ -124,7 +127,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
               setSession((state) => {
                 state.transaction = DEFAULT_TRANSACTION;
               });
-              setTransactionRun((state) => {
+              setUI((state) => {
                 state.transactionRun = DEFAULT_TRANSACTION_RUN;
               });
             }}

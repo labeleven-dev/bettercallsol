@@ -33,11 +33,11 @@ export const mapITransactionToTransactionExt = ({
   name,
   instructions: toSortedArray(instructions).map(
     ({ name, programId, accounts, data }) => ({
-      name,
+      name: name || undefined,
       programId,
       accounts: toSortedArray(accounts).map(
         ({ name, pubkey, isWritable, isSigner }) => ({
-          name,
+          name: name || undefined,
           pubkey,
           isWritable,
           isSigner,

@@ -16,6 +16,7 @@ import { Header } from "./components/header/Header";
 import { ImportModal } from "./components/ImportModal";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
+import { ShareModal } from "./components/ShareModal";
 import { useSessionStoreWithoutUndo } from "./hooks/useSessionStore";
 
 import theme from "./theme";
@@ -71,6 +72,7 @@ export const App: React.FC = () => {
 
         <Options />
         <ImportModal />
+        <ShareModal />
       </Web3Provider>
     </ChakraProvider>
   );

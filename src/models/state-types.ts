@@ -31,6 +31,7 @@ export interface AppOptions {
 export interface UIState {
   readonly paletteOpen: boolean;
   readonly optionsOpen: boolean;
+  readonly shareOpen: boolean;
 }
 
 export interface ImportState {
