@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useGetWeb3Transaction } from "../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { IRpcEndpoint } from "../../models/internal-types";
-import { mapToTransactionPreview } from "../../models/preview-mappers";
+import { mapFromTransactionResponse } from "../../models/preview-mappers";
 import { ITransactionPreview } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ExplorerButton } from "../common/ExplorerButton";
@@ -37,8 +37,9 @@ export const ImportTransaction: React.FC = () => {
   const [error, setError] = useState("");
 
   const { start, inProgress } = useGetWeb3Transaction({
+    rpcEndpointUrl: rpcEndpoint.url,
     onFinalised: (response) => {
-      setTransaction(mapToTransactionPreview(response, rpcEndpoint));
+      setTransaction(mapFromTransactionResponse(response, rpcEndpoint));
     },
     onError: (error) => {
       setError(error.message);
@@ -78,6 +79,7 @@ export const ImportTransaction: React.FC = () => {
             {rpcEndpoint.network[0].toUpperCase()}
           </MenuButton>
           <RpcEndpointMenuList
+            fontSize="sm"
             endpoint={rpcEndpoint}
             setEndpoint={(endpoint) => {
               setRpcEndpoint(endpoint);

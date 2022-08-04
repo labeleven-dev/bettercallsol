@@ -1,16 +1,22 @@
 import { useInterval } from "@chakra-ui/react";
 import { useConnection } from "@solana/wallet-adapter-react";
-import { SignatureStatus, TransactionResponse } from "@solana/web3.js";
-import { useState } from "react";
+import {
+  Connection,
+  SignatureStatus,
+  TransactionResponse,
+} from "@solana/web3.js";
+import { useMemo, useState } from "react";
 import { IPubKey } from "../models/internal-types";
 import { usePersistentStore } from "./usePersistentStore";
 
 export const useGetWeb3Transaction = ({
+  rpcEndpointUrl,
   onStatus,
   onFinalised,
   onTimeout,
   onError,
 }: {
+  rpcEndpointUrl?: string;
   onStatus?: (status: SignatureStatus) => void;
   onFinalised?: (response: TransactionResponse) => void;
   onTimeout?: () => void;
@@ -33,7 +39,23 @@ export const useGetWeb3Transaction = ({
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
-  const { connection } = useConnection();
+
+  const { connection: defaultConnection } = useConnection();
+  const customConnection = useMemo(() => {
+    if (!rpcEndpointUrl) return null;
+
+    const {
+      commitment,
+      confirmTransactionInitialTimeout,
+      disableRetryOnRateLimit,
+    } = transactionOptions;
+    return new Connection(rpcEndpointUrl, {
+      commitment,
+      confirmTransactionInitialTimeout,
+      disableRetryOnRateLimit,
+    });
+  }, [rpcEndpointUrl, transactionOptions]);
+  const connection = customConnection || defaultConnection;
 
   useInterval(
     async () => {

@@ -1,5 +1,5 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import { MenuItem, MenuList } from "@chakra-ui/react";
+import { MenuItem, MenuList, TypographyProps } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { IRpcEndpoint } from "../../models/internal-types";
@@ -8,13 +8,14 @@ import { toSortedArray } from "../../models/sortable";
 export const RpcEndpointMenuList: React.FC<{
   endpoint: IRpcEndpoint;
   setEndpoint: (endpoint: IRpcEndpoint) => void;
-}> = ({ endpoint, setEndpoint }) => {
+  fontSize?: TypographyProps["fontSize"];
+}> = ({ endpoint, setEndpoint, fontSize = "md" }) => {
   const rpcEndpoints = usePersistentStore(
     (state) => state.appOptions.rpcEndpoints
   );
 
   return (
-    <MenuList fontSize="md">
+    <MenuList fontSize={fontSize}>
       {toSortedArray(rpcEndpoints)
         .filter(({ enabled, url }) => enabled && url)
         .map((it, index) => (

@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaRedo, FaUndo, FaWrench } from "react-icons/fa";
+import { FaWrench } from "react-icons/fa";
 import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Example } from "./Examples";
@@ -55,8 +55,8 @@ export const Header: React.FC = () => {
 
         <Spacer />
 
-        <Hide below="md">
-          {/* TODO implement */}
+        {/* TODO implement */}
+        {/* <Hide below="md">
           <Tooltip label="Undo">
             <IconButton
               mr="0.5"
@@ -67,8 +67,6 @@ export const Header: React.FC = () => {
               isDisabled
             />
           </Tooltip>
-
-          {/* TODO implement */}
           <Tooltip label="Redo">
             <IconButton
               mr="4"
@@ -79,7 +77,7 @@ export const Header: React.FC = () => {
               isDisabled
             />
           </Tooltip>
-        </Hide>
+        </Hide> */}
       </DarkMode>
 
       <ColorModeSwitcher justifySelf="flex-end" />

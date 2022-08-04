@@ -29,7 +29,7 @@ import { toSortableCollection } from "./sortable";
 // },
 
 /** Maps a web3.js transaction from the chain into a transaction preview, suitable for importing **/
-export const mapToTransactionPreview = (
+export const mapFromTransactionResponse = (
   response: TransactionResponse,
   rpcEndpoint: IRpcEndpoint
 ): ITransactionPreview => {
