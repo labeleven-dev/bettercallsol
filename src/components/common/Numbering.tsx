@@ -17,6 +17,7 @@ export const Numbering: React.FC<{ index: number } & BadgeProps> = ({
       colorScheme="main"
       textColor={textColor}
       textAlign="center"
+      p="0.5"
       rounded="xl"
       {...theRest}
     >

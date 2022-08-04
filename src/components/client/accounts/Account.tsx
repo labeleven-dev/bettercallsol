@@ -85,7 +85,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     <Flex mb="2" alignItems="center">
       <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
 
-      <Numbering index={index} ml="2" pt="2" minW="30px" fontSize="sm" />
+      <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
       <EditableName
         ml="2"

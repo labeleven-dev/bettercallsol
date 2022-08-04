@@ -38,22 +38,10 @@ export const InstructionPreview: React.FC<{
       <Flex mb="2" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mr="1" /> */}
+
         <InstructionIcon />
-        <Text
-          ml="2"
-          fontSize="sm"
-          textColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
-        >
-          #{index + 1}
-        </Text>
-        <Tooltip label={programId}>
-          <Text ml="1" mr="1" as="kbd" fontSize="sm">
-            {short(programId)}
-          </Text>
-        </Tooltip>
-        <Box mt="-1">
-          <CopyButton size="xs" value={programId} />
-        </Box>
+
+        <Numbering index={index} ml="2" minW="25px" />
 
         <Spacer />
 
