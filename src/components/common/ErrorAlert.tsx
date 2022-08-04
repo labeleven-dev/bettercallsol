@@ -2,16 +2,17 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
+  AlertProps,
   CloseButton,
 } from "@chakra-ui/react";
 import React from "react";
 
-export const ErrorAlert: React.FC<{ error?: string; onClose?: () => void }> = ({
-  error,
-  onClose,
-}) =>
+export const ErrorAlert: React.FC<
+  { error?: string; onClose?: () => void } & AlertProps
+> = ({ error, onClose, ...theRest }) =>
   error ? (
     <Alert
+      {...theRest}
       mb="5"
       status="error"
       fontSize="md"

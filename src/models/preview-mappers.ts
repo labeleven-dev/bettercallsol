@@ -6,6 +6,7 @@ import {
   IAccountSummary,
   IInstructionPreview,
   ITransactionPreview,
+  PreviewSource,
 } from "./preview-types";
 
 // TODO getParsedTransaction has some more info for specific instructions
@@ -71,14 +72,13 @@ export const mapTransactionResponseToITransactionPreview = (
 
 export const mapITransactionExtToITransactionPreview = (
   { name, instructions }: ITransactionExt,
-  url: string,
-  rpcEndpoint: IRpcEndpoint
+  source: PreviewSource,
+  sourceValue: string
 ): ITransactionPreview => {
   return {
-    source: "shareUrl",
-    sourceValue: url,
+    source,
+    sourceValue,
     name,
-    rpcEndpoint,
     instructions: instructions.map((instruction) => ({
       ...instruction,
       accountSummary: accountSummary(instruction.accounts),

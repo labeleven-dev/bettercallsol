@@ -83,9 +83,9 @@ export const TransactionPreview: React.FC<{
                 <CheckCircleIcon color="green.400" />
               </Tooltip>
             )}
-            <Tooltip label={rpcEndpoint.network}>
+            <Tooltip label={rpcEndpoint!.network}>
               <Tag ml="1" size="sm" colorScheme="yellow">
-                {rpcEndpoint.network[0].toUpperCase()}
+                {rpcEndpoint!.network[0].toUpperCase()}
               </Tag>
             </Tooltip>
           </>
@@ -94,11 +94,15 @@ export const TransactionPreview: React.FC<{
             <Text ml="2" mr="1" as="kbd" fontSize="sm">
               {name || "Transaction"}
             </Text>
-            <Tag fontSize="xs">
-              <Link href={sourceValue} isExternal>
-                URL <ExternalLinkIcon />
-              </Link>
-            </Tag>
+            {source === "shareUrl" ? (
+              <Tag fontSize="xs">
+                <Link href={sourceValue} isExternal>
+                  URL <ExternalLinkIcon />
+                </Link>
+              </Tag>
+            ) : (
+              <Tag fontSize="xs">JSON</Tag>
+            )}
           </>
         )}
 

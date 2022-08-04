@@ -16,14 +16,14 @@ export interface IInstructionPreview extends IInstructionExt {
   innerInstructions?: IInstructionPreview[];
 }
 
-export type PreviewSource = "tx" | "shareUrl"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
+export type PreviewSource = "tx" | "shareUrl" | "shareJson"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
 
 export interface ITransactionPreview {
   source: PreviewSource;
   sourceValue: string; // could transaction ID, URL, file path, etc.
   name?: string;
   description?: string;
-  rpcEndpoint: IRpcEndpoint;
+  rpcEndpoint?: IRpcEndpoint;
   instructions: IInstructionPreview[];
   accountSummary?: IAccountSummary; // only set in source=tx
   fee?: number;

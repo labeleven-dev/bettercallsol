@@ -1,36 +1,26 @@
-import { CheckIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Flex,
   Grid,
-  IconButton,
-  Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Skeleton,
-  Tooltip,
 } from "@chakra-ui/react";
-import Ajv from "ajv";
-import axios from "axios";
-import { useMemo, useState } from "react";
-import { useGetWeb3Transaction } from "../../hooks/useGetWeb3Transaction";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { JSON_SCHEMA } from "../../models/external-types";
-import { IRpcEndpoint } from "../../models/internal-types";
-import {
-  mapITransactionExtToITransactionPreview,
-  mapTransactionResponseToITransactionPreview,
-} from "../../models/preview-mappers";
+import { useState } from "react";
 import { ITransactionPreview, PreviewSource } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
-import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
+import { ShareJsonImport } from "./import/ShareJsonImport";
+import { ShareUrlImport } from "./import/ShareUrlImport";
+import { TransactionIdImport } from "./import/TransactionIdImport";
 import { TransactionPreview } from "./preview/TransactionPreview";
 
 const IMPORT_TYPES: Record<PreviewSource, string> = {
   tx: "Transaction ID",
   shareUrl: "Share URL",
+  shareJson: "Share JSON",
 };
 
 export const ImportTransaction: React.FC = () => {
@@ -39,65 +29,11 @@ export const ImportTransaction: React.FC = () => {
   const [transaction, setTransaction] = useState<ITransactionPreview>();
   const [error, setError] = useState("");
 
-  const rpcEndpoints = usePersistentStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
-  const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
-    Object.values(rpcEndpoints.map).find(
-      (endpoint) => endpoint.network === "mainnet-beta"
-    )!
-  );
-
-  const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
-
-  const { start, inProgress } = useGetWeb3Transaction({
-    rpcEndpointUrl: rpcEndpoint.url,
-    onFinalised: (response) => {
-      setTransaction(
-        mapTransactionResponseToITransactionPreview(response, rpcEndpoint)
-      );
-    },
-    onError: (error) => {
-      setError(error.message);
-    },
-  });
-
-  const search = () => {
-    if (!importValue) return;
-
-    setTransaction(undefined);
-    setError("");
-
-    if (importType === "tx") {
-      start(importValue, true);
-    } else if (importType === "shareUrl") {
-      axios
-        .get(importValue)
-        .then((response) => {
-          if (!validate(response.data)) {
-            setError(validate.errors?.map((e) => e.message).join(", ")!);
-            console.log(validate.errors);
-            return;
-          }
-          setTransaction(
-            mapITransactionExtToITransactionPreview(
-              response.data as ITransactionPreview,
-              importValue,
-              rpcEndpoint
-            )
-          );
-        })
-        .catch((err) => {
-          setError(err);
-        });
-    }
-  };
-
   return (
     <Grid>
       <Flex mb="1">
         <Menu>
-          <MenuButton flex="1" as={Button} mr="1" size="sm">
+          <MenuButton flex="1" as={Button} size="sm">
             {IMPORT_TYPES[importType]} <ChevronDownIcon />
           </MenuButton>
           <MenuList fontSize="sm">
@@ -114,53 +50,32 @@ export const ImportTransaction: React.FC = () => {
             ))}
           </MenuList>
         </Menu>
-
-        <Menu>
-          <MenuButton flex="1" as={Button} size="sm">
-            {rpcEndpoint.network} <ChevronDownIcon />
-          </MenuButton>
-          <RpcEndpointMenuList
-            fontSize="sm"
-            endpoint={rpcEndpoint}
-            setEndpoint={(endpoint) => {
-              setRpcEndpoint(endpoint);
-            }}
-          />
-        </Menu>
       </Flex>
 
-      <Flex mb="5">
-        <Input
-          flex="1"
-          mr="1"
-          fontFamily="mono"
-          placeholder={importType === "tx" ? "Transaction ID" : "URL"}
-          value={importValue}
-          onChange={(e) => {
-            setImportValue(e.target.value);
-          }}
+      {importType === "tx" && (
+        <TransactionIdImport
+          setTransaction={setTransaction}
+          setError={setError}
         />
-
-        <Tooltip label="Search">
-          <IconButton
-            isLoading={inProgress}
-            aria-label="Search"
-            icon={<SearchIcon />}
-            onClick={search}
-          />
-        </Tooltip>
-      </Flex>
+      )}
+      {importType === "shareUrl" && (
+        <ShareUrlImport setTransaction={setTransaction} setError={setError} />
+      )}
+      {importType === "shareJson" && (
+        <ShareJsonImport setTransaction={setTransaction} setError={setError} />
+      )}
 
       <ErrorAlert
+        mt="5"
         error={error}
         onClose={() => {
           setError("");
         }}
       />
 
-      <Skeleton height="200px" isLoaded={!inProgress}>
+      <Box mt="5">
         {transaction && <TransactionPreview transaction={transaction} />}
-      </Skeleton>
+      </Box>
     </Grid>
   );
 };
