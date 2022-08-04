@@ -17,9 +17,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapIInstructionPreviewToIInstruction } from "../../../models/preview-mappers";
+import { mapITransactionPreviewToITransaction } from "../../../models/preview-mappers";
 import { ITransactionPreview } from "../../../models/preview-types";
-import { addTo } from "../../../models/sortable";
 import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
@@ -27,8 +26,9 @@ import { InstructionPreview } from "./InstructionPreview";
 
 export const TransactionPreview: React.FC<{
   transaction: ITransactionPreview;
-}> = ({
-  transaction: {
+  interactive?: boolean;
+}> = ({ transaction, interactive = true }) => {
+  const {
     source,
     sourceValue,
     name,
@@ -36,17 +36,12 @@ export const TransactionPreview: React.FC<{
     instructions,
     accountSummary,
     error,
-  },
-}) => {
-  const addInstructions = useSessionStoreWithUndo(
+  } = transaction;
+
+  const setTransaction = useSessionStoreWithUndo(
     (state) => () =>
       state.set((state) => {
-        instructions.forEach((instruction) => {
-          addTo(
-            state.transaction.instructions,
-            mapIInstructionPreviewToIInstruction(instruction)
-          );
-        });
+        state.transaction = mapITransactionPreviewToITransaction(transaction);
       })
   );
 
@@ -108,15 +103,17 @@ export const TransactionPreview: React.FC<{
 
         <Spacer />
 
-        <Tooltip label="Add all instructions to transaction">
-          <IconButton
-            size="xs"
-            variant="ghost"
-            aria-label="Add all instructions to transaction"
-            icon={<AddIcon />}
-            onClick={addInstructions}
-          />
-        </Tooltip>
+        {interactive && (
+          <Tooltip label="Add all instructions to transaction">
+            <IconButton
+              size="xs"
+              variant="ghost"
+              aria-label="Add all instructions to transaction"
+              icon={<AddIcon />}
+              onClick={setTransaction}
+            />
+          </Tooltip>
+        )}
       </Flex>
 
       {accountSummary && (
@@ -128,6 +125,7 @@ export const TransactionPreview: React.FC<{
           key={index}
           index={index}
           instruction={instruction}
+          interactive={interactive}
         />
       ))}
     </Grid>

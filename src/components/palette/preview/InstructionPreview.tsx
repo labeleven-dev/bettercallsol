@@ -22,7 +22,8 @@ import { AccountSummary } from "./AccountSummary";
 export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
-}> = ({ instruction, index }) => {
+  interactive?: boolean;
+}> = ({ instruction, index, interactive = true }) => {
   const set = useSessionStoreWithUndo((state) => state.set);
 
   const { name, programId, accountSummary, innerInstructions } = instruction;
@@ -50,23 +51,25 @@ export const InstructionPreview: React.FC<{
 
         <Spacer />
 
-        <Tooltip label="Add to transaction">
-          <IconButton
-            mt="-1"
-            size="xs"
-            variant="ghost"
-            aria-label="Add to transaction"
-            icon={<AddIcon />}
-            onClick={() => {
-              set((state) => {
-                addTo(
-                  state.transaction.instructions,
-                  mapIInstructionPreviewToIInstruction(instruction)
-                );
-              });
-            }}
-          />
-        </Tooltip>
+        {interactive && (
+          <Tooltip label="Add to transaction">
+            <IconButton
+              mt="-1"
+              size="xs"
+              variant="ghost"
+              aria-label="Add to transaction"
+              icon={<AddIcon />}
+              onClick={() => {
+                set((state) => {
+                  addTo(
+                    state.transaction.instructions,
+                    mapIInstructionPreviewToIInstruction(instruction)
+                  );
+                });
+              }}
+            />
+          </Tooltip>
+        )}
       </Flex>
 
       <Flex ml="10" mt="1" alignItems="center">

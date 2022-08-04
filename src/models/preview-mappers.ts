@@ -1,13 +1,14 @@
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
 import { mapIInstructionExtToIInstruction } from "./external-mappers";
 import { IAccountExt, ITransactionExt } from "./external-types";
-import { IInstruction, IRpcEndpoint } from "./internal-types";
+import { IInstruction, IRpcEndpoint, ITransaction } from "./internal-types";
 import {
   IAccountSummary,
   IInstructionPreview,
   ITransactionPreview,
   PreviewSource,
 } from "./preview-types";
+import { toSortableCollection } from "./sortable";
 
 // TODO getParsedTransaction has some more info for specific instructions
 // {
@@ -94,10 +95,17 @@ const accountSummary = (accounts: IAccountExt[]): IAccountSummary => ({
   readonlyUsigned: accounts.filter((x) => !x.isSigner && !x.isWritable).length,
 });
 
+export const mapITransactionPreviewToITransaction = ({
+  name,
+  instructions,
+}: ITransactionPreview): ITransaction => ({
+  name,
+  instructions: toSortableCollection(
+    instructions.map(mapIInstructionPreviewToIInstruction)
+  ),
+});
+
 /** Imports a preview instruction into the current transaction */
 export const mapIInstructionPreviewToIInstruction = (
   instruction: IInstructionPreview
-): IInstruction => ({
-  ...mapIInstructionExtToIInstruction(instruction),
-  name: "Imported Instruction",
-});
+): IInstruction => mapIInstructionExtToIInstruction(instruction);

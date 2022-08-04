@@ -13,6 +13,7 @@ import { Transaction } from "./components/client/Transaction";
 import { Web3Provider } from "./components/common/Web3Provider";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/header/Header";
+import { ImportModal } from "./components/ImportModal";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
 import { useSessionStoreWithoutUndo } from "./hooks/useSessionStore";
@@ -69,6 +70,7 @@ export const App: React.FC = () => {
         </Flex>
 
         <Options />
+        <ImportModal />
       </Web3Provider>
     </ChakraProvider>
   );

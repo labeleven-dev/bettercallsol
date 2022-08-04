@@ -25,7 +25,6 @@ const IMPORT_TYPES: Record<PreviewSource, string> = {
 
 export const ImportTransaction: React.FC = () => {
   const [importType, setImportType] = useState<PreviewSource>("tx");
-  const [importValue, setImportValue] = useState("");
   const [transaction, setTransaction] = useState<ITransactionPreview>();
   const [error, setError] = useState("");
 
