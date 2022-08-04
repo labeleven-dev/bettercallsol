@@ -1,17 +1,12 @@
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
-import {
-  EMPTY_INSTRUCTION_DATA,
-  newAccount,
-  newInstruction,
-} from "./internal-mappers";
+import { mapIInstructionExtToIInstruction } from "./external-mappers";
+import { IAccountExt } from "./external-types";
 import { IInstruction, IRpcEndpoint } from "./internal-types";
 import {
-  IAccountPreview,
   IAccountSummary,
   IInstructionPreview,
   ITransactionPreview,
 } from "./preview-types";
-import { toSortableCollection } from "./sortable";
 
 // TODO getParsedTransaction has some more info for specific instructions
 // {
@@ -29,7 +24,7 @@ import { toSortableCollection } from "./sortable";
 // },
 
 /** Maps a web3.js transaction from the chain into a transaction preview, suitable for importing **/
-export const mapFromTransactionResponse = (
+export const mapTransactionResponseToITransactionPreview = (
   response: TransactionResponse,
   rpcEndpoint: IRpcEndpoint
 ): ITransactionPreview => {
@@ -50,13 +45,17 @@ export const mapFromTransactionResponse = (
     return {
       programId: accountKeys[programIdIndex].toBase58(),
       accounts: mappedAccounts,
-      data,
+      data: {
+        format: "raw",
+        value: data,
+      },
       accountSummary: accountSummary(mappedAccounts),
     };
   };
 
   return {
-    signature: response.transaction.signatures[0],
+    source: "tx",
+    sourceValue: response.transaction.signatures[0],
     rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
@@ -70,7 +69,7 @@ export const mapFromTransactionResponse = (
   };
 };
 
-const accountSummary = (accounts: IAccountPreview[]): IAccountSummary => ({
+const accountSummary = (accounts: IAccountExt[]): IAccountSummary => ({
   total: accounts.length,
   writableSigner: accounts.filter((x) => x.isSigner && x.isWritable).length,
   readonlySigner: accounts.filter((x) => x.isSigner && !x.isWritable).length,
@@ -79,25 +78,9 @@ const accountSummary = (accounts: IAccountPreview[]): IAccountSummary => ({
 });
 
 /** Imports a preview instruction into the current transaction */
-export const mapToIInstruction = ({
-  programId,
-  accounts,
-  data,
-}: IInstructionPreview): IInstruction => ({
-  ...newInstruction(),
+export const mapIInstructionPreviewToIInstruction = (
+  instruction: IInstructionPreview
+): IInstruction => ({
+  ...mapIInstructionExtToIInstruction(instruction),
   name: "Imported Instruction",
-  programId,
-  accounts: toSortableCollection(
-    accounts.map(({ pubkey, isWritable, isSigner }) => ({
-      ...newAccount(),
-      pubkey,
-      isSigner,
-      isWritable,
-    }))
-  ),
-  data: {
-    ...EMPTY_INSTRUCTION_DATA,
-    format: "raw",
-    raw: data,
-  },
 });

@@ -26,8 +26,8 @@ import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
 import { IBalance } from "../../../models/internal-types";
 import {
-  mapBalances,
-  mapTransactionError,
+  extractBalances,
+  mapWeb3TransactionError,
 } from "../../../models/web3js-mappers";
 import { ErrorAlert } from "../../common/ErrorAlert";
 import { BalanceTable } from "./BalanceTable";
@@ -69,7 +69,7 @@ export const Results: React.FC = () => {
         slot,
         confirmationStatus,
         confirmations: confirmations || undefined,
-        error: mapTransactionError(err),
+        error: mapWeb3TransactionError(err),
       });
     },
     onFinalised: (response) => {
@@ -77,9 +77,9 @@ export const Results: React.FC = () => {
         confirmationStatus: "finalized",
         blockTime: response.blockTime || undefined,
         slot: response.slot,
-        balances: mapBalances(response),
+        balances: extractBalances(response),
         logs: response.meta?.logMessages || [],
-        error: mapTransactionError(response.meta?.err),
+        error: mapWeb3TransactionError(response.meta?.err),
         fee: response.meta?.fee,
       });
       setInProgress(false);

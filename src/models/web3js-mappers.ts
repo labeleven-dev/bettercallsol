@@ -30,7 +30,7 @@ export const isValidPublicKey = (key: string): boolean =>
   bs58.decode(key).length === 32;
 
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
-export const mapToTransaction = (
+export const mapITransactionToWeb3Transaction = (
   transactionData: ITransaction
 ): Transaction => {
   // TODO filter out empty fields
@@ -74,7 +74,9 @@ export const mapToTransaction = (
   return transaction;
 };
 
-export const mapBalances = (transaction: TransactionResponse): IBalance[] => {
+export const extractBalances = (
+  transaction: TransactionResponse
+): IBalance[] => {
   const { accountKeys } = transaction.transaction.message;
   const { preBalances, postBalances } = transaction.meta!;
 
@@ -85,7 +87,7 @@ export const mapBalances = (transaction: TransactionResponse): IBalance[] => {
   }));
 };
 
-export const mapTransactionError = (err: any): string => {
+export const mapWeb3TransactionError = (err: any): string => {
   if (!err) return "";
 
   let error = "Unexpected error";

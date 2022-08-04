@@ -1,5 +1,6 @@
 import {
   Flex,
+  FlexProps,
   Icon,
   Tag,
   Text,
@@ -9,9 +10,11 @@ import {
 import React from "react";
 import { IAccountSummary } from "../../../models/preview-types";
 
-export const AccountSummary: React.FC<{
-  summary: IAccountSummary;
-}> = ({
+export const AccountSummary: React.FC<
+  {
+    summary: IAccountSummary;
+  } & FlexProps
+> = ({
   summary: {
     total,
     writableSigner,
@@ -19,6 +22,7 @@ export const AccountSummary: React.FC<{
     writableUnsigned,
     readonlyUsigned,
   },
+  ...theRest
 }) => {
   const tags = [
     {
@@ -48,7 +52,7 @@ export const AccountSummary: React.FC<{
   ].filter(({ count }) => count > 0);
 
   return (
-    <Flex alignItems="center">
+    <Flex {...theRest} alignItems="center">
       <Tooltip label="Accounts">
         <Flex>
           <AccountIcon />

@@ -1,6 +1,5 @@
 import { AddIcon, CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Flex,
   Grid,
   Icon,
@@ -12,25 +11,35 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapToIInstruction } from "../../../models/preview-mappers";
+import { mapIInstructionPreviewToIInstruction } from "../../../models/preview-mappers";
 import { ITransactionPreview } from "../../../models/preview-types";
 import { addTo } from "../../../models/sortable";
 import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
-import { ExplorerButton } from "../../common/ExplorerButton";
 import { AccountSummary } from "./AccountSummary";
 import { InstructionPreview } from "./InstructionPreview";
 
 export const TransactionPreview: React.FC<{
   transaction: ITransactionPreview;
 }> = ({
-  transaction: { signature, rpcEndpoint, instructions, accountSummary, error },
+  transaction: {
+    source,
+    sourceValue,
+    name,
+    rpcEndpoint,
+    instructions,
+    accountSummary,
+    error,
+  },
 }) => {
   const addInstructions = useSessionStoreWithUndo(
     (state) => () =>
       state.set((state) => {
         instructions.forEach((instruction) => {
-          addTo(state.transaction.instructions, mapToIInstruction(instruction));
+          addTo(
+            state.transaction.instructions,
+            mapIInstructionPreviewToIInstruction(instruction)
+          );
         });
       })
   );
@@ -48,15 +57,24 @@ export const TransactionPreview: React.FC<{
       <Flex mb="3" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
+
         <TransactionIcon />
-        <Tooltip label={signature}>
+
+        {source === "tx" ? (
+          <>
+            <Tooltip label={sourceValue}>
+              <Text ml="2" mr="1" as="kbd" fontSize="sm">
+                {short(sourceValue)}
+              </Text>
+            </Tooltip>
+            <CopyButton size="xs" mr="1" value={sourceValue} />
+          </>
+        ) : (
           <Text ml="2" mr="1" as="kbd" fontSize="sm">
-            {short(signature)}
+            {name || "Transaction"}
           </Text>
-        </Tooltip>
-        <Box mr="1">
-          <CopyButton size="xs" value={signature} />
-        </Box>
+        )}
+
         {error ? (
           <Tooltip label={`Transaction failed: ${error}`}>
             <WarningIcon color="red.400" />
@@ -66,6 +84,7 @@ export const TransactionPreview: React.FC<{
             <CheckCircleIcon color="green.400" />
           </Tooltip>
         )}
+
         <Tooltip label={rpcEndpoint.network}>
           <Tag ml="1" size="sm" colorScheme="yellow">
             {rpcEndpoint.network[0].toUpperCase()}
@@ -74,14 +93,6 @@ export const TransactionPreview: React.FC<{
 
         <Spacer />
 
-        <Box ml="-2">
-          <ExplorerButton
-            size="xs"
-            valueType="tx"
-            value={signature}
-            rpcEndpoint={rpcEndpoint}
-          />
-        </Box>
         <Tooltip label="Add all instructions to transaction">
           <IconButton
             size="xs"
@@ -93,9 +104,7 @@ export const TransactionPreview: React.FC<{
         </Tooltip>
       </Flex>
 
-      <Box ml="10" mb="5">
-        <AccountSummary summary={accountSummary} />
-      </Box>
+      <AccountSummary ml="10" mb="5" summary={accountSummary} />
 
       {instructions.map((instruction, index) => (
         <InstructionPreview

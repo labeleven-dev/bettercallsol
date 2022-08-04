@@ -14,7 +14,7 @@ import {
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
 import { EXAMPLES } from "../../models/examples";
-import { mapFromTransactionExt } from "../../models/external-mappers";
+import { mapITransactionExtToITransaction } from "../../models/external-mappers";
 import { DEFAULT_TRANSACTION_RUN } from "../../models/state-default";
 
 export const Example: React.FC = () => {
@@ -24,7 +24,7 @@ export const Example: React.FC = () => {
 
   const loadExample = (name: string) => {
     setTransaction((state) => {
-      state.transaction = mapFromTransactionExt(
+      state.transaction = mapITransactionExtToITransaction(
         EXAMPLES[name](walletPublicKey?.toBase58()!)
       );
     });

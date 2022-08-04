@@ -1,7 +1,7 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey, Signer } from "@solana/web3.js";
 import { ITransaction } from "../models/internal-types";
-import { mapToTransaction } from "../models/web3js-mappers";
+import { mapITransactionToWeb3Transaction } from "../models/web3js-mappers";
 import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 
@@ -33,7 +33,7 @@ export const useSendWeb3Transaction = ({
     }
 
     try {
-      const web3Transaction = mapToTransaction(transaction);
+      const web3Transaction = mapITransactionToWeb3Transaction(transaction);
 
       // add additional signers
       const signerPubkeys = Object.values(transaction.instructions.map)

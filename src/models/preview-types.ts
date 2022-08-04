@@ -1,6 +1,7 @@
 // Models for transactions fetched from the chain, as part of import
 
-import { IPubKey, IRpcEndpoint } from "./internal-types";
+import { IInstructionExt } from "./external-types";
+import { IRpcEndpoint } from "./internal-types";
 
 export interface IAccountSummary {
   total: number;
@@ -10,22 +11,18 @@ export interface IAccountSummary {
   readonlyUsigned: number;
 }
 
-export interface IAccountPreview {
-  pubkey: IPubKey;
-  isWritable: boolean;
-  isSigner: boolean;
-}
-
-export interface IInstructionPreview {
-  programId: IPubKey;
-  accounts: IAccountPreview[];
-  data: string;
+export interface IInstructionPreview extends IInstructionExt {
   accountSummary: IAccountSummary;
   innerInstructions?: IInstructionPreview[];
 }
 
+export type PreviewSource = "tx" | "shareUrl"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
+
 export interface ITransactionPreview {
-  signature: IPubKey;
+  source: PreviewSource;
+  sourceValue: string; // could transaction ID, URL, file path, etc.
+  name?: string;
+  description?: string;
   rpcEndpoint: IRpcEndpoint;
   instructions: IInstructionPreview[];
   accountSummary: IAccountSummary;

@@ -9,6 +9,7 @@ export type IPubKey = string;
 export interface IAccount {
   id: IID;
   name?: string;
+  description?: string;
   pubkey: IPubKey;
   isWritable: boolean;
   isSigner: boolean;
@@ -32,6 +33,7 @@ export type InstructionDataFieldType =
 export interface IInstrctionDataField {
   id: IID;
   name?: string;
+  description?: string;
   type: InstructionDataFieldType;
   value: any;
 }
@@ -48,6 +50,7 @@ export interface IInstructionData {
 export interface IInstruction {
   id: IID;
   name?: string;
+  description?: string;
   programId: IPubKey;
   accounts: SortableCollection<IAccount>;
   data: IInstructionData;
@@ -70,6 +73,7 @@ export interface IRpcEndpoint {
 
 export interface ITransaction {
   name?: string;
+  description?: string;
   instructions: SortableCollection<IInstruction>;
 }
 

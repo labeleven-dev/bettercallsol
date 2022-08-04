@@ -1,6 +1,14 @@
 import { v4 as uuid } from "uuid";
-import { IInstrctionDataFieldExt, ITransactionExt } from "./external-types";
-import { IInstrctionDataField, ITransaction } from "./internal-types";
+import {
+  IInstrctionDataFieldExt,
+  IInstructionExt,
+  ITransactionExt,
+} from "./external-types";
+import {
+  IInstrctionDataField,
+  IInstruction,
+  ITransaction,
+} from "./internal-types";
 import {
   Identifiable,
   SortableCollection,
@@ -18,7 +26,7 @@ const mapToIInstrctionDataFieldExt = ({
   value,
 });
 
-export const mapToTransactionExt = ({
+export const mapITransactionToTransactionExt = ({
   name,
   instructions,
 }: ITransaction): ITransactionExt => ({
@@ -48,47 +56,58 @@ export const mapToTransactionExt = ({
   ),
 });
 
+const mapToSortable = <T>(item: T): T & Identifiable => ({
+  ...item,
+  id: uuid(),
+});
+
 const mapToSortableCollection = <T>(
   items: T[]
 ): SortableCollection<T & Identifiable> =>
-  toSortableCollection(items.map((item) => ({ ...item, id: uuid() })));
+  toSortableCollection(items.map(mapToSortable));
 
-export const mapFromTransactionExt = ({
+export const mapITransactionExtToITransaction = ({
   name,
   instructions,
 }: ITransactionExt): ITransaction => ({
   name,
   instructions: mapToSortableCollection(
-    instructions.map(({ name, programId, accounts, data }) => ({
-      name,
-      programId,
-      accounts: mapToSortableCollection(
-        accounts.map(({ name, pubkey, isWritable, isSigner }) => ({
-          name,
-          pubkey,
-          isWritable,
-          isSigner,
-        }))
-      ),
-      data: {
-        format: data.format,
-        raw: data.format === "raw" ? (data.value as string) : "",
-        borsh: mapToSortableCollection(
-          data.format === "borsh"
-            ? (data.value as IInstrctionDataFieldExt[])
-            : []
-        ),
-        bufferLayout: mapToSortableCollection(
-          data.format === "bufferLayout"
-            ? (data.value as IInstrctionDataFieldExt[])
-            : []
-        ),
-      },
-      disabled: false,
-      expanded: true,
-    }))
+    instructions.map(mapIInstructionExtToIInstruction)
   ),
 });
+
+export const mapIInstructionExtToIInstruction = ({
+  name,
+  programId,
+  accounts,
+  data,
+}: IInstructionExt): IInstruction =>
+  mapToSortable({
+    name,
+    programId,
+    accounts: mapToSortableCollection(
+      accounts.map(({ name, pubkey, isWritable, isSigner }) => ({
+        name,
+        pubkey,
+        isWritable,
+        isSigner,
+      }))
+    ),
+    data: {
+      format: data.format,
+      raw: data.format === "raw" ? (data.value as string) : "",
+      borsh: mapToSortableCollection(
+        data.format === "borsh" ? (data.value as IInstrctionDataFieldExt[]) : []
+      ),
+      bufferLayout: mapToSortableCollection(
+        data.format === "bufferLayout"
+          ? (data.value as IInstrctionDataFieldExt[])
+          : []
+      ),
+    },
+    disabled: false,
+    expanded: true,
+  });
 
 // const mapFromTransactionExport = (
 //   transaction: ITransactionExport
