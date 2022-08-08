@@ -43,6 +43,7 @@ export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
 export const newInstruction = (): IInstruction => ({
   id: uuid(),
   name: "",
+  dynamic: true,
   programId: "",
   accounts: { map: {}, order: [] },
   data: EMPTY_INSTRUCTION_DATA,

@@ -50,7 +50,7 @@ export const useWeb3Account = (
     };
 
     fetch().catch(console.log); // TODO better error handling? Too noisy for user
-  }, [address, connection, provider]);
+  }, [address, activeConnection, provider]);
 
   return accountInfo;
 };

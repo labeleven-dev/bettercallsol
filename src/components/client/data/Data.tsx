@@ -19,7 +19,10 @@ import { RawData } from "./RawData";
 export const Data: React.FC<{ data: IInstructionData }> = ({
   data: { format, raw, borsh, bufferLayout },
 }) => {
-  const { update } = useInstruction();
+  const {
+    instruction: { dynamic },
+    update,
+  } = useInstruction();
 
   const tabStyle: TabProps = {
     mr: "1",
@@ -62,10 +65,10 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
           <Tab {...tabStyle} rounded="md">
             Borsh
           </Tab>
-          <Tab {...tabStyle} rounded="md">
+          <Tab {...tabStyle} rounded="md" isDisabled={!dynamic}>
             Buffer Layout
           </Tab>
-          <Tab {...tabStyle} rounded="md">
+          <Tab {...tabStyle} rounded="md" isDisabled={!dynamic}>
             Raw
           </Tab>
         </TabList>

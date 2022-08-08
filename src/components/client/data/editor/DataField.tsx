@@ -35,7 +35,10 @@ export const DataField: React.FC<{
   format: DataFormat;
   index: number;
 }> = ({ field: { id, name, type, value }, format, index }) => {
-  const { update } = useInstruction();
+  const {
+    instruction: { dynamic },
+    update,
+  } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
 
   const updateField = (
@@ -50,21 +53,23 @@ export const DataField: React.FC<{
 
   return (
     <Flex mb="2" alignItems="center">
-      <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
+      {dynamic && (
+        <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
+      )}
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
       <EditableName
         ml="2"
         w={useBreakpointValue({
-          base: "50px",
-          md: "100px",
+          base: "100px",
           lg: "150px",
           xl: "200px",
         })}
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"
+        isDisabled={!dynamic}
         value={name}
         onChange={(value: string) => {
           updateField((state) => {
@@ -79,6 +84,7 @@ export const DataField: React.FC<{
         size="sm"
         fontFamily="mono"
         placeholder="Field Type"
+        isDisabled={!dynamic}
         value={type}
         onChange={(e) => {
           updateField((state) => {
@@ -137,23 +143,27 @@ export const DataField: React.FC<{
         />
       )}
 
-      <Tooltip label="Remove">
-        <IconButton
-          ml="3"
-          size="xs"
-          aria-label="Remove"
-          icon={<CloseIcon />}
-          variant="ghost"
-          onClick={() => {
-            update((state) => {
-              removeFrom(
-                state.data[format] as SortableCollection<IInstrctionDataField>,
-                id
-              );
-            });
-          }}
-        />
-      </Tooltip>
+      {dynamic && (
+        <Tooltip label="Remove">
+          <IconButton
+            ml="3"
+            size="xs"
+            aria-label="Remove"
+            icon={<CloseIcon />}
+            variant="ghost"
+            onClick={() => {
+              update((state) => {
+                removeFrom(
+                  state.data[
+                    format
+                  ] as SortableCollection<IInstrctionDataField>,
+                  id
+                );
+              });
+            }}
+          />
+        </Tooltip>
+      )}
     </Flex>
   );
 };

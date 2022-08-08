@@ -57,6 +57,7 @@ export const mapTransactionResponseToIPreview = (
   }: CompiledInstruction): IInstructionPreview => {
     const mappedAccounts = accounts.map((index) => parsedAccountKeys[index]);
     return {
+      dynamic: true,
       programId: accountKeys[programIdIndex].toBase58(),
       accounts: mappedAccounts,
       data: {
@@ -70,7 +71,6 @@ export const mapTransactionResponseToIPreview = (
   return {
     source: "tx",
     sourceValue: response.transaction.signatures[0],
-    dynamic: true,
     rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
@@ -85,7 +85,7 @@ export const mapTransactionResponseToIPreview = (
 };
 
 export const mapITransactionExtToIPreview = (
-  { name, dynamic, instructions }: ITransactionExt,
+  { name, instructions }: ITransactionExt,
   source: PreviewSource,
   sourceValue: string
 ): IPreview => {
@@ -93,7 +93,6 @@ export const mapITransactionExtToIPreview = (
     source,
     sourceValue,
     name,
-    dynamic,
     instructions: instructions.map((instruction) => ({
       ...instruction,
       accountSummary: accountSummary(instruction.accounts),
@@ -113,11 +112,9 @@ const accountSummary = (accounts: IAccountExt[]): IAccountSummary => ({
 
 export const mapIPreviewToITransaction = ({
   name,
-  dynamic,
   instructions,
 }: IPreview): ITransaction => ({
   name,
-  dynamic,
   instructions: toSortableCollection(
     instructions.map(mapIInstructionPreviewToIInstruction)
   ),
@@ -151,6 +148,7 @@ const mapIdlInstructionToIInstructionPreview = (
 
   return {
     name,
+    dynamic: false,
     programId,
     accounts: mappedAccounts,
     accountSummary: accountSummary(mappedAccounts),
@@ -171,7 +169,6 @@ export const mapIdlToIPreview = (
 ): IPreview => ({
   source: "anchorProgramId",
   sourceValue: programId,
-  dynamic: false,
   rpcEndpoint,
   name,
   instructions: instructions.map((instruction) =>

@@ -23,7 +23,10 @@ import { Account } from "./Account";
 export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
   accounts,
 }) => {
-  const { update } = useInstruction();
+  const {
+    instruction: { dynamic },
+    update,
+  } = useInstruction();
 
   return (
     <Grid>
@@ -43,24 +46,26 @@ export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
           }}
         >
           {toSortedArray(accounts).map((account, index) => (
-            <Account data={account} index={index} key={account.id} />
+            <Account account={account} index={index} key={account.id} />
           ))}
         </Sortable>
       </Box>
-      <Tooltip label="Add Account">
-        <IconButton
-          mt="1"
-          aria-label="Add Account"
-          icon={<AddIcon />}
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            update((state) => {
-              addTo(state.accounts, newAccount());
-            });
-          }}
-        />
-      </Tooltip>
+      {dynamic && (
+        <Tooltip label="Add Account">
+          <IconButton
+            mt="1"
+            aria-label="Add Account"
+            icon={<AddIcon />}
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              update((state) => {
+                addTo(state.accounts, newAccount());
+              });
+            }}
+          />
+        </Tooltip>
+      )}
     </Grid>
   );
 };

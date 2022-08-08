@@ -28,14 +28,13 @@ const mapToIInstrctionDataFieldExt = ({
 
 export const mapITransactionToTransactionExt = ({
   name,
-  dynamic,
   instructions,
 }: ITransaction): ITransactionExt => ({
   name,
-  dynamic,
   instructions: toSortedArray(instructions).map(
-    ({ name, programId, accounts, data }) => ({
+    ({ name, dynamic, programId, accounts, data }) => ({
       name: name || undefined,
+      dynamic,
       programId,
       accounts: toSortedArray(accounts).map(
         ({ name, pubkey, isWritable, isSigner }) => ({
@@ -70,11 +69,9 @@ const mapToSortableCollection = <T>(
 
 export const mapITransactionExtToITransaction = ({
   name,
-  dynamic,
   instructions,
 }: ITransactionExt): ITransaction => ({
   name,
-  dynamic,
   instructions: mapToSortableCollection(
     instructions.map(mapIInstructionExtToIInstruction)
   ),
@@ -82,12 +79,14 @@ export const mapITransactionExtToITransaction = ({
 
 export const mapIInstructionExtToIInstruction = ({
   name,
+  dynamic,
   programId,
   accounts,
   data,
 }: IInstructionExt): IInstruction =>
   mapToSortable({
     name,
+    dynamic,
     programId,
     accounts: mapToSortableCollection(
       accounts.map(({ name, pubkey, isWritable, isSigner }) => ({

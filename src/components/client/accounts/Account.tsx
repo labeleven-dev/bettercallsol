@@ -28,11 +28,14 @@ import { SortableItemContext } from "../../common/Sortable";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
 import { AirdropButton } from "./AirdropButton";
 
-export const Account: React.FC<{ data: IAccount; index: number }> = ({
-  data,
+export const Account: React.FC<{ account: IAccount; index: number }> = ({
+  account: { id, name, pubkey, isWritable, isSigner },
   index,
 }) => {
-  const { update } = useInstruction();
+  const {
+    instruction: { dynamic },
+    update,
+  } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
   const { publicKey: walletPubkey } = useWallet();
   const [rpcEndpoint, keypairs, setSession] = useSessionStoreWithUndo(
@@ -40,23 +43,23 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
   );
   const toast = useToast();
 
-  const isValid = isValidPublicKey(data.pubkey);
-  const isWallet = data.pubkey === walletPubkey?.toBase58();
-  const hasPrivateKey = Object.keys(keypairs).includes(data.pubkey);
+  const isValid = isValidPublicKey(pubkey);
+  const isWallet = pubkey === walletPubkey?.toBase58();
+  const hasPrivateKey = Object.keys(keypairs).includes(pubkey);
 
   const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
     update((state) => {
-      fn(state.accounts.map[data.id]);
+      fn(state.accounts.map[id]);
     });
   };
 
   const removeAccount = () => {
     update((state) => {
-      removeFrom(state.accounts, data.id);
+      removeFrom(state.accounts, id);
     });
     if (hasPrivateKey) {
       setSession((state) => {
-        delete state.keypairs[data.pubkey];
+        delete state.keypairs[pubkey];
       });
     }
   };
@@ -82,15 +85,16 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
   };
 
   const nameWidth = useBreakpointValue({
-    base: "50px",
-    md: "100px",
+    base: "100px",
     lg: "150px",
     xl: "200px",
   });
 
   return (
     <Flex mb="2" alignItems="center">
-      <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
+      {dynamic && (
+        <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
+      )}
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
@@ -101,7 +105,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"
-        value={data.name}
+        isDisabled={!dynamic}
+        value={name}
         onChange={(value: string) => {
           updateAccount((state) => {
             state.name = value;
@@ -126,7 +131,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           ml="2"
           fontFamily="mono"
           placeholder="Account Public Key"
-          value={data.pubkey}
+          value={pubkey}
           onChange={(e) => {
             updateAccount((state) => {
               state.pubkey = e.target.value.trim();
@@ -136,11 +141,11 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         <InputRightElement w="60px">
           {isValid ? (
             <>
-              <AirdropButton accountPubkey={data.pubkey} />
+              <AirdropButton accountPubkey={pubkey} />
               <ExplorerButton
                 size="xs"
                 valueType="account"
-                value={data.pubkey}
+                value={pubkey}
                 rpcEndpoint={rpcEndpoint}
               />
             </>
@@ -174,7 +179,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         size="sm"
         label="Writable"
         icon={<EditIcon />}
-        toggled={data.isWritable}
+        isDisabled={!dynamic}
+        toggled={isWritable}
         onToggle={(toggled) => {
           updateAccount((state) => {
             state.isWritable = toggled;
@@ -187,7 +193,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         size="sm"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
-        toggled={data.isSigner}
+        isDisabled={!dynamic}
+        toggled={isSigner}
         onToggle={(toggled) => {
           updateAccount((state) => {
             state.isSigner = toggled;
@@ -195,16 +202,18 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
         }}
       />
 
-      <Tooltip label="Remove">
-        <IconButton
-          ml="3"
-          size="xs"
-          aria-label="Remove"
-          icon={<CloseIcon />}
-          variant="ghost"
-          onClick={removeAccount}
-        />
-      </Tooltip>
+      {dynamic && (
+        <Tooltip label="Remove">
+          <IconButton
+            ml="3"
+            size="xs"
+            aria-label="Remove"
+            icon={<CloseIcon />}
+            variant="ghost"
+            onClick={removeAccount}
+          />
+        </Tooltip>
+      )}
     </Flex>
   );
 };

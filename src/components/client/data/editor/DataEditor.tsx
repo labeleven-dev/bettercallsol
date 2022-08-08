@@ -20,7 +20,10 @@ export const DataEditor: React.FC<{
   format: DataFormat;
   fields: SortableCollection<IInstrctionDataField>;
 }> = ({ format, fields }) => {
-  const { update } = useInstruction();
+  const {
+    instruction: { dynamic },
+    update,
+  } = useInstruction();
 
   const updateFields = (
     fn: (state: WritableDraft<SortableCollection<IInstrctionDataField>>) => void
@@ -49,18 +52,21 @@ export const DataEditor: React.FC<{
           />
         ))}
       </Sortable>
-      <Tooltip label="Add Data">
-        <IconButton
-          mt="1"
-          aria-label="Add Data"
-          icon={<AddIcon />}
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            updateFields((state) => addTo(state, newDataField()));
-          }}
-        />
-      </Tooltip>
+
+      {dynamic && (
+        <Tooltip label="Add Data">
+          <IconButton
+            mt="1"
+            aria-label="Add Data"
+            icon={<AddIcon />}
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              updateFields((state) => addTo(state, newDataField()));
+            }}
+          />
+        </Tooltip>
+      )}
     </Grid>
   );
 };

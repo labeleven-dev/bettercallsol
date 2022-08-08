@@ -55,6 +55,7 @@ export interface IInstruction {
   id: IID;
   name?: string;
   description?: string;
+  dynamic: boolean;
   programId: IPubKey;
   accounts: SortableCollection<IAccount>;
   data: IInstructionData;
@@ -78,7 +79,6 @@ export interface IRpcEndpoint {
 export interface ITransaction {
   name?: string;
   description?: string;
-  dynamic: boolean;
   instructions: SortableCollection<IInstruction>;
 }
 

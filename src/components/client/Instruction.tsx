@@ -1,5 +1,6 @@
 import { WarningTwoIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Collapse,
   Grid,
   Icon,
@@ -55,11 +56,18 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             <InputLeftElement>
               {programHasIdl ? (
                 <Tooltip label="Anchor program">
-                  <Icon as={FaAnchor} />
+                  {/* Box is needed coz react-icons do not support forwardref 
+                      https://github.com/chakra-ui/chakra-ui/issues/683
+                  */}
+                  <Box>
+                    <Icon as={FaAnchor} />
+                  </Box>
                 </Tooltip>
               ) : programExecutable ? (
                 <Tooltip label="Executable program">
-                  <Icon as={FaRobot} />
+                  <Box>
+                    <Icon as={FaRobot} />
+                  </Box>
                 </Tooltip>
               ) : (
                 <Tooltip label="Not a program">
@@ -81,6 +89,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           />
           <InputRightElement
             // bug where it's set to 2 and goes in front of network selector menu :(
+            // downside is that it is not clickable when the text field is active
             zIndex="base"
           >
             <ExplorerButton

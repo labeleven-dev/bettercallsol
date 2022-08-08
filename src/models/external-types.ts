@@ -29,6 +29,7 @@ export interface IDataExt {
 export interface IInstructionExt {
   name?: string;
   description?: string;
+  dynamic: boolean;
   programId: IPubKey;
   accounts: IAccountExt[];
   data: IDataExt;
@@ -37,7 +38,6 @@ export interface IInstructionExt {
 export interface ITransactionExt {
   name?: string;
   description?: string;
-  dynamic: boolean;
   instructions: IInstructionExt[];
 }
 
