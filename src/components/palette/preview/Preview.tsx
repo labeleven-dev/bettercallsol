@@ -16,18 +16,19 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { FaAnchor } from "react-icons/fa";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapITransactionPreviewToITransaction } from "../../../models/preview-mappers";
-import { ITransactionPreview } from "../../../models/preview-types";
+import { mapIPreviewToITransaction } from "../../../models/preview-mappers";
+import { IPreview } from "../../../models/preview-types";
 import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
 import { InstructionPreview } from "./InstructionPreview";
 
-export const TransactionPreview: React.FC<{
-  transaction: ITransactionPreview;
+export const Preview: React.FC<{
+  preview: IPreview;
   interactive?: boolean;
-}> = ({ transaction, interactive = true }) => {
+}> = ({ preview, interactive = true }) => {
   const {
     source,
     sourceValue,
@@ -36,12 +37,12 @@ export const TransactionPreview: React.FC<{
     instructions,
     accountSummary,
     error,
-  } = transaction;
+  } = preview;
 
-  const setTransaction = useSessionStoreWithUndo(
+  const addAll = useSessionStoreWithUndo(
     (state) => () =>
       state.set((state) => {
-        state.transaction = mapITransactionPreviewToITransaction(transaction);
+        state.transaction = mapIPreviewToITransaction(preview);
       })
   );
 
@@ -55,13 +56,14 @@ export const TransactionPreview: React.FC<{
       boxShadow={useColorModeValue("base", "")}
       borderColor={useColorModeValue("gray.200", "gray.600")}
     >
-      <Flex mb="3" alignItems="center">
+      <Flex mb="1" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
 
-        <TransactionIcon />
+        {source === "anchorProgramId" && <AnchorIcon />}
+        {source !== "anchorProgramId" && <TransactionIcon />}
 
-        {source === "tx" ? (
+        {(source === "tx" || source === "anchorProgramId") && (
           <>
             <Tooltip label={sourceValue}>
               <Text ml="2" mr="1" as="kbd" fontSize="sm">
@@ -69,36 +71,45 @@ export const TransactionPreview: React.FC<{
               </Text>
             </Tooltip>
             <CopyButton size="xs" mr="1" value={sourceValue} />
-            {error ? (
-              <Tooltip label={`Transaction failed: ${error}`}>
-                <WarningIcon color="red.400" />
-              </Tooltip>
-            ) : (
-              <Tooltip label="Transaction succeeded">
-                <CheckCircleIcon color="green.400" />
-              </Tooltip>
-            )}
-            <Tooltip label={rpcEndpoint!.network}>
-              <Tag ml="1" size="sm" colorScheme="yellow">
-                {rpcEndpoint!.network[0].toUpperCase()}
-              </Tag>
+          </>
+        )}
+        {(source === "shareJson" || source === "shareUrl") && (
+          <Text ml="2" mr="1" as="kbd" fontSize="sm">
+            {name || "Transaction"}
+          </Text>
+        )}
+
+        {source === "tx" &&
+          (error ? (
+            <Tooltip label={`Transaction failed: ${error}`}>
+              <WarningIcon mr="1" color="red.400" />
             </Tooltip>
-          </>
-        ) : (
-          <>
-            <Text ml="2" mr="1" as="kbd" fontSize="sm">
-              {name || "Transaction"}
-            </Text>
-            {source === "shareUrl" ? (
-              <Tag fontSize="xs">
-                <Link href={sourceValue} isExternal>
-                  URL <ExternalLinkIcon />
-                </Link>
-              </Tag>
-            ) : (
-              <Tag fontSize="xs">JSON</Tag>
-            )}
-          </>
+          ) : (
+            <Tooltip label="Transaction succeeded">
+              <CheckCircleIcon mr="1" color="green.400" />
+            </Tooltip>
+          ))}
+
+        {(source === "tx" || source === "anchorProgramId") && (
+          <Tooltip label={rpcEndpoint!.network}>
+            <Tag mr="1" size="sm" colorScheme="yellow">
+              {rpcEndpoint!.network[0].toUpperCase()}
+            </Tag>
+          </Tooltip>
+        )}
+
+        {source === "shareUrl" && (
+          <Tag mr="1" fontSize="xs">
+            <Link href={sourceValue} isExternal>
+              URL <ExternalLinkIcon />
+            </Link>
+          </Tag>
+        )}
+
+        {source === "shareJson" && (
+          <Tag mr="1" fontSize="xs">
+            JSON
+          </Tag>
         )}
 
         <Spacer />
@@ -110,14 +121,14 @@ export const TransactionPreview: React.FC<{
               variant="ghost"
               aria-label="Add all instructions to transaction"
               icon={<AddIcon />}
-              onClick={setTransaction}
+              onClick={addAll}
             />
           </Tooltip>
         )}
       </Flex>
 
       {accountSummary && (
-        <AccountSummary ml="10" mt="3" mb="5" summary={accountSummary} />
+        <AccountSummary ml="5" mt="3" mb="5" summary={accountSummary} />
       )}
 
       {instructions.map((instruction, index) => (
@@ -125,6 +136,7 @@ export const TransactionPreview: React.FC<{
           key={index}
           index={index}
           instruction={instruction}
+          showProgram={source !== "anchorProgramId"}
           interactive={interactive}
         />
       ))}
@@ -139,4 +151,8 @@ const TransactionIcon: React.FC = () => (
       fill="currentColor"
     ></path>
   </Icon>
+);
+
+const AnchorIcon: React.FC = () => (
+  <Icon as={FaAnchor} color={useColorModeValue("green.400", "green.200")} />
 );

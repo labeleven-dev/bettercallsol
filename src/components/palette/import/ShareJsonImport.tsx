@@ -2,19 +2,19 @@ import { Flex, Textarea } from "@chakra-ui/react";
 import Ajv from "ajv";
 import { useMemo } from "react";
 import { JSON_SCHEMA } from "../../../models/external-types";
-import { mapITransactionExtToITransactionPreview } from "../../../models/preview-mappers";
-import { ITransactionPreview } from "../../../models/preview-types";
+import { mapITransactionExtToIPreview } from "../../../models/preview-mappers";
+import { IPreview } from "../../../models/preview-types";
 
 export const ShareJsonImport: React.FC<{
-  setTransaction: (tranaction: ITransactionPreview | undefined) => void;
+  setPreview: (tranaction: IPreview | undefined) => void;
   setError: (error: string) => void;
-}> = ({ setTransaction, setError }) => {
+}> = ({ setPreview, setError }) => {
   const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
 
   const parse = (json: string) => {
     if (!json) return;
 
-    setTransaction(undefined);
+    setPreview(undefined);
     setError("");
 
     let prasedJson;
@@ -30,12 +30,8 @@ export const ShareJsonImport: React.FC<{
       return;
     }
 
-    setTransaction(
-      mapITransactionExtToITransactionPreview(
-        prasedJson as ITransactionPreview,
-        "shareJson",
-        ""
-      )
+    setPreview(
+      mapITransactionExtToIPreview(prasedJson as IPreview, "shareJson", "")
     );
   };
 

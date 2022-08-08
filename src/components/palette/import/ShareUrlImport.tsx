@@ -4,13 +4,13 @@ import Ajv from "ajv";
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { JSON_SCHEMA } from "../../../models/external-types";
-import { mapITransactionExtToITransactionPreview } from "../../../models/preview-mappers";
-import { ITransactionPreview } from "../../../models/preview-types";
+import { mapITransactionExtToIPreview } from "../../../models/preview-mappers";
+import { IPreview } from "../../../models/preview-types";
 
 export const ShareUrlImport: React.FC<{
-  setTransaction: (tranaction: ITransactionPreview | undefined) => void;
+  setPreview: (tranaction: IPreview | undefined) => void;
   setError: (error: string) => void;
-}> = ({ setTransaction, setError }) => {
+}> = ({ setPreview, setError }) => {
   const [url, setUrl] = useState("");
   const [inProgress, setInprogress] = useState(false);
   const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
@@ -19,7 +19,7 @@ export const ShareUrlImport: React.FC<{
     if (!url) return;
 
     setInprogress(true);
-    setTransaction(undefined);
+    setPreview(undefined);
     setError("");
 
     axios
@@ -29,9 +29,9 @@ export const ShareUrlImport: React.FC<{
           setError(validate.errors?.map((e) => e.message).join(", ")!);
           return;
         }
-        setTransaction(
-          mapITransactionExtToITransactionPreview(
-            response.data as ITransactionPreview,
+        setPreview(
+          mapITransactionExtToIPreview(
+            response.data as IPreview,
             "shareUrl",
             url
           )

@@ -5,10 +5,10 @@ import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { JSON_SCHEMA } from "../models/external-types";
 import {
-  mapITransactionExtToITransactionPreview,
-  mapTransactionResponseToITransactionPreview,
+  mapITransactionExtToIPreview,
+  mapTransactionResponseToIPreview,
 } from "../models/preview-mappers";
-import { ITransactionPreview } from "../models/preview-types";
+import { IPreview } from "../models/preview-types";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithoutUndo } from "./useSessionStore";
@@ -43,10 +43,7 @@ export const useImport = () => {
       set((state) => {
         state.import = {
           isLoading: false,
-          transaction: mapTransactionResponseToITransactionPreview(
-            response,
-            rpcEndpoint
-          ),
+          transaction: mapTransactionResponseToIPreview(response, rpcEndpoint),
         };
       });
     },
@@ -106,8 +103,8 @@ export const useImport = () => {
         set((state) => {
           state.import = {
             isLoading: false,
-            transaction: mapITransactionExtToITransactionPreview(
-              response.data as ITransactionPreview,
+            transaction: mapITransactionExtToIPreview(
+              response.data as IPreview,
               "shareUrl",
               share
             ),

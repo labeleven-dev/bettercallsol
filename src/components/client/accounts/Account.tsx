@@ -81,6 +81,13 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
     });
   };
 
+  const nameWidth = useBreakpointValue({
+    base: "50px",
+    md: "100px",
+    lg: "150px",
+    xl: "200px",
+  });
+
   return (
     <Flex mb="2" alignItems="center">
       <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
@@ -89,12 +96,8 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
 
       <EditableName
         ml="2"
-        w={useBreakpointValue({
-          base: "50px",
-          md: "100px",
-          lg: "150px",
-          xl: "200px",
-        })}
+        minW={nameWidth}
+        maxW={nameWidth}
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"

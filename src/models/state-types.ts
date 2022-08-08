@@ -8,7 +8,7 @@ import {
   ITransactionOptions,
   ITransactionRun,
 } from "./internal-types";
-import { ITransactionPreview } from "./preview-types";
+import { IPreview } from "./preview-types";
 import { SortableCollection } from "./sortable";
 
 export type Explorer =
@@ -36,7 +36,7 @@ export interface UIState {
 
 export interface ImportState {
   readonly isLoading: boolean;
-  readonly transaction?: ITransactionPreview;
+  readonly transaction?: IPreview;
 }
 
 ////// State Stores //////

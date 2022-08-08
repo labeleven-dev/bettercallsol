@@ -17,9 +17,9 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../hooks/useSessionStore";
-import { mapITransactionPreviewToITransaction } from "../models/preview-mappers";
+import { mapIPreviewToITransaction } from "../models/preview-mappers";
 import { DEFAULT_IMPORT } from "../models/state-default";
-import { TransactionPreview } from "./palette/preview/TransactionPreview";
+import { Preview } from "./palette/preview/Preview";
 
 export const ImportModal: React.FC = () => {
   const [isLoading, transaction, setImport] = useSessionStoreWithoutUndo(
@@ -31,7 +31,7 @@ export const ImportModal: React.FC = () => {
 
   const onConfirm = () => {
     setTransaction((state) => {
-      state.transaction = mapITransactionPreviewToITransaction(transaction!);
+      state.transaction = mapIPreviewToITransaction(transaction!);
     });
     onClose();
   };
@@ -66,10 +66,7 @@ export const ImportModal: React.FC = () => {
           {transaction === undefined ? (
             <Skeleton h="200px" />
           ) : (
-            <TransactionPreview
-              transaction={transaction!}
-              interactive={false}
-            />
+            <Preview preview={transaction!} interactive={false} />
           )}
         </ModalBody>
 

@@ -5,14 +5,14 @@ import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { IRpcEndpoint } from "../../../models/internal-types";
-import { mapTransactionResponseToITransactionPreview } from "../../../models/preview-mappers";
-import { ITransactionPreview } from "../../../models/preview-types";
+import { mapTransactionResponseToIPreview } from "../../../models/preview-mappers";
+import { IPreview } from "../../../models/preview-types";
 import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
 
 export const TransactionIdImport: React.FC<{
-  setTransaction: (tranaction: ITransactionPreview | undefined) => void;
+  setPreview: (tranaction: IPreview | undefined) => void;
   setError: (error: string) => void;
-}> = ({ setTransaction, setError }) => {
+}> = ({ setPreview, setError }) => {
   const rpcEndpoints = usePersistentStore(
     (state) => state.appOptions.rpcEndpoints
   );
@@ -28,9 +28,7 @@ export const TransactionIdImport: React.FC<{
   const { start, inProgress } = useGetWeb3Transaction({
     connection,
     onFinalised: (response) => {
-      setTransaction(
-        mapTransactionResponseToITransactionPreview(response, rpcEndpoint)
-      );
+      setPreview(mapTransactionResponseToIPreview(response, rpcEndpoint));
     },
     onError: (error) => {
       setError(error.message);
@@ -40,7 +38,7 @@ export const TransactionIdImport: React.FC<{
   const search = () => {
     if (!tranasctionId) return;
 
-    setTransaction(undefined);
+    setPreview(undefined);
     setError("");
 
     start(tranasctionId, true);

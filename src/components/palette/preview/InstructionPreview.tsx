@@ -1,6 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Flex,
   Grid,
   Icon,
@@ -18,15 +17,18 @@ import { short } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
 import { Numbering } from "../../common/Numbering";
 import { AccountSummary } from "./AccountSummary";
+import { DataPreview } from "./DataPreview";
 
 export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
+  showProgram?: boolean;
   interactive?: boolean;
-}> = ({ instruction, index, interactive = true }) => {
+}> = ({ instruction, index, showProgram = true, interactive = true }) => {
   const set = useSessionStoreWithUndo((state) => state.set);
 
-  const { name, programId, accountSummary, innerInstructions } = instruction;
+  const { name, programId, accountSummary, data, innerInstructions } =
+    instruction;
 
   return (
     <Grid
@@ -37,7 +39,7 @@ export const InstructionPreview: React.FC<{
       rounded="md"
       borderColor={useColorModeValue("gray.300", "gray.600")}
     >
-      <Flex mb="2" alignItems="center">
+      <Flex mb="1" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mr="1" /> */}
 
@@ -72,25 +74,25 @@ export const InstructionPreview: React.FC<{
         )}
       </Flex>
 
-      <Flex ml="10" mt="1" alignItems="center">
-        <Flex>
-          <ProgramIcon />
-          <Tooltip label={programId}>
-            <Text ml="2" fontSize="sm" as="kbd">
-              {short(programId)}
-            </Text>
-          </Tooltip>
+      {showProgram && (
+        <Flex ml="5" mt="1" alignItems="center">
+          <Flex>
+            <ProgramIcon />
+            <Tooltip label={programId}>
+              <Text ml="2" fontSize="sm" as="kbd">
+                {short(programId)}
+              </Text>
+            </Tooltip>
+          </Flex>
+          <CopyButton size="xs" value={programId} />
         </Flex>
+      )}
 
-        <CopyButton size="xs" value={programId} />
-      </Flex>
-
-      <Box ml="10">
-        <AccountSummary summary={accountSummary} />
-      </Box>
+      <AccountSummary ml="5" summary={accountSummary} />
+      <DataPreview ml="5" mt="1" data={data} />
 
       {(innerInstructions?.length || 0) > 0 && (
-        <Flex ml="10" mt="1" alignItems="center">
+        <Flex ml="5" mt="1" alignItems="center">
           <Tooltip label="Inner instructions">
             <Flex>
               <InstructionIcon />

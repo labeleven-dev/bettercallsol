@@ -10,12 +10,12 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ITransactionPreview, PreviewSource } from "../../models/preview-types";
+import { IPreview, PreviewSource } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { ShareJsonImport } from "./import/ShareJsonImport";
 import { ShareUrlImport } from "./import/ShareUrlImport";
 import { TransactionIdImport } from "./import/TransactionIdImport";
-import { TransactionPreview } from "./preview/TransactionPreview";
+import { Preview } from "./preview/Preview";
 
 const IMPORT_TYPES: Record<PreviewSource, string> = {
   tx: "Transaction ID",
@@ -25,7 +25,7 @@ const IMPORT_TYPES: Record<PreviewSource, string> = {
 
 export const ImportTransaction: React.FC = () => {
   const [importType, setImportType] = useState<PreviewSource>("tx");
-  const [transaction, setTransaction] = useState<ITransactionPreview>();
+  const [preview, setPreview] = useState<IPreview>();
   const [error, setError] = useState("");
 
   return (
@@ -41,6 +41,7 @@ export const ImportTransaction: React.FC = () => {
                 key={type}
                 icon={type === importType ? <CheckIcon /> : undefined}
                 onClick={() => {
+                  setPreview(undefined); // clear
                   setImportType(type as PreviewSource);
                 }}
               >
@@ -52,16 +53,14 @@ export const ImportTransaction: React.FC = () => {
       </Flex>
 
       {importType === "tx" && (
-        <TransactionIdImport
-          setTransaction={setTransaction}
-          setError={setError}
-        />
+        <TransactionIdImport setPreview={setPreview} setError={setError} />
       )}
       {importType === "shareUrl" && (
-        <ShareUrlImport setTransaction={setTransaction} setError={setError} />
+        <ShareUrlImport setPreview={setPreview} setError={setError} />
       )}
       {importType === "shareJson" && (
-        <ShareJsonImport setTransaction={setTransaction} setError={setError} />
+        <ShareJsonImport setPreview={setPreview} setError={setError} />
+      )}
       )}
 
       <ErrorAlert
@@ -72,9 +71,7 @@ export const ImportTransaction: React.FC = () => {
         }}
       />
 
-      <Box mt="5">
-        {transaction && <TransactionPreview transaction={transaction} />}
-      </Box>
+      <Box mt="5">{preview && <Preview preview={preview} />}</Box>
     </Grid>
   );
 };

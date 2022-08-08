@@ -16,9 +16,9 @@ export interface IInstructionPreview extends IInstructionExt {
   innerInstructions?: IInstructionPreview[];
 }
 
-export type PreviewSource = "tx" | "shareUrl" | "shareJson"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
+export type PreviewSource = "tx" | "shareUrl" | "shareJson" | "anchorProgramId"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
 
-export interface ITransactionPreview {
+export interface IPreview {
   source: PreviewSource;
   sourceValue: string; // could transaction ID, URL, file path, etc.
   name?: string;
