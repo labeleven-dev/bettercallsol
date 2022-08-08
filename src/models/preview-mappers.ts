@@ -1,14 +1,27 @@
+import { Idl } from "@project-serum/anchor";
+import {
+  IdlAccount,
+  IdlAccountItem,
+  IdlInstruction,
+} from "@project-serum/anchor/dist/cjs/idl";
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
 import { mapIInstructionExtToIInstruction } from "./external-mappers";
 import { IAccountExt, ITransactionExt } from "./external-types";
-import { IInstruction, IRpcEndpoint, ITransaction } from "./internal-types";
+import {
+  IInstruction,
+  IPubKey,
+  IRpcEndpoint,
+  ITransaction,
+} from "./internal-types";
 import {
   IAccountSummary,
   IInstructionPreview,
-  ITransactionPreview,
+  IPreview,
   PreviewSource,
 } from "./preview-types";
 import { toSortableCollection } from "./sortable";
+
+/// web3.js <-> Preview ///
 
 // TODO getParsedTransaction has some more info for specific instructions
 // {
@@ -25,11 +38,10 @@ import { toSortableCollection } from "./sortable";
 //   "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
 // },
 
-/** Maps a web3.js transaction from the chain into a transaction preview, suitable for importing **/
-export const mapTransactionResponseToITransactionPreview = (
+export const mapTransactionResponseToIPreview = (
   response: TransactionResponse,
   rpcEndpoint: IRpcEndpoint
-): ITransactionPreview => {
+): IPreview => {
   const { accountKeys, instructions } = response.transaction.message;
 
   const parsedAccountKeys = accountKeys.map((account, index) => ({
@@ -58,6 +70,7 @@ export const mapTransactionResponseToITransactionPreview = (
   return {
     source: "tx",
     sourceValue: response.transaction.signatures[0],
+    dynamic: true,
     rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
@@ -71,15 +84,16 @@ export const mapTransactionResponseToITransactionPreview = (
   };
 };
 
-export const mapITransactionExtToITransactionPreview = (
-  { name, instructions }: ITransactionExt,
+export const mapITransactionExtToIPreview = (
+  { name, dynamic, instructions }: ITransactionExt,
   source: PreviewSource,
   sourceValue: string
-): ITransactionPreview => {
+): IPreview => {
   return {
     source,
     sourceValue,
     name,
+    dynamic,
     instructions: instructions.map((instruction) => ({
       ...instruction,
       accountSummary: accountSummary(instruction.accounts),
@@ -95,11 +109,15 @@ const accountSummary = (accounts: IAccountExt[]): IAccountSummary => ({
   readonlyUsigned: accounts.filter((x) => !x.isSigner && !x.isWritable).length,
 });
 
-export const mapITransactionPreviewToITransaction = ({
+/// Internal <-> Preview ///
+
+export const mapIPreviewToITransaction = ({
   name,
+  dynamic,
   instructions,
-}: ITransactionPreview): ITransaction => ({
+}: IPreview): ITransaction => ({
   name,
+  dynamic,
   instructions: toSortableCollection(
     instructions.map(mapIInstructionPreviewToIInstruction)
   ),
@@ -109,3 +127,54 @@ export const mapITransactionPreviewToITransaction = ({
 export const mapIInstructionPreviewToIInstruction = (
   instruction: IInstructionPreview
 ): IInstruction => mapIInstructionExtToIInstruction(instruction);
+
+/// Anchor IDL <-> Preview ///
+
+const mapIdlAccountItemToIAccountExt = (
+  account: IdlAccountItem
+): IAccountExt | null => {
+  if (Object.keys(account).includes("isMut")) {
+    const { name, isMut, isSigner } = account as IdlAccount;
+    return { name, isWritable: isMut, isSigner };
+  } else {
+    return null; // TODO support nested accounts
+  }
+};
+
+const mapIdlInstructionToIInstructionPreview = (
+  { name, accounts, args }: IdlInstruction,
+  programId: IPubKey
+): IInstructionPreview => {
+  const mappedAccounts = accounts
+    .map(mapIdlAccountItemToIAccountExt)
+    .filter((x) => x !== null) as IAccountExt[];
+
+  return {
+    name,
+    programId,
+    accounts: mappedAccounts,
+    accountSummary: accountSummary(mappedAccounts),
+    data: {
+      format: "borsh",
+      value: args.map(({ name, type }) => ({
+        name,
+        type: typeof type === "string" ? type : "unsupported", // TODO support defined, option, etc.
+      })),
+    },
+  };
+};
+
+export const mapIdlToIPreview = (
+  { name, instructions }: Idl,
+  programId: IPubKey,
+  rpcEndpoint?: IRpcEndpoint
+): IPreview => ({
+  source: "anchorProgramId",
+  sourceValue: programId,
+  dynamic: false,
+  rpcEndpoint,
+  name,
+  instructions: instructions.map((instruction) =>
+    mapIdlInstructionToIInstructionPreview(instruction, programId)
+  ),
+});

@@ -8,6 +8,7 @@ export const EXAMPLES: Record<
 > = {
   systemProgramCreateAccount: (walletPublicKey: string) => ({
     name: "System Program: Create Account",
+    dynamic: true, // so they can play around
     instructions: [
       {
         name: "Create Account",
@@ -57,6 +58,7 @@ export const EXAMPLES: Record<
 
   systemProgramTransfer: (walletPublicKey: string) => ({
     name: "System Program: Transfer",
+    dynamic: true, // so they can play around
     instructions: [
       {
         name: "Transfer",

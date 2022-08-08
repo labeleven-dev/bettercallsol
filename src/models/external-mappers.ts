@@ -28,9 +28,11 @@ const mapToIInstrctionDataFieldExt = ({
 
 export const mapITransactionToTransactionExt = ({
   name,
+  dynamic,
   instructions,
 }: ITransaction): ITransactionExt => ({
   name,
+  dynamic,
   instructions: toSortedArray(instructions).map(
     ({ name, programId, accounts, data }) => ({
       name: name || undefined,
@@ -68,9 +70,11 @@ const mapToSortableCollection = <T>(
 
 export const mapITransactionExtToITransaction = ({
   name,
+  dynamic,
   instructions,
 }: ITransactionExt): ITransaction => ({
   name,
+  dynamic,
   instructions: mapToSortableCollection(
     instructions.map(mapIInstructionExtToIInstruction)
   ),
@@ -88,7 +92,7 @@ export const mapIInstructionExtToIInstruction = ({
     accounts: mapToSortableCollection(
       accounts.map(({ name, pubkey, isWritable, isSigner }) => ({
         name,
-        pubkey,
+        pubkey: pubkey || "",
         isWritable,
         isSigner,
       }))
@@ -97,11 +101,19 @@ export const mapIInstructionExtToIInstruction = ({
       format: data.format,
       raw: data.format === "raw" ? (data.value as string) : "",
       borsh: mapToSortableCollection(
-        data.format === "borsh" ? (data.value as IInstrctionDataFieldExt[]) : []
+        data.format === "borsh"
+          ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({
+              value: "",
+              ...v,
+            }))
+          : []
       ),
       bufferLayout: mapToSortableCollection(
         data.format === "bufferLayout"
-          ? (data.value as IInstrctionDataFieldExt[])
+          ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({
+              value: "",
+              ...v,
+            }))
           : []
       ),
     },

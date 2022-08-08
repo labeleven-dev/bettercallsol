@@ -10,15 +10,20 @@ export interface IInstrctionDataFieldExt {
   name?: string;
   description?: string;
   type: InstructionDataFieldType;
-  value: any;
+  value?: any;
 }
 
 export interface IAccountExt {
   name?: string;
   description?: string;
-  pubkey: IPubKey;
+  pubkey?: IPubKey;
   isWritable: boolean;
   isSigner: boolean;
+}
+
+export interface IDataExt {
+  format: DataFormat;
+  value: IInstrctionDataFieldExt[] | string;
 }
 
 export interface IInstructionExt {
@@ -26,15 +31,13 @@ export interface IInstructionExt {
   description?: string;
   programId: IPubKey;
   accounts: IAccountExt[];
-  data: {
-    format: DataFormat;
-    value: IInstrctionDataFieldExt[] | string;
-  };
+  data: IDataExt;
 }
 
 export interface ITransactionExt {
   name?: string;
   description?: string;
+  dynamic: boolean;
   instructions: IInstructionExt[];
 }
 

@@ -24,11 +24,15 @@ export type InstructionDataFieldType =
   | "i32"
   | "u64"
   | "i64"
-  // | "u128"
-  // | "i128"
+  | "u128"
+  | "i128"
+  | "f32"
+  | "f64"
   | "bool"
+  | "bytes"
   | "publicKey"
-  | "string";
+  | "string"
+  | "unsupported";
 
 export interface IInstrctionDataField {
   id: IID;
@@ -74,6 +78,7 @@ export interface IRpcEndpoint {
 export interface ITransaction {
   name?: string;
   description?: string;
+  dynamic: boolean;
   instructions: SortableCollection<IInstruction>;
 }
 

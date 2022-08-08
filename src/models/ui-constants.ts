@@ -37,6 +37,7 @@ export const FORMAT_DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> =
       "bool",
       "publicKey",
       "string",
+      "unsupported",
     ],
     bufferLayout: [
       "u8",
@@ -47,9 +48,13 @@ export const FORMAT_DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> =
       "i32",
       "u64",
       "i64",
+      "f32",
+      "f64",
       "bool",
+      "bytes",
       "publicKey",
       "string",
+      "unsupported",
     ],
     raw: [],
   };
@@ -64,4 +69,8 @@ export const NUMERICAL_DATA_TYPES: InstructionDataFieldType[] = [
   "i32",
   "u64",
   "i64",
+  "u128",
+  "i128",
+  "f32",
+  "f64",
 ];

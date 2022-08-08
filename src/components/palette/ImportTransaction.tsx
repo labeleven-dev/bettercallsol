@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { IPreview, PreviewSource } from "../../models/preview-types";
 import { ErrorAlert } from "../common/ErrorAlert";
+import { AnchorProgramIdImport } from "./import/AnchorProgramIdImport";
 import { ShareJsonImport } from "./import/ShareJsonImport";
 import { ShareUrlImport } from "./import/ShareUrlImport";
 import { TransactionIdImport } from "./import/TransactionIdImport";
@@ -21,6 +22,7 @@ const IMPORT_TYPES: Record<PreviewSource, string> = {
   tx: "Transaction ID",
   shareUrl: "Share URL",
   shareJson: "Share JSON",
+  anchorProgramId: "Anchor Program ID",
 };
 
 export const ImportTransaction: React.FC = () => {
@@ -61,6 +63,8 @@ export const ImportTransaction: React.FC = () => {
       {importType === "shareJson" && (
         <ShareJsonImport setPreview={setPreview} setError={setError} />
       )}
+      {importType === "anchorProgramId" && (
+        <AnchorProgramIdImport setPreview={setPreview} setError={setError} />
       )}
 
       <ErrorAlert

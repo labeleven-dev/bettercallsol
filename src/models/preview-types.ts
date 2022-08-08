@@ -23,6 +23,7 @@ export interface IPreview {
   sourceValue: string; // could transaction ID, URL, file path, etc.
   name?: string;
   description?: string;
+  dynamic: boolean;
   rpcEndpoint?: IRpcEndpoint;
   instructions: IInstructionPreview[];
   accountSummary?: IAccountSummary; // only set in source=tx
