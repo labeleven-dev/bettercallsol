@@ -1,22 +1,36 @@
+import { WarningTwoIcon } from "@chakra-ui/icons";
 import {
   Collapse,
   Grid,
+  Icon,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { FaAnchor, FaRobot } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
+import { useWeb3Account } from "../../hooks/useWeb3Account";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
 import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
-  const { instruction, update } = useInstruction();
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
+  const {
+    instruction: { programId, accounts, data, disabled, expanded },
+    update,
+  } = useInstruction();
+  const {
+    status: programStatus,
+    executable: programExecutable,
+    hasIdl: programHasIdl,
+  } = useWeb3Account(programId);
 
   return (
     <Grid
@@ -26,7 +40,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.600")}
       bg={
-        instruction.disabled
+        disabled
           ? "repeating-linear-gradient(-45deg, transparent, transparent 40px, #85858510 40px, #85858510 80px)"
           : ""
       }
@@ -35,13 +49,30 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
     >
       <InstructionHeader index={index} />
 
-      <Collapse in={instruction.expanded}>
+      <Collapse in={expanded}>
         <InputGroup>
+          {programStatus === "fetched" && (
+            <InputLeftElement>
+              {programHasIdl ? (
+                <Tooltip label="Anchor program">
+                  <Icon as={FaAnchor} />
+                </Tooltip>
+              ) : programExecutable ? (
+                <Tooltip label="Executable program">
+                  <Icon as={FaRobot} />
+                </Tooltip>
+              ) : (
+                <Tooltip label="Not a program">
+                  <WarningTwoIcon />
+                </Tooltip>
+              )}
+            </InputLeftElement>
+          )}
           <Input
             mb="5"
             fontFamily="mono"
             placeholder="Program ID"
-            value={instruction.programId}
+            value={programId}
             onChange={(e) => {
               update((state) => {
                 state.programId = e.target.value.trim();
@@ -55,15 +86,15 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             <ExplorerButton
               size="sm"
               valueType="account"
-              value={instruction.programId}
+              value={programId}
               rpcEndpoint={rpcEndpoint}
             />
           </InputRightElement>
         </InputGroup>
 
-        <Accounts accounts={instruction.accounts} />
+        <Accounts accounts={accounts} />
 
-        <Data data={instruction.data} />
+        <Data data={data} />
       </Collapse>
     </Grid>
   );

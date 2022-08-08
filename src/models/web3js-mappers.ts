@@ -26,8 +26,14 @@ export const short = (pubkey: string) =>
     pubkey.length - SHORT_TRUNC_TO
   )}`;
 
-export const isValidPublicKey = (key: string): boolean =>
-  bs58.decode(key).length === 32;
+export const isValidPublicKey = (key: string): boolean => {
+  let valid = false;
+  try {
+    valid = bs58.decode(key).length === 32;
+  } catch (_) {}
+
+  return valid;
+};
 
 /**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
 export const mapITransactionToWeb3Transaction = (
