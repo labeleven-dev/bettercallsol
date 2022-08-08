@@ -126,7 +126,7 @@ export const Account: React.FC<{ data: IAccount; index: number }> = ({
           value={data.pubkey}
           onChange={(e) => {
             updateAccount((state) => {
-              state.pubkey = e.target.value;
+              state.pubkey = e.target.value.trim();
             });
           }}
         ></Input>

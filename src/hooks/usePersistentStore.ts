@@ -6,14 +6,8 @@ import { PersistentState } from "../models/state-types";
 const LOCAL_STORAGE_KEY = "bcsol-store";
 
 // excludes functions
-const saveState = ({ transactionOptions, appOptions }: PersistentState) => {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY,
-    JSON.stringify({
-      transactionOptions,
-      appOptions,
-    })
-  );
+const saveState = (state: PersistentState) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
 };
 
 export const usePersistentStore = create<PersistentState>((set) => {

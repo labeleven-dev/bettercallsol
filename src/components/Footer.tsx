@@ -9,7 +9,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FaGithub, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLaptop, FaTwitter } from "react-icons/fa";
 
 export const Footer: React.FC = () => (
   <Grid
@@ -26,12 +26,18 @@ export const Footer: React.FC = () => (
     </Flex>
     <Box>
       <Center>
-        {/* TODO update to repo url */}
-        <Link mr="4" href="https://github.com/labeleven-dev" isExternal>
+        <Link
+          mr="4"
+          href="https://github.com/labeleven-dev/bcsol-issues"
+          isExternal
+        >
           <Icon as={FaGithub} />
         </Link>
-        <Link href="https://twitter.com/labeleven_dev" isExternal>
+        <Link mr="4" href="https://twitter.com/labeleven_dev" isExternal>
           <Icon as={FaTwitter} />
+        </Link>
+        <Link href="https://twitter.com/sohrabwashere" isExternal>
+          <Icon as={FaLaptop} />
         </Link>
       </Center>
     </Box>

@@ -44,7 +44,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             value={instruction.programId}
             onChange={(e) => {
               update((state) => {
-                state.programId = e.target.value;
+                state.programId = e.target.value.trim();
               });
             }}
           />
