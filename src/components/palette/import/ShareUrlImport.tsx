@@ -15,7 +15,7 @@ export const ShareUrlImport: React.FC<{
   const [inProgress, setInprogress] = useState(false);
   const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
 
-  const search = () => {
+  const fetch = () => {
     if (!url) return;
 
     setInprogress(true);
@@ -62,7 +62,7 @@ export const ShareUrlImport: React.FC<{
           isLoading={inProgress}
           aria-label="Fetch"
           icon={<DownloadIcon />}
-          onClick={search}
+          onClick={fetch}
         />
       </Tooltip>
     </Flex>

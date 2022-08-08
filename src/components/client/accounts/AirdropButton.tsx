@@ -26,12 +26,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
+import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { IPubKey } from "../../../models/internal-types";
 import { short, toLamports } from "../../../models/web3js-mappers";
 import { ExplorerButton } from "../../common/ExplorerButton";
@@ -46,12 +46,13 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   >("idle");
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
 
-  const { connection } = useConnection();
+  const connection = useWeb3Connection();
   const {
     signature,
     start: startConfirmation,
     cancel: cancelConfirmation,
   } = useGetWeb3Transaction({
+    connection,
     onStatus: (web3Status) => {
       // to avoid further message changes post-cancellation
       if (status !== "cancelled") {

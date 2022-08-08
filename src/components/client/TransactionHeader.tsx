@@ -1,6 +1,4 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
-  Button,
   Flex,
   Heading,
   Icon,
@@ -32,7 +30,7 @@ import {
   DEFAULT_TRANSACTION_RUN,
 } from "../../models/state-default";
 import { EditableName } from "../common/EditableName";
-import { RpcEndpointMenuList } from "../common/RpcEndpointMenuList";
+import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   transaction,
@@ -137,28 +135,16 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         </MenuList>
       </Menu>
 
-      <Menu>
-        <Tooltip label={rpcEndpoint.url}>
-          <MenuButton
-            minW="180px"
-            maxW="250px"
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-          >
-            {`${rpcEndpoint.network}${
-              rpcEndpoint.provider ? " (" + rpcEndpoint.provider + ")" : ""
-            }`}
-          </MenuButton>
-        </Tooltip>
-        <RpcEndpointMenuList
-          endpoint={rpcEndpoint}
-          setEndpoint={(endpoint) => {
-            setSession((state) => {
-              state.rpcEndpoint = endpoint;
-            });
-          }}
-        />
-      </Menu>
+      <RpcEndpointMenu
+        menuButtonProps={{ minW: "180px", maxW: "250px" }}
+        menuListProps={{ fontSize: "md" }}
+        endpoint={rpcEndpoint}
+        setEndpoint={(endpoint) => {
+          setSession((state) => {
+            state.rpcEndpoint = endpoint;
+          });
+        }}
+      />
 
       <Tooltip
         shouldWrapChildren

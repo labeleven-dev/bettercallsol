@@ -1,22 +1,22 @@
 import { useInterval } from "@chakra-ui/react";
-import { useConnection } from "@solana/wallet-adapter-react";
 import {
   Connection,
   SignatureStatus,
   TransactionResponse,
 } from "@solana/web3.js";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { IPubKey } from "../models/internal-types";
 import { usePersistentStore } from "./usePersistentStore";
+import { useWeb3Connection } from "./useWeb3Connection";
 
 export const useGetWeb3Transaction = ({
-  rpcEndpointUrl,
+  connection,
   onStatus,
   onFinalised,
   onTimeout,
   onError,
 }: {
-  rpcEndpointUrl?: string;
+  connection?: Connection;
   onStatus?: (status: SignatureStatus) => void;
   onFinalised?: (response: TransactionResponse) => void;
   onTimeout?: () => void;
@@ -39,23 +39,8 @@ export const useGetWeb3Transaction = ({
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
   );
-
-  const { connection: defaultConnection } = useConnection();
-  const customConnection = useMemo(() => {
-    if (!rpcEndpointUrl) return null;
-
-    const {
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    } = transactionOptions;
-    return new Connection(rpcEndpointUrl, {
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    });
-  }, [rpcEndpointUrl, transactionOptions]);
-  const connection = customConnection || defaultConnection;
+  const defaultConnection = useWeb3Connection();
+  const activeConnection = connection || defaultConnection;
 
   useInterval(
     async () => {
@@ -66,7 +51,7 @@ export const useGetWeb3Transaction = ({
       try {
         let status: SignatureStatus | null = null;
         if (!skipPolling) {
-          status = (await connection.getSignatureStatus(signature)).value;
+          status = (await activeConnection.getSignatureStatus(signature)).value;
           if (status && onStatus) {
             onStatus(status);
           }
@@ -74,7 +59,7 @@ export const useGetWeb3Transaction = ({
 
         // TODO status from option?
         if (skipPolling || status?.confirmationStatus === "finalized") {
-          const transaction = await connection.getTransaction(signature, {
+          const transaction = await activeConnection.getTransaction(signature, {
             commitment: "finalized",
           });
 

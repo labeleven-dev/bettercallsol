@@ -1,20 +1,13 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Flex,
-  IconButton,
-  Input,
-  Menu,
-  MenuButton,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { IRpcEndpoint } from "../../../models/internal-types";
 import { mapTransactionResponseToITransactionPreview } from "../../../models/preview-mappers";
 import { ITransactionPreview } from "../../../models/preview-types";
-import { RpcEndpointMenuList } from "../../common/RpcEndpointMenuList";
+import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
 
 export const TransactionIdImport: React.FC<{
   setTransaction: (tranaction: ITransactionPreview | undefined) => void;
@@ -30,8 +23,10 @@ export const TransactionIdImport: React.FC<{
       (endpoint) => endpoint.network === "mainnet-beta"
     )!
   );
+
+  const connection = useWeb3Connection(rpcEndpoint.url);
   const { start, inProgress } = useGetWeb3Transaction({
-    rpcEndpointUrl: rpcEndpoint.url,
+    connection,
     onFinalised: (response) => {
       setTransaction(
         mapTransactionResponseToITransactionPreview(response, rpcEndpoint)
@@ -64,18 +59,13 @@ export const TransactionIdImport: React.FC<{
         }}
       />
 
-      <Menu>
-        <MenuButton mr="1" as={Button}>
-          {rpcEndpoint.network[0].toUpperCase()}
-        </MenuButton>
-        <RpcEndpointMenuList
-          fontSize="sm"
-          endpoint={rpcEndpoint}
-          setEndpoint={(endpoint) => {
-            setRpcEndpoint(endpoint);
-          }}
-        />
-      </Menu>
+      <RpcEndpointMenu
+        variant="short"
+        menuButtonProps={{ mr: "1" }}
+        menuListProps={{ fontSize: "sm" }}
+        endpoint={rpcEndpoint}
+        setEndpoint={setRpcEndpoint}
+      />
 
       <Tooltip label="Search">
         <IconButton

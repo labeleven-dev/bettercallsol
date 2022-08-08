@@ -12,6 +12,7 @@ import { ITransactionPreview } from "../models/preview-types";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithoutUndo } from "./useSessionStore";
+import { useWeb3Connection } from "./useWeb3Connection";
 
 export const useImport = () => {
   const [set, setIsLoading] = useSessionStoreWithoutUndo((state) => [
@@ -35,8 +36,9 @@ export const useImport = () => {
     (endpoint) => endpoint.network === (network || "mainnet-beta")
   )!;
 
+  const connection = useWeb3Connection(rpcEndpoint.url);
   const { start } = useGetWeb3Transaction({
-    rpcEndpointUrl: rpcEndpoint.url,
+    connection,
     onFinalised: (response) => {
       set((state) => {
         state.import = {

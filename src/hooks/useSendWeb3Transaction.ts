@@ -1,14 +1,17 @@
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey, Signer } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Connection, PublicKey, Signer } from "@solana/web3.js";
 import { ITransaction } from "../models/internal-types";
 import { mapITransactionToWeb3Transaction } from "../models/web3js-mappers";
 import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithUndo } from "./useSessionStore";
+import { useWeb3Connection } from "./useWeb3Connection";
 
 export const useSendWeb3Transaction = ({
+  connection,
   onSent,
   onError,
 }: {
+  connection?: Connection;
   onSent?: (signature: string) => void;
   onError?: (error: Error) => void;
 }): {
@@ -19,7 +22,8 @@ export const useSendWeb3Transaction = ({
   );
   const keypairs = useSessionStoreWithUndo((state) => state.keypairs);
 
-  const { connection } = useConnection();
+  const defaultConnection = useWeb3Connection();
+  const activeConnection = connection || defaultConnection;
   const { sendTransaction } = useWallet();
 
   // send the transaction to the chain
@@ -49,7 +53,7 @@ export const useSendWeb3Transaction = ({
           } as Signer)
       );
 
-      sendTransaction(web3Transaction, connection, {
+      sendTransaction(web3Transaction, activeConnection, {
         signers: additionalSigners || undefined,
         skipPreflight: transactionOptions.skipPreflight,
         maxRetries: transactionOptions.maxRetries,
