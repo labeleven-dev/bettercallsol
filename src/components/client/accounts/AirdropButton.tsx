@@ -96,6 +96,8 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   return (
     <Popover placement="left" initialFocusRef={initialFocusRef} isLazy>
       <Tooltip label="Airdop SOL">
+        {/* cannot use tooltips directly on trigger 
+            https://github.com/chakra-ui/chakra-ui/issues/2843 */}
         <Box display="inline-block">
           <PopoverTrigger>
             <IconButton

@@ -187,19 +187,20 @@ export const Results: React.FC = () => {
             Cancel
           </Button>
         ) : (
-          <Tooltip label="Refresh">
-            <IconButton
-              ml="1"
-              aria-label="Refresh"
-              icon={<RepeatIcon />}
-              variant="ghost"
-              size="sm"
-              isDisabled={!signature || inProgress}
-              onClick={() => {
-                start(signature, true);
-              }}
-            />
-          </Tooltip>
+          signature && (
+            <Tooltip label="Refresh">
+              <IconButton
+                ml="1"
+                aria-label="Refresh"
+                icon={<RepeatIcon />}
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  start(signature, true);
+                }}
+              />
+            </Tooltip>
+          )
         )}
       </Flex>
 
@@ -214,8 +215,8 @@ export const Results: React.FC = () => {
 
       <Tabs colorScheme="main" variant="enclosed">
         <TabList>
-          <Tab>Program Logs</Tab>
-          <Tab>Account Balances</Tab>
+          <Tab fontSize="sm">Program Logs</Tab>
+          <Tab fontSize="sm">Account Balances</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
