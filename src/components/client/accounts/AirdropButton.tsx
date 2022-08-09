@@ -40,7 +40,7 @@ import { ExplorerButton } from "../../common/ExplorerButton";
 export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   accountPubkey,
 }) => {
-  const [value, setValue] = useState("1.000000000");
+  const [value, setValue] = useState("1.0");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<
     "idle" | "running" | "success" | "fail" | "cancelled"

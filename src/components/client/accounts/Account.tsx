@@ -27,13 +27,14 @@ import { Numbering } from "../../common/Numbering";
 import { SortableItemContext } from "../../common/Sortable";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
 import { AirdropButton } from "./AirdropButton";
+import { PdaButton } from "./PdaButton";
 
 export const Account: React.FC<{ account: IAccount; index: number }> = ({
   account: { id, name, pubkey, isWritable, isSigner },
   index,
 }) => {
   const {
-    instruction: { dynamic },
+    instruction: { dynamic, programId },
     update,
   } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
@@ -160,6 +161,16 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
             </>
           ) : (
             <>
+              {programId && (
+                <PdaButton
+                  programId={programId}
+                  setPubkey={(pubkey) => {
+                    updateAccount((state) => {
+                      state.pubkey = pubkey;
+                    });
+                  }}
+                />
+              )}
               {walletPubkey && (
                 <Tooltip label="Use Wallet">
                   <IconButton
