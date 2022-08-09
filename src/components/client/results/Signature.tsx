@@ -35,7 +35,14 @@ export const Signature: React.FC<{
             isReadOnly
             value={signature}
           />
-          <InputRightElement w="60px">
+          <InputRightElement
+            // chakra hardcode the width so we can't have multiple buttons
+            w=""
+            mr="1"
+            // bug where it's set to 2 and goes in front of network selector menu :(
+            // downside is that it is not clickable when the text field is active
+            zIndex="base"
+          >
             <CopyButton size="xs" isDisabled={!signature} value={signature} />
             <ExplorerButton
               size="xs"

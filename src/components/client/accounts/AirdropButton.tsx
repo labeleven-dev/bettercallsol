@@ -22,6 +22,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Portal,
   Spinner,
   Text,
   VStack,
@@ -98,113 +99,119 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
           variant="ghost"
           aria-label="Airdrop SOL"
           icon={<FaParachuteBox />}
-          isDisabled={rpcEndpoint.network === "mainnet-beta"}
         />
       </PopoverTrigger>
 
-      <PopoverContent>
-        <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverHeader>
-          <Heading size="sm">Airdrop SOL</Heading>
-        </PopoverHeader>
-        <PopoverBody>
-          <VStack p="2" spacing="2">
-            <Text>
-              Add more SOL to{" "}
-              <ExplorerButton
-                value={accountPubkey}
-                valueType="account"
-                rpcEndpoint={rpcEndpoint}
-                variant="link"
-              >
-                <Button size="sm" variant="link" fontFamily="mono">
-                  {short(accountPubkey)} <ExternalLinkIcon ml="1" />
-                </Button>
-              </ExplorerButton>
-            </Text>
-
-            <NumberInput
-              size="sm"
-              min={0}
-              precision={9}
-              allowMouseWheel
-              value={value.toLocaleString()}
-              onChange={setValue}
-            >
-              <NumberInputField fontFamily="mono" textAlign="center" />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-
-            <Text as="i">{`${(toLamports(value) || 0).toFormat(
-              0
-            )} Lamports`}</Text>
-          </VStack>
-        </PopoverBody>
-        <PopoverFooter>
-          <VStack p="2" spacing="1">
-            {message && (
-              <HStack mb="1" justifyContent="center">
-                {status === "running" && <Spinner color="blue.400" size="sm" />}
-                {status === "success" && <CheckCircleIcon color="green.400" />}
-                {status === "cancelled" && <WarningIcon color="yellow.400" />}
-                {status === "fail" && <WarningIcon color="red.400" />}
-                <Text
-                  textAlign="center"
-                  textColor={
-                    status === "running"
-                      ? "blue.400"
-                      : status === "success"
-                      ? "green.400"
-                      : status === "cancelled"
-                      ? "yellow.400"
-                      : status === "fail"
-                      ? "red.400"
-                      : undefined
-                  }
+      {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>
+            <Heading size="sm">Airdrop SOL</Heading>
+          </PopoverHeader>
+          <PopoverBody>
+            <VStack p="2" spacing="2">
+              <Text fontSize="md">
+                Add more SOL to{" "}
+                <ExplorerButton
+                  value={accountPubkey}
+                  valueType="account"
+                  rpcEndpoint={rpcEndpoint}
+                  variant="link"
                 >
-                  {message}
-                </Text>
-              </HStack>
-            )}
-            {signature && (
-              <ExplorerButton
-                value={signature}
-                valueType="tx"
-                rpcEndpoint={rpcEndpoint}
-                variant="link"
-              >
-                <Button mb="4" size="sm" variant="link" fontFamily="mono">
-                  {short(signature)} <ExternalLinkIcon ml="1" />
-                </Button>
-              </ExplorerButton>
-            )}
+                  <Button size="sm" variant="link" fontFamily="mono">
+                    {short(accountPubkey)} <ExternalLinkIcon ml="1" />
+                  </Button>
+                </ExplorerButton>
+              </Text>
 
-            {status === "running" ? (
-              <Button
+              <NumberInput
                 size="sm"
-                colorScheme="red"
-                leftIcon={<Icon as={FaParachuteBox} />}
-                onClick={cancel}
+                min={0}
+                precision={9}
+                allowMouseWheel
+                value={value.toLocaleString()}
+                onChange={setValue}
               >
-                Cancel
-              </Button>
-            ) : (
-              <Button
-                size="sm"
-                colorScheme="teal"
-                leftIcon={<Icon as={FaParachuteBox} />}
-                onClick={airdop}
-              >
-                Airdop
-              </Button>
-            )}
-          </VStack>
-        </PopoverFooter>
-      </PopoverContent>
+                <NumberInputField fontFamily="mono" textAlign="center" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+
+              <Text as="i" fontSize="md">{`${(toLamports(value) || 0).toFormat(
+                0
+              )} Lamports`}</Text>
+            </VStack>
+          </PopoverBody>
+          <PopoverFooter>
+            <VStack p="2" spacing="1">
+              {message && (
+                <HStack mb="1" justifyContent="center">
+                  {status === "running" && (
+                    <Spinner color="blue.400" size="sm" />
+                  )}
+                  {status === "success" && (
+                    <CheckCircleIcon color="green.400" />
+                  )}
+                  {status === "cancelled" && <WarningIcon color="yellow.400" />}
+                  {status === "fail" && <WarningIcon color="red.400" />}
+                  <Text
+                    textAlign="center"
+                    textColor={
+                      status === "running"
+                        ? "blue.400"
+                        : status === "success"
+                        ? "green.400"
+                        : status === "cancelled"
+                        ? "yellow.400"
+                        : status === "fail"
+                        ? "red.400"
+                        : undefined
+                    }
+                  >
+                    {message}
+                  </Text>
+                </HStack>
+              )}
+              {signature && (
+                <ExplorerButton
+                  value={signature}
+                  valueType="tx"
+                  rpcEndpoint={rpcEndpoint}
+                  variant="link"
+                >
+                  <Button mb="4" size="sm" variant="link" fontFamily="mono">
+                    {short(signature)} <ExternalLinkIcon ml="1" />
+                  </Button>
+                </ExplorerButton>
+              )}
+
+              {status === "running" ? (
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  leftIcon={<Icon as={FaParachuteBox} />}
+                  onClick={cancel}
+                >
+                  Cancel
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  colorScheme="teal"
+                  leftIcon={<Icon as={FaParachuteBox} />}
+                  onClick={airdop}
+                >
+                  Airdop
+                </Button>
+              )}
+            </VStack>
+          </PopoverFooter>
+        </PopoverContent>
+      </Portal>
     </Popover>
   );
 };

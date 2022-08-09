@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   MenuListProps,
+  Portal,
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
@@ -46,22 +47,26 @@ export const RpcEndpointMenu: React.FC<{
             : endpoint.network[0].toUpperCase()}
         </MenuButton>
       </Tooltip>
-      <MenuList {...menuListProps}>
-        {toSortedArray(rpcEndpoints)
-          .filter(({ enabled, url }) => enabled && url)
-          .map((it, index) => (
-            <MenuItem
-              icon={endpoint.url === it.url ? <CheckIcon /> : undefined}
-              key={index}
-              command={it.provider}
-              onClick={() => {
-                setEndpoint(it);
-              }}
-            >
-              {it.network}
-            </MenuItem>
-          ))}
-      </MenuList>
+
+      {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
+      <Portal>
+        <MenuList {...menuListProps}>
+          {toSortedArray(rpcEndpoints)
+            .filter(({ enabled, url }) => enabled && url)
+            .map((it, index) => (
+              <MenuItem
+                icon={endpoint.url === it.url ? <CheckIcon /> : undefined}
+                key={index}
+                command={it.provider}
+                onClick={() => {
+                  setEndpoint(it);
+                }}
+              >
+                {it.network}
+              </MenuItem>
+            ))}
+        </MenuList>
+      </Portal>
     </Menu>
   );
 };

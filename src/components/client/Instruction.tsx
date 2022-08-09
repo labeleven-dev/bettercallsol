@@ -4,15 +4,17 @@ import {
   Collapse,
   Grid,
   Icon,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightElement,
+  Link,
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { FaAnchor, FaRobot } from "react-icons/fa";
+import { FaAnchor, FaBoxOpen, FaRocket } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { useWeb3Account } from "../../hooks/useWeb3Account";
@@ -66,7 +68,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               ) : programExecutable ? (
                 <Tooltip label="Executable program">
                   <Box>
-                    <Icon as={FaRobot} />
+                    <Icon as={FaRocket} />
                   </Box>
                 </Tooltip>
               ) : (
@@ -88,10 +90,28 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             }}
           />
           <InputRightElement
+            // chakra hardcode the width so we can't have multiple buttons
+            w=""
+            mr="1"
             // bug where it's set to 2 and goes in front of network selector menu :(
             // downside is that it is not clickable when the text field is active
             zIndex="base"
           >
+            {programHasIdl && rpcEndpoint.network === "mainnet-beta" && (
+              <Tooltip label="Open in apr.dev">
+                <Link
+                  href={`https://www.apr.dev/program/${programId}`}
+                  isExternal
+                >
+                  <IconButton
+                    aria-label="Open in apr.dev"
+                    variant="ghost"
+                    size="sm"
+                    icon={<Icon as={FaBoxOpen} />}
+                  />
+                </Link>
+              </Tooltip>
+            )}
             <ExplorerButton
               size="sm"
               valueType="account"

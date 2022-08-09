@@ -41,7 +41,7 @@ export const App: React.FC = () => {
             <Header />
           </Box>
 
-          <Flex mt="55px">
+          <Flex mt="45px">
             <Box flex="2" h="93vh" overflow="scroll">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
               <Show below="md">

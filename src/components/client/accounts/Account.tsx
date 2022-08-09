@@ -138,10 +138,19 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
             });
           }}
         ></Input>
-        <InputRightElement w="60px">
+        <InputRightElement
+          // chakra hardcode the width so we can't have multiple buttons
+          w=""
+          mr="1"
+          // bug where it's set to 2 and goes in front of network selector menu :(
+          // downside is that it is not clickable when the text field is active
+          zIndex="base"
+        >
           {isValid ? (
             <>
-              <AirdropButton accountPubkey={pubkey} />
+              {rpcEndpoint.network !== "mainnet-beta" && (
+                <AirdropButton accountPubkey={pubkey} />
+              )}
               <ExplorerButton
                 size="xs"
                 valueType="account"
@@ -151,15 +160,22 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
             </>
           ) : (
             <>
-              <Tooltip label="Use Wallet">
-                <IconButton
-                  ml="1"
-                  size="xs"
-                  variant="ghost"
-                  aria-label="Use Wallet"
-                  icon={<Icon as={FaWallet} />}
-                />
-              </Tooltip>
+              {walletPubkey && (
+                <Tooltip label="Use Wallet">
+                  <IconButton
+                    ml="1"
+                    size="xs"
+                    variant="ghost"
+                    aria-label="Use Wallet"
+                    icon={<Icon as={FaWallet} />}
+                    onClick={() => {
+                      updateAccount((state) => {
+                        state.pubkey = walletPubkey?.toBase58();
+                      });
+                    }}
+                  />
+                </Tooltip>
+              )}
               <Tooltip label="Generate Keypair">
                 <IconButton
                   size="xs"
