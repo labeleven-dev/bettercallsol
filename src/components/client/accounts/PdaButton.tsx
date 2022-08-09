@@ -5,6 +5,7 @@ import {
   SearchIcon,
 } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Center,
   Flex,
@@ -93,15 +94,21 @@ export const PdaButton: React.FC<{
       initialFocusRef={initialFocusRef}
       isLazy
     >
-      <PopoverTrigger>
-        {/* TODO tooltips don't play nice with Popovers */}
-        <IconButton
-          size="xs"
-          variant="ghost"
-          aria-label="Find PDA"
-          icon={<FaRobot />}
-        />
-      </PopoverTrigger>
+      <Tooltip label="Find PDA">
+        {/* cannot use tooltips directly on trigger 
+            https://github.com/chakra-ui/chakra-ui/issues/2843 */}
+        <Box display="inline-block">
+          <PopoverTrigger>
+            {/* TODO tooltips don't play nice with Popovers */}
+            <IconButton
+              size="xs"
+              variant="ghost"
+              aria-label="Find PDA"
+              icon={<FaRobot />}
+            />
+          </PopoverTrigger>
+        </Box>
+      </Tooltip>
 
       {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
       <Portal>

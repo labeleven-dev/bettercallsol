@@ -4,6 +4,7 @@ import {
   WarningIcon,
 } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Heading,
   HStack,
@@ -25,6 +26,7 @@ import {
   Portal,
   Spinner,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
@@ -93,24 +95,29 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
 
   return (
     <Popover placement="left" initialFocusRef={initialFocusRef} isLazy>
-      <PopoverTrigger>
-        {/* TODO tooltips don't play nice with Popovers */}
-        <IconButton
-          size="xs"
-          variant="ghost"
-          aria-label="Airdrop SOL"
-          icon={<FaParachuteBox />}
-        />
-      </PopoverTrigger>
+      <Tooltip label="Airdop SOL">
+        <Box display="inline-block">
+          <PopoverTrigger>
+            <IconButton
+              size="xs"
+              variant="ghost"
+              aria-label="Airdrop SOL"
+              icon={<FaParachuteBox />}
+            />
+          </PopoverTrigger>
+        </Box>
+      </Tooltip>
 
       {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
       <Portal>
         <PopoverContent>
           <PopoverArrow />
           <PopoverCloseButton />
+
           <PopoverHeader>
             <Heading size="sm">Airdrop SOL</Heading>
           </PopoverHeader>
+
           <PopoverBody>
             <VStack p="2" spacing="2">
               <Text fontSize="md">
@@ -151,6 +158,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
               )} Lamports`}</Text>
             </VStack>
           </PopoverBody>
+
           <PopoverFooter>
             <VStack p="2" spacing="1">
               {message && (
