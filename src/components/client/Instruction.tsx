@@ -1,4 +1,4 @@
-import { WarningTwoIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, WarningIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Collapse,
@@ -14,7 +14,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { FaAnchor, FaBoxOpen, FaRocket } from "react-icons/fa";
+import { FaAnchor, FaRocket } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { useWeb3Account } from "../../hooks/useWeb3Account";
@@ -29,11 +29,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
     instruction: { programId, accounts, data, disabled, expanded },
     update,
   } = useInstruction();
-  const {
-    status: programStatus,
-    executable: programExecutable,
-    hasIdl: programHasIdl,
-  } = useWeb3Account(programId);
+  const programInfo = useWeb3Account(programId);
 
   return (
     <Grid
@@ -54,9 +50,9 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
 
       <Collapse in={expanded}>
         <InputGroup>
-          {programStatus === "fetched" && (
+          {programInfo.status === "fetched" && (
             <InputLeftElement>
-              {programHasIdl ? (
+              {programInfo.hasIdl ? (
                 <Tooltip label="Anchor program">
                   {/* Box is needed coz react-icons do not support forwardref 
                       https://github.com/chakra-ui/chakra-ui/issues/683
@@ -65,7 +61,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                     <Icon as={FaAnchor} />
                   </Box>
                 </Tooltip>
-              ) : programExecutable ? (
+              ) : programInfo.executable ? (
                 <Tooltip label="Executable program">
                   <Box>
                     <Icon as={FaRocket} />
@@ -97,17 +93,29 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             // downside is that it is not clickable when the text field is active
             zIndex="base"
           >
-            {programHasIdl && rpcEndpoint.network === "mainnet-beta" && (
-              <Tooltip label="Open in apr.dev">
+            {programInfo.status === "fetched" && programInfo.verified !== null && (
+              <Tooltip
+                label={`${
+                  programInfo.verified ? "Verified" : "Unverified"
+                } Build (Open in apr.dev)`}
+              >
                 <Link
                   href={`https://www.apr.dev/program/${programId}`}
                   isExternal
                 >
                   <IconButton
-                    aria-label="Open in apr.dev"
+                    aria-label={`${
+                      programInfo.verified ? "Verified" : "Unverified"
+                    } Build (Open in apr.dev)`}
                     variant="ghost"
                     size="sm"
-                    icon={<Icon as={FaBoxOpen} />}
+                    icon={
+                      programInfo.verified ? (
+                        <CheckCircleIcon color="green.400" />
+                      ) : (
+                        <WarningIcon color="yellow.400" />
+                      )
+                    }
                   />
                 </Link>
               </Tooltip>

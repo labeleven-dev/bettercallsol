@@ -1,5 +1,6 @@
 import { idlAddress } from "@project-serum/anchor/dist/cjs/idl";
 import { Connection, PublicKey } from "@solana/web3.js";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { IPubKey } from "../models/internal-types";
 import { isValidPublicKey } from "../models/web3js-mappers";
@@ -10,6 +11,7 @@ interface Web3AccountInfo {
   exists?: boolean;
   executable?: boolean;
   hasIdl?: boolean;
+  verified?: boolean | null;
 }
 
 export const useWeb3Account = (
@@ -34,11 +36,26 @@ export const useWeb3Account = (
       const accountInfo = await activeConnection.getAccountInfo(pubkey);
 
       let hasIdl = false;
+      let verified = null;
       if (accountInfo?.executable) {
+        // check if program has IDL
         const idlAddr = await idlAddress(pubkey);
         const idlAccountInfo = await activeConnection.getAccountInfo(idlAddr);
         if (idlAccountInfo) {
           hasIdl = true;
+        }
+
+        // check if program in apr.dev
+        const response = await axios.get(
+          `https://anchor.projectserum.com/api/v0/program/${address}/latest?limit=1`
+        );
+        if (response?.status === 200 && response.data?.length > 0) {
+          const build: { aborted: boolean; state: string; verified: string } =
+            response.data[0];
+          verified =
+            !build.aborted &&
+            build.state === "Built" &&
+            build.verified === "Verified";
         }
       }
       setAccountInfo({
@@ -46,6 +63,7 @@ export const useWeb3Account = (
         exists: accountInfo !== null,
         executable: accountInfo?.executable || false,
         hasIdl,
+        verified,
       });
     };
 

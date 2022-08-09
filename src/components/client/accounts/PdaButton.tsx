@@ -71,10 +71,9 @@ export const PdaButton: React.FC<{
 
   const generate = () => {
     const [pubkey, bump] = PublicKey.findProgramAddressSync(
-      seeds.order
-        .map((i) => seeds.map[i].value)
-        .filter((x) => x)
-        .map((x) => Buffer.from(x)),
+      toSortedArray(seeds)
+        .filter((x) => x.value)
+        .map((x) => Buffer.from(x.value)),
       new PublicKey(programId)
     );
     setPubkey(pubkey.toBase58());
