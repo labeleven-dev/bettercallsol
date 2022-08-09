@@ -1,5 +1,6 @@
 import {
   Alert,
+  AlertDescription,
   AlertIcon,
   Box,
   Collapse,
@@ -24,7 +25,7 @@ export const Transaction: React.FC = () => {
         <TransactionHeader transaction={transaction} />
 
         {/* TODO remove once out of beta */}
-        <Collapse in={rpcEndpoint.provider === "mainnet-beta"} unmountOnExit>
+        <Collapse in={rpcEndpoint.network === "mainnet-beta"} unmountOnExit>
           <Alert
             mb="2"
             fontSize="sm"
@@ -33,8 +34,10 @@ export const Transaction: React.FC = () => {
             variant="left-accent"
           >
             <AlertIcon />
-            This app is currently in active development. Use MAINNET at your own
-            risk.
+            <AlertDescription>
+              This is a pre-GA version of Better Call SOL. Use Mainnet at your
+              own risk!
+            </AlertDescription>
           </Alert>
         </Collapse>
 

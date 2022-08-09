@@ -9,6 +9,7 @@ import {
   Center,
   Flex,
   FormLabel,
+  forwardRef,
   Grid,
   Heading,
   IconButton,
@@ -27,7 +28,7 @@ import {
 } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import produce, { Draft } from "immer";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaRobot } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { IPubKey } from "../../../models/internal-types";
@@ -56,6 +57,7 @@ export const PdaButton: React.FC<{
   const [seeds, setSeedsOriginal] = useState<SeedState>(
     toSortableCollection([newSeedItem()])
   );
+  const initialFocusRef = useRef(null);
   const toast = useToast();
 
   const setSeeds = (fn: (state: Draft<SeedState>) => void) => {
@@ -85,7 +87,12 @@ export const PdaButton: React.FC<{
   };
 
   return (
-    <Popover placement="left" closeOnBlur={false}>
+    <Popover
+      placement="left"
+      closeOnBlur={false}
+      initialFocusRef={initialFocusRef}
+      isLazy
+    >
       <PopoverTrigger>
         {/* TODO tooltips don't play nice with Popovers */}
         <IconButton
@@ -117,8 +124,9 @@ export const PdaButton: React.FC<{
                   });
                 }}
               >
-                {toSortedArray(seeds).map((seed) => (
+                {toSortedArray(seeds).map((seed, index) => (
                   <SeedItem
+                    ref={initialFocusRef}
                     seed={seed}
                     setSeed={(fn) => {
                       setSeeds((state) => {
@@ -169,17 +177,21 @@ export const PdaButton: React.FC<{
   );
 };
 
-const SeedItem: React.FC<{
-  seed: Seed;
-  setSeed: (fn: (state: Draft<Seed>) => void) => void;
-  removeSeed: () => void;
-}> = ({ seed, setSeed, removeSeed }) => {
+const SeedItem = forwardRef<
+  {
+    seed: Seed;
+    setSeed: (fn: (state: Draft<Seed>) => void) => void;
+    removeSeed: () => void;
+  },
+  "div"
+>(({ seed, setSeed, removeSeed }, ref) => {
   const { listeners, attributes } = useContext(SortableItemContext);
 
   return (
     <Flex alignItems="center" mb="1">
       <DragHandleIcon h="2.5" w="2.5" mr="1" {...attributes} {...listeners} />
       <Input
+        ref={ref}
         placeholder="Seed"
         size="sm"
         value={seed.value}
@@ -202,4 +214,4 @@ const SeedItem: React.FC<{
       </Tooltip>
     </Flex>
   );
-};
+});

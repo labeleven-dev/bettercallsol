@@ -28,7 +28,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
@@ -46,6 +46,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
     "idle" | "running" | "success" | "fail" | "cancelled"
   >("idle");
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
+  const initialFocusRef = useRef(null);
 
   const connection = useWeb3Connection();
   const {
@@ -91,7 +92,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   };
 
   return (
-    <Popover placement="left">
+    <Popover placement="left" initialFocusRef={initialFocusRef} isLazy>
       <PopoverTrigger>
         {/* TODO tooltips don't play nice with Popovers */}
         <IconButton
@@ -134,7 +135,11 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
                 value={value.toLocaleString()}
                 onChange={setValue}
               >
-                <NumberInputField fontFamily="mono" textAlign="center" />
+                <NumberInputField
+                  ref={initialFocusRef}
+                  fontFamily="mono"
+                  textAlign="center"
+                />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
