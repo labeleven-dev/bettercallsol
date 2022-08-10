@@ -49,14 +49,15 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     enabled: true,
     custom: false,
   },
-  {
-    id: uuid(),
-    provider: "You",
-    network: "local",
-    url: "http://0.0.0.0:8899",
-    enabled: true,
-    custom: true,
-  },
+  // TODO
+  // {
+  //   id: uuid(),
+  //   provider: "You",
+  //   network: "local",
+  //   url: "http://127.0.0.1:8899",
+  //   enabled: true,
+  //   custom: true,
+  // },
 ];
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
@@ -68,10 +69,10 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
 
 export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
   skipPreflight: true,
-  commitment: "finalized",
+  finality: "confirmed",
   preflightCommitment: "processed",
-  confirmTransactionInitialTimeout: 30_000,
-  confirmTransactionTimeout: 30_000,
+  confirmTransactionInitialTimeout: 60_000,
+  confirmTransactionTimeout: 60_000,
   maxRetries: 5,
   disableRetryOnRateLimit: true,
   pollingPeriod: 1_000,

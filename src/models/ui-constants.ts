@@ -1,3 +1,4 @@
+import { Finality } from "@solana/web3.js";
 import { DataFormat, InstructionDataFieldType } from "./internal-types";
 import { Explorer } from "./state-types";
 
@@ -20,6 +21,12 @@ export const COMMITMENT_LEVELS = [
   { id: "singleGossip", name: "Single Gossip" },
   { id: "root", name: "Root" },
   { id: "max", name: "Max" },
+];
+
+// for finality level option drop-downs
+export const FINALITY_LEVELS: { id: Finality; name: string }[] = [
+  { id: "confirmed", name: "Confirmed" },
+  { id: "finalized", name: "Finalized" },
 ];
 
 // for the data type drop-down

@@ -1,8 +1,8 @@
 import { Grid } from "@chakra-ui/react";
-import { Commitment } from "@solana/web3.js";
+import { Commitment, Finality } from "@solana/web3.js";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { COMMITMENT_LEVELS } from "../../models/ui-constants";
+import { COMMITMENT_LEVELS, FINALITY_LEVELS } from "../../models/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";
@@ -16,15 +16,15 @@ export const TransactionOptions: React.FC = () => {
   return (
     <Grid templateColumns="1fr 1fr" gap="15px 5px" alignItems="center">
       <ChoiceOption
-        id="commitment"
-        name="Commitment level"
+        id="finality"
+        name="Finality"
         get={() =>
-          COMMITMENT_LEVELS.find((x) => x.id === transactionOptions.commitment)!
+          FINALITY_LEVELS.find((x) => x.id === transactionOptions.finality)!
         }
-        getChoices={() => COMMITMENT_LEVELS}
+        getChoices={() => FINALITY_LEVELS}
         set={(x) => {
           set((state) => {
-            state.transactionOptions.commitment = x as Commitment;
+            state.transactionOptions.finality = x as Finality;
           });
         }}
       />

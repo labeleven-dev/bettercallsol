@@ -63,7 +63,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
         setMessage(`Confirmed by ${web3Status.confirmations || 0}`);
       }
     },
-    onFinalised: () => {
+    onSuccess: () => {
       setMessage("Airdop has been successful");
       setStatus("success");
     },

@@ -11,8 +11,9 @@ export const useAnchorProvider = (
   provider?: AnchorProvider;
   connection?: Connection;
 } => {
-  const { commitment, maxRetries, preflightCommitment, skipPreflight } =
-    usePersistentStore((state) => state.transactionOptions);
+  const { maxRetries, preflightCommitment, skipPreflight } = usePersistentStore(
+    (state) => state.transactionOptions
+  );
 
   const defaultConnection = useWeb3Connection();
   const activeConnection = connection || defaultConnection;
@@ -29,7 +30,6 @@ export const useAnchorProvider = (
         signAllTransactions: signAllTransactions!,
       },
       {
-        commitment,
         maxRetries,
         preflightCommitment,
         skipPreflight,
@@ -40,7 +40,6 @@ export const useAnchorProvider = (
     publicKey,
     signTransaction,
     signAllTransactions,
-    commitment,
     maxRetries,
     preflightCommitment,
     skipPreflight,

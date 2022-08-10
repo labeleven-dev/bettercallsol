@@ -23,6 +23,7 @@ import {
 import { TransactionConfirmationStatus } from "@solana/web3.js";
 import React, { useEffect, useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
 import { IBalance } from "../../../models/internal-types";
 import {
@@ -47,6 +48,9 @@ type State = {
 
 export const Results: React.FC = () => {
   const [results, setResults] = useState<State>({});
+  const finality = usePersistentStore(
+    (state) => state.transactionOptions.finality
+  );
 
   const setInProgress = useSessionStoreWithoutUndo(
     (state) => (value: boolean) => {
@@ -59,7 +63,7 @@ export const Results: React.FC = () => {
   const {
     signature,
     inProgress,
-    finalisedAt,
+    endedAt,
     start: startWeb3Transaction,
     cancel: cancelWeb3Transaction,
   } = useGetWeb3Transaction({
@@ -72,7 +76,7 @@ export const Results: React.FC = () => {
         error: mapWeb3TransactionError(err),
       });
     },
-    onFinalised: (response) => {
+    onSuccess: (response) => {
       setResults({
         confirmationStatus: "finalized",
         blockTime: response.blockTime || undefined,
@@ -124,7 +128,8 @@ export const Results: React.FC = () => {
         <Heading mr="3" size="md">
           Results
         </Heading>
-        {results.confirmationStatus === "finalized" ? (
+        {results.confirmationStatus === finality ||
+        results.confirmationStatus === "finalized" ? (
           results.error ? (
             <>
               <WarningIcon mr="1" color="red.400" />
@@ -154,31 +159,12 @@ export const Results: React.FC = () => {
 
         <Spacer />
 
-        {results.confirmationStatus && (
-          <Tag
-            mr="1"
-            colorScheme={
-              results.confirmationStatus === "processed"
-                ? "yellow"
-                : results.confirmationStatus === "confirmed"
-                ? "blue"
-                : "green"
-            }
-            height="20px"
-          >
-            {results.confirmationStatus === "processed"
-              ? "Processed"
-              : results.confirmationStatus === "confirmed"
-              ? `Confirmed by ${results.confirmations || 0}`
-              : `Finalised by max confirmations`}
-          </Tag>
-        )}
-        {finalisedAt && (
+        {endedAt && (
           <Tooltip
-            label={`Last fetched @ ${new Date(finalisedAt).toLocaleString()}`}
+            label={`Last fetched @ ${new Date(endedAt).toLocaleString()}`}
           >
             <Tag height="20px" variant="outline">
-              {new Date(finalisedAt).toLocaleTimeString()}
+              {new Date(endedAt).toLocaleTimeString()}
             </Tag>
           </Tooltip>
         )}
@@ -211,7 +197,13 @@ export const Results: React.FC = () => {
         }}
       />
 
-      <Signature signature={signature} slot={results.slot} fee={results.fee} />
+      <Signature
+        signature={signature}
+        confirmationStatus={results.confirmationStatus}
+        confirmations={results.confirmations}
+        slot={results.slot}
+        fee={results.fee}
+      />
 
       <Tabs colorScheme="main" variant="enclosed">
         <TabList>

@@ -12,20 +12,20 @@ import { useWeb3Connection } from "./useWeb3Connection";
 export const useGetWeb3Transaction = ({
   connection,
   onStatus,
-  onFinalised,
+  onSuccess,
   onTimeout,
   onError,
 }: {
   connection?: Connection;
   onStatus?: (status: SignatureStatus) => void;
-  onFinalised?: (response: TransactionResponse) => void;
+  onSuccess?: (response: TransactionResponse) => void;
   onTimeout?: () => void;
   onError?: (error: Error) => void;
 }): {
   signature: IPubKey;
   inProgress: boolean;
   startedAt?: number;
-  finalisedAt?: number;
+  endedAt?: number;
   start: (signature: IPubKey, skipPolling?: boolean) => void;
   cancel: () => void;
 } => {
@@ -34,7 +34,7 @@ export const useGetWeb3Transaction = ({
   const [skipPolling, setSkipPolling] = useState(false);
 
   const [startedAt, setStartedAt] = useState<number>();
-  const [finalisedAt, setFinalisedAt] = useState<number>();
+  const [endedAt, setFinalisedAt] = useState<number>();
 
   const transactionOptions = usePersistentStore(
     (state) => state.transactionOptions
@@ -57,16 +57,18 @@ export const useGetWeb3Transaction = ({
           }
         }
 
-        // TODO status from option?
-        if (skipPolling || status?.confirmationStatus === "finalized") {
+        if (
+          skipPolling ||
+          status?.confirmationStatus === transactionOptions.finality
+        ) {
           const transaction = await activeConnection.getTransaction(signature, {
-            commitment: "finalized",
+            commitment: transactionOptions.finality,
           });
 
           if (transaction) {
             setFinalisedAt(new Date().getTime());
             setInProgress(false);
-            onFinalised && onFinalised(transaction);
+            onSuccess && onSuccess(transaction);
           } else {
             setInProgress(false);
             onError && onError(new Error("Transaction not found"));
@@ -93,7 +95,7 @@ export const useGetWeb3Transaction = ({
     signature,
     inProgress,
     startedAt,
-    finalisedAt,
+    endedAt,
     start: (signature, skipPolling = false) => {
       setStartedAt(new Date().getTime());
       setSignature(signature);

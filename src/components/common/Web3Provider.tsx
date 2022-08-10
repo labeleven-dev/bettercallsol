@@ -7,7 +7,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   GlowWalletAdapter,
   PhantomWalletAdapter,
-  SlopeWalletAdapter,
   SolflareWalletAdapter,
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
@@ -20,12 +19,10 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
   const [
-    commitment,
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
     autoConnectWallet,
   ] = usePersistentStore((state) => [
-    state.transactionOptions.commitment,
     state.transactionOptions.confirmTransactionInitialTimeout,
     state.transactionOptions.disableRetryOnRateLimit,
     state.appOptions.autoConnectWallet,
@@ -35,7 +32,6 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
     () => [
       new PhantomWalletAdapter(),
       new GlowWalletAdapter(),
-      new SlopeWalletAdapter(),
       new SolflareWalletAdapter({
         network: rpcEndpoint.network as WalletAdapterNetwork,
       }),
@@ -48,7 +44,6 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
     <ConnectionProvider
       endpoint={rpcEndpoint.url}
       config={{
-        commitment,
         confirmTransactionInitialTimeout,
         disableRetryOnRateLimit,
       }}

@@ -27,7 +27,7 @@ export const TransactionIdImport: React.FC<{
   const connection = useWeb3Connection(rpcEndpoint.url);
   const { start, inProgress } = useGetWeb3Transaction({
     connection,
-    onFinalised: (response) => {
+    onSuccess: (response) => {
       setPreview(mapTransactionResponseToIPreview(response, rpcEndpoint));
     },
     onError: (error) => {

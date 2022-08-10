@@ -7,7 +7,9 @@ import {
   InputRightElement,
   Tag,
 } from "@chakra-ui/react";
+import { TransactionConfirmationStatus } from "@solana/web3.js";
 import React from "react";
+import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { toSol } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
@@ -15,10 +17,15 @@ import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const Signature: React.FC<{
   signature: string;
+  confirmations?: number;
+  confirmationStatus?: TransactionConfirmationStatus;
   slot?: number;
   fee?: number;
-}> = ({ signature, slot, fee }) => {
+}> = ({ signature, confirmations, confirmationStatus, slot, fee }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
+  const finality = usePersistentStore(
+    (state) => state.transactionOptions.finality
+  );
 
   return (
     <>
@@ -33,6 +40,7 @@ export const Signature: React.FC<{
             fontFamily="mono"
             placeholder="Transaction Signature"
             isReadOnly
+            paddingEnd="55px"
             value={signature}
           />
           <InputRightElement
@@ -54,6 +62,30 @@ export const Signature: React.FC<{
 
       <Flex mb="4" alignItems="center">
         <Box width="70px" />
+
+        {confirmationStatus && (
+          <Tag
+            mr="1"
+            colorScheme={
+              confirmationStatus === "confirmed" ||
+              confirmationStatus === "finalized"
+                ? "green"
+                : confirmationStatus === "processed"
+                ? "yellow"
+                : "blue"
+            }
+            height="20px"
+          >
+            {confirmationStatus === "processed"
+              ? "Processed"
+              : confirmationStatus === "confirmed"
+              ? `Confirmed by ${confirmations || 0}`
+              : confirmationStatus === "finalized"
+              ? `Finalised by max confirmations`
+              : ""}
+          </Tag>
+        )}
+
         {slot && (
           <Tag mr="1">
             <strong>Slot:&nbsp;</strong> {slot}

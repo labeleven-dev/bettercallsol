@@ -39,7 +39,7 @@ export const useImport = () => {
   const connection = useWeb3Connection(rpcEndpoint.url);
   const { start } = useGetWeb3Transaction({
     connection,
-    onFinalised: (response) => {
+    onSuccess: (response) => {
       set((state) => {
         state.import = {
           isLoading: false,

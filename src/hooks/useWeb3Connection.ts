@@ -11,13 +11,9 @@ export const useWeb3Connection = (rpcEndpointUrl?: string): Connection => {
   const customConnection = useMemo(() => {
     if (!rpcEndpointUrl) return null;
 
-    const {
-      commitment,
-      confirmTransactionInitialTimeout,
-      disableRetryOnRateLimit,
-    } = transactionOptions;
+    const { confirmTransactionInitialTimeout, disableRetryOnRateLimit } =
+      transactionOptions;
     return new Connection(rpcEndpointUrl, {
-      commitment,
       confirmTransactionInitialTimeout,
       disableRetryOnRateLimit,
     });

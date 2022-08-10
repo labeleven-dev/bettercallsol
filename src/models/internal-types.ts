@@ -1,7 +1,7 @@
 // The internal common model
 // Use as intermediate for other models and for tracking transaction state in the app
 
-import { Commitment } from "@solana/web3.js";
+import { Commitment, Finality } from "@solana/web3.js";
 import { IID, SortableCollection } from "./sortable";
 
 export type IPubKey = string;
@@ -101,7 +101,7 @@ export interface ICommitment {
 
 export interface ITransactionOptions {
   skipPreflight: boolean;
-  commitment: Commitment;
+  finality: Finality;
   maxRetries: number;
   preflightCommitment?: Commitment;
   disableRetryOnRateLimit: boolean;
