@@ -49,8 +49,8 @@ export const WalletButton: React.FC = () => {
           <WalletMultiButton />
         </Box>
       </PopoverTrigger>
-      <PopoverContent bg={useColorModeValue("cyan.100", "cyan.900")}>
-        <PopoverArrow bg={useColorModeValue("cyan.100", "cyan.900")} />
+      <PopoverContent bg={useColorModeValue("orange.100", "orange.900")}>
+        <PopoverArrow bg={useColorModeValue("orange.100", "orange.900")} />
         <PopoverCloseButton />
         <PopoverHeader>
           <Heading size="md" mt="2" mb="2">

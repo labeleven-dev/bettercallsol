@@ -19,13 +19,13 @@ export const Palette: React.FC = () => {
       bgColor={useColorModeValue("blackAlpha.50", "blackAlpha.500")}
     >
       <TabList mb="1em">
-        <Tab>History</Tab>
-        <Tab>Library</Tab>
+        {/* <Tab>History</Tab>
+        <Tab>Library</Tab> */}
         <Tab>Import</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
+        {/* <TabPanel></TabPanel>
+        <TabPanel></TabPanel> */}
         <TabPanel>
           <ImportTransaction />
         </TabPanel>

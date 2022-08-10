@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Heading,
   Icon,
@@ -7,6 +8,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Spacer,
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -16,6 +18,7 @@ import {
   FaEraser,
   FaExpand,
   FaExpandAlt,
+  FaFileImport,
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
@@ -67,110 +70,126 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   };
 
   return (
-    <Flex mb="5" alignItems="center">
-      <Heading flex="1" size="lg">
-        <EditableName
-          tooltip="Click to edit"
-          placeholder="Unnamed Tranasction"
-          value={transaction.name}
-          onChange={(value) =>
+    <>
+      <Flex mb="5" alignItems="center">
+        <RpcEndpointMenu
+          menuButtonProps={{ minW: "250px", maxW: "250px" }}
+          menuListProps={{ fontSize: "md" }}
+          endpoint={rpcEndpoint}
+          setEndpoint={(endpoint) => {
             setSession((state) => {
-              state.transaction.name = value;
-            })
+              state.rpcEndpoint = endpoint;
+            });
+          }}
+        />
+
+        <Tooltip
+          shouldWrapChildren
+          hasArrow={!walletPublicKey}
+          label={
+            walletPublicKey
+              ? "Run Program"
+              : "Please connect a wallet to contiune"
           }
-        />
-      </Heading>
+        >
+          <Button
+            isLoading={transactionRun.inProgress}
+            isDisabled={!walletPublicKey}
+            ml="2"
+            mr="2"
+            colorScheme="purple"
+            aria-label="Run Program"
+            rightIcon={<Icon as={FaPlay} />}
+            onClick={() => {
+              send(transaction);
+            }}
+          >
+            Send
+          </Button>
+        </Tooltip>
 
-      <Tooltip label="Expand All">
-        <IconButton
-          ml="2"
-          aria-label="Expand All"
-          icon={<Icon as={FaExpandAlt} />}
-          variant="ghost"
-          onClick={setAllExpanded(true)}
-        />
-      </Tooltip>
+        <Spacer />
 
-      <Tooltip label="Collapse All">
-        <IconButton
-          aria-label="Collapse All"
-          icon={<Icon as={FaExpand} />}
-          variant="ghost"
-          onClick={setAllExpanded(false)}
-        />
-      </Tooltip>
+        <Tooltip label="Import">
+          <IconButton
+            aria-label="Import"
+            icon={<Icon as={FaFileImport} />}
+            variant="ghost"
+            onClick={() => {
+              setUI((state) => {
+                state.uiState.paletteOpen = true;
+              });
+            }}
+          />
+        </Tooltip>
 
-      <Menu>
-        <MenuButton
-          mr="2"
-          as={IconButton}
-          aria-label="Options"
-          icon={<Icon as={FaEllipsisV} />}
-          variant="ghost"
-        />
-        <MenuList>
-          <MenuItem
+        <Tooltip label="Share">
+          <IconButton
+            aria-label="Share"
             icon={<Icon as={FaShareAlt} />}
+            variant="ghost"
             onClick={() => {
               setUI((state) => {
                 state.uiState.shareOpen = true;
               });
             }}
-          >
-            Share
-          </MenuItem>
-          <MenuItem
-            icon={<Icon as={FaEraser} />}
-            onClick={() => {
+          />
+        </Tooltip>
+
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<Icon as={FaEllipsisV} />}
+            variant="ghost"
+          />
+          <MenuList>
+            <MenuItem
+              icon={<Icon as={FaExpandAlt} />}
+              onClick={() => {
+                setAllExpanded(true);
+              }}
+            >
+              Expand All
+            </MenuItem>
+            <MenuItem
+              icon={<Icon as={FaExpand} />}
+              onClick={() => {
+                setAllExpanded(false);
+              }}
+            >
+              Collapse All
+            </MenuItem>
+            <MenuItem
+              icon={<Icon as={FaEraser} />}
+              onClick={() => {
+                setSession((state) => {
+                  state.transaction = DEFAULT_TRANSACTION;
+                });
+                setUI((state) => {
+                  state.transactionRun = DEFAULT_TRANSACTION_RUN;
+                });
+              }}
+            >
+              Clear
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+      <Flex mb="5" alignItems="center">
+        <Heading flex="1" size="lg">
+          <EditableName
+            tooltip="Click to edit"
+            placeholder="Unnamed Tranasction"
+            value={transaction.name}
+            onChange={(value) =>
               setSession((state) => {
-                state.transaction = DEFAULT_TRANSACTION;
-              });
-              setUI((state) => {
-                state.transactionRun = DEFAULT_TRANSACTION_RUN;
-              });
-            }}
-          >
-            Clear
-          </MenuItem>
-        </MenuList>
-      </Menu>
-
-      <RpcEndpointMenu
-        menuButtonProps={{ minW: "180px", maxW: "250px" }}
-        menuListProps={{ fontSize: "md" }}
-        endpoint={rpcEndpoint}
-        setEndpoint={(endpoint) => {
-          setSession((state) => {
-            state.rpcEndpoint = endpoint;
-          });
-        }}
-      />
-
-      <Tooltip
-        shouldWrapChildren
-        hasArrow={!walletPublicKey}
-        label={
-          walletPublicKey
-            ? "Run Program"
-            : "Please connect a wallet to contiune"
-        }
-      >
-        <IconButton
-          isLoading={transactionRun.inProgress}
-          isDisabled={!walletPublicKey}
-          ml="2"
-          mr="2"
-          colorScheme="main"
-          color="main.500"
-          borderWidth="2px"
-          variant="outline"
-          aria-label="Run Program"
-          icon={<Icon as={FaPlay} />}
-          onClick={() => {
-            send(transaction);
-          }}
-        />
-      </Tooltip>
-    </Flex>
+                state.transaction.name = value;
+              })
+            }
+          />
+        </Heading>
+      </Flex>
+    </>
   );
 };
