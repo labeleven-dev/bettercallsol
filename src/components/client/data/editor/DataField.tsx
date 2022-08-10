@@ -69,6 +69,7 @@ export const DataField: React.FC<{
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"
+        tooltipProps={{ placement: "bottom-end" }}
         isDisabled={!dynamic}
         value={name}
         onChange={(value: string) => {

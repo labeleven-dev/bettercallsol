@@ -57,7 +57,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           </FormLabel>
           <InputGroup>
             {programInfo.status === "fetched" && (
-              <InputLeftElement>
+              <InputLeftElement pointerEvents="none">
                 {programInfo.hasIdl ? (
                   <Tooltip label="Anchor program">
                     {/* Box is needed coz react-icons do not support forwardref 

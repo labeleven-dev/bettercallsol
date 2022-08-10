@@ -180,6 +180,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         <Heading flex="1" size="lg">
           <EditableName
             tooltip="Click to edit"
+            tooltipProps={{ placement: "bottom-start" }}
             placeholder="Unnamed Transaction"
             value={transaction.name}
             onChange={(value) =>

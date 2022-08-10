@@ -4,16 +4,17 @@ import {
   EditablePreview,
   EditableProps,
   Tooltip,
+  TooltipProps,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
 
-export const EditableName: React.FC<{ tooltip?: string } & EditableProps> = ({
-  tooltip,
-  width,
-  value,
-  ...theRest
-}) => {
+export const EditableName: React.FC<
+  {
+    tooltip?: string;
+    tooltipProps?: Omit<TooltipProps, "children">;
+  } & EditableProps
+> = ({ tooltip, tooltipProps, width, value, ...theRest }) => {
   const previewRef = useRef<HTMLSpanElement>(null);
   const unnamedColor = useColorModeValue("blackAlpha.400", "whiteAlpha.400");
 
@@ -32,7 +33,7 @@ export const EditableName: React.FC<{ tooltip?: string } & EditableProps> = ({
   return (
     <Tooltip
       label={tooltip || (value ? previewRef.current?.innerText : "")}
-      placement="bottom-start"
+      {...tooltipProps}
     >
       <Editable value={value} {...theRest}>
         <EditablePreview

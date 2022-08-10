@@ -106,6 +106,7 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
         textAlign="right"
         fontSize="sm"
         placeholder="Unnamed"
+        tooltipProps={{ placement: "bottom-end" }}
         isDisabled={!dynamic}
         value={name}
         onChange={(value: string) => {
@@ -132,6 +133,8 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
           ml="2"
           fontFamily="mono"
           placeholder="Account Public Key"
+          // TODO should be smarter based on the number of children in InputRightElement
+          paddingEnd="14"
           value={pubkey}
           onChange={(e) => {
             updateAccount((state) => {

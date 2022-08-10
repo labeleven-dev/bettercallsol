@@ -59,6 +59,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
       <Heading flex="1" size="md">
         <EditableName
           tooltip="Click to edit"
+          tooltipProps={{ placement: "bottom-start" }}
           placeholder="Unnamed Instruction"
           value={instruction.name}
           onChange={(value) => {
