@@ -115,7 +115,7 @@ export const useImport = () => {
         setIsLoading(false);
         toast({
           title: "Transaction import failed",
-          description: `Cannot fetch tranasction from URL: ${err}`,
+          description: `Cannot fetch transaction from URL: ${err}`,
           status: "error",
           duration: 15000,
           isClosable: true,

@@ -143,7 +143,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
             icon={<Icon as={FaEllipsisV} />}
             variant="ghost"
           />
-          <MenuList>
+          <MenuList zIndex="modal">
             <MenuItem
               icon={<Icon as={FaExpandAlt} />}
               onClick={() => {
@@ -180,7 +180,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         <Heading flex="1" size="lg">
           <EditableName
             tooltip="Click to edit"
-            placeholder="Unnamed Tranasction"
+            placeholder="Unnamed Transaction"
             value={transaction.name}
             onChange={(value) =>
               setSession((state) => {

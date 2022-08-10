@@ -143,9 +143,6 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
           // chakra hardcode the width so we can't have multiple buttons
           w=""
           mr="1"
-          // bug where it's set to 2 and goes in front of network selector menu :(
-          // downside is that it is not clickable when the text field is active
-          zIndex="base"
         >
           {isValid ? (
             <>

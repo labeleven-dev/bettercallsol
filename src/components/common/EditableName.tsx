@@ -37,7 +37,7 @@ export const EditableName: React.FC<{ tooltip?: string } & EditableProps> = ({
       <Editable value={value} {...theRest}>
         <EditablePreview
           ref={previewRef}
-          color={!value ? unnamedColor : undefined}
+          color={value ? undefined : unnamedColor}
           noOfLines={1} // TODO ellipses don't apear on truncating words
           minW={width || undefined}
           maxW={width || undefined}

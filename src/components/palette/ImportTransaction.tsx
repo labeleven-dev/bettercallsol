@@ -37,7 +37,7 @@ export const ImportTransaction: React.FC = () => {
           <MenuButton flex="1" as={Button} size="sm">
             {IMPORT_TYPES[importType]} <ChevronDownIcon />
           </MenuButton>
-          <MenuList fontSize="sm">
+          <MenuList fontSize="sm" zIndex="modal">
             {Object.entries(IMPORT_TYPES).map(([type, label]) => (
               <MenuItem
                 key={type}

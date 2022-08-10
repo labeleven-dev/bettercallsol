@@ -24,7 +24,7 @@ export const ChoiceOption: React.FC<{
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
         {get().name}
       </MenuButton>
-      <MenuList>
+      <MenuList zIndex="modal">
         {getChoices().map(({ id, name }) => (
           <MenuItem
             icon={get().id === id ? <CheckIcon /> : undefined}

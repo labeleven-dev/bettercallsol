@@ -95,7 +95,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           icon={<Icon as={FaEllipsisV} />}
           variant="ghost"
         />
-        <MenuList>
+        <MenuList zIndex="modal">
           <MenuItem
             icon={<Icon as={FaEraser} />}
             onClick={() => {

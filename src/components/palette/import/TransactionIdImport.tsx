@@ -17,7 +17,7 @@ export const TransactionIdImport: React.FC<{
     (state) => state.appOptions.rpcEndpoints
   );
 
-  const [tranasctionId, setTransactionId] = useState("");
+  const [transactionId, setTransactionId] = useState("");
   const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
     Object.values(rpcEndpoints.map).find(
       (endpoint) => endpoint.network === "mainnet-beta"
@@ -36,12 +36,12 @@ export const TransactionIdImport: React.FC<{
   });
 
   const search = () => {
-    if (!tranasctionId) return;
+    if (!transactionId) return;
 
     setPreview(undefined);
     setError("");
 
-    start(tranasctionId, true);
+    start(transactionId, true);
   };
 
   return (
@@ -51,7 +51,7 @@ export const TransactionIdImport: React.FC<{
         mr="1"
         fontFamily="mono"
         placeholder="Transaction ID"
-        value={tranasctionId}
+        value={transactionId}
         onChange={(e) => {
           setTransactionId(e.target.value);
         }}

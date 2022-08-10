@@ -70,7 +70,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                 ) : programInfo.executable ? (
                   <Tooltip label="Executable program">
                     <Box>
-                      <Icon as={FaRocket} />
+                      <Icon mt="2" as={FaRocket} />
                     </Box>
                   </Tooltip>
                 ) : (
@@ -95,9 +95,6 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               // chakra hardcode the width so we can't have multiple buttons
               w=""
               mr="1"
-              // bug where it's set to 2 and goes in front of network selector menu :(
-              // downside is that it is not clickable when the text field is active
-              zIndex="base"
             >
               {programInfo.status === "fetched" &&
                 programInfo.verified !== null && (

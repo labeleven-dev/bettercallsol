@@ -50,7 +50,7 @@ export const RpcEndpointMenu: React.FC<{
 
       {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
       <Portal>
-        <MenuList {...menuListProps}>
+        <MenuList {...menuListProps} zIndex="modal">
           {toSortedArray(rpcEndpoints)
             .filter(({ enabled, url }) => enabled && url)
             .map((it, index) => (

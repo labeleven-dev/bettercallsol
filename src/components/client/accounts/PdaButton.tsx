@@ -132,6 +132,7 @@ export const PdaButton: React.FC<{
               >
                 {toSortedArray(seeds).map((seed, index) => (
                   <SeedItem
+                    key={index}
                     ref={initialFocusRef}
                     seed={seed}
                     setSeed={(fn) => {

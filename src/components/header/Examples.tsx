@@ -55,7 +55,7 @@ export const Example: React.FC = () => {
         </MenuButton>
       </Tooltip>
 
-      <MenuList fontSize="md">
+      <MenuList fontSize="md" zIndex="modal">
         <MenuItem
           onClick={() => {
             loadExample("systemProgramTransfer");

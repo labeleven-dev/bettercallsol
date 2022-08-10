@@ -11,7 +11,7 @@ Each domain has its own file. In case of larger files, it may be split into mult
 The following domains have been covered:
 
 * `internal`: The common data model representing the internal state of a transaction, including its UI state
-* `state`: The non-tranasction, e.g. options, non-transaction UI state, etc., models.
+* `state`: The non-transaction, e.g. options, non-transaction UI state, etc., models.
 * `preview`: The models and mappers, imported from the chain and previewed in "Import" palette
 * `external`: The external representation of the transaction, used for export/share and corresponding import/load
 
