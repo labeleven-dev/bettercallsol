@@ -39,7 +39,13 @@ export const ProgramLogs: React.FC<{
   }
 
   return (
-    <Grid p="3" backgroundColor="gray.700" rounded="sm" position="relative">
+    <Grid
+      p="3"
+      minH="45px"
+      backgroundColor="gray.700"
+      rounded="sm"
+      position="relative"
+    >
       {logs && (
         <Flex alignItems="center" position="absolute" top="1" right="1">
           <CopyButton value={joinedUpLogs!} />

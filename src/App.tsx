@@ -45,7 +45,7 @@ export const App: React.FC = () => {
             <Box flex="2" h="93vh" overflow="scroll">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
               <Show below="md">
-                <Alert status="warning" variant="left-accent">
+                <Alert mt="10px" status="warning" variant="left-accent">
                   <AlertIcon />
                   <AlertDescription>
                     This app is optimised for desktop. It may look wonky on your

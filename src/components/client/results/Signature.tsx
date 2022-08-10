@@ -1,15 +1,6 @@
-import {
-  Box,
-  Flex,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Tag,
-} from "@chakra-ui/react";
+import { Box, Flex, FormLabel, Tag, Text } from "@chakra-ui/react";
 import { TransactionConfirmationStatus } from "@solana/web3.js";
 import React from "react";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { toSol } from "../../../models/web3js-mappers";
 import { CopyButton } from "../../common/CopyButton";
@@ -23,9 +14,6 @@ export const Signature: React.FC<{
   fee?: number;
 }> = ({ signature, confirmations, confirmationStatus, slot, fee }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
-  const finality = usePersistentStore(
-    (state) => state.transactionOptions.finality
-  );
 
   return (
     <>
@@ -34,30 +22,27 @@ export const Signature: React.FC<{
           Signature
         </FormLabel>
 
-        <InputGroup flex="1" mr="1" size="sm">
-          <Input
-            id="signature"
-            fontFamily="mono"
-            placeholder="Transaction Signature"
-            isReadOnly
-            paddingEnd="55px"
-            value={signature}
-          />
-          <InputRightElement
-            // chakra hardcode the width so we can't have multiple buttons
-            w=""
-            mr="1"
-          >
-            <CopyButton size="xs" isDisabled={!signature} value={signature} />
-            <ExplorerButton
-              size="xs"
-              valueType="tx"
-              isDisabled={!signature}
-              value={signature}
-              rpcEndpoint={rpcEndpoint}
-            />
-          </InputRightElement>
-        </InputGroup>
+        <Text
+          p="5px 10px 5px 10px"
+          id="signature"
+          mr="1"
+          fontSize="sm"
+          fontFamily="mono"
+          // minW="200px"
+          borderWidth="1px"
+          borderRadius="sm"
+          wordBreak="break-all"
+        >
+          {signature || " "}
+        </Text>
+        <CopyButton size="xs" isDisabled={!signature} value={signature} />
+        <ExplorerButton
+          size="xs"
+          valueType="tx"
+          isDisabled={!signature}
+          value={signature}
+          rpcEndpoint={rpcEndpoint}
+        />
       </Flex>
 
       <Flex mb="4" alignItems="center">
@@ -74,7 +59,6 @@ export const Signature: React.FC<{
                 ? "yellow"
                 : "blue"
             }
-            height="20px"
           >
             {confirmationStatus === "processed"
               ? "Processed"
