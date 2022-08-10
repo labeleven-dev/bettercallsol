@@ -10,13 +10,27 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Also tell us, what did you expect to happen? And please provide any relevant error messages or logs.
+      description: |
+        Tell us what happened and what you expected to happen. A video of the problem would be awesome!
     validations:
       required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Errors & Logs
+      description: |
+        If there were any logs or errors in browser developer tools, please include them.
   - type: input
     id: version
     attributes:
       label: App Version
-      description: Version can be found at the bottom right corner of the app screen.
+      description: The version can be found at the bottom right corner of the app page. Please copy the entire text including the build number.
     validations:
-      required: false
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Web Browser
+      description: Which web browser(s) have you encountered the issue in? Please also provide the version.
+    validations:
+      required: true
