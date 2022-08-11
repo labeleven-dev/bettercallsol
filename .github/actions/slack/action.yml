@@ -36,10 +36,29 @@ runs:
             "blocks": [
               {
                 "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "${{ inputs.success && ':rocket:' || ':skull_and_crossbones:' }} *${{ inputs.environment }}:* ${{ inputs.version }} <${{ inputs.app_url }}|:phone: App> <${{ inputs.app_url }}|:building_construction: Workflow>"
-                }
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:* ${{ inputs.success && ':rocket: Success' || ':skull_and_crossbones: Fail' }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Env:* ${{ inputs.environment }}${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Version:* ${{ inputs.version }}"
+                  }
+                ]
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "<${{ inputs.app_url }}|:phone: App>     <${{ inputs.app_url }}|:building_construction: Workflow>"
+                  }
+                ]
               }
             ]
           }
