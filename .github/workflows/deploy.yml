@@ -38,7 +38,7 @@ jobs:
           else
             LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
             echo "Existing version: ${LATEST_TAG}"
-            echo "::set-output name=version::${LATEST_TAG}"
+            echo "::set-output name=version::${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt	}})"
           fi
 
       # test
@@ -50,7 +50,7 @@ jobs:
       - run: npm run build
         env:
           # GENERATE_SOURCEMAP: false
-          REACT_APP_VERSION: "${{ steps.version.outputs.version }} (Build ${{ github.run_number }}-${{ github.run_attempt	}})"
+          REACT_APP_VERSION: ${{ steps.version.outputs.version }}
       
       # release
       - run: npm run release
@@ -58,13 +58,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # deploy
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - id: deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           projectId: "${{ env.PROJECT_ID }}"
           expires: 30d
           channelId: staging
+
+      # notify
+      - uses: ./.github/actions/slack.yml
+        if: always()
+        with:
+          environment: Staging
+          version: ${{ steps.version.outputs.version }}
+          app_url: ${{ steps.deploy.outputs.details_url }}
+          action_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
   deployProd:
     runs-on: ubuntu-latest
@@ -82,3 +92,13 @@ jobs:
 
       # promote from staging to production
       - run: firebase hosting:clone ${PROJECT_ID}:staging ${PROJECT_ID}:live
+
+      # notify
+      - uses: ./.github/actions/slack.yml
+        if: always()
+        with:
+          environment: Prod
+          version: ${{ jobs.deployStaging.steps.version.outputs.version }}
+          app_url: ${{ jobs.deployStaging.steps.deploy.outputs.details_url }}
+          action_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+

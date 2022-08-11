@@ -1,0 +1,38 @@
+name: Notify Slack
+
+inputs:
+  environment:
+    description: Which env was the app deployed to
+    required: true
+  version:
+    description: The version of the deployed app
+    required: true
+  app_url:
+    description: The URL where the app was deployed to
+    required: true
+  action_url:
+    description: The URL GitHub Action for this build
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Post to a Slack channel
+      uses: slackapi/slack-github-action@v1.21.0
+      with:
+        channel-id: C03ND2RUSTE
+        payload: |
+          {
+            "text": "${{ inputs.environment }}: ${{ inputs.version }} ${{ inputs.app_url }} ${{ inputs.action_url }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${{ failure() && ':skull_and_crossbones:' || '' }}${{ inputs.environment == 'Prod' && ':rocket: ' || '' }}*${{ inputs.environment }}:* ${{ inputs.version }} <${{ inputs.app_url }}|:phone: App> <${{ inputs.app_url }}|:building_construction: Workflow>"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
