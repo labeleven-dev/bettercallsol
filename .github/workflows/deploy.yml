@@ -74,7 +74,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: npm
 
       # setup firebase CLI
       - run: npm install -g firebase-tools
