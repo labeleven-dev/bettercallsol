@@ -4,6 +4,18 @@
   <p>
     <h3>The Missing Solana Client</h3>
     <p><i>For when you have had enough glass...</i></p>
+    <p>
+      <a href="https://github.com/labeleven-dev/bettercallsol/actions/workflows/deploy.yml">
+        <img alt="Workflow Status" src="https://github.com/labeleven-dev/bettercallsol/actions/workflows/deploy.yml/badge.svg">
+      </a>
+      <a href="https://snyk.io/test/github/labeleven-dev/bettercallsol">
+        <img alt="Known Vulnerabilities" src="https://snyk.io/test/github/labeleven-dev/bettercallsol/badge.svg">
+      </a>
+    <p>
+      <a href="https://github.com/labeleven-dev/bettercallsol/discussions">
+        <img alt="Join the community on GitHub Discussions" src="https://img.shields.io/badge/Join%20the%20community-on%20GitHub%20Discussions-blue">
+      </a>
+    </p>
   </p>
 </div>
 
@@ -21,6 +33,7 @@ Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://so
 * [x] Connect your favourite Solana wallet
 * [x] Open accounts and transactions in your favourite explorer
 * [x] Airdrop SOLs to accounts
+* [x] Generate PDAs
 
 Contribution
 ---
