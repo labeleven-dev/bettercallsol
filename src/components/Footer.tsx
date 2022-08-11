@@ -28,7 +28,7 @@ export const Footer: React.FC = () => (
       <Center>
         <Link
           mr="4"
-          href="https://github.com/labeleven-dev/bcsol-issues"
+          href="https://github.com/labeleven-dev/bettercallsol"
           isExternal
         >
           <Icon as={FaGithub} />

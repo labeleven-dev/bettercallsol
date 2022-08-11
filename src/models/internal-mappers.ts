@@ -36,8 +36,8 @@ export const newAccount = (): IAccount => ({
 export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
   format: "raw",
   raw: "",
-  borsh: toSortableCollection([{ id: uuid(), type: "u8", value: "" }]),
-  bufferLayout: toSortableCollection([{ id: uuid(), type: "u8", value: "" }]),
+  borsh: toSortableCollection([]),
+  bufferLayout: toSortableCollection([]),
 };
 
 export const newInstruction = (): IInstruction => ({

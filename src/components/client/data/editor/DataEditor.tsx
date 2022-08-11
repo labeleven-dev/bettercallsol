@@ -1,5 +1,12 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
+import {
+  Center,
+  Grid,
+  IconButton,
+  Text,
+  Tooltip,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
@@ -33,8 +40,18 @@ export const DataEditor: React.FC<{
     });
   };
 
+  const emptyBgColour = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
+
   return (
     <Grid>
+      {fields.order.length === 0 && (
+        <Center p="3" bgColor={emptyBgColour}>
+          <Text as="i" fontSize="sm">
+            No fields yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" /> below
+            to add a field.
+          </Text>
+        </Center>
+      )}
       <Sortable
         itemOrder={fields.order}
         setItemOrder={(itemOrder) => {

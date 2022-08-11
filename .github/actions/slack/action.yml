@@ -32,14 +32,14 @@ runs:
         channel-id: C03ND2RUSTE
         payload: |
           {
-            "text": "${{ inputs.success == 'true' && 'Success' || 'Fail' }}: ${{ inputs.environment }} - ${{ inputs.version }}\n${{ inputs.app_url }}\n${{ inputs.action_url }}",
+            "text": "${{ inputs.success == 'true' && 'SUCCESS' || 'FAIL' }}: ${{ inputs.environment }} - ${{ inputs.version }}\n${{ inputs.app_url }}\n${{ inputs.action_url }}",
             "blocks": [
               {
                 "type": "section",
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Env:* <${{ inputs.app_url }}|${{ inputs.environment }}>${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
+                    "text": "*Env:* <${{ inputs.app_url || 'https://labeleven.dev' }}|>${{ inputs.environment }}${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
                   },
                   {
                     "type": "mrkdwn",
