@@ -6,6 +6,7 @@ import {
   MenuItem,
   MenuList,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
@@ -22,14 +23,25 @@ export const Example: React.FC = () => {
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
   const setResults = useSessionStoreWithoutUndo((state) => state.set);
 
+  const toast = useToast();
+
   const loadExample = (name: string) => {
+    const { transaction, help } = EXAMPLES[name];
     setTransaction((state) => {
       state.transaction = mapITransactionExtToITransaction(
-        EXAMPLES[name](walletPublicKey?.toBase58()!)
+        transaction(walletPublicKey?.toBase58()!)
       );
     });
     setResults((state) => {
       state.transactionRun = DEFAULT_TRANSACTION_RUN;
+    });
+
+    toast({
+      title: "The example has been loaded!",
+      description: help,
+      status: "info",
+      isClosable: true,
+      duration: 30_000,
     });
   };
 
@@ -40,7 +52,7 @@ export const Example: React.FC = () => {
         hasArrow={!walletPublicKey}
         label={
           walletPublicKey
-            ? "Run Program"
+            ? "Load an example transaction"
             : "Please connect a wallet to contiune"
         }
       >

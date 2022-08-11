@@ -104,7 +104,8 @@ export const mapWeb3TransactionError = (err: any): string => {
     // this doesn't seem to match web3.js types but still comes back from RPC endpoint 🤷
     const errObject = err as Record<string, any>;
     if (errObject?.InstructionError) {
-      error = `Instruction Error: ${errObject.InstructionError[1]} (${errObject.InstructionError[0]})`;
+      const [index, errorCode] = errObject.InstructionError;
+      error = `Error at Instruction ${index}: ${JSON.stringify(errorCode)}`;
     }
   }
 
