@@ -38,7 +38,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "${{ inputs.success && :rocket: || ':skull_and_crossbones:' }} *${{ inputs.environment }}:* ${{ inputs.version }} <${{ inputs.app_url }}|:phone: App> <${{ inputs.app_url }}|:building_construction: Workflow>"
+                  "text": "${{ inputs.success && ':rocket:' || ':skull_and_crossbones:' }} *${{ inputs.environment }}:* ${{ inputs.version }} <${{ inputs.app_url }}|:phone: App> <${{ inputs.app_url }}|:building_construction: Workflow>"
                 }
               }
             ]

@@ -112,6 +112,5 @@ jobs:
           bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
           environment: Prod
           version: ${{ needs.deployStaging.outputs.version }}
-          # TODO
-          app_url: https://todo
+          app_url: https://bettercallsol.dev
 
