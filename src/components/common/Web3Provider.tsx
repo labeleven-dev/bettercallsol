@@ -5,6 +5,7 @@ import {
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
+  BackpackWalletAdapter,
   BraveWalletAdapter,
   GlowWalletAdapter,
   LedgerWalletAdapter,
@@ -31,8 +32,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
 
   const wallets = useMemo(
     () => [
-      // TODO Attempted import error: 'BackpackWalletAdapter' is not exported from '@solana/wallet-adapter-wallets' (imported as 'BackpackWalletAdapter').
-      // new BackpackWalletAdapter(),
+      new BackpackWalletAdapter(),
       new BraveWalletAdapter(),
       new GlowWalletAdapter(),
       new LedgerWalletAdapter(),
