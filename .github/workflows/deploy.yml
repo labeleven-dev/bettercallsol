@@ -75,7 +75,7 @@ jobs:
       - uses: ./.github/actions/slack/
         if: always()
         with:
-          success: ${{ steps.version.outcome == "success" && steps.deploy.outcome == "success" }}
+          success: ${{ steps.version.outcome == 'success' && steps.deploy.outcome == 'success' }}
           bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
           environment: Staging
           version: ${{ steps.version.outputs.version }}
@@ -108,7 +108,7 @@ jobs:
       - uses: ./.github/actions/slack/
         if: always()
         with:
-          success: ${{ steps.promote.outcome == "success" }}
+          success: ${{ steps.promote.outcome == 'success' }}
           bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
           environment: Prod
           version: ${{ needs.deployStaging.outputs.version }}
