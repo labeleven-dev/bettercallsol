@@ -29,7 +29,7 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
-import { PublicKey } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import React, { useRef, useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
@@ -81,7 +81,10 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
     setStatus("running");
     setMessage("Sending transcation...");
     connection
-      .requestAirdrop(new PublicKey(accountPubkey), parseInt(value))
+      .requestAirdrop(
+        new PublicKey(accountPubkey),
+        parseInt(value) * LAMPORTS_PER_SOL
+      )
       .then((signature) => {
         startConfirmation(signature);
       });

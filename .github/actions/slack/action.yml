@@ -32,31 +32,22 @@ runs:
         channel-id: C03ND2RUSTE
         payload: |
           {
-            "text": "${{ inputs.success && 'Success' || 'Fail' }}: ${{ inputs.environment }}: ${{ inputs.version }} ${{ inputs.app_url }} ${{ inputs.action_url }}",
+            "text": "${{ inputs.success == 'true' && 'Success' || 'Fail' }}: ${{ inputs.environment }} - ${{ inputs.version }}\n${{ inputs.app_url }}\n${{ inputs.action_url }}",
             "blocks": [
               {
                 "type": "section",
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Status:* ${{ inputs.success && ':rocket: Success' || ':skull_and_crossbones: Fail' }}"
+                    "text": "*Env:* <${{ inputs.app_url }}|${{ inputs.environment }}>${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*Env:* ${{ inputs.environment }}${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
+                    "text": "*Status:* ${{ inputs.success == 'true' && ':rocket: Success' || ':skull_and_crossbones: Fail' }}"
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*Version:* ${{ inputs.version }}"
-                  }
-                ]
-              },
-              {
-                "type": "context",
-                "elements": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "<${{ inputs.app_url }}|:phone: App>     <${{ inputs.app_url }}|:building_construction: Workflow>"
+                    "text": "*Version:* <${{ inputs.action_url }}|${{ inputs.version }}>"
                   }
                 ]
               }

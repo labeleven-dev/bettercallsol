@@ -5,10 +5,12 @@ import {
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
+  BackpackWalletAdapter,
+  BraveWalletAdapter,
   GlowWalletAdapter,
+  LedgerWalletAdapter,
   PhantomWalletAdapter,
   SolflareWalletAdapter,
-  TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import React, { useMemo } from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
@@ -30,12 +32,14 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
 
   const wallets = useMemo(
     () => [
+      new BackpackWalletAdapter(),
+      new BraveWalletAdapter(),
+      new LedgerWalletAdapter(),
       new PhantomWalletAdapter(),
       new GlowWalletAdapter(),
       new SolflareWalletAdapter({
         network: rpcEndpoint.network as WalletAdapterNetwork,
       }),
-      new TorusWalletAdapter(),
     ],
     [rpcEndpoint]
   );
