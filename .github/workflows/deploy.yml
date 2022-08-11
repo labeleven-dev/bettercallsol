@@ -14,6 +14,10 @@ jobs:
   deployStaging:
     runs-on: ubuntu-latest
     environment: Staging
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
     steps:
       # setup
       - uses: actions/checkout@v3
@@ -74,11 +78,15 @@ jobs:
           environment: Staging
           version: ${{ steps.version.outputs.version }}
           app_url: ${{ steps.deploy.outputs.details_url }}
-          action_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          
 
   deployProd:
     runs-on: ubuntu-latest
     environment: Prod
+
+    needs:
+      - deployStaging
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x (LTS)
@@ -98,7 +106,7 @@ jobs:
         if: always()
         with:
           environment: Prod
-          version: ${{ jobs.deployStaging.steps.version.outputs.version }}
-          app_url: ${{ jobs.deployStaging.steps.deploy.outputs.details_url }}
-          action_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          version: ${{ needs.deployStaging.outputs.version }}
+          # TODO
+          app_url: https://todo
 

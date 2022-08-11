@@ -12,7 +12,8 @@ inputs:
     required: true
   action_url:
     description: The URL GitHub Action for this build
-    required: true
+    required: false
+    default: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 runs:
   using: "composite"
