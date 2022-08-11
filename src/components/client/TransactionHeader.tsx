@@ -88,7 +88,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           hasArrow={!walletPublicKey}
           label={
             walletPublicKey
-              ? "Run Program"
+              ? "Run Transaction"
               : "Please connect a wallet to contiune"
           }
         >
@@ -181,6 +181,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <EditableName
             tooltip="Click to edit"
             tooltipProps={{ placement: "bottom-start" }}
+            previewProps={{ p: "2" }}
             placeholder="Unnamed Transaction"
             value={transaction.name}
             onChange={(value) =>

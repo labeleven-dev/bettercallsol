@@ -61,6 +61,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           tooltip="Click to edit"
           tooltipProps={{ placement: "bottom-start" }}
           placeholder="Unnamed Instruction"
+          previewProps={{ p: "2" }}
           value={instruction.name}
           onChange={(value) => {
             update((state) => {

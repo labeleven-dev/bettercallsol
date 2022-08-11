@@ -45,7 +45,7 @@ export const DataEditor: React.FC<{
   return (
     <Grid>
       {fields.order.length === 0 && (
-        <Center p="3" bgColor={emptyBgColour}>
+        <Center p="3" bgColor={emptyBgColour} rounded="md">
           <Text as="i" fontSize="sm">
             No fields yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" /> below
             to add a field.
