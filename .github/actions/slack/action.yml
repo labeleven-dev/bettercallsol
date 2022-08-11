@@ -32,7 +32,7 @@ runs:
         channel-id: C03ND2RUSTE
         payload: |
           {
-            "text": "${{ inputs.environment }}: ${{ inputs.version }} ${{ inputs.app_url }} ${{ inputs.action_url }}",
+            "text": "${{ inputs.success && 'Success' || 'Fail' }}: ${{ inputs.environment }}: ${{ inputs.version }} ${{ inputs.app_url }} ${{ inputs.action_url }}",
             "blocks": [
               {
                 "type": "section",
