@@ -101,7 +101,9 @@ jobs:
       
       # promote from staging to production
       - id: promote
-        run: firebase hosting:clone ${PROJECT_ID}:staging ${PROJECT_ID}:live
+        run: |
+          firebase login:ci
+          firebase hosting:clone ${PROJECT_ID}:staging ${PROJECT_ID}:live
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
 
