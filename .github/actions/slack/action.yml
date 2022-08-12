@@ -39,7 +39,7 @@ runs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Env:* <${{ inputs.app_url || 'https://' }}|${{ inputs.environment }}>${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
+                    "text": "*Env:* <${{ inputs.app_url || 'http://na' }}|${{ inputs.environment }}>${{ inputs.environment == 'Prod' && ' :fire:' || ''}}"
                   },
                   {
                     "type": "mrkdwn",
@@ -47,7 +47,7 @@ runs:
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*Version:* <${{ inputs.action_url }}|${{ inputs.version }}>"
+                    "text": "*Version:* <${{ inputs.action_url }}|${{ inputs.version || 'N/A' }}>"
                   }
                 ]
               }

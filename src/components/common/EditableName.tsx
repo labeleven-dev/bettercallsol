@@ -60,7 +60,7 @@ export const EditableName: React.FC<
           }}
           {...previewProps}
         />
-        <EditableInput {...inputProps} />
+        <EditableInput p="1" {...inputProps} />
       </Editable>
     </Tooltip>
   );

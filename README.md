@@ -44,5 +44,6 @@ Contribution
 * If you have encountered a bug, please open a [bug report](https://github.com/labeleven-dev/bettercallsol/issues/new?template=bug.yml&labels=bug), or
 * If there is a new feature you like to see in the tool, please open a [feature request](https://github.com/labeleven-dev/bettercallsol/issues/new?template=feature_request.md&labels=enhancement).
 
+Feel free to 👍 any bug or enhancement that you like to see addressed first.
 
 If you are a core committer, see [CONTRIB.md](CONTRIB.md).

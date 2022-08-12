@@ -181,7 +181,8 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <EditableName
             tooltip="Click to edit"
             tooltipProps={{ placement: "bottom-start" }}
-            previewProps={{ p: "2" }}
+            previewProps={{ p: "3px 10px 3px 10px" }}
+            inputProps={{ p: "3px 10px 3px 10px" }}
             placeholder="Unnamed Transaction"
             value={transaction.name}
             onChange={(value) =>
