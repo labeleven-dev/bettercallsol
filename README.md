@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/alpha/assets/logo128.png?raw=true" />
+  <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/alpha/public/logo128.png?raw=true" />
   <h1><a href="https://bettercallsol.dev">Better Call SOL</a></h1>
   <p>
     <h3>The Missing Solana Client</h3>
