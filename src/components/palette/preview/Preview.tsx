@@ -56,7 +56,7 @@ export const Preview: React.FC<{
       boxShadow={useColorModeValue("base", "")}
       borderColor={useColorModeValue("gray.200", "gray.600")}
     >
-      <Flex mb="1" alignItems="center">
+      <Flex mb="3" alignItems="center">
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
 
@@ -135,7 +135,7 @@ export const Preview: React.FC<{
       </Flex>
 
       {accountSummary && (
-        <AccountSummary ml="5" mt="3" mb="5" summary={accountSummary} />
+        <AccountSummary ml="5" mb="3" summary={accountSummary} />
       )}
 
       {instructions.map((instruction, index) => (

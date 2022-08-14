@@ -1,12 +1,20 @@
 import * as Borsh from "@project-serum/borsh";
+import { PublicKey } from "@solana/web3.js";
 import { Coder } from ".";
 import { IInstrctionDataField } from "../types/internal";
 
 export class BorshCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {
     const layout = Borsh.struct(fields.map(mapToLayout));
-    const values = fields.reduce((acc, { name, value }) => {
-      acc[name!] = value;
+
+    const values = fields.reduce((acc, { name, type, value }) => {
+      let encoded = value;
+
+      if (type === "publicKey") {
+        encoded = new PublicKey(encoded);
+      }
+
+      acc[name!] = encoded;
       return acc;
     }, {} as Record<string, any>);
 

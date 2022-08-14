@@ -7,6 +7,7 @@ export const mapIInstructionPreviewToIInstruction = (
   instruction: IInstructionPreview,
   source: PreviewSource
 ): IInstruction => {
+  // preview is just a subset of external
   const mapped = mapIInstructionExtToIInstruction(instruction);
 
   // preview doesn't have anchorMethod or anchorAccounts

@@ -22,7 +22,10 @@ export const DataPreview: React.FC<
         <Flex>
           <DataIcon />
           <Text ml="2" mr="4" fontSize="sm">
-            {format}
+            {
+              // capitalise
+              format[0].toUpperCase() + format.slice(1)
+            }
           </Text>
         </Flex>
       </Tooltip>

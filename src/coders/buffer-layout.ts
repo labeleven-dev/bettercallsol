@@ -6,6 +6,7 @@ import { IInstrctionDataField } from "../types/internal";
 export class BufferLayoutCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {
     const layout = BufferLayout.struct<any>(fields.map(mapToLayout));
+
     const values = fields.reduce((acc, { name, type, value }) => {
       let encoded = value;
 
