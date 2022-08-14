@@ -25,10 +25,14 @@ export const EditableName: React.FC<
   inputProps,
   width,
   value,
+  isDisabled,
   ...theRest
 }) => {
   const previewRef = useRef<HTMLSpanElement>(null);
   const unnamedColor = useColorModeValue("blackAlpha.400", "whiteAlpha.400");
+  const hoverStyle = {
+    background: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
+  };
 
   // TODO only show tooltip if truncated
   // const [truncated, setTruncated] = useState(false);
@@ -47,7 +51,7 @@ export const EditableName: React.FC<
       label={tooltip || (value ? previewRef.current?.innerText : "")}
       {...tooltipProps}
     >
-      <Editable value={value} {...theRest}>
+      <Editable value={value} isDisabled={isDisabled} {...theRest}>
         <EditablePreview
           p="1"
           ref={previewRef}
@@ -55,9 +59,7 @@ export const EditableName: React.FC<
           noOfLines={1} // TODO ellipses don't apear on truncating words
           minW={width || undefined}
           maxW={width || undefined}
-          _hover={{
-            background: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
-          }}
+          _hover={isDisabled ? {} : hoverStyle}
           {...previewProps}
         />
         <EditableInput p="1" {...inputProps} />

@@ -21,7 +21,7 @@ export const Accounts: React.FC<{
   accounts: SortableCollection<IAccount>;
   anchorAccounts?: IAccount[];
 }> = ({ accounts, anchorAccounts }) => {
-  const { update } = useInstruction();
+  const { update, isAnchor } = useInstruction();
 
   return (
     <Grid>
@@ -32,16 +32,24 @@ export const Accounts: React.FC<{
         <Divider flex="1" />
       </Flex>
 
-      <Box>
-        {anchorAccounts?.map((account, index) => (
-          <Account
-            account={account}
-            locked={true}
-            index={index}
-            key={account.id}
-          />
-        ))}
-      </Box>
+      {anchorAccounts?.map((account, index) => (
+        <Account
+          account={account}
+          locked={true}
+          index={index}
+          key={account.id}
+        />
+      ))}
+
+      {isAnchor && (
+        <Flex mt="4" mb="3" alignItems="center">
+          <Divider flex="1" />
+          <Heading mr="3" ml="3" size="xs">
+            Remaining Accounts
+          </Heading>
+          <Divider flex="1" />
+        </Flex>
+      )}
 
       <Box>
         <Sortable

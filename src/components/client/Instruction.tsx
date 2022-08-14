@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   InputRightElement,
   Link,
+  Tag,
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -31,6 +32,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
     instruction: {
       programId,
       accounts,
+      anchorMethod,
       anchorAccounts,
       data,
       disabled,
@@ -58,7 +60,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
       <InstructionHeader index={index} />
 
       <Collapse in={expanded}>
-        <Flex alignItems="center" mb="5">
+        <Flex alignItems="center" mb="1">
           <FormLabel mb="0" htmlFor="program-id">
             Program
           </FormLabel>
@@ -139,6 +141,10 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               />
             </InputRightElement>
           </InputGroup>
+        </Flex>
+
+        <Flex ml="70px" mb="4">
+          {anchorMethod && <Tag>{`Anchor Method: ${anchorMethod}`}</Tag>}
         </Flex>
 
         <Accounts accounts={accounts} anchorAccounts={anchorAccounts} />
