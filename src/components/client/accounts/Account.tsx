@@ -32,11 +32,11 @@ import { PdaButton } from "./PdaButton";
 export const Account: React.FC<{
   account: IAccount;
   index: number;
-  locked?: boolean;
+  isAnchor?: boolean;
 }> = ({
   account: { id, name, pubkey, isWritable, isSigner },
   index,
-  locked = false,
+  isAnchor = false,
 }) => {
   const {
     instruction: { programId },
@@ -55,12 +55,13 @@ export const Account: React.FC<{
 
   const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
     update((state) => {
-      fn(state.accounts.map[id]);
+      fn(isAnchor ? state.anchorAccounts![index] : state.accounts.map[id]);
     });
   };
 
   const removeAccount = () => {
     update((state) => {
+      // no need for the anchor side since it is never deleted
       removeFrom(state.accounts, id);
     });
     if (hasPrivateKey) {
@@ -101,7 +102,7 @@ export const Account: React.FC<{
       <DragHandle
         unlockedProps={{ h: "2.5", w: "2.5" }}
         lockedProps={{ h: "3" }}
-        locked={locked}
+        locked={isAnchor}
       />
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
@@ -114,7 +115,7 @@ export const Account: React.FC<{
         fontSize="sm"
         placeholder="Unnamed"
         tooltipProps={{ placement: "bottom-end" }}
-        isDisabled={locked}
+        isDisabled={isAnchor}
         value={name}
         onChange={(value: string) => {
           updateAccount((state) => {
@@ -213,7 +214,7 @@ export const Account: React.FC<{
         size="sm"
         label="Writable"
         icon={<EditIcon />}
-        isDisabled={!locked}
+        isDisabled={isAnchor}
         toggled={isWritable}
         onToggle={(toggled) => {
           updateAccount((state) => {
@@ -227,7 +228,7 @@ export const Account: React.FC<{
         size="sm"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
-        isDisabled={locked}
+        isDisabled={isAnchor}
         toggled={isSigner}
         onToggle={(toggled) => {
           updateAccount((state) => {
@@ -236,7 +237,7 @@ export const Account: React.FC<{
         }}
       />
 
-      {!locked && (
+      {!isAnchor && (
         <Tooltip label="Remove">
           <IconButton
             ml="3"

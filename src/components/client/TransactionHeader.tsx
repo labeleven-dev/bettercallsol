@@ -100,6 +100,9 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
             aria-label="Run Program"
             rightIcon={<Icon as={FaPlay} />}
             onClick={() => {
+              setUI((state) => {
+                state.transactionRun = DEFAULT_TRANSACTION_RUN;
+              });
               send(transaction);
             }}
           >

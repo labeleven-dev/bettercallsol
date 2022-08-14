@@ -52,13 +52,15 @@ export const Results: React.FC = () => {
     (state) => state.transactionOptions.finality
   );
 
-  const setInProgress = useSessionStoreWithoutUndo(
-    (state) => (value: boolean) => {
-      state.set((state) => {
-        state.transactionRun.inProgress = value;
-      });
-    }
-  );
+  const [error, set] = useSessionStoreWithoutUndo((state) => [
+    state.transactionRun.error,
+    state.set,
+  ]);
+
+  const setInProgress = (value: boolean) =>
+    set((state) => {
+      state.transactionRun.inProgress = value;
+    });
 
   const {
     signature,
@@ -191,7 +193,7 @@ export const Results: React.FC = () => {
       </Flex>
 
       <ErrorAlert
-        error={results.error}
+        error={error || results.error}
         onClose={() => {
           setResults({ ...results, error: "" });
         }}

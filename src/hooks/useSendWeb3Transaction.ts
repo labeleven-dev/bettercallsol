@@ -41,7 +41,11 @@ export const useSendWeb3Transaction = ({
 
       // add additional signers
       const signerPubkeys = Object.values(transaction.instructions.map)
-        .flatMap((instruction) => Object.values(instruction.accounts.map))
+        .flatMap((instruction) =>
+          (instruction.anchorAccounts || []).concat(
+            Object.values(instruction.accounts.map)
+          )
+        )
         .filter((account) => account.isSigner && keypairs[account.pubkey])
         .map((account) => account.pubkey);
 
@@ -66,7 +70,10 @@ export const useSendWeb3Transaction = ({
 
       onSent && onSent(signature);
     } catch (err) {
-      onError && onError(new Error((err as { message: string }).message));
+      const message = Object.getOwnPropertyNames(err).includes("message")
+        ? (err as { message: string }).message
+        : JSON.stringify(err);
+      onError && onError(new Error(message));
     }
   };
 

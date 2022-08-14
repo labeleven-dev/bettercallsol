@@ -40,7 +40,7 @@ export const Accounts: React.FC<{
       {anchorAccounts?.map((account, index) => (
         <Account
           account={account}
-          locked={true}
+          isAnchor={true}
           index={index}
           key={account.id}
         />
