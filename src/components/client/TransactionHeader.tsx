@@ -31,10 +31,7 @@ import {
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
 import { ITransaction } from "../../types/internal";
-import {
-  DEFAULT_TRANSACTION,
-  DEFAULT_TRANSACTION_RUN,
-} from "../../utils/state";
+import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
@@ -166,7 +163,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
               icon={<Icon as={FaEraser} />}
               onClick={() => {
                 setSession((state) => {
-                  state.transaction = DEFAULT_TRANSACTION;
+                  state.transaction = EMPTY_TRANSACTION;
                 });
                 setUI((state) => {
                   state.transactionRun = DEFAULT_TRANSACTION_RUN;

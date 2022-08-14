@@ -85,6 +85,11 @@ export const DEFAULT_TRANSACTION: ITransaction = {
   ]),
 };
 
+export const EMPTY_TRANSACTION: ITransaction = {
+  name: "",
+  instructions: toSortableCollection([]),
+};
+
 export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
   inProgress: false,
   signature: "",

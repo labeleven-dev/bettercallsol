@@ -35,7 +35,7 @@ export const Instructions: React.FC<{
     <Grid>
       {instructions.order.length === 0 && (
         <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
-          <Text as="i" fontSize="sm" textColor="grey">
+          <Text as="i" textColor="grey">
             No instructions yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" />{" "}
             below to add one.
           </Text>

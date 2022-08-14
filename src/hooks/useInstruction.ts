@@ -2,8 +2,7 @@ import { WritableDraft } from "immer/dist/internal";
 import { useContext } from "react";
 import { InstructionContext } from "../components/client/Instructions";
 import { IInstruction } from "../types/internal";
-import { newAccount, newInstruction } from "../utils/internal";
-import { toSortableCollection } from "../utils/sortable";
+import { newInstruction } from "../utils/internal";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 
 export const useInstruction = (): {
@@ -26,7 +25,6 @@ export const useInstruction = (): {
       state.transaction.instructions.map[instruction.id] = {
         ...newInstruction(),
         id: instruction.id,
-        accounts: toSortableCollection([newAccount()]),
       };
     });
   };

@@ -63,7 +63,7 @@ export const Preview: React.FC<{
         {source === "anchorProgramId" && <AnchorIcon />}
         {source !== "anchorProgramId" && <TransactionIcon />}
 
-        {(source === "tx" || source === "anchorProgramId") && (
+        {source === "tx" && (
           <>
             <Tooltip label={sourceValue}>
               <Text ml="2" mr="1" as="kbd" fontSize="sm">
@@ -77,6 +77,13 @@ export const Preview: React.FC<{
           <Text ml="2" mr="1" as="kbd" fontSize="sm">
             {name || "Transaction"}
           </Text>
+        )}
+        {source === "anchorProgramId" && (
+          <Tooltip label={sourceValue}>
+            <Text as="b" ml="2" mr="1" fontSize="sm">
+              {name}
+            </Text>
+          </Tooltip>
         )}
 
         {source === "tx" &&

@@ -1,12 +1,15 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Center,
   Divider,
   Flex,
   Grid,
   Heading,
   IconButton,
+  Text,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
@@ -22,6 +25,8 @@ export const Accounts: React.FC<{
   anchorAccounts?: IAccount[];
 }> = ({ accounts, anchorAccounts }) => {
   const { update, isAnchor } = useInstruction();
+
+  const emptyBgColour = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
 
   return (
     <Grid>
@@ -69,6 +74,15 @@ export const Accounts: React.FC<{
           ))}
         </Sortable>
       </Box>
+
+      {accounts.order.length + (anchorAccounts?.length || 0) === 0 && (
+        <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
+          <Text as="i" fontSize="sm" textColor="grey">
+            No accounts yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" />{" "}
+            below to add one.
+          </Text>
+        </Center>
+      )}
 
       <Tooltip label="Add Account">
         <IconButton
