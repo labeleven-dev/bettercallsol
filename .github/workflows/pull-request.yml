@@ -1,25 +1,26 @@
-name: Pull request preview
-on: pull_request
+# TODO
+# name: Pull request preview
+# on: pull_request
 
-jobs:
-  deployPreview:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16.x (LTS)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-      # test & build
-      - run: npm ci
-      # TODO
-      # - run: npm test
-      # - run: npm run lint
-      - run: npm run build
-      # deploy
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BCSOL_A8522 }}'
-          projectId: bcsol-a8522
+# jobs:
+#   deployPreview:
+#     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Use Node.js 16.x (LTS)
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16.x
+#       # test & build
+#       - run: npm ci
+#       # TODO
+#       # - run: npm test
+#       # - run: npm run lint
+#       - run: npm run build
+#       # deploy
+#       - uses: FirebaseExtended/action-hosting-deploy@v0
+#         with:
+#           repoToken: '${{ secrets.GITHUB_TOKEN }}'
+#           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BCSOL_A8522 }}'
+#           projectId: bcsol-a8522

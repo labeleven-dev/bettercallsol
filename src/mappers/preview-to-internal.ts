@@ -17,8 +17,6 @@ export const mapIInstructionPreviewToIInstruction = (
     mapped.accounts = toSortableCollection([]);
   }
 
-  console.log(mapped);
-
   return mapped;
 };
 

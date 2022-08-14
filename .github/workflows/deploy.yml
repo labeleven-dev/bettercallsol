@@ -102,7 +102,7 @@ jobs:
       # promote from staging to production
       - id: promote
         run: |
-          cat '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ./sa.json
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ./sa.json
           export GOOGLE_APPLICATION_CREDENTIALS="${PWD}/sa.json"
           firebase hosting:clone ${PROJECT_ID}:staging ${PROJECT_ID}:live
 
