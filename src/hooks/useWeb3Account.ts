@@ -1,4 +1,5 @@
 import { idlAddress } from "@project-serum/anchor/dist/cjs/idl";
+import * as Sentry from "@sentry/react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -68,7 +69,9 @@ export const useWeb3Account = (
       });
     };
 
-    fetch().catch(console.log); // TODO better error handling? Too noisy for user
+    fetch().catch((e) => {
+      Sentry.captureException(e);
+    });
   }, [address, activeConnection]);
 
   return accountInfo;

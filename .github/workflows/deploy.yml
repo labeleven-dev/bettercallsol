@@ -55,6 +55,7 @@ jobs:
         env:
           # GENERATE_SOURCEMAP: false
           REACT_APP_VERSION: ${{ steps.version.outputs.version }}
+          REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       
       # release
       - run: npm run release

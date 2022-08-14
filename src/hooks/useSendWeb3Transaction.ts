@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
 import { mapITransactionToWeb3Transaction } from "../mappers/internal-to-web3js";
@@ -70,6 +71,7 @@ export const useSendWeb3Transaction = ({
 
       onSent && onSent(signature);
     } catch (err) {
+      Sentry.captureException(err);
       const message = Object.getOwnPropertyNames(err).includes("message")
         ? (err as { message: string }).message
         : JSON.stringify(err);

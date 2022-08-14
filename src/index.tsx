@@ -1,10 +1,15 @@
 import { ColorModeScript } from "@chakra-ui/react";
+import * as Sentry from "@sentry/react";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
+
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_DSN,
+});
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Failed to find the root element");
@@ -21,7 +26,9 @@ root.render(
     </>
     <ColorModeScript initialColorMode="system" />
     <BrowserRouter>
-      <App />
+      <Sentry.ErrorBoundary>
+        <App />
+      </Sentry.ErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>
 );
