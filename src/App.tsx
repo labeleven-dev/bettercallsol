@@ -14,6 +14,7 @@ import { Web3Provider } from "./components/common/Web3Provider";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/header/Header";
 import { ImportModal } from "./components/ImportModal";
+import { InfoModal } from "./components/info/InfoModal";
 import { Options } from "./components/options/Options";
 import { Palette } from "./components/palette/Palette";
 import { ShareModal } from "./components/ShareModal";
@@ -73,6 +74,7 @@ export const App: React.FC = () => {
         <Options />
         <ImportModal />
         <ShareModal />
+        <InfoModal />
       </Web3Provider>
     </ChakraProvider>
   );

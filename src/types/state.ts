@@ -32,6 +32,7 @@ export interface UIState {
   readonly paletteOpen: boolean;
   readonly optionsOpen: boolean;
   readonly shareOpen: boolean;
+  readonly infoOpen: boolean;
 }
 
 export interface ImportState {

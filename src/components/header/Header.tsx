@@ -1,4 +1,4 @@
-import { HamburgerIcon, QuestionIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   DarkMode,
   Flex,
@@ -100,15 +100,18 @@ export const Header: React.FC = () => {
           />
         </Tooltip>
 
-        {/* TODO implement */}
-        <Tooltip label="Help">
+        <Tooltip label="Info">
           <IconButton
-            mr="0.5"
-            aria-label="Help"
-            icon={<QuestionIcon />}
+            mr="1"
+            aria-label="Info"
+            icon={<InfoIcon />}
             variant="ghost"
             color="white"
-            isDisabled
+            onClick={() => {
+              set((state) => {
+                state.uiState.infoOpen = true;
+              });
+            }}
           />
         </Tooltip>
       </DarkMode>

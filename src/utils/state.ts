@@ -113,6 +113,7 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     paletteOpen: false,
     optionsOpen: false,
     shareOpen: false,
+    infoOpen: false,
   },
   import: DEFAULT_IMPORT,
   set: () => {}, // set by the hook
