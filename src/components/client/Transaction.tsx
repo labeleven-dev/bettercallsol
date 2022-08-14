@@ -7,9 +7,8 @@ import { Results } from "./results/Results";
 import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
-  const [transaction, rpcEndpoint, set] = useSessionStoreWithUndo((state) => [
+  const [transaction, set] = useSessionStoreWithUndo((state) => [
     state.transaction,
-    state.rpcEndpoint,
     state.set,
   ]);
 
