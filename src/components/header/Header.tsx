@@ -35,8 +35,8 @@ export const Header: React.FC = () => {
             color="white"
             fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
             fontWeight="extrabold"
-            fontSize={funTitle ? "xl" : "lg"}
-            bgGradient="linear(to-r, #ff6f61ff, #e1ad01)"
+            fontSize={funTitle ? "3xl" : "xl"}
+            bgGradient="linear(to-r, #ff6f61ff, #fece2f)"
             bgClip="text"
             onClick={() => {
               toast({

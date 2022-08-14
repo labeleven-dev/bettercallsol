@@ -16,7 +16,7 @@ export const Palette: React.FC = () => {
       p="2"
       isFitted
       colorScheme="main"
-      bgColor={useColorModeValue("blackAlpha.50", "blackAlpha.500")}
+      bgColor={useColorModeValue("gray.50", "blackAlpha.500")}
     >
       <TabList mb="1em">
         {/* <Tab>History</Tab>

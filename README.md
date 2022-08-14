@@ -24,10 +24,10 @@ Features
 
 Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://solana.com/).
 
-* [x] Compose and send transactions
+* [x] Compose and send basic transactions
 * [x] Easily switch between networks
 * [x] Define instruction data in raw, Buffer Layout and Borsh formats
-* [x] Anchor support
+* [x] Basic Anchor support
 * [x] Import transactions from the chain
 * [x] Share transactions with others
 * [x] Connect your favourite Solana wallet
@@ -38,12 +38,12 @@ Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://so
 Contribution
 ---
 
-**This tool is currently in alpha and under active development. This limits the type of contribution we can accept from the community at the moment. Thank you for your understanding.**
-
 * If you have a question about the tool or how to do something, please start a new [discussion](https://github.com/labeleven-dev/bettercallsol/discussions),
 * If you have encountered a bug, please open a [bug report](https://github.com/labeleven-dev/bettercallsol/issues/new?template=bug.yml&labels=bug), or
 * If there is a new feature you like to see in the tool, please open a [feature request](https://github.com/labeleven-dev/bettercallsol/issues/new?template=feature_request.md&labels=enhancement).
 
 Feel free to 👍 any bug or enhancement that you like to see addressed first.
+
+Regarding pull requests: The codebase is quite fluid at the moment, going through rapid iterations, overhauls and refactoring. It is unfair to expect the community to spend time and effort creating a pull request, which may not be mergeable. **Therefore, till the codebase stabilises, we cannot accept pull requests from the community. Thank you for your understanding!**
 
 If you are a core committer, see [CONTRIB.md](CONTRIB.md).
