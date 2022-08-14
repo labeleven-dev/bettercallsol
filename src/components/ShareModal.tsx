@@ -109,7 +109,7 @@ export const ShareModal: React.FC = () => {
           </Box>
           <Box mb="4">
             <Text as="i">
-              Better Call SOL also accepts the following URLs:
+              Better Call Sol also accepts the following URLs:
               <UnorderedList ml="8">
                 <ListItem>
                   <Kbd>

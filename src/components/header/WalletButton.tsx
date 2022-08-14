@@ -54,7 +54,7 @@ export const WalletButton: React.FC = () => {
         <PopoverCloseButton />
         <PopoverHeader>
           <Heading size="md" mt="2" mb="2">
-            Welcome to Better Call SOL!
+            Welcome to Better Call Sol!
           </Heading>
         </PopoverHeader>
         <PopoverBody>

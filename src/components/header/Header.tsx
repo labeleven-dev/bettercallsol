@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
               setFunTitle(!funTitle);
             }}
           >
-            Better Call SOL
+            Better Call Sol
           </Text>
           <Example />
         </Hide>

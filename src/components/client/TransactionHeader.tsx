@@ -190,7 +190,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
         >
           <AlertIcon />
           <AlertDescription>
-            This is a pre-GA version of Better Call SOL. Use Mainnet at your own
+            This is a pre-GA version of Better Call Sol. Use Mainnet at your own
             risk!
           </AlertDescription>
         </Alert>
