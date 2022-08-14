@@ -193,7 +193,15 @@ export const Results: React.FC = () => {
       </Flex>
 
       <ErrorAlert
-        error={error || results.error}
+        error={error}
+        onClose={() => {
+          set((state) => {
+            state.transactionRun.error = "";
+          });
+        }}
+      />
+      <ErrorAlert
+        error={results.error}
         onClose={() => {
           setResults({ ...results, error: "" });
         }}

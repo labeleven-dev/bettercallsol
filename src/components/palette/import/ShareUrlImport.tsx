@@ -15,33 +15,33 @@ export const ShareUrlImport: React.FC<{
   const [inProgress, setInprogress] = useState(false);
   const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
 
-  const fetch = () => {
+  const fetch = async () => {
     if (!url) return;
 
     setInprogress(true);
     setPreview(undefined);
     setError("");
 
-    axios
-      .get(url)
-      .then((response) => {
-        if (!validate(response.data)) {
-          setError(validate.errors?.map((e) => e.message).join(", ")!);
-          return;
-        }
-        setPreview(
-          mapITransactionExtToIPreview(
-            response.data as IPreview,
-            "shareUrl",
-            url
-          )
-        );
-        setInprogress(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setInprogress(false);
-      });
+    try {
+      const response = await axios.get(url);
+      if (!validate(response.data)) {
+        setError(validate.errors?.map((e) => e.message).join(", ")!);
+        return;
+      }
+      setPreview(
+        mapITransactionExtToIPreview(response.data as IPreview, "shareUrl", url)
+      );
+      setInprogress(false);
+    } catch (err) {
+      const error =
+        typeof err === "string"
+          ? err
+          : Object.getOwnPropertyNames(err).includes("message")
+          ? (err as { message: string }).message
+          : "Unexpected error";
+      setError(error);
+      setInprogress(false);
+    }
   };
 
   return (
