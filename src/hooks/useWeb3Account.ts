@@ -3,21 +3,25 @@ import * as Sentry from "@sentry/react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { IPubKey } from "../types/internal";
+import { programLabel } from "../library/programs";
+import { IPubKey, IRpcEndpoint } from "../types/internal";
 import { isValidPublicKey } from "../utils/web3js";
+import { useSessionStoreWithUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
 interface Web3AccountInfo {
   status: "new" | "inProgress" | "fetched" | "invalid";
   exists?: boolean;
   executable?: boolean;
+  label?: string;
   hasIdl?: boolean;
-  verified?: boolean | null;
+  aprVerified?: boolean | null;
 }
 
 export const useWeb3Account = (
   address: IPubKey,
-  connection?: Connection
+  connection?: Connection,
+  rpcEndpoint?: IRpcEndpoint
 ): Web3AccountInfo => {
   const [accountInfo, setAccountInfo] = useState<Web3AccountInfo>({
     status: "new",
@@ -25,6 +29,11 @@ export const useWeb3Account = (
 
   const defaultConenction = useWeb3Connection();
   const activeConnection = connection || defaultConenction;
+
+  const defaultRpcEndpoint = useSessionStoreWithUndo(
+    (state) => state.rpcEndpoint
+  );
+  const activeRpcEndpoint = rpcEndpoint || defaultRpcEndpoint;
 
   useEffect(() => {
     if (!activeConnection || !isValidPublicKey(address)) {
@@ -37,9 +46,13 @@ export const useWeb3Account = (
       const pubkey = new PublicKey(address);
       const accountInfo = await activeConnection.getAccountInfo(pubkey);
 
+      let label = undefined;
       let hasIdl = false;
       let verified = null;
       if (accountInfo?.executable) {
+        // get program label
+        label = programLabel(address, activeRpcEndpoint.network);
+
         // check if program has IDL
         const idlAddr = await idlAddress(pubkey);
         const idlAccountInfo = await activeConnection.getAccountInfo(idlAddr);
@@ -64,15 +77,16 @@ export const useWeb3Account = (
         status: "fetched",
         exists: accountInfo !== null,
         executable: accountInfo?.executable || false,
+        label,
         hasIdl,
-        verified,
+        aprVerified: verified,
       });
     };
 
     fetch().catch((e) => {
       Sentry.captureException(e);
     });
-  }, [address, activeConnection]);
+  }, [address, activeConnection, activeRpcEndpoint]);
 
   return accountInfo;
 };

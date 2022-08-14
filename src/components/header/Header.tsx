@@ -32,6 +32,7 @@ export const Header: React.FC = () => {
           <Text
             ml="3"
             mr="9"
+            pr="2" // for cursive font to not get cut off
             color="white"
             fontFamily={funTitle ? "'Dancing Script', cursive;" : ""}
             fontWeight="extrabold"

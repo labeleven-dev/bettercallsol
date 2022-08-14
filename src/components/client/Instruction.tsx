@@ -106,10 +106,10 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               mr="1"
             >
               {programInfo.status === "fetched" &&
-                programInfo.verified !== null && (
+                programInfo.aprVerified !== null && (
                   <Tooltip
                     label={`${
-                      programInfo.verified ? "Verified" : "Unverified"
+                      programInfo.aprVerified ? "Verified" : "Unverified"
                     } Build (Open in apr.dev)`}
                   >
                     <Link
@@ -118,12 +118,12 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                     >
                       <IconButton
                         aria-label={`${
-                          programInfo.verified ? "Verified" : "Unverified"
+                          programInfo.aprVerified ? "Verified" : "Unverified"
                         } Build (Open in apr.dev)`}
                         variant="ghost"
                         size="sm"
                         icon={
-                          programInfo.verified ? (
+                          programInfo.aprVerified ? (
                             <CheckCircleIcon color="green.400" />
                           ) : (
                             <WarningIcon color="yellow.400" />
@@ -144,6 +144,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         </Flex>
 
         <Flex ml="70px" mb="4">
+          {programInfo.label && <Tag>{programInfo.label}</Tag>}
           {anchorMethod && <Tag>{`Anchor Method: ${anchorMethod}`}</Tag>}
         </Flex>
 
