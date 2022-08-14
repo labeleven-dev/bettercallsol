@@ -12,7 +12,7 @@ export const mapIInstructionPreviewToIInstruction = (
 
   // preview doesn't have anchorMethod or anchorAccounts
   // those values are overloaded into name and accounts for anchor instructions
-  if (source === "anchorProgramId") {
+  if (source === "anchorProgramId" || source === "anchorJson") {
     mapped.anchorMethod = mapped.name;
     mapped.anchorAccounts = toSortedArray(mapped.accounts);
     mapped.accounts = toSortableCollection([]);

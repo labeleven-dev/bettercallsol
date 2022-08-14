@@ -17,7 +17,12 @@ export interface IInstructionPreview
   innerInstructions?: IInstructionPreview[];
 }
 
-export type PreviewSource = "tx" | "shareUrl" | "shareJson" | "anchorProgramId"; // TODO file, anchorIdlUrl, anchorIdlFile, etc.
+export type PreviewSource =
+  | "tx"
+  | "shareUrl"
+  | "shareJson"
+  | "anchorProgramId"
+  | "anchorJson";
 
 export interface IPreview {
   source: PreviewSource;

@@ -6,7 +6,7 @@ import {
 } from "@project-serum/anchor/dist/cjs/idl";
 import { IAccountExt, IInstrctionDataFieldExt } from "../types/external";
 import { IPubKey, IRpcEndpoint } from "../types/internal";
-import { IInstructionPreview, IPreview } from "../types/preview";
+import { IInstructionPreview, IPreview, PreviewSource } from "../types/preview";
 import { accountSummary } from "./web3js-to-preview";
 
 const mapIdlAccountItemToIAccountExt = (
@@ -48,10 +48,11 @@ const mapIdlInstructionToIInstructionPreview = (
 
 export const mapIdlToIPreview = (
   { name, instructions }: Idl,
+  source: PreviewSource,
   programId: IPubKey,
   rpcEndpoint?: IRpcEndpoint
 ): IPreview => ({
-  source: "anchorProgramId",
+  source,
   sourceValue: programId,
   rpcEndpoint,
   name,

@@ -30,6 +30,8 @@ export const InstructionPreview: React.FC<{
   const { name, programId, accountSummary, data, innerInstructions } =
     instruction;
 
+  const isSource = (...sources: PreviewSource[]) => sources.includes(source);
+
   return (
     <Grid
       mb="2"
@@ -74,7 +76,7 @@ export const InstructionPreview: React.FC<{
         )}
       </Flex>
 
-      {source !== "anchorProgramId" && (
+      {isSource("tx", "shareUrl", "shareJson") && programId && (
         <Flex ml="5" mt="1" alignItems="center">
           <Flex>
             <ProgramIcon />
@@ -89,7 +91,7 @@ export const InstructionPreview: React.FC<{
       )}
 
       <AccountSummary ml="5" summary={accountSummary} />
-      <DataPreview ml="5" mt="1" data={data} />
+      {data && <DataPreview ml="5" mt="1" data={data} />}
 
       {(innerInstructions?.length || 0) > 0 && (
         <Flex ml="5" mt="1" alignItems="center">

@@ -19,7 +19,7 @@ import {
 import { FaAnchor } from "react-icons/fa";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { mapIPreviewToITransaction } from "../../../mappers/preview-to-internal";
-import { IPreview } from "../../../types/preview";
+import { IPreview, PreviewSource } from "../../../types/preview";
 import { short } from "../../../utils/web3js";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
@@ -46,6 +46,8 @@ export const Preview: React.FC<{
       })
   );
 
+  const isSource = (...sources: PreviewSource[]) => sources.includes(source);
+
   return (
     <Grid
       border="1px"
@@ -60,10 +62,12 @@ export const Preview: React.FC<{
         {/* TODO implement drag-and-drop */}
         {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
 
-        {source === "anchorProgramId" && <AnchorIcon />}
-        {source !== "anchorProgramId" && <TransactionIcon />}
+        {/* icon */}
+        {isSource("anchorProgramId", "anchorJson") && <AnchorIcon />}
+        {isSource("tx", "shareUrl", "shareJson") && <TransactionIcon />}
 
-        {source === "tx" && (
+        {/* main value */}
+        {isSource("tx") && (
           <>
             <Tooltip label={sourceValue}>
               <Text ml="2" mr="1" as="kbd" fontSize="sm">
@@ -73,20 +77,26 @@ export const Preview: React.FC<{
             <CopyButton size="xs" mr="1" value={sourceValue} />
           </>
         )}
-        {(source === "shareJson" || source === "shareUrl") && (
+        {isSource("shareJson", "shareUrl") && (
           <Text ml="2" mr="1" as="kbd" fontSize="sm">
             {name || "Transaction"}
           </Text>
         )}
-        {source === "anchorProgramId" && (
+        {isSource("anchorProgramId") && (
           <Tooltip label={sourceValue}>
             <Text as="b" ml="2" mr="1" fontSize="sm">
               {name}
             </Text>
           </Tooltip>
         )}
+        {isSource("anchorJson") && (
+          <Text as="b" ml="2" mr="1" fontSize="sm">
+            {name}
+          </Text>
+        )}
 
-        {source === "tx" &&
+        {/* transaction status */}
+        {isSource("tx") &&
           (error ? (
             <Tooltip label={`Transaction failed: ${error}`}>
               <WarningIcon mr="1" color="red.400" />
@@ -97,23 +107,22 @@ export const Preview: React.FC<{
             </Tooltip>
           ))}
 
-        {(source === "tx" || source === "anchorProgramId") && (
+        {/* network */}
+        {isSource("tx", "anchorProgramId") && (
           <Tooltip label={rpcEndpoint!.network}>
             <Tag mr="1" size="sm" colorScheme="yellow">
               {rpcEndpoint!.network[0].toUpperCase()}
             </Tag>
           </Tooltip>
         )}
-
-        {source === "shareUrl" && (
+        {isSource("shareUrl") && (
           <Tag mr="1" fontSize="xs">
             <Link href={sourceValue} isExternal>
               URL <ExternalLinkIcon />
             </Link>
           </Tag>
         )}
-
-        {source === "shareJson" && (
+        {isSource("shareJson", "anchorJson") && (
           <Tag mr="1" fontSize="xs">
             JSON
           </Tag>

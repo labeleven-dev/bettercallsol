@@ -6,7 +6,7 @@ import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { mapIdlToIPreview } from "../../../mappers/idl-to-preview";
 import { IRpcEndpoint } from "../../../types/internal";
 import { IPreview } from "../../../types/preview";
-import { fetchIdl } from "../../../utils/ild";
+import { fetchIdl } from "../../../utils/idl";
 import { isValidPublicKey } from "../../../utils/web3js";
 import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
 
@@ -45,7 +45,9 @@ export const AnchorProgramIdImport: React.FC<{
     try {
       let idl = await fetchIdl(programId, connection);
       if (idl) {
-        setPreview(mapIdlToIPreview(idl, programId, rpcEndpoint));
+        setPreview(
+          mapIdlToIPreview(idl, "anchorProgramId", programId, rpcEndpoint)
+        );
       } else {
         setError("IDL not found");
       }
