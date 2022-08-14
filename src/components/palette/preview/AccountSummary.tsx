@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { IAccountSummary } from "../../../models/preview-types";
+import { IAccountSummary } from "../../../types/preview";
 
 export const AccountSummary: React.FC<
   {

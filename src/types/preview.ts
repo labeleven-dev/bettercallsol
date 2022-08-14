@@ -1,7 +1,7 @@
 // Models for transactions fetched from the chain, as part of import
 
-import { IInstructionExt } from "./external-types";
-import { IRpcEndpoint } from "./internal-types";
+import { IInstructionExt } from "./external";
+import { IRpcEndpoint } from "./internal";
 
 export interface IAccountSummary {
   total: number;
@@ -11,7 +11,8 @@ export interface IAccountSummary {
   readonlyUsigned: number;
 }
 
-export interface IInstructionPreview extends IInstructionExt {
+export interface IInstructionPreview
+  extends Omit<IInstructionExt, "anchorMethod" | "anchorAccounts"> {
   accountSummary: IAccountSummary;
   innerInstructions?: IInstructionPreview[];
 }

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
-import { IRpcEndpoint } from "../../../models/internal-types";
-import { mapTransactionResponseToIPreview } from "../../../models/preview-mappers";
-import { IPreview } from "../../../models/preview-types";
+import { mapTransactionResponseToIPreview } from "../../../mappers/web3js-to-preview";
+import { IRpcEndpoint } from "../../../types/internal";
+import { IPreview } from "../../../types/preview";
 import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
 
 export const TransactionIdImport: React.FC<{

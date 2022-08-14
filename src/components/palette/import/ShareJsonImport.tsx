@@ -1,9 +1,9 @@
 import { Flex, Textarea } from "@chakra-ui/react";
 import Ajv from "ajv";
 import { useMemo } from "react";
-import { JSON_SCHEMA } from "../../../models/external-types";
-import { mapITransactionExtToIPreview } from "../../../models/preview-mappers";
-import { IPreview } from "../../../models/preview-types";
+import { mapITransactionExtToIPreview } from "../../../mappers/external-to-preview";
+import { JSON_SCHEMA } from "../../../types/external";
+import { IPreview } from "../../../types/preview";
 
 export const ShareJsonImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;

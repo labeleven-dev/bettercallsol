@@ -2,7 +2,7 @@ import { Grid } from "@chakra-ui/react";
 import { Commitment, Finality } from "@solana/web3.js";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { COMMITMENT_LEVELS, FINALITY_LEVELS } from "../../models/ui-constants";
+import { COMMITMENT_LEVELS, FINALITY_LEVELS } from "../../utils/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";

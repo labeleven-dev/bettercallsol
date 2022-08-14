@@ -10,10 +10,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapIInstructionPreviewToIInstruction } from "../../../models/preview-mappers";
-import { IInstructionPreview } from "../../../models/preview-types";
-import { addTo } from "../../../models/sortable";
-import { short } from "../../../models/web3js-mappers";
+import { mapIInstructionPreviewToIInstruction } from "../../../mappers/preview-to-internal";
+import { IInstructionPreview, PreviewSource } from "../../../types/preview";
+import { addTo } from "../../../utils/sortable";
+import { short } from "../../../utils/web3js";
 import { CopyButton } from "../../common/CopyButton";
 import { Numbering } from "../../common/Numbering";
 import { AccountSummary } from "./AccountSummary";
@@ -22,9 +22,9 @@ import { DataPreview } from "./DataPreview";
 export const InstructionPreview: React.FC<{
   index: number;
   instruction: IInstructionPreview;
-  showProgram?: boolean;
+  source: PreviewSource;
   interactive?: boolean;
-}> = ({ instruction, index, showProgram = true, interactive = true }) => {
+}> = ({ instruction, source, index, interactive = true }) => {
   const set = useSessionStoreWithUndo((state) => state.set);
 
   const { name, programId, accountSummary, data, innerInstructions } =
@@ -65,7 +65,7 @@ export const InstructionPreview: React.FC<{
                 set((state) => {
                   addTo(
                     state.transaction.instructions,
-                    mapIInstructionPreviewToIInstruction(instruction)
+                    mapIInstructionPreviewToIInstruction(instruction, source)
                   );
                 });
               }}
@@ -74,7 +74,7 @@ export const InstructionPreview: React.FC<{
         )}
       </Flex>
 
-      {showProgram && (
+      {source !== "anchorProgramId" && (
         <Flex ml="5" mt="1" alignItems="center">
           <Flex>
             <ProgramIcon />

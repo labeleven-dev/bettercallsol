@@ -19,7 +19,7 @@ import React, { useContext } from "react";
 import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { removeFrom } from "../../models/sortable";
+import { removeFrom } from "../../utils/sortable";
 import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
 import { SortableItemContext } from "../common/Sortable";

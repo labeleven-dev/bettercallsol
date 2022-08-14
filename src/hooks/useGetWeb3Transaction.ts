@@ -5,7 +5,7 @@ import {
   TransactionResponse,
 } from "@solana/web3.js";
 import { useState } from "react";
-import { IPubKey } from "../models/internal-types";
+import { IPubKey } from "../types/internal";
 import { usePersistentStore } from "./usePersistentStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 

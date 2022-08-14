@@ -1,7 +1,10 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
   Button,
+  Collapse,
   Flex,
-  Heading,
   Icon,
   IconButton,
   Menu,
@@ -27,12 +30,11 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
-import { ITransaction } from "../../models/internal-types";
+import { ITransaction } from "../../types/internal";
 import {
   DEFAULT_TRANSACTION,
   DEFAULT_TRANSACTION_RUN,
-} from "../../models/state-default";
-import { EditableName } from "../common/EditableName";
+} from "../../utils/state";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
 
 export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
@@ -71,7 +73,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
 
   return (
     <>
-      <Flex mb="5" alignItems="center">
+      <Flex alignItems="center">
         <RpcEndpointMenu
           menuButtonProps={{ minW: "250px", maxW: "250px" }}
           menuListProps={{ fontSize: "md" }}
@@ -176,23 +178,23 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           </MenuList>
         </Menu>
       </Flex>
-      <Flex mb="5" alignItems="center">
-        <Heading flex="1" size="lg">
-          <EditableName
-            tooltip="Click to edit"
-            tooltipProps={{ placement: "bottom-start" }}
-            previewProps={{ p: "3px 10px 3px 10px" }}
-            inputProps={{ p: "3px 10px 3px 10px" }}
-            placeholder="Unnamed Transaction"
-            value={transaction.name}
-            onChange={(value) =>
-              setSession((state) => {
-                state.transaction.name = value;
-              })
-            }
-          />
-        </Heading>
-      </Flex>
+
+      {/* TODO remove once out of beta */}
+      <Collapse in={rpcEndpoint.network === "mainnet-beta"} unmountOnExit>
+        <Alert
+          mt="2"
+          fontSize="sm"
+          rounded="sm"
+          status="warning"
+          variant="left-accent"
+        >
+          <AlertIcon />
+          <AlertDescription>
+            This is a pre-GA version of Better Call SOL. Use Mainnet at your own
+            risk!
+          </AlertDescription>
+        </Alert>
+      </Collapse>
     </>
   );
 };

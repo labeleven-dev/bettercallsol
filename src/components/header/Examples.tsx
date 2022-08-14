@@ -14,9 +14,9 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
-import { EXAMPLES } from "../../models/examples";
-import { mapITransactionExtToITransaction } from "../../models/external-mappers";
-import { DEFAULT_TRANSACTION_RUN } from "../../models/state-default";
+import { mapITransactionExtToITransaction } from "../../mappers/external-to-internal";
+import { EXAMPLES } from "../../utils/examples";
+import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
 
 export const Example: React.FC = () => {
   const { publicKey: walletPublicKey } = useWallet();

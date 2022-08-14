@@ -2,7 +2,7 @@ import { Box, Flex, FormLabel, Tag, Text } from "@chakra-ui/react";
 import { TransactionConfirmationStatus } from "@solana/web3.js";
 import React from "react";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { toSol } from "../../../models/web3js-mappers";
+import { toSol } from "../../../utils/web3js";
 import { CopyButton } from "../../common/CopyButton";
 import { ExplorerButton } from "../../common/ExplorerButton";
 

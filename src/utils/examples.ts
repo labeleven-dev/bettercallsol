@@ -1,4 +1,4 @@
-import { ITransactionExt } from "./external-types";
+import { ITransactionExt } from "../types/external";
 
 // TODO use export model instead and map across
 

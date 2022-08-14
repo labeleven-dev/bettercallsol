@@ -10,16 +10,10 @@ import {
 import { WritableDraft } from "immer/dist/internal";
 import React from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
-import { newDataField } from "../../../../models/internal-mappers";
-import {
-  DataFormat,
-  IInstrctionDataField,
-} from "../../../../models/internal-types";
-import {
-  addTo,
-  SortableCollection,
-  toSortedArray,
-} from "../../../../models/sortable";
+import { DataFormat, IInstrctionDataField } from "../../../../types/internal";
+import { SortableCollection } from "../../../../types/sortable";
+import { newDataField } from "../../../../utils/internal";
+import { addTo, toSortedArray } from "../../../../utils/sortable";
 import { Sortable } from "../../../common/Sortable";
 import { DataField } from "./DataField";
 
@@ -27,10 +21,7 @@ export const DataEditor: React.FC<{
   format: DataFormat;
   fields: SortableCollection<IInstrctionDataField>;
 }> = ({ format, fields }) => {
-  const {
-    instruction: { dynamic },
-    update,
-  } = useInstruction();
+  const { isAnchor, update } = useInstruction();
 
   const updateFields = (
     fn: (state: WritableDraft<SortableCollection<IInstrctionDataField>>) => void
@@ -40,15 +31,15 @@ export const DataEditor: React.FC<{
     });
   };
 
-  const emptyBgColour = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
+  const emptyBgColour = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
 
   return (
     <Grid>
       {fields.order.length === 0 && (
-        <Center p="3" bgColor={emptyBgColour} rounded="md">
-          <Text as="i" fontSize="sm">
+        <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
+          <Text as="i" fontSize="sm" textColor="grey">
             No fields yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" /> below
-            to add a field.
+            to add one.
           </Text>
         </Center>
       )}
@@ -70,7 +61,7 @@ export const DataEditor: React.FC<{
         ))}
       </Sortable>
 
-      {dynamic && (
+      {!isAnchor && (
         <Tooltip label="Add Data">
           <IconButton
             mt="1"

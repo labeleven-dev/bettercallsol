@@ -13,8 +13,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IBalance } from "../../../models/internal-types";
-import { toSol } from "../../../models/web3js-mappers";
+import { IBalance } from "../../../types/internal";
+import { toSol } from "../../../utils/web3js";
 import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const BalanceTable: React.FC<{

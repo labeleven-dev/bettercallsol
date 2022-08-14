@@ -1,76 +1,54 @@
 import {
-  LAMPORTS_PER_SOL,
   PublicKey,
   Transaction,
   TransactionInstruction,
   TransactionResponse,
 } from "@solana/web3.js";
-import BigNumber from "bignumber.js";
-import bs58 from "bs58";
 import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
-import { IBalance, ITransaction } from "./internal-types";
-import { toSortedArray } from "./sortable";
+import { IBalance, ITransaction } from "../types/internal";
+import { toSortedArray } from "../utils/sortable";
+import { anchorMethodSighash } from "../utils/web3js";
 
-/** Converts lamports to SOL */
-export const toSol = (x: number): BigNumber =>
-  new BigNumber(x).div(new BigNumber(LAMPORTS_PER_SOL));
-
-export const toLamports = (x: number | string): BigNumber =>
-  new BigNumber(x).multipliedBy(new BigNumber(LAMPORTS_PER_SOL));
-
-const SHORT_TRUNC_TO = 7;
-/** Shortens public keys to a truncated format */
-export const short = (pubkey: string) =>
-  `${pubkey.substring(0, SHORT_TRUNC_TO)}...${pubkey.substring(
-    pubkey.length - SHORT_TRUNC_TO
-  )}`;
-
-export const isValidPublicKey = (key: string): boolean => {
-  let valid = false;
-  try {
-    valid = bs58.decode(key).length === 32;
-  } catch (_) {}
-
-  return valid;
-};
-
-/**  Maps an internal transaction to the web3.js so it can be sent to the chain **/
-export const mapITransactionToWeb3Transaction = (
-  transactionData: ITransaction
-): Transaction => {
-  // TODO filter out empty fields
+export const mapITransactionToWeb3Transaction = ({
+  instructions,
+}: ITransaction): Transaction => {
   const transaction = new Transaction();
 
-  toSortedArray(transactionData.instructions).forEach(
-    ({ programId, accounts, data, disabled }) => {
-      if (disabled || !programId) return;
+  toSortedArray(instructions).forEach(
+    ({ programId, accounts, data, disabled, anchorMethod, anchorAccounts }) => {
+      if (disabled) return;
 
       // handle instruction data
-      let buffer;
+      let buffer = Buffer.from(""); // empty
       if (data.format === "borsh" && data.borsh) {
         buffer = new BorshCoder().encode(toSortedArray(data.borsh));
+        if (anchorMethod) {
+          // prepend method sighash to instruction data
+          buffer = Buffer.concat([anchorMethodSighash(anchorMethod), buffer]);
+        }
       } else if (data.format === "bufferLayout" && data.bufferLayout) {
         buffer = new BufferLayoutCoder().encode(
           toSortedArray(data.bufferLayout)
         );
       } else if (data.format === "raw" && data.raw) {
         buffer = Buffer.from(data.raw);
-      } else {
-        // TODO
       }
+
+      // accounts
+      const keys = (anchorAccounts || [])
+        .concat(toSortedArray(accounts))
+        .map(({ pubkey, isWritable, isSigner }) => ({
+          pubkey: new PublicKey(pubkey),
+          isWritable,
+          isSigner,
+        }));
 
       // add transcation
       transaction.add(
         new TransactionInstruction({
           programId: new PublicKey(programId),
-          keys: toSortedArray(accounts).map(
-            ({ pubkey, isWritable, isSigner }) => ({
-              pubkey: new PublicKey(pubkey),
-              isWritable,
-              isSigner,
-            })
-          ),
+          keys,
           data: buffer,
         })
       );

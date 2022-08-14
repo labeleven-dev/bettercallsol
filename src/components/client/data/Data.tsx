@@ -1,3 +1,4 @@
+import { LockIcon } from "@chakra-ui/icons";
 import {
   Divider,
   Flex,
@@ -12,17 +13,14 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { IInstructionData } from "../../../models/internal-types";
+import { IInstructionData } from "../../../types/internal";
 import { DataEditor } from "./editor/DataEditor";
 import { RawData } from "./RawData";
 
 export const Data: React.FC<{ data: IInstructionData }> = ({
   data: { format, raw, borsh, bufferLayout },
 }) => {
-  const {
-    instruction: { dynamic },
-    update,
-  } = useInstruction();
+  const { isAnchor, update } = useInstruction();
 
   const tabStyle: TabProps = {
     mr: "1",
@@ -38,6 +36,8 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
       borderColor: "chakra-border-color",
     },
   };
+
+  const lockedIconColor = useColorModeValue("blackAlpha.500", "whiteAlpha.500");
 
   return (
     <>
@@ -63,12 +63,13 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
       >
         <TabList>
           <Tab {...tabStyle} rounded="md">
-            Borsh
+            Borsh{" "}
+            {isAnchor && <LockIcon ml="1" w="2.5" color={lockedIconColor} />}
           </Tab>
-          <Tab {...tabStyle} rounded="md" isDisabled={!dynamic}>
+          <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
             Buffer Layout
           </Tab>
-          <Tab {...tabStyle} rounded="md" isDisabled={!dynamic}>
+          <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
             Raw
           </Tab>
         </TabList>

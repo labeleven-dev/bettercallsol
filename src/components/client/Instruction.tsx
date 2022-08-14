@@ -28,7 +28,14 @@ import { InstructionHeader } from "./InstructionHeader";
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
   const {
-    instruction: { programId, accounts, data, disabled, expanded },
+    instruction: {
+      programId,
+      accounts,
+      anchorAccounts,
+      data,
+      disabled,
+      expanded,
+    },
     update,
   } = useInstruction();
   const programInfo = useWeb3Account(programId);
@@ -134,7 +141,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           </InputGroup>
         </Flex>
 
-        <Accounts accounts={accounts} />
+        <Accounts accounts={accounts} anchorAccounts={anchorAccounts} />
 
         <Data data={data} />
       </Collapse>

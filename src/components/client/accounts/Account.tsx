@@ -1,4 +1,4 @@
-import { CloseIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
+import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Icon,
@@ -14,30 +14,35 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair } from "@solana/web3.js";
 import { WritableDraft } from "immer/dist/internal";
-import React, { useContext } from "react";
+import React from "react";
 import { FaKey, FaPenNib, FaWallet } from "react-icons/fa";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IAccount } from "../../../models/internal-types";
-import { removeFrom } from "../../../models/sortable";
-import { isValidPublicKey } from "../../../models/web3js-mappers";
+import { IAccount } from "../../../types/internal";
+import { removeFrom } from "../../../utils/sortable";
+import { isValidPublicKey } from "../../../utils/web3js";
+import { DragHandle } from "../../common/DragHandle";
 import { EditableName } from "../../common/EditableName";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { Numbering } from "../../common/Numbering";
-import { SortableItemContext } from "../../common/Sortable";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
 import { AirdropButton } from "./AirdropButton";
 import { PdaButton } from "./PdaButton";
 
-export const Account: React.FC<{ account: IAccount; index: number }> = ({
+export const Account: React.FC<{
+  account: IAccount;
+  index: number;
+  locked?: boolean;
+}> = ({
   account: { id, name, pubkey, isWritable, isSigner },
   index,
+  locked = false,
 }) => {
   const {
-    instruction: { dynamic, programId },
+    instruction: { programId },
     update,
   } = useInstruction();
-  const { listeners, attributes } = useContext(SortableItemContext);
+
   const { publicKey: walletPubkey } = useWallet();
   const [rpcEndpoint, keypairs, setSession] = useSessionStoreWithUndo(
     (state) => [state.rpcEndpoint, state.keypairs, state.set]
@@ -93,9 +98,11 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
 
   return (
     <Flex mb="2" alignItems="center">
-      {dynamic && (
-        <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
-      )}
+      <DragHandle
+        unlockedProps={{ h: "2.5", w: "2.5" }}
+        lockedProps={{ h: "3" }}
+        locked={locked}
+      />
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
@@ -107,7 +114,7 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
         fontSize="sm"
         placeholder="Unnamed"
         tooltipProps={{ placement: "bottom-end" }}
-        isDisabled={!dynamic}
+        isDisabled={locked}
         value={name}
         onChange={(value: string) => {
           updateAccount((state) => {
@@ -206,7 +213,7 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
         size="sm"
         label="Writable"
         icon={<EditIcon />}
-        isDisabled={!dynamic}
+        isDisabled={!locked}
         toggled={isWritable}
         onToggle={(toggled) => {
           updateAccount((state) => {
@@ -220,7 +227,7 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
         size="sm"
         label="Signer"
         icon={<Icon as={FaPenNib} />}
-        isDisabled={!dynamic}
+        isDisabled={locked}
         toggled={isSigner}
         onToggle={(toggled) => {
           updateAccount((state) => {
@@ -229,7 +236,7 @@ export const Account: React.FC<{ account: IAccount; index: number }> = ({
         }}
       />
 
-      {dynamic && (
+      {!locked && (
         <Tooltip label="Remove">
           <IconButton
             ml="3"

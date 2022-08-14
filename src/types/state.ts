@@ -7,8 +7,8 @@ import {
   ITransaction,
   ITransactionOptions,
   ITransactionRun,
-} from "./internal-types";
-import { IPreview } from "./preview-types";
+} from "./internal";
+import { IPreview } from "./preview";
 import { SortableCollection } from "./sortable";
 
 export type Explorer =

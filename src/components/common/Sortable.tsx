@@ -25,7 +25,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React from "react";
-import { IID } from "../../models/sortable";
+import { IID } from "../../types/sortable";
 
 export const SortableItemContext = React.createContext<{
   attributes?: DraggableAttributes;

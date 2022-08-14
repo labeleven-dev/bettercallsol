@@ -16,11 +16,11 @@ import {
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
+import {} from "../../types/state";
 import {
   DEFAULT_APP_OPTIONS,
   DEFAUT_TRANSACTION_OPTIONS,
-} from "../../models/state-default";
-import {} from "../../models/state-types";
+} from "../../utils/state";
 import { GeneralOptions } from "./GeneralOptions";
 import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";

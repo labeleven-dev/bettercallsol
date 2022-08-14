@@ -25,11 +25,11 @@ import React, { useEffect, useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
-import { IBalance } from "../../../models/internal-types";
 import {
   extractBalances,
   mapWeb3TransactionError,
-} from "../../../models/web3js-mappers";
+} from "../../../mappers/internal-to-web3js";
+import { IBalance } from "../../../types/internal";
 import { ErrorAlert } from "../../common/ErrorAlert";
 import { BalanceTable } from "./BalanceTable";
 import { ProgramLogs } from "./ProgramLogs";

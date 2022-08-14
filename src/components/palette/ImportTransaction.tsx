@@ -10,7 +10,7 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { IPreview, PreviewSource } from "../../models/preview-types";
+import { IPreview, PreviewSource } from "../../types/preview";
 import { ErrorAlert } from "../common/ErrorAlert";
 import { AnchorProgramIdImport } from "./import/AnchorProgramIdImport";
 import { ShareJsonImport } from "./import/ShareJsonImport";

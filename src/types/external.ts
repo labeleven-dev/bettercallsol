@@ -2,26 +2,16 @@
 
 import {
   DataFormat,
-  InstructionDataFieldType,
+  IAccount,
+  IInstrctionDataField,
   IPubKey,
-} from "./internal-types";
+} from "./internal";
 
-export interface IInstrctionDataFieldExt {
-  name?: string;
-  description?: string;
-  type: InstructionDataFieldType;
-  value?: any;
-}
+export type IInstrctionDataFieldExt = Omit<IInstrctionDataField, "id">;
 
-export interface IAccountExt {
-  name?: string;
-  description?: string;
-  pubkey?: IPubKey;
-  isWritable: boolean;
-  isSigner: boolean;
-}
+export type IAccountExt = Omit<IAccount, "id">;
 
-export interface IDataExt {
+export interface IInstructionDataExt {
   format: DataFormat;
   value: IInstrctionDataFieldExt[] | string;
 }
@@ -29,10 +19,11 @@ export interface IDataExt {
 export interface IInstructionExt {
   name?: string;
   description?: string;
-  dynamic: boolean;
   programId: IPubKey;
   accounts: IAccountExt[];
-  data: IDataExt;
+  data: IInstructionDataExt;
+  anchorMethod?: string;
+  anchorAccounts?: IAccountExt[];
 }
 
 export interface ITransactionExt {
@@ -106,6 +97,23 @@ export const JSON_SCHEMA = {
                     },
                   },
                 ],
+              },
+            },
+          },
+          anchorMethod: {
+            type: "string",
+          },
+          anchorAccounts: {
+            type: "array",
+            // TODO code duplication with the above
+            items: {
+              type: "object",
+              properties: {
+                name: { type: "string" },
+                description: { type: "string" },
+                pubkey: { type: "string" },
+                isWritable: { type: "boolean" },
+                isSigner: { type: "boolean" },
               },
             },
           },

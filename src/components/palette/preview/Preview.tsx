@@ -18,9 +18,9 @@ import {
 } from "@chakra-ui/react";
 import { FaAnchor } from "react-icons/fa";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapIPreviewToITransaction } from "../../../models/preview-mappers";
-import { IPreview } from "../../../models/preview-types";
-import { short } from "../../../models/web3js-mappers";
+import { mapIPreviewToITransaction } from "../../../mappers/preview-to-internal";
+import { IPreview } from "../../../types/preview";
+import { short } from "../../../utils/web3js";
 import { CopyButton } from "../../common/CopyButton";
 import { AccountSummary } from "./AccountSummary";
 import { InstructionPreview } from "./InstructionPreview";
@@ -136,7 +136,7 @@ export const Preview: React.FC<{
           key={index}
           index={index}
           instruction={instruction}
-          showProgram={source !== "anchorProgramId"}
+          source={source}
           interactive={interactive}
         />
       ))}

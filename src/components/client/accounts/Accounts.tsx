@@ -10,23 +10,18 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { newAccount } from "../../../models/internal-mappers";
-import { IAccount } from "../../../models/internal-types";
-import {
-  addTo,
-  SortableCollection,
-  toSortedArray,
-} from "../../../models/sortable";
+import { IAccount } from "../../../types/internal";
+import { SortableCollection } from "../../../types/sortable";
+import { newAccount } from "../../../utils/internal";
+import { addTo, toSortedArray } from "../../../utils/sortable";
 import { Sortable } from "../../common/Sortable";
 import { Account } from "./Account";
 
-export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
-  accounts,
-}) => {
-  const {
-    instruction: { dynamic },
-    update,
-  } = useInstruction();
+export const Accounts: React.FC<{
+  accounts: SortableCollection<IAccount>;
+  anchorAccounts?: IAccount[];
+}> = ({ accounts, anchorAccounts }) => {
+  const { update } = useInstruction();
 
   return (
     <Grid>
@@ -36,6 +31,18 @@ export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
         </Heading>
         <Divider flex="1" />
       </Flex>
+
+      <Box>
+        {anchorAccounts?.map((account, index) => (
+          <Account
+            account={account}
+            locked={true}
+            index={index}
+            key={account.id}
+          />
+        ))}
+      </Box>
+
       <Box>
         <Sortable
           itemOrder={accounts.order}
@@ -46,26 +53,29 @@ export const Accounts: React.FC<{ accounts: SortableCollection<IAccount> }> = ({
           }}
         >
           {toSortedArray(accounts).map((account, index) => (
-            <Account account={account} index={index} key={account.id} />
+            <Account
+              account={account}
+              index={index + (anchorAccounts?.length || 0)}
+              key={account.id}
+            />
           ))}
         </Sortable>
       </Box>
-      {dynamic && (
-        <Tooltip label="Add Account">
-          <IconButton
-            mt="1"
-            aria-label="Add Account"
-            icon={<AddIcon />}
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              update((state) => {
-                addTo(state.accounts, newAccount());
-              });
-            }}
-          />
-        </Tooltip>
-      )}
+
+      <Tooltip label="Add Account">
+        <IconButton
+          mt="1"
+          aria-label="Add Account"
+          icon={<AddIcon />}
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            update((state) => {
+              addTo(state.accounts, newAccount());
+            });
+          }}
+        />
+      </Tooltip>
     </Grid>
   );
 };

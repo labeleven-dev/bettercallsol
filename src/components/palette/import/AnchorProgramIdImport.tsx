@@ -1,14 +1,13 @@
 import { DownloadIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
-import { Program } from "@project-serum/anchor";
 import { useState } from "react";
-import { useAnchorProvider } from "../../../hooks/useAnchorProvider";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
-import { IRpcEndpoint } from "../../../models/internal-types";
-import { mapIdlToIPreview } from "../../../models/preview-mappers";
-import { IPreview } from "../../../models/preview-types";
-import { isValidPublicKey } from "../../../models/web3js-mappers";
+import { mapIdlToIPreview } from "../../../mappers/idl-to-preview";
+import { IRpcEndpoint } from "../../../types/internal";
+import { IPreview } from "../../../types/preview";
+import { fetchIdl } from "../../../utils/ild";
+import { isValidPublicKey } from "../../../utils/web3js";
 import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
 
 export const AnchorProgramIdImport: React.FC<{
@@ -27,7 +26,6 @@ export const AnchorProgramIdImport: React.FC<{
   );
 
   const connection = useWeb3Connection(rpcEndpoint.url);
-  const { provider } = useAnchorProvider(connection);
 
   const fetch = async () => {
     if (!programId || !isValidPublicKey(programId)) {
@@ -35,7 +33,7 @@ export const AnchorProgramIdImport: React.FC<{
       return;
     }
 
-    if (!connection || !provider) {
+    if (!connection) {
       setError("Connection could not be established");
       return;
     }
@@ -45,7 +43,7 @@ export const AnchorProgramIdImport: React.FC<{
     setError("");
 
     try {
-      let idl = await Program.fetchIdl(programId, provider);
+      let idl = await fetchIdl(programId, connection);
       if (idl) {
         setPreview(mapIdlToIPreview(idl, programId, rpcEndpoint));
       } else {

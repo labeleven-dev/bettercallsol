@@ -9,14 +9,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import {
-  IDataExt,
   IInstrctionDataFieldExt,
-} from "../../../models/external-types";
+  IInstructionDataExt,
+} from "../../../types/external";
 
-export const DataPreview: React.FC<{ data: IDataExt } & FlexProps> = ({
-  data: { format, value },
-  ...theRest
-}) => {
+export const DataPreview: React.FC<
+  { data: IInstructionDataExt } & FlexProps
+> = ({ data: { format, value }, ...theRest }) => {
   return (
     <Flex {...theRest} alignItems="center">
       <Tooltip label="Instruction Data">

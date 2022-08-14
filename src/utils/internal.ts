@@ -5,7 +5,7 @@ import {
   IInstruction,
   IInstructionData,
   IRpcEndpoint,
-} from "./internal-types";
+} from "../types/internal";
 import { toSortableCollection } from "./sortable";
 
 ///// Initialisers /////
@@ -43,7 +43,6 @@ export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
 export const newInstruction = (): IInstruction => ({
   id: uuid(),
   name: "",
-  dynamic: true,
   programId: "",
   accounts: { map: {}, order: [] },
   data: EMPTY_INSTRUCTION_DATA,

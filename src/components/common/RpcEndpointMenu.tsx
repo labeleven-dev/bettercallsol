@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { IRpcEndpoint } from "../../models/internal-types";
-import { toSortedArray } from "../../models/sortable";
+import { IRpcEndpoint } from "../../types/internal";
+import { toSortedArray } from "../../utils/sortable";
 
 export const RpcEndpointMenu: React.FC<{
   endpoint: IRpcEndpoint;

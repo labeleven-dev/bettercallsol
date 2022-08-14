@@ -22,12 +22,12 @@ export type InstructionDataFieldType =
   | "i16"
   | "u32"
   | "i32"
+  | "f32"
   | "u64"
   | "i64"
+  | "f64"
   | "u128"
   | "i128"
-  | "f32"
-  | "f64"
   | "bool"
   | "bytes"
   | "publicKey"
@@ -55,10 +55,15 @@ export interface IInstruction {
   id: IID;
   name?: string;
   description?: string;
-  dynamic: boolean;
   programId: IPubKey;
   accounts: SortableCollection<IAccount>;
   data: IInstructionData;
+
+  // Anchor-specific
+  anchorMethod?: string;
+  anchorAccounts?: IAccount[];
+  // `accounts` field above is treated as "remaining accounts"
+  // if this is an Anchor instruction
 
   // UI state
   readonly disabled: boolean;

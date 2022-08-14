@@ -1,20 +1,20 @@
 import { clusterApiUrl } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
-import { newAccount, newInstruction } from "./internal-mappers";
 import {
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
   ITransactionRun,
-} from "./internal-types";
-import { toSortableCollection } from "./sortable";
+} from "../types/internal";
 import {
   AppOptions,
   ImportState,
   PersistentState,
   SessionStateWithoutUndo,
   SessionStateWithUndo,
-} from "./state-types";
+} from "../types/state";
+import { newAccount, newInstruction } from "./internal";
+import { toSortableCollection } from "./sortable";
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {

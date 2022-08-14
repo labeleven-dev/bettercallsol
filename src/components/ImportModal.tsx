@@ -17,8 +17,8 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../hooks/useSessionStore";
-import { mapIPreviewToITransaction } from "../models/preview-mappers";
-import { DEFAULT_IMPORT } from "../models/state-default";
+import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
+import { DEFAULT_IMPORT } from "../utils/state";
 import { Preview } from "./palette/preview/Preview";
 
 export const ImportModal: React.FC = () => {

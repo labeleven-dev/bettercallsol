@@ -1,8 +1,8 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Text, Tooltip } from "@chakra-ui/react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { newRpcEndpoint } from "../../models/internal-mappers";
-import { addTo, toSortedArray } from "../../models/sortable";
+import { newRpcEndpoint } from "../../utils/internal";
+import { addTo, toSortedArray } from "../../utils/sortable";
 import { Sortable } from "../common/Sortable";
 import { RpcEndpointOption } from "./fields/RpcEndpointOption";
 

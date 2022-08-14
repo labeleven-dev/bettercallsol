@@ -1,8 +1,8 @@
 import { Grid } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { Explorer } from "../../models/state-types";
-import { EXPLORERS } from "../../models/ui-constants";
+import { Explorer } from "../../types/state";
+import { EXPLORERS } from "../../utils/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { ToggleOption } from "./fields/ToggleOption";
 

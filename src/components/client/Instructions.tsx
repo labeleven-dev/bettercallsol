@@ -1,15 +1,18 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Grid, IconButton, Tooltip } from "@chakra-ui/react";
+import {
+  Center,
+  Grid,
+  IconButton,
+  Text,
+  Tooltip,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { newInstruction } from "../../models/internal-mappers";
-import { IInstruction } from "../../models/internal-types";
-import {
-  addTo,
-  IID,
-  SortableCollection,
-  toSortedArray,
-} from "../../models/sortable";
+import { IInstruction } from "../../types/internal";
+import { IID, SortableCollection } from "../../types/sortable";
+import { newInstruction } from "../../utils/internal";
+import { addTo, toSortedArray } from "../../utils/sortable";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 
@@ -26,8 +29,19 @@ export const Instructions: React.FC<{
     });
   };
 
+  const emptyBgColour = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
+
   return (
     <Grid>
+      {instructions.order.length === 0 && (
+        <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
+          <Text as="i" fontSize="sm" textColor="grey">
+            No instructions yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" />{" "}
+            below to add one.
+          </Text>
+        </Center>
+      )}
+
       <Sortable itemOrder={instructions.order} setItemOrder={setOrderItem}>
         {toSortedArray(instructions).map((instruction, index) => (
           // key must be stable so it can't be loop index
@@ -36,6 +50,7 @@ export const Instructions: React.FC<{
           </InstructionContext.Provider>
         ))}
       </Sortable>
+
       <Tooltip label="Add Instruction">
         <IconButton
           aria-label="Add Instruction"

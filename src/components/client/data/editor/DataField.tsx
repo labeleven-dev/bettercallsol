@@ -1,4 +1,4 @@
-import { CloseIcon, DragHandleIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Flex,
   IconButton,
@@ -14,32 +14,29 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
-import React, { useContext } from "react";
+import React from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
 import {
   DataFormat,
   IInstrctionDataField,
   InstructionDataFieldType,
-} from "../../../../models/internal-types";
-import { removeFrom, SortableCollection } from "../../../../models/sortable";
+} from "../../../../types/internal";
+import { SortableCollection } from "../../../../types/sortable";
+import { removeFrom } from "../../../../utils/sortable";
 import {
   FORMAT_DATA_TYPES,
   NUMERICAL_DATA_TYPES,
-} from "../../../../models/ui-constants";
+} from "../../../../utils/ui-constants";
+import { DragHandle } from "../../../common/DragHandle";
 import { EditableName } from "../../../common/EditableName";
 import { Numbering } from "../../../common/Numbering";
-import { SortableItemContext } from "../../../common/Sortable";
 
 export const DataField: React.FC<{
   field: IInstrctionDataField;
   format: DataFormat;
   index: number;
 }> = ({ field: { id, name, type, value }, format, index }) => {
-  const {
-    instruction: { dynamic },
-    update,
-  } = useInstruction();
-  const { listeners, attributes } = useContext(SortableItemContext);
+  const { isAnchor, update } = useInstruction();
 
   const updateField = (
     fn: (state: WritableDraft<IInstrctionDataField>) => void
@@ -53,9 +50,11 @@ export const DataField: React.FC<{
 
   return (
     <Flex mb="2" alignItems="center">
-      {dynamic && (
-        <DragHandleIcon h="2.5" w="2.5" {...attributes} {...listeners} />
-      )}
+      <DragHandle
+        unlockedProps={{ h: "2.5", w: "2.5" }}
+        lockedProps={{ h: "3" }}
+        locked={isAnchor}
+      />
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
@@ -70,7 +69,7 @@ export const DataField: React.FC<{
         fontSize="sm"
         placeholder="Unnamed"
         tooltipProps={{ placement: "bottom-end" }}
-        isDisabled={!dynamic}
+        isDisabled={isAnchor}
         value={name}
         onChange={(value: string) => {
           updateField((state) => {
@@ -85,7 +84,7 @@ export const DataField: React.FC<{
         size="sm"
         fontFamily="mono"
         placeholder="Field Type"
-        isDisabled={!dynamic}
+        isDisabled={isAnchor}
         value={type}
         onChange={(e) => {
           updateField((state) => {
@@ -144,7 +143,7 @@ export const DataField: React.FC<{
         />
       )}
 
-      {dynamic && (
+      {!isAnchor && (
         <Tooltip label="Remove">
           <IconButton
             ml="3"

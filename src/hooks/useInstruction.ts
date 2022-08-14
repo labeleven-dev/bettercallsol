@@ -1,12 +1,17 @@
 import { WritableDraft } from "immer/dist/internal";
 import { useContext } from "react";
 import { InstructionContext } from "../components/client/Instructions";
-import { newAccount, newInstruction } from "../models/internal-mappers";
-import { IInstruction } from "../models/internal-types";
-import { toSortableCollection } from "../models/sortable";
+import { IInstruction } from "../types/internal";
+import { newAccount, newInstruction } from "../utils/internal";
+import { toSortableCollection } from "../utils/sortable";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 
-export const useInstruction = () => {
+export const useInstruction = (): {
+  instruction: IInstruction;
+  isAnchor: boolean;
+  update: (fn: (state: WritableDraft<IInstruction>) => void) => void;
+  reset: () => void;
+} => {
   const instruction = useContext(InstructionContext);
   const set = useSessionStoreWithUndo((state) => state.set);
 
@@ -28,6 +33,7 @@ export const useInstruction = () => {
 
   return {
     instruction,
+    isAnchor: (instruction.anchorMethod?.length || 0) > 0,
     update,
     reset,
   };

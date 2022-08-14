@@ -2,9 +2,9 @@ import { idlAddress } from "@project-serum/anchor/dist/cjs/idl";
 import { Connection, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { IPubKey } from "../models/internal-types";
-import { isValidPublicKey } from "../models/web3js-mappers";
-import { useAnchorProvider } from "./useAnchorProvider";
+import { IPubKey } from "../types/internal";
+import { isValidPublicKey } from "../utils/web3js";
+import { useWeb3Connection } from "./useWeb3Connection";
 
 interface Web3AccountInfo {
   status: "new" | "inProgress" | "fetched" | "invalid";
@@ -21,11 +21,12 @@ export const useWeb3Account = (
   const [accountInfo, setAccountInfo] = useState<Web3AccountInfo>({
     status: "new",
   });
-  const { connection: activeConnection, provider } =
-    useAnchorProvider(connection);
+
+  const defaultConenction = useWeb3Connection();
+  const activeConnection = connection || defaultConenction;
 
   useEffect(() => {
-    if (!activeConnection || !provider || !isValidPublicKey(address)) {
+    if (!activeConnection || !isValidPublicKey(address)) {
       setAccountInfo({ status: "invalid" });
       return;
     }
@@ -68,7 +69,7 @@ export const useWeb3Account = (
     };
 
     fetch().catch(console.log); // TODO better error handling? Too noisy for user
-  }, [address, activeConnection, provider]);
+  }, [address, activeConnection]);
 
   return accountInfo;
 };

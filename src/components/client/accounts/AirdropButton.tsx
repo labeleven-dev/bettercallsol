@@ -35,8 +35,8 @@ import { FaParachuteBox } from "react-icons/fa";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
-import { IPubKey } from "../../../models/internal-types";
-import { short, toLamports } from "../../../models/web3js-mappers";
+import { IPubKey } from "../../../types/internal";
+import { short, toLamports } from "../../../utils/web3js";
 import { ExplorerButton } from "../../common/ExplorerButton";
 
 export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({

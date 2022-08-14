@@ -3,12 +3,10 @@ import Ajv from "ajv";
 import axios from "axios";
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { JSON_SCHEMA } from "../models/external-types";
-import {
-  mapITransactionExtToIPreview,
-  mapTransactionResponseToIPreview,
-} from "../models/preview-mappers";
-import { IPreview } from "../models/preview-types";
+import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
+import { mapTransactionResponseToIPreview } from "../mappers/web3js-to-preview";
+import { JSON_SCHEMA } from "../types/external";
+import { IPreview } from "../types/preview";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithoutUndo } from "./useSessionStore";

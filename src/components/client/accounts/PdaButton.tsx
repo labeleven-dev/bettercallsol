@@ -32,15 +32,14 @@ import produce, { Draft } from "immer";
 import React, { useContext, useRef, useState } from "react";
 import { FaRobot } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
-import { IPubKey } from "../../../models/internal-types";
+import { IPubKey } from "../../../types/internal";
+import { Identifiable, SortableCollection } from "../../../types/sortable";
 import {
   addTo,
-  Identifiable,
   removeFrom,
-  SortableCollection,
   toSortableCollection,
   toSortedArray,
-} from "../../../models/sortable";
+} from "../../../utils/sortable";
 import { Sortable, SortableItemContext } from "../../common/Sortable";
 
 type Seed = { value: string } & Identifiable;

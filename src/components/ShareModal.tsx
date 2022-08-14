@@ -28,7 +28,7 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../hooks/useSessionStore";
-import { mapITransactionToTransactionExt } from "../models/external-mappers";
+import { mapITransactionToTransactionExt } from "../mappers/internal-to-external";
 
 export const ShareModal: React.FC = () => {
   const [isOpen, set] = useSessionStoreWithoutUndo((state) => [

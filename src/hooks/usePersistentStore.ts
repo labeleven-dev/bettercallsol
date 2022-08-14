@@ -1,7 +1,7 @@
 import produce from "immer";
 import create from "zustand";
-import { DEFAULT_PERSISTENT_STATE } from "../models/state-default";
-import { PersistentState } from "../models/state-types";
+import { PersistentState } from "../types/state";
+import { DEFAULT_PERSISTENT_STATE } from "../utils/state";
 
 const LOCAL_STORAGE_KEY = "bcsol-store";
 

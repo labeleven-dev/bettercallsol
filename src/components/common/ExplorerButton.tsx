@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { INetwork, IRpcEndpoint } from "../../models/internal-types";
-import { Explorer } from "../../models/state-types";
+import { INetwork, IRpcEndpoint } from "../../types/internal";
+import { Explorer } from "../../types/state";
 
 export type AddressType = "tx" | "account";
 

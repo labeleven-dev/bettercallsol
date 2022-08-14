@@ -1,18 +1,5 @@
-// deal with sortable/draggable collections uniformly
-// should ideally be a class but having trouble making it work with immer
-
 import { WritableDraft } from "immer/dist/internal";
-
-export type IID = string;
-
-export type Identifiable = {
-  id: IID;
-};
-
-export interface SortableCollection<T extends Identifiable> {
-  map: Record<IID, T>;
-  order: IID[];
-}
+import { Identifiable, IID, SortableCollection } from "../types/sortable";
 
 export const addTo = <T extends Identifiable>(
   collection: SortableCollection<T> | WritableDraft<SortableCollection<T>>,

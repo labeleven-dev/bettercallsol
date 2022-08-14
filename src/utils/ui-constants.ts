@@ -1,6 +1,6 @@
 import { Finality } from "@solana/web3.js";
-import { DataFormat, InstructionDataFieldType } from "./internal-types";
-import { Explorer } from "./state-types";
+import { DataFormat, InstructionDataFieldType } from "../types/internal";
+import { Explorer } from "../types/state";
 
 // for explorer option drop-down
 export const EXPLORERS: { id: Explorer; name: string }[] = [
