@@ -6,6 +6,7 @@ import {
   IInstructionPreview,
   IPreview,
 } from "../types/preview";
+import { mapWeb3TransactionError } from "./web3js-to-internal";
 
 // TODO getParsedTransaction has some more info for specific instructions
 // {
@@ -57,7 +58,7 @@ export const mapTransactionResponseToIPreview = (
     rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
-    error: (response.meta?.err as string) || undefined,
+    error: mapWeb3TransactionError(response.meta?.err),
     instructions: instructions.map((instruction, ixnIndex) => ({
       ...mapInstruction(instruction),
       innerInstructions: response.meta?.innerInstructions

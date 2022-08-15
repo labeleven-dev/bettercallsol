@@ -28,7 +28,7 @@ import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
 import {
   extractBalances,
   mapWeb3TransactionError,
-} from "../../../mappers/internal-to-web3js";
+} from "../../../mappers/web3js-to-internal";
 import { IBalance } from "../../../types/internal";
 import { ErrorAlert } from "../../common/ErrorAlert";
 import { BalanceTable } from "./BalanceTable";

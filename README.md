@@ -35,6 +35,8 @@ Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://so
 * [x] Airdrop SOLs to accounts
 * [x] Generate PDAs
 
+See [roadmap](https://github.com/orgs/labeleven-dev/projects/1) for upcoming features.
+
 Contribution
 ---
 
@@ -42,13 +44,13 @@ Contribution
 * If you have encountered a bug, please open a [bug report](https://github.com/labeleven-dev/bettercallsol/issues/new?template=bug.yml&labels=bug), or
 * If you encounter a security concern, please see our [security policy](https://github.com/labeleven-dev/bettercallsol/security/policy).
 * If there is a new feature you like to see in the tool, please open a [feature request](https://github.com/labeleven-dev/bettercallsol/issues/new?template=feature_request.md&labels=enhancement).
-     * Current roadmap is available [here](https://github.com/orgs/labeleven-dev/projects/1).
-     * Feel free to 👍 any bug or enhancement that you like to see addressed first.
+
+Feel free to 👍 any bug or enhancement that you like to see addressed first.
 
 > **Pull Requests:** The codebase is quite fluid at the moment, going through rapid iterations, overhauls and refactoring. It is unfair to expect the community to spend time and effort creating a pull request, which may not be mergeable. 
 >
-> **Therefore, until the codebase becomes stable, we cannot accept pull requests from the community. 
+> **Therefore, until the codebase becomes stable, we cannot accept pull requests from the community.**
 >
-> Thank you for your understanding!**
+> **Thank you for your understanding!**
 
 If you are a core committer, see [CONTRIB.md](CONTRIB.md).
