@@ -1,10 +1,10 @@
 import { idlAddress } from "@project-serum/anchor/dist/cjs/idl";
-import * as Sentry from "@sentry/react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { programLabel } from "../library/programs";
 import { IPubKey, IRpcEndpoint } from "../types/internal";
+import { sentryCaptureException } from "../utils/sentry";
 import { isValidPublicKey } from "../utils/web3js";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
@@ -84,7 +84,7 @@ export const useWeb3Account = (
     };
 
     fetch().catch((e) => {
-      Sentry.captureException(e);
+      sentryCaptureException(e);
     });
   }, [address, activeConnection, activeRpcEndpoint]);
 

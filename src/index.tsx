@@ -9,6 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
+  release: process.env.REACT_APP_VERSION || "local",
 });
 
 const container = document.getElementById("root");

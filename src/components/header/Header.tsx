@@ -19,7 +19,7 @@ import { Example } from "./Examples";
 import { WalletButton } from "./WalletButton";
 
 export const Header: React.FC = () => {
-  const [funTitle, setFunTitle] = useState(false);
+  const [funTitle, setFunTitle] = useState(true);
   const toast = useToast();
   const set = useSessionStoreWithoutUndo((state) => state.set);
 
