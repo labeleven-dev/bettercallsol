@@ -17,10 +17,10 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import {
+  FaCompress,
   FaEllipsisV,
   FaEraser,
   FaExpand,
-  FaExpandAlt,
   FaFileImport,
   FaPlay,
   FaShareAlt,
@@ -147,7 +147,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           />
           <MenuList zIndex="modal">
             <MenuItem
-              icon={<Icon as={FaExpandAlt} />}
+              icon={<Icon as={FaExpand} />}
               onClick={() => {
                 setAllExpanded(true);
               }}
@@ -155,7 +155,7 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
               Expand All
             </MenuItem>
             <MenuItem
-              icon={<Icon as={FaExpand} />}
+              icon={<Icon as={FaCompress} />}
               onClick={() => {
                 setAllExpanded(false);
               }}

@@ -15,8 +15,16 @@ import {
   MenuList,
   Tooltip,
 } from "@chakra-ui/react";
+import { arrayMove } from "@dnd-kit/sortable";
 import React, { useContext } from "react";
-import { FaEllipsisV, FaEraser, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaAngleDoubleDown,
+  FaAngleDoubleUp,
+  FaEllipsisV,
+  FaEraser,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { removeFrom } from "../../utils/sortable";
@@ -28,7 +36,10 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, update, reset } = useInstruction();
   const { listeners, attributes } = useContext(SortableItemContext);
 
-  const set = useSessionStoreWithUndo((state) => state.set);
+  const [instructionOrder, set] = useSessionStoreWithUndo((state) => [
+    state.transaction.instructions.order,
+    state.set,
+  ]);
 
   return (
     <Flex mb={instruction.expanded ? "4" : undefined} alignItems="center">
@@ -99,6 +110,36 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           variant="ghost"
         />
         <MenuList zIndex="modal">
+          <MenuItem
+            icon={<Icon as={FaAngleDoubleUp} />}
+            isDisabled={index === 0}
+            onClick={() => {
+              set((state) => {
+                state.transaction.instructions.order = arrayMove(
+                  state.transaction.instructions.order,
+                  index,
+                  0
+                );
+              });
+            }}
+          >
+            Move to the top
+          </MenuItem>
+          <MenuItem
+            icon={<Icon as={FaAngleDoubleDown} />}
+            isDisabled={index === instructionOrder.length - 1}
+            onClick={() => {
+              set((state) => {
+                state.transaction.instructions.order = arrayMove(
+                  state.transaction.instructions.order,
+                  index,
+                  instructionOrder.length - 1
+                );
+              });
+            }}
+          >
+            Move to the bottom
+          </MenuItem>
           <MenuItem
             icon={<Icon as={FaEraser} />}
             onClick={() => {
