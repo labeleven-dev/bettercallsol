@@ -27,8 +27,10 @@ export const Header: React.FC = () => {
     <Flex p="2" bgColor="main.800" alignItems="center">
       <DarkMode>
         <Image w="40px" h="40px" src="/logo128.png" alt="Logo" />
+      </DarkMode>
 
-        <Hide below="md">
+      <Hide below="md">
+        <DarkMode>
           <Text
             ml="3"
             mr="9"
@@ -53,13 +55,15 @@ export const Header: React.FC = () => {
           >
             Better Call Sol
           </Text>
-          <Example />
-        </Hide>
+        </DarkMode>
 
-        <Spacer />
+        <Example />
+      </Hide>
 
-        {/* TODO implement */}
-        {/* <Hide below="md">
+      <Spacer />
+
+      {/* TODO implement */}
+      {/* <Hide below="md">
           <Tooltip label="Undo">
             <IconButton
               mr="0.5"
@@ -81,7 +85,6 @@ export const Header: React.FC = () => {
             />
           </Tooltip>
         </Hide> */}
-      </DarkMode>
 
       <ColorModeSwitcher justifySelf="flex-end" />
 
@@ -138,5 +141,6 @@ export const Header: React.FC = () => {
         </Hide>
       </DarkMode>
     </Flex>
-  );
+  )
+    ;
 };
