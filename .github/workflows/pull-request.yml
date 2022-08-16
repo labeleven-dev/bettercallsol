@@ -1,0 +1,45 @@
+name: Pull Request Build
+on: pull_request
+
+env:
+  PROJECT_ID: bcsol-a8522
+
+jobs:
+
+  deployPreview:
+    runs-on: ubuntu-latest
+    environment: Preview
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      # setup
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x (LTS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+      - run: npm ci
+
+      # test
+      # TODO
+      # - run: npm test
+      # - run: npm run lint
+
+      # build
+      - run: npm run build
+        env:
+          # GENERATE_SOURCEMAP: false
+          REACT_APP_VERSION: "PREVIEW (PR #${{ github.event.number }})"
+          REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
+      # deploy
+      - id: deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: "${{ env.PROJECT_ID }}"
+          expires: 5d
