@@ -29,7 +29,7 @@ runs:
     - name: Notify Slack
       uses: slackapi/slack-github-action@v1.21.0
       with:
-        channel-id: C03ND2RUSTE
+        channel-id: C03TSBKKQQ3
         payload: |
           {
             "text": "${{ inputs.success == 'true' && 'SUCCESS' || 'FAIL' }}: ${{ inputs.environment }} - ${{ inputs.version }}\n${{ inputs.app_url }}\n${{ inputs.action_url }}",

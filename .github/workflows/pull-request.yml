@@ -32,7 +32,8 @@ jobs:
       - run: npm run build
         env:
           # GENERATE_SOURCEMAP: false
-          REACT_APP_VERSION: "PREVIEW (PR #${{ github.event.number }})"
+          # TODO include PR number
+          REACT_APP_VERSION: PREVIEW
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       # deploy
