@@ -53,6 +53,7 @@ export const Header: React.FC = () => {
           >
             Better Call Sol
           </Text>
+
           <Example />
         </Hide>
 

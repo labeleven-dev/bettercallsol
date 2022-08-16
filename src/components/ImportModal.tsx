@@ -46,6 +46,8 @@ export const ImportModal: React.FC = () => {
     <Modal
       size="lg"
       closeOnOverlayClick={false}
+      // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
+      blockScrollOnMount={false}
       isOpen={transaction !== undefined || isLoading}
       onClose={onClose}
     >
