@@ -23,6 +23,8 @@ export const InfoModal: React.FC = () => {
   ]);
   return (
     <Modal
+      // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
+      blockScrollOnMount={false}
       isOpen={isOpen}
       onClose={() => {
         set((state) => {

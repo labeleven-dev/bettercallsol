@@ -4,8 +4,17 @@ export default extendTheme({
   // use system colours, otherwise fallback to dark
   useSystemColorMode: true,
   initialColorMode: "dark",
+  // set brand colour
   colors: {
     main: theme.colors.purple,
+  },
+  // dim the light mode background
+  semanticTokens: {
+    colors: {
+      "chakra-body-bg": {
+        _light: " #FBFBFB",
+      },
+    },
   },
   // reduce the font sizes a tinge
   fontSizes: {

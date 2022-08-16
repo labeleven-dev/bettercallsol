@@ -42,8 +42,8 @@ export const App: React.FC = () => {
             <Header />
           </Box>
 
-          <Flex mt="45px">
-            <Box flex="2" h="93vh" overflow="scroll">
+          <Flex mt="45px" h="94vh">
+            <Box flex="2" overflow="scroll">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
               <Show below="md">
                 <Alert mt="10px" status="warning" variant="left-accent">
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
             {paletteOpen && (
               // TODO overlaps with main pane on smaller width
               <Hide below="md">
-                <Box flex="1" h="93vh" overflow="scroll">
+                <Box flex="1" overflow="scroll">
                   <Palette />
                 </Box>
               </Hide>
