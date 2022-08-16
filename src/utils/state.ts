@@ -49,15 +49,14 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
     enabled: true,
     custom: false,
   },
-  // TODO
-  // {
-  //   id: uuid(),
-  //   provider: "You",
-  //   network: "local",
-  //   url: "http://127.0.0.1:8899",
-  //   enabled: true,
-  //   custom: true,
-  // },
+  {
+    id: uuid(),
+    provider: "You",
+    network: "local",
+    url: "http://127.0.0.1:8899",
+    enabled: true,
+    custom: true,
+  },
 ];
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
