@@ -47,6 +47,7 @@ export const mapIInstructionExtToIInstruction = ({
     data: {
       format: data.format,
       raw: data.format === "raw" ? (data.value as string) : "",
+      isHex: false,
       borsh: mapToSortableCollection(
         data.format === "borsh"
           ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({

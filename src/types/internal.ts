@@ -47,6 +47,7 @@ export type DataFormat = "raw" | "bufferLayout" | "borsh";
 export interface IInstructionData {
   format: DataFormat;
   raw: string;
+  isHex: boolean;
   borsh: SortableCollection<IInstrctionDataField>;
   bufferLayout: SortableCollection<IInstrctionDataField>;
 }
