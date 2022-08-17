@@ -16,35 +16,60 @@ export const mapITransactionToWeb3Transaction = ({
   const transaction = new Transaction();
 
   toSortedArray(instructions).forEach(
-    ({ programId, accounts, data, disabled, anchorMethod, anchorAccounts }) => {
+    ({ programId, accounts, data, disabled, anchorMethod, anchorAccounts }, index) => {
       if (disabled) return;
 
       // handle instruction data
       let buffer = Buffer.from(""); // empty
-      if (data.format === "borsh" && data.borsh) {
-        buffer = new BorshCoder().encode(toSortedArray(data.borsh));
-        if (anchorMethod) {
-          // prepend method sighash to instruction data
-          buffer = Buffer.concat([anchorMethodSighash(anchorMethod), buffer]);
+      try {
+        if (data.format === "borsh" && data.borsh) {
+          buffer = new BorshCoder().encode(toSortedArray(data.borsh));
+          if (anchorMethod) {
+            // prepend method sighash to instruction data
+            buffer = Buffer.concat([anchorMethodSighash(anchorMethod), buffer]);
+          }
+        } else if (data.format === "bufferLayout" && data.bufferLayout) {
+          buffer = new BufferLayoutCoder().encode(
+            toSortedArray(data.bufferLayout)
+          );
+        } else if (data.format === "raw" && data.raw) {
+          buffer = Buffer.from(bs58.decode(data.raw));
         }
-      } else if (data.format === "bufferLayout" && data.bufferLayout) {
-        buffer = new BufferLayoutCoder().encode(
-          toSortedArray(data.bufferLayout)
-        );
-      } else if (data.format === "raw" && data.raw) {
-        buffer = Buffer.from(bs58.decode(data.raw));
+      } catch (err) {
+        const message = Object.getOwnPropertyNames(err).includes("message")
+          ? (err as {message: string}).message
+          : JSON.stringify(err);
+        throw new Error(`Instruction #${index + 1}: ${message} in Data`)
       }
 
       // accounts
       const keys = (anchorAccounts || [])
         .concat(toSortedArray(accounts))
-        .map(({ pubkey, isWritable, isSigner }) => ({
-          pubkey: new PublicKey(pubkey),
-          isWritable,
-          isSigner,
-        }));
+        .map(({ pubkey, isWritable, isSigner }, keyIdx) => {
+          try {
+            return {
+              pubkey: new PublicKey(pubkey),
+              isWritable,
+              isSigner
+            }
+          } catch (err) {
+            const message = Object.getOwnPropertyNames(err).includes("message")
+              ? (err as {message: string}).message
+              : JSON.stringify(err);
+            throw new Error(`Instruction #${index + 1}: ${message} in Accounts #${keyIdx + 1}`)
+          }
+        });
 
-      // add transcation
+      // add transaction
+      try {
+        new PublicKey(programId)
+      } catch (err) {
+        const message = Object.getOwnPropertyNames(err).includes("message")
+          ? (err as {message: string}).message
+          : JSON.stringify(err);
+        throw new Error(`Instruction #${index + 1}: ${message} in Program Account`)
+      }
+
       transaction.add(
         new TransactionInstruction({
           programId: new PublicKey(programId),
