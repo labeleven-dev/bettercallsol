@@ -33,7 +33,11 @@ export const mapITransactionToWeb3Transaction = ({
             toSortedArray(data.bufferLayout)
           );
         } else if (data.format === "raw" && data.raw) {
-          buffer = Buffer.from(bs58.decode(data.raw));
+          if (data.isHex) {
+            buffer = Buffer.from(data.raw, 'hex');
+          } else {
+            buffer = Buffer.from(bs58.decode(data.raw));
+          }
         }
       } catch (err) {
         const message = Object.getOwnPropertyNames(err).includes("message")

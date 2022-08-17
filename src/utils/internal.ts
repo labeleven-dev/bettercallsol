@@ -36,6 +36,7 @@ export const newAccount = (): IAccount => ({
 export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
   format: "raw",
   raw: "",
+  isHex: false,
   borsh: toSortableCollection([]),
   bufferLayout: toSortableCollection([]),
 };
