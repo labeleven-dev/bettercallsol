@@ -8,6 +8,7 @@ import { BufferLayoutCoder } from "../coders/buffer-layout";
 import { ITransaction } from "../types/internal";
 import { toSortedArray } from "../utils/sortable";
 import { anchorMethodSighash } from "../utils/web3js";
+import bs58 from "bs58";
 
 export const mapITransactionToWeb3Transaction = ({
   instructions,
@@ -31,7 +32,7 @@ export const mapITransactionToWeb3Transaction = ({
           toSortedArray(data.bufferLayout)
         );
       } else if (data.format === "raw" && data.raw) {
-        buffer = Buffer.from(data.raw);
+        buffer = Buffer.from(bs58.decode(data.raw));
       }
 
       // accounts
