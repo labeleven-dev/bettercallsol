@@ -44,10 +44,14 @@ export interface IInstrctionDataField {
 
 export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
+export interface IRaw {
+  content: string;
+  encoding: "hex" | "bs58"
+}
+
 export interface IInstructionData {
   format: DataFormat;
-  raw: string;
-  isHex: boolean;
+  raw: IRaw;
   borsh: SortableCollection<IInstrctionDataField>;
   bufferLayout: SortableCollection<IInstrctionDataField>;
 }

@@ -32,11 +32,11 @@ export const mapITransactionToWeb3Transaction = ({
           buffer = new BufferLayoutCoder().encode(
             toSortedArray(data.bufferLayout)
           );
-        } else if (data.format === "raw" && data.raw) {
-          if (data.isHex) {
-            buffer = Buffer.from(data.raw, 'hex');
+        } else if (data.format === "raw" && data.raw.content) {
+          if (data.raw.encoding === "hex") {
+            buffer = Buffer.from(data.raw.content, 'hex');
           } else {
-            buffer = Buffer.from(bs58.decode(data.raw));
+            buffer = Buffer.from(bs58.decode(data.raw.content));
           }
         }
       } catch (err) {
@@ -65,22 +65,23 @@ export const mapITransactionToWeb3Transaction = ({
         });
 
       // add transaction
-      try {
-        new PublicKey(programId)
-      } catch (err) {
-        const message = Object.getOwnPropertyNames(err).includes("message")
-          ? (err as {message: string}).message
-          : JSON.stringify(err);
-        throw new Error(`Instruction #${index + 1}: ${message} in Program Account`)
-      }
-
       transaction.add(
         new TransactionInstruction({
-          programId: new PublicKey(programId),
+          programId: (() => {
+            try {
+              return new PublicKey(programId)
+            } catch (err) {
+              const message = Object.getOwnPropertyNames(err).includes("message")
+                ? (err as {message: string}).message
+                : JSON.stringify(err);
+              throw new Error(`Instruction #${index + 1}: ${message} in Program Account`)
+            }
+          })(),
           keys,
           data: buffer,
         })
       );
+
     }
   );
 
