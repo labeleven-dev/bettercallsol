@@ -1,10 +1,8 @@
 import { LockIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Divider,
   Flex,
   Heading,
-  Icon,
   Tab,
   TabList,
   TabPanel,
@@ -12,23 +10,17 @@ import {
   TabProps,
   Tabs,
   useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { IInstructionData } from "../../../types/internal";
 import { DataEditor } from "./editor/DataEditor";
 import { RawData } from "./RawData";
-import { ToggleIconButton } from "../../common/ToggleIconButton";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
-import bs58 from "bs58";
 
 export const Data: React.FC<{data: IInstructionData}> = ({
-  data: { format, raw, isHex, borsh, bufferLayout },
+  data: { format, raw, borsh, bufferLayout },
 }) => {
   const { isAnchor, update } = useInstruction();
-
-  const toast = useToast();
 
   const tabStyle: TabProps = {
     mr: "1",
@@ -69,54 +61,18 @@ export const Data: React.FC<{data: IInstructionData}> = ({
           });
         }}
       >
-        <Box display="flex">
-          <TabList>
-            <Tab {...tabStyle} rounded="md">
-              Borsh{" "}
-              {isAnchor && <LockIcon ml="1" w="2.5" color={lockedIconColor} />}
-            </Tab>
-            <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
-              Buffer Layout
-            </Tab>
-            <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
-              Raw
-            </Tab>
-          </TabList>
-          {
-            format === "raw" ? <Box ml="auto">
-              <ToggleIconButton
-                ml="1"
-                size="sm"
-                label={isHex ? "Click to use encoded data" : "Click to use hex data"}
-                icon={<Icon as={HiOutlineSwitchHorizontal} />}
-                isDisabled={isAnchor}
-                toggled={!isHex}
-                onToggle={(toggled) => {
-                  update((state) => {
-                    if (isHex) {
-                      state.data.raw = bs58.encode(Buffer.from(raw, 'hex'));
-                      state.data.isHex = !isHex;
-                    } else {
-                      try {
-                        state.data.raw = Buffer.from(bs58.decode(raw)).toString('hex');
-                        state.data.isHex = !isHex;
-                      } catch (e) {
-                        // it is not a valid base58 string
-                        toast({
-                          title: "Invalid string",
-                          description: "This is not a valid base58 encoded string.",
-                          status: "error",
-                          isClosable: true,
-                          duration: 30_000,
-                        });
-                      }
-                    }
-                  });
-                }}
-              />
-            </Box> : <></>
-          }
-        </Box>
+        <TabList>
+          <Tab {...tabStyle} rounded="md">
+            Borsh{" "}
+            {isAnchor && <LockIcon ml="1" w="2.5" color={lockedIconColor} />}
+          </Tab>
+          <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
+            Buffer Layout
+          </Tab>
+          <Tab {...tabStyle} rounded="md" isDisabled={isAnchor}>
+            Raw
+          </Tab>
+        </TabList>
 
         <TabPanels>
           <TabPanel p="0" pt="3">
@@ -126,7 +82,7 @@ export const Data: React.FC<{data: IInstructionData}> = ({
             <DataEditor format="bufferLayout" fields={bufferLayout} />
           </TabPanel>
           <TabPanel p="0" pt="3">
-            <RawData data={raw} isHex={isHex} />
+            <RawData data={raw} />
           </TabPanel>
         </TabPanels>
       </Tabs>
