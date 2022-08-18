@@ -42,15 +42,6 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
     });
   };
 
-  // TODO is this best way?
-  const [notValidatedUrl, setNotValidatedUrl] = useState(url);
-  const setUrl = (url: string) => {
-    if (!isValidUrl(url)) return;
-    set((state) => {
-      state.appOptions.rpcEndpoints.map[id].url = url;
-    });
-  };
-
   return (
     <Flex alignItems="center">
       <DragHandleIcon h="3" w="3" mr="1" {...attributes} {...listeners} />
@@ -130,12 +121,16 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
           mr="1"
           placeholder="RPC URL"
           fontFamily="mono"
-          value={notValidatedUrl}
+          value={url}
           isReadOnly={!custom}
-          isInvalid={!isValidUrl(notValidatedUrl)}
+          isInvalid={!isValidUrl(url)}
           onChange={(e) => {
-            setNotValidatedUrl(e.target.value);
-            setUrl(notValidatedUrl);
+            const url = e.target.value;
+            if (isValidUrl(url)) {
+              updateEndpoint((state) => {
+                state.url = url;
+              });
+            }
           }}
         />
       </Grid>
