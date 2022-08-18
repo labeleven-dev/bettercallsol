@@ -55,7 +55,7 @@ export const RpcEndpointMenu: React.FC<{
             .filter(({ enabled, url }) => enabled && url)
             .map((it, index) => (
               <MenuItem
-                icon={endpoint.url === it.url ? <CheckIcon /> : undefined}
+                icon={endpoint.id === it.id ? <CheckIcon /> : undefined}
                 key={index}
                 command={it.provider}
                 onClick={() => {
