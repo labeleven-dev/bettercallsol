@@ -136,7 +136,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
           isInvalid={!isValidUrl(notValidatedUrl)}
           onChange={(e) => {
             setNotValidatedUrl(e.target.value);
-            setUrl(notValidatedUrl);
+            setUrl(e.target.value);
           }}
         />
       </Grid>
