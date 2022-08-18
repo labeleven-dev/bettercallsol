@@ -7,7 +7,7 @@ import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
 import { ITransaction } from "../types/internal";
 import { toSortedArray } from "../utils/sortable";
-import { anchorMethodSighash } from "../utils/web3js";
+import { anchorMethodSighash, isValidPublicKey } from "../utils/web3js";
 import bs58 from "bs58";
 
 export const mapITransactionToWeb3Transaction = ({
@@ -43,38 +43,32 @@ export const mapITransactionToWeb3Transaction = ({
         const message = Object.getOwnPropertyNames(err).includes("message")
           ? (err as {message: string}).message
           : JSON.stringify(err);
-        throw new Error(`Instruction #${index + 1}: ${message} in Data`)
+        throw new Error(`Error at Instruction #${index + 1}: ${message} in Data`)
       }
 
       // accounts
       const keys = (anchorAccounts || [])
         .concat(toSortedArray(accounts))
-        .map(({ pubkey, isWritable, isSigner }, keyIdx) => {
-          try {
-            return {
-              pubkey: new PublicKey(pubkey),
-              isWritable,
-              isSigner
+        .map(({ pubkey, isWritable, isSigner }, keyIdx) => ({
+          pubkey: (() => {
+            if (isValidPublicKey(pubkey)) {
+              return new PublicKey(pubkey)
+            } else {
+              throw new Error(`Error at Instruction #${index + 1}: Invalid public key input ${pubkey} in Accounts #${keyIdx + 1}`)
             }
-          } catch (err) {
-            const message = Object.getOwnPropertyNames(err).includes("message")
-              ? (err as {message: string}).message
-              : JSON.stringify(err);
-            throw new Error(`Instruction #${index + 1}: ${message} in Accounts #${keyIdx + 1}`)
-          }
-        });
+          })(),
+          isWritable,
+          isSigner
+        }));
 
       // add transaction
       transaction.add(
         new TransactionInstruction({
           programId: (() => {
-            try {
+            if (isValidPublicKey(programId)) {
               return new PublicKey(programId)
-            } catch (err) {
-              const message = Object.getOwnPropertyNames(err).includes("message")
-                ? (err as {message: string}).message
-                : JSON.stringify(err);
-              throw new Error(`Instruction #${index + 1}: ${message} in Program Account`)
+            } else {
+              throw new Error(`Error at Instruction #${index + 1}: Invalid program id ${programId}`)
             }
           })(),
           keys,

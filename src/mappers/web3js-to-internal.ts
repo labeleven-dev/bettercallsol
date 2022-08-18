@@ -26,7 +26,7 @@ export const mapWeb3TransactionError = (err: any): string => {
     const errObject = err as Record<string, any>;
     if (errObject?.InstructionError) {
       const [index, errorCode] = errObject.InstructionError;
-      error = `Error at Instruction ${index}: ${JSON.stringify(errorCode)}`;
+      error = `Error at Instruction #${index + 1}: ${JSON.stringify(errorCode)}`;
     }
   }
 
