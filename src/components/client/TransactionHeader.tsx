@@ -73,6 +73,15 @@ export const TransactionHeader: React.FC<{transaction: ITransaction}> = ({
   };
 
   useEffect(() => {
+    if (rpcEndpoints.order.length > 0) {
+      // take the first rpc endpoint as initial value if local storage exists
+      setSession((state) => {
+        state.rpcEndpoint = rpcEndpoints.map[rpcEndpoints.order[0]]
+      });
+    }
+  }, [])
+
+  useEffect(() => {
     // update selected endpoint on endpoint settings change
     if (rpcEndpoints.map.hasOwnProperty(rpcEndpoint.id)) {
       setSession((state) => {
