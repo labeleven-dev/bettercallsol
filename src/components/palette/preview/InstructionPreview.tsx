@@ -43,7 +43,7 @@ export const InstructionPreview: React.FC<{
     >
       <Flex mb="1" alignItems="center">
         {/* TODO implement drag-and-drop */}
-        {/* <DragHandleIcon h="2.5" mr="1" /> */}
+        {/* <DragHandle unlockedProps={{ h: "2.5", mr: "1" }} /> */}
 
         <InstructionIcon />
 
