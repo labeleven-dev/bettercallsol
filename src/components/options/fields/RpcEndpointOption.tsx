@@ -1,4 +1,4 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, DragHandleIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Grid,
@@ -9,12 +9,13 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { INetwork, IRpcEndpoint } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
-import { DragHandle } from "../../common/DragHandle";
+import { SortableItemContext } from "../../common/Sortable";
+import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
 
 const isValidUrl = (url: string) => {
   try {
@@ -33,6 +34,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   custom,
   enabled,
 }) => {
+  const { listeners, attributes } = useContext(SortableItemContext);
   const set = usePersistentStore((state) => state.set);
 
   const updateEndpoint = (fn: (state: WritableDraft<IRpcEndpoint>) => void) => {
@@ -52,7 +54,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
 
   return (
     <Flex alignItems="center">
-      <DragHandle unlockedProps={{ h: "3", w: "3", mr: "1" }} />
+      <DragHandleIcon h="3" w="3" mr="1" {...attributes} {...listeners} />
 
       <Grid
         p="4"
@@ -78,7 +80,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
               })
             }
           >
-            {["devnet", "testnet", "mainnet-beta"].map((n) => (
+            {RPC_NETWORK_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
