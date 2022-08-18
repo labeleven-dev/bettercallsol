@@ -144,8 +144,10 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         </Flex>
 
         <Flex ml="70px" mb="4">
-          {programInfo.label && <Tag>{programInfo.label}</Tag>}
-          {anchorMethod && <Tag>{`Anchor Method: ${anchorMethod}`}</Tag>}
+          {programInfo.label && <Tag size="sm">{programInfo.label}</Tag>}
+          {anchorMethod && (
+            <Tag size="sm">{`Anchor Method: ${anchorMethod}`}</Tag>
+          )}
         </Flex>
 
         <Accounts accounts={accounts} anchorAccounts={anchorAccounts} />
