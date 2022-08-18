@@ -47,8 +47,11 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   const [notValidatedUrl, setNotValidatedUrl] = useState(url);
   const setUrl = (url: string) => {
     if (!isValidUrl(url)) return;
+
     set((state) => {
-      state.appOptions.rpcEndpoints.map[id].url = url;
+      if (!Object.values(state.appOptions.rpcEndpoints.map).map(element => element.url).includes(url)) {
+        state.appOptions.rpcEndpoints.map[id].url = url;
+      }
     });
   };
 
