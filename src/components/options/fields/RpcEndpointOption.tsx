@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { INetwork, IRpcEndpoint } from "../../../types/internal";
@@ -51,6 +51,10 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
       state.appOptions.rpcEndpoints.map[id].url = url;
     });
   };
+
+  useEffect(() => {
+    setUrl(notValidatedUrl)
+  }, [notValidatedUrl])
 
   return (
     <Flex alignItems="center">
@@ -136,7 +140,6 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
           isInvalid={!isValidUrl(notValidatedUrl)}
           onChange={(e) => {
             setNotValidatedUrl(e.target.value);
-            setUrl(notValidatedUrl);
           }}
         />
       </Grid>
