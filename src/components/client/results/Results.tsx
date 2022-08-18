@@ -7,6 +7,7 @@ import {
 import {
   Button,
   Flex,
+  forwardRef,
   Grid,
   Heading,
   IconButton,
@@ -21,7 +22,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { TransactionConfirmationStatus } from "@solana/web3.js";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
@@ -46,7 +47,7 @@ type State = {
   logs?: string[];
 };
 
-export const Results: React.FC = () => {
+export const Results = forwardRef<{}, "div">((_, ref) => {
   const [results, setResults] = useState<State>({});
   const finality = usePersistentStore(
     (state) => state.transactionOptions.finality
@@ -125,7 +126,7 @@ export const Results: React.FC = () => {
   };
 
   return (
-    <Grid pt="2" pl="5" pr="5">
+    <Grid ref={ref} pt="2" pl="5" pr="5">
       <Flex alignItems="center" mb="4">
         <Heading mr="3" size="md">
           Results
@@ -231,4 +232,4 @@ export const Results: React.FC = () => {
       </Tabs>
     </Grid>
   );
-};
+});

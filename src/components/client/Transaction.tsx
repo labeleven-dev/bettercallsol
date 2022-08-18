@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Grid, Heading } from "@chakra-ui/react";
-import React from "react";
+import React, { useRef } from "react";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { EditableName } from "../common/EditableName";
 import { Instructions } from "./Instructions";
@@ -12,10 +12,13 @@ export const Transaction: React.FC = () => {
     state.set,
   ]);
 
+  // used for scrolling to results
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   return (
     <Grid m="2">
       <Box p="5">
-        <TransactionHeader transaction={transaction} />
+        <TransactionHeader transaction={transaction} resultsRef={resultsRef} />
 
         <Flex mt="5" mb="3" alignItems="center">
           <Heading flex="1" size="lg">
@@ -41,7 +44,7 @@ export const Transaction: React.FC = () => {
       <Divider />
 
       <Box mt="5">
-        <Results />
+        <Results ref={resultsRef} />
       </Box>
     </Grid>
   );

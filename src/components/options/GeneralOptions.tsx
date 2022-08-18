@@ -38,6 +38,17 @@ export const GeneralOptions: React.FC = () => {
       />
 
       <ToggleOption
+        id="scroll-to-results"
+        name="Scroll to results"
+        get={() => appOptions.scrollToResults}
+        set={(x) => {
+          set((state) => {
+            state.appOptions.scrollToResults = x;
+          });
+        }}
+      />
+
+      <ToggleOption
         id="enable-numbering"
         name="Enable numbering"
         get={() => appOptions.enableNumbering}

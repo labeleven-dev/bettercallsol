@@ -24,6 +24,7 @@ export type Explorer =
 export interface AppOptions {
   readonly explorer: Explorer;
   readonly autoConnectWallet: boolean;
+  readonly scrollToResults: boolean;
   readonly enableNumbering: boolean;
   readonly rpcEndpoints: SortableCollection<IRpcEndpoint>;
 }
