@@ -15,8 +15,7 @@ import { Explorer } from "../../types/state";
 
 export type AddressType = "tx" | "account";
 
-const explorerOpts: Record<
-  Exclude<Explorer, "none">,
+const explorerOpts: Record<Exclude<Explorer, "none">,
   {
     label: string;
     supportedNetworks: INetwork[];
@@ -25,15 +24,16 @@ const explorerOpts: Record<
       value: string,
       rpcEndpoint: IRpcEndpoint
     ) => string;
-  }
-> = {
+  }> = {
   solana: {
     label: "Open in Solana Explorer",
-    supportedNetworks: ["devnet", "testnet", "mainnet-beta"],
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
     url: (valueType, value, rpcEndpoint) =>
       `https://explorer.solana.com/${
         valueType === "account" ? "address" : valueType
-      }/${value}?cluster=${rpcEndpoint.network}`,
+      }/${value}?cluster=${
+        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
+      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
   },
   solanafm: {
     label: "Open in SolanaFM",
@@ -43,12 +43,12 @@ const explorerOpts: Record<
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
         rpcEndpoint.custom
-          ? rpcEndpoint.custom
+          ? rpcEndpoint.url
           : rpcEndpoint.network === "devnet"
-          ? "devnet-qn1"
-          : rpcEndpoint.network === "testnet"
-          ? "testnet-qn1"
-          : "mainnet-qn1"
+            ? "devnet-qn1"
+            : rpcEndpoint.network === "testnet"
+              ? "testnet-qn1"
+              : "mainnet-qn1"
       }`,
   },
   solanaBeach: {
@@ -73,13 +73,11 @@ const explorerOpts: Record<
   },
 };
 
-export const ExplorerButton: React.FC<
-  {
-    value: string;
-    valueType: AddressType;
-    rpcEndpoint: IRpcEndpoint;
-  } & Omit<ButtonProps, "aria-label">
-> = ({
+export const ExplorerButton: React.FC<{
+  value: string;
+  valueType: AddressType;
+  rpcEndpoint: IRpcEndpoint;
+} & Omit<ButtonProps, "aria-label">> = ({
   value,
   valueType,
   rpcEndpoint,
@@ -137,7 +135,7 @@ export const ExplorerButton: React.FC<
   );
 };
 
-const SolscanIcon: React.FC<{ size: any }> = ({ size }) => (
+const SolscanIcon: React.FC<{size: any}> = ({ size }) => (
   <Icon
     w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
     h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
@@ -156,7 +154,7 @@ const SolscanIcon: React.FC<{ size: any }> = ({ size }) => (
   </Icon>
 );
 
-const SolanaExplorerIcon: React.FC<{ size: any }> = ({ size }) => (
+const SolanaExplorerIcon: React.FC<{size: any}> = ({ size }) => (
   <Icon
     w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
     h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
@@ -175,7 +173,7 @@ const SolanaExplorerIcon: React.FC<{ size: any }> = ({ size }) => (
   </Icon>
 );
 
-const SolanaFmIcon: React.FC<{ size: any }> = ({ size }) => {
+const SolanaFmIcon: React.FC<{size: any}> = ({ size }) => {
   const fillColour = useColorModeValue("black", "white");
 
   return (
@@ -213,7 +211,7 @@ const SolanaFmIcon: React.FC<{ size: any }> = ({ size }) => {
   );
 };
 
-const SolanaBeachIcon: React.FC<{ size: any }> = ({ size }) => (
+const SolanaBeachIcon: React.FC<{size: any}> = ({ size }) => (
   <Icon
     w={size === "xs" ? 3 : size === "sm" ? 4 : 5}
     h={size === "xs" ? 3 : size === "sm" ? 4 : 5}
