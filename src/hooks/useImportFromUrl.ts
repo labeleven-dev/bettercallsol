@@ -12,6 +12,9 @@ import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithoutUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
+/**
+ * Encapsulates logic for importing transctions using HTTP query parameters
+ */
 export const useImport = () => {
   const [set, setIsLoading] = useSessionStoreWithoutUndo((state) => [
     state.set,

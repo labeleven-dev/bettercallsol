@@ -5,6 +5,9 @@ import { IInstruction } from "../types/internal";
 import { newInstruction } from "../utils/internal";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 
+/**
+ * Provides the current instruction details and methods to interact with it
+ */
 export const useInstruction = (): {
   instruction: IInstruction;
   isAnchor: boolean;

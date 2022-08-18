@@ -9,6 +9,9 @@ import { IPubKey } from "../types/internal";
 import { usePersistentStore } from "./usePersistentStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
+/**
+ * Use it to poll for the results of a transaction
+ */
 export const useGetWeb3Transaction = ({
   connection,
   onStatus,

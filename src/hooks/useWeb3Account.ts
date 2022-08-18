@@ -18,6 +18,9 @@ interface Web3AccountInfo {
   aprVerified?: boolean | null;
 }
 
+/**
+ * Provides details of the provided Solana account by querying the chain
+ */
 export const useWeb3Account = (
   address: IPubKey,
   connection?: Connection,
