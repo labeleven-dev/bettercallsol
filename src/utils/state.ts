@@ -63,6 +63,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
   explorer: "solanafm",
   autoConnectWallet: true,
   enableNumbering: false,
+  scrollToResults: true,
   rpcEndpoints: toSortableCollection(DEFAULT_RPC_ENDPOINTS),
 };
 

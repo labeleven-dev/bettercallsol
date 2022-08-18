@@ -25,6 +25,7 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
   useSessionStoreWithoutUndo,
@@ -34,9 +35,13 @@ import { ITransaction } from "../../types/internal";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
 
-export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
-  transaction,
-}) => {
+export const TransactionHeader: React.FC<{
+  transaction: ITransaction;
+  resultsRef: React.RefObject<HTMLDivElement>;
+}> = ({ transaction, resultsRef }) => {
+  const scrollToResults = usePersistentStore(
+    (state) => state.appOptions.scrollToResults
+  );
   const [transactionRun, setUI] = useSessionStoreWithoutUndo((state) => [
     state.transactionRun,
     state.set,
@@ -52,11 +57,25 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
       setUI((state) => {
         state.transactionRun = { inProgress: true, signature };
       });
+      if (scrollToResults) {
+        resultsRef.current?.scrollIntoView({
+          block: "end",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     },
     onError: (error) => {
       setUI((state) => {
         state.transactionRun.error = error.message;
       });
+      if (scrollToResults) {
+        resultsRef.current?.scrollIntoView({
+          block: "end",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     },
   });
 
