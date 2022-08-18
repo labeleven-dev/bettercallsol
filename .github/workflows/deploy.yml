@@ -38,10 +38,12 @@ jobs:
         run: |
           if [[ ${{ steps.semantic-version.outputs.new-release-published }} = 'true' ]]; then
             echo "New version: ${{ steps.semantic-version.outputs.new-release-version }}"
-            echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }}'
+            echo '::set-output name=semver::${{ steps.semantic-version.outputs.new-release-version }}'
+            echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }} (Build ${{ github.run_number }}-${{ github.run_attempt }})'
           else
             LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
             echo "Existing version: ${LATEST_TAG}"
+            echo "::set-output name=semver::${LATEST_TAG}"
             echo "::set-output name=version::${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt	}})"
           fi
 
@@ -54,7 +56,9 @@ jobs:
       - run: npm run build
         env:
           # GENERATE_SOURCEMAP: false
-          REACT_APP_VERSION: ${{ steps.version.outputs.version }}
+          REACT_APP_SEMVER: ${{ steps.version.outputs.semver }}
+          REACT_APP_BUILD: ${{ github.run_number }}-${{ github.run_attempt }}
+          REACT_APP_BUILD_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       
       # release

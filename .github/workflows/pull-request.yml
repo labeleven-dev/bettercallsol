@@ -32,8 +32,9 @@ jobs:
       - run: npm run build
         env:
           # GENERATE_SOURCEMAP: false
-          # TODO include PR number
-          REACT_APP_VERSION: PREVIEW
+          REACT_APP_SEMVER: PREVIEW
+          REACT_APP_BUILD: ${{ github.run_number }}-${{ github.run_attempt }}
+          REACT_APP_BUILD_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       # deploy

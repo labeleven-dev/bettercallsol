@@ -43,7 +43,23 @@ export const Footer: React.FC = () => (
     </Box>
     <Flex>
       <Spacer />
-      <Text fontSize="xs">v{process.env.REACT_APP_VERSION || "???"}</Text>
+      <Box fontSize="xs">
+        <Link
+          href={
+            process.env.REACT_APP_SEMVER
+              ? `https://github.com/labeleven-dev/bettercallsol/releases/tag/v${process.env.REACT_APP_SEMVER}`
+              : undefined
+          }
+          isExternal
+        >
+          v{process.env.REACT_APP_SEMVER || "LOCAL"}
+        </Link>
+        {" ("}
+        <Link href={process.env.REACT_APP_BUILD_URL} isExternal>
+          {process.env.REACT_APP_BUILD || "N/A"}
+        </Link>
+        {")"}
+      </Box>
     </Flex>
   </Grid>
 );
