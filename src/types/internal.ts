@@ -75,7 +75,7 @@ export interface IInstruction {
   readonly expanded: boolean;
 }
 
-export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
+export type INetwork = "custom" | "devnet" | "testnet" | "mainnet-beta";
 
 export interface IRpcEndpoint {
   id: IID;
