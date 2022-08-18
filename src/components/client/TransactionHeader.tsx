@@ -148,17 +148,13 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
           <MenuList zIndex="modal">
             <MenuItem
               icon={<Icon as={FaExpand} />}
-              onClick={() => {
-                setAllExpanded(true);
-              }}
+              onClick={setAllExpanded(true)}
             >
               Expand All
             </MenuItem>
             <MenuItem
               icon={<Icon as={FaCompress} />}
-              onClick={() => {
-                setAllExpanded(false);
-              }}
+              onClick={setAllExpanded(false)}
             >
               Collapse All
             </MenuItem>
