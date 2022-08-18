@@ -16,6 +16,8 @@ import {
 import { newAccount, newInstruction } from "./internal";
 import { toSortableCollection } from "./sortable";
 
+export const RPC_NETWORK_OPTIONS: string[] = ["devnet", "testnet", "mainnet-beta", "custom"];
+
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
     id: uuid(),
