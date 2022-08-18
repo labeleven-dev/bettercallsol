@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaCompress,
   FaEllipsisV,
@@ -33,8 +33,9 @@ import {
 import { ITransaction } from "../../types/internal";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
+import { usePersistentStore } from "../../hooks/usePersistentStore";
 
-export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
+export const TransactionHeader: React.FC<{transaction: ITransaction}> = ({
   transaction,
 }) => {
   const [transactionRun, setUI] = useSessionStoreWithoutUndo((state) => [
@@ -44,6 +45,9 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
   const [rpcEndpoint, setSession] = useSessionStoreWithUndo((state) => [
     state.rpcEndpoint,
     state.set,
+  ]);
+  const [rpcEndpoints] = usePersistentStore((state) => [
+    state.appOptions.rpcEndpoints,
   ]);
 
   const { publicKey: walletPublicKey } = useWallet();
@@ -67,6 +71,15 @@ export const TransactionHeader: React.FC<{ transaction: ITransaction }> = ({
       });
     });
   };
+
+  useEffect(() => {
+    // update selected endpoint on endpoint settings change
+    if (rpcEndpoints.map.hasOwnProperty(rpcEndpoint.id)) {
+      setSession((state) => {
+        state.rpcEndpoint = rpcEndpoints.map[rpcEndpoint.id];
+      });
+    }
+  }, [rpcEndpoints])
 
   return (
     <>
