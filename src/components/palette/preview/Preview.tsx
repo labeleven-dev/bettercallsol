@@ -60,7 +60,7 @@ export const Preview: React.FC<{
     >
       <Flex mb="3" alignItems="center">
         {/* TODO implement drag-and-drop */}
-        {/* <DragHandleIcon h="2.5" mt="1" mr="1" /> */}
+        {/* <DragHandle unlockedProps={{ h: "2.5", mt: "1", mr: "1" }} /> */}
 
         {/* icon */}
         {isSource("anchorProgramId", "anchorJson") && <AnchorIcon />}

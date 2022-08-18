@@ -2,7 +2,6 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   DeleteIcon,
-  DragHandleIcon,
 } from "@chakra-ui/icons";
 import {
   Flex,
@@ -16,7 +15,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { arrayMove } from "@dnd-kit/sortable";
-import React, { useContext } from "react";
+import React from "react";
 import {
   FaAngleDoubleDown,
   FaAngleDoubleUp,
@@ -28,13 +27,12 @@ import {
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { removeFrom } from "../../utils/sortable";
+import { DragHandle } from "../common/DragHandle";
 import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
-import { SortableItemContext } from "../common/Sortable";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const { instruction, update, reset } = useInstruction();
-  const { listeners, attributes } = useContext(SortableItemContext);
 
   const [instructionOrder, set] = useSessionStoreWithUndo((state) => [
     state.transaction.instructions.order,
@@ -43,7 +41,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
 
   return (
     <Flex mb={instruction.expanded ? "4" : undefined} alignItems="center">
-      <DragHandleIcon mr="2" {...attributes} {...listeners} />
+      <DragHandle unlockedProps={{ mr: "2" }} />
 
       <IconButton
         h="8"

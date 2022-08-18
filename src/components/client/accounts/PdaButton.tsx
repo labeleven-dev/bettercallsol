@@ -1,9 +1,4 @@
-import {
-  AddIcon,
-  CloseIcon,
-  DragHandleIcon,
-  SearchIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -29,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import produce, { Draft } from "immer";
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaRobot } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { IPubKey } from "../../../types/internal";
@@ -40,7 +35,8 @@ import {
   toSortableCollection,
   toSortedArray,
 } from "../../../utils/sortable";
-import { Sortable, SortableItemContext } from "../../common/Sortable";
+import { DragHandle } from "../../common/DragHandle";
+import { Sortable } from "../../common/Sortable";
 
 type Seed = { value: string } & Identifiable;
 type SeedState = SortableCollection<Seed>;
@@ -190,34 +186,32 @@ const SeedItem = forwardRef<
     removeSeed: () => void;
   },
   "div"
->(({ seed, setSeed, removeSeed }, ref) => {
-  const { listeners, attributes } = useContext(SortableItemContext);
+>(({ seed, setSeed, removeSeed }, ref) => (
+  <Flex alignItems="center" mb="1">
+    <DragHandle unlockedProps={{ h: "2.5", w: "2.5", mr: "1" }} />
 
-  return (
-    <Flex alignItems="center" mb="1">
-      <DragHandleIcon h="2.5" w="2.5" mr="1" {...attributes} {...listeners} />
-      <Input
-        ref={ref}
-        placeholder="Seed"
-        size="sm"
-        value={seed.value}
-        key={seed.id}
-        onChange={(e) => {
-          setSeed((state) => {
-            state.value = e.target.value;
-          });
-        }}
+    <Input
+      ref={ref}
+      placeholder="Seed"
+      size="sm"
+      value={seed.value}
+      key={seed.id}
+      onChange={(e) => {
+        setSeed((state) => {
+          state.value = e.target.value;
+        });
+      }}
+    />
+
+    <Tooltip label="Remove">
+      <IconButton
+        ml="1"
+        size="xs"
+        aria-label="Remove"
+        icon={<CloseIcon />}
+        variant="ghost"
+        onClick={removeSeed}
       />
-      <Tooltip label="Remove">
-        <IconButton
-          ml="1"
-          size="xs"
-          aria-label="Remove"
-          icon={<CloseIcon />}
-          variant="ghost"
-          onClick={removeSeed}
-        />
-      </Tooltip>
-    </Flex>
-  );
-});
+    </Tooltip>
+  </Flex>
+));
