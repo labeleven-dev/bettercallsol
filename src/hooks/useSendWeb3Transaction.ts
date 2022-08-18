@@ -7,6 +7,9 @@ import { usePersistentStore } from "./usePersistentStore";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
+/**
+ * Use it to send transactions to Solana
+ */
 export const useSendWeb3Transaction = ({
   connection,
   onSent,

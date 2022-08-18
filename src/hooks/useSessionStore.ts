@@ -9,6 +9,9 @@ import {
 
 // TODO implement undo/redo once this is resolved: https://github.com/charkour/zundo/issues/38
 
+/**
+ * Provides access to in-memory Zustand store, for state that can be undo/redo'ed
+ */
 export const useSessionStoreWithUndo = create<SessionStateWithUndo>((set) => ({
   ...DEFAULT_SESSION_STATE_WITH_UNDO,
   set: (fn) => {
@@ -16,6 +19,9 @@ export const useSessionStoreWithUndo = create<SessionStateWithUndo>((set) => ({
   },
 }));
 
+/**
+ * Provides access to in-memory Zustand store, for state that should not be undo/redo'ed
+ */
 export const useSessionStoreWithoutUndo = create<SessionStateWithoutUndo>()(
   subscribeWithSelector((set) => ({
     ...DEFAULT_SESSION_STATE_WITHOUT_UNDO,

@@ -10,6 +10,9 @@ const saveState = (state: PersistentState) => {
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
 };
 
+/**
+ * Provides access to the LocalStorage Zustand store
+ */
 export const usePersistentStore = create<PersistentState>((set) => {
   // retrieve local storage
   const existingStateString = localStorage.getItem(LOCAL_STORAGE_KEY);

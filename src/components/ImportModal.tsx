@@ -12,7 +12,7 @@ import {
   Skeleton,
   Text,
 } from "@chakra-ui/react";
-import { useImport } from "../hooks/useImport";
+import { useImport } from "../hooks/useImportFromUrl";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
