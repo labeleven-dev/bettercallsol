@@ -7,7 +7,7 @@ import { BorshCoder } from "../coders/borsh";
 import { BufferLayoutCoder } from "../coders/buffer-layout";
 import { ITransaction } from "../types/internal";
 import { toSortedArray } from "../utils/sortable";
-import { anchorMethodSighash } from "../utils/web3js";
+import { anchorMethodSighash, isValidPublicKey } from "../utils/web3js";
 import bs58 from "bs58";
 
 export const mapITransactionToWeb3Transaction = ({
@@ -16,38 +16,72 @@ export const mapITransactionToWeb3Transaction = ({
   const transaction = new Transaction();
 
   toSortedArray(instructions).forEach(
-    ({ programId, accounts, data, disabled, anchorMethod, anchorAccounts }) => {
+    (
+      { programId, accounts, data, disabled, anchorMethod, anchorAccounts },
+      index
+    ) => {
       if (disabled) return;
 
       // handle instruction data
       let buffer = Buffer.from(""); // empty
-      if (data.format === "borsh" && data.borsh) {
-        buffer = new BorshCoder().encode(toSortedArray(data.borsh));
-        if (anchorMethod) {
-          // prepend method sighash to instruction data
-          buffer = Buffer.concat([anchorMethodSighash(anchorMethod), buffer]);
+      try {
+        if (data.format === "borsh" && data.borsh) {
+          buffer = new BorshCoder().encode(toSortedArray(data.borsh));
+          if (anchorMethod) {
+            // prepend method sighash to instruction data
+            buffer = Buffer.concat([anchorMethodSighash(anchorMethod), buffer]);
+          }
+        } else if (data.format === "bufferLayout" && data.bufferLayout) {
+          buffer = new BufferLayoutCoder().encode(
+            toSortedArray(data.bufferLayout)
+          );
+        } else if (data.format === "raw" && data.raw) {
+          buffer = Buffer.from(bs58.decode(data.raw));
         }
-      } else if (data.format === "bufferLayout" && data.bufferLayout) {
-        buffer = new BufferLayoutCoder().encode(
-          toSortedArray(data.bufferLayout)
+      } catch (err) {
+        const message = Object.getOwnPropertyNames(err).includes("message")
+          ? (err as { message: string }).message
+          : JSON.stringify(err);
+        throw new Error(
+          `Error at Instruction #${index + 1}: ${message} in Data`
         );
-      } else if (data.format === "raw" && data.raw) {
-        buffer = Buffer.from(bs58.decode(data.raw));
       }
 
       // accounts
       const keys = (anchorAccounts || [])
         .concat(toSortedArray(accounts))
-        .map(({ pubkey, isWritable, isSigner }) => ({
-          pubkey: new PublicKey(pubkey),
+        .map(({ pubkey, isWritable, isSigner }, keyIdx) => ({
+          pubkey: (() => {
+            if (isValidPublicKey(pubkey)) {
+              return new PublicKey(pubkey);
+            } else {
+              throw new Error(
+                `Error at Instruction #${
+                  index + 1
+                }: Invalid public key input ${pubkey} in Accounts #${
+                  keyIdx + 1
+                }`
+              );
+            }
+          })(),
           isWritable,
           isSigner,
         }));
 
-      // add transcation
+      // add transaction
       transaction.add(
         new TransactionInstruction({
-          programId: new PublicKey(programId),
+          programId: (() => {
+            if (isValidPublicKey(programId)) {
+              return new PublicKey(programId);
+            } else {
+              throw new Error(
+                `Error at Instruction #${
+                  index + 1
+                }: Invalid program id ${programId}`
+              );
+            }
+          })(),
           keys,
           data: buffer,
         })
