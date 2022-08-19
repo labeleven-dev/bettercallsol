@@ -1,6 +1,7 @@
 import { clusterApiUrl } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
 import {
+  INetwork,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
@@ -16,7 +17,7 @@ import {
 import { newAccount, newInstruction } from "./internal";
 import { toSortableCollection } from "./sortable";
 
-export const RPC_NETWORK_OPTIONS: string[] = [
+export const RPC_NETWORK_OPTIONS: INetwork[] = [
   "devnet",
   "testnet",
   "mainnet-beta",
