@@ -46,19 +46,26 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   // TODO is this best way?
   const [notValidatedUrl, setNotValidatedUrl] = useState(url);
 
-  const setUrl = useCallback((url: string) => {
-    if (!isValidUrl(url)) return;
+  const setUrl = useCallback(
+    (url: string) => {
+      if (!isValidUrl(url)) return;
 
-    set((state) => {
-      if (!Object.values(state.appOptions.rpcEndpoints.map).map(element => element.url).includes(url)) {
-        state.appOptions.rpcEndpoints.map[id].url = url;
-      }
-    });
-  }, [set, id]);
+      set((state) => {
+        if (
+          !Object.values(state.appOptions.rpcEndpoints.map)
+            .map((element) => element.url)
+            .includes(url)
+        ) {
+          state.appOptions.rpcEndpoints.map[id].url = url;
+        }
+      });
+    },
+    [set, id]
+  );
 
   useEffect(() => {
-    setUrl(notValidatedUrl)
-  }, [notValidatedUrl, setUrl])
+    setUrl(notValidatedUrl);
+  }, [notValidatedUrl, setUrl]);
 
   return (
     <Flex alignItems="center">

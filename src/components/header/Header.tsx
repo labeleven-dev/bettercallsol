@@ -84,7 +84,6 @@ export const Header: React.FC = () => {
           </Tooltip>
         </Hide> */}
 
-
       <ColorModeSwitcher justifySelf="flex-end" />
 
       <DarkMode>

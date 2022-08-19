@@ -46,7 +46,7 @@ export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
 export interface IRaw {
   content: string;
-  encoding: "hex" | "bs58"
+  encoding: "hex" | "bs58";
 }
 
 export interface IInstructionData {

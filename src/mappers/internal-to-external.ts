@@ -49,10 +49,10 @@ export const mapITransactionToTransactionExt = ({
           data.format === "borsh"
             ? toSortedArray(data.borsh).map(mapToIInstrctionDataFieldExt)
             : data.format === "bufferLayout"
-              ? toSortedArray(data.bufferLayout).map(mapToIInstrctionDataFieldExt)
-              : data.raw.encoding === "hex"
-                ? bs58.encode(Buffer.from(data.raw.content, 'hex'))
-                : data.raw.content,
+            ? toSortedArray(data.bufferLayout).map(mapToIInstrctionDataFieldExt)
+            : data.raw.encoding === "hex"
+            ? bs58.encode(Buffer.from(data.raw.content, "hex"))
+            : data.raw.content,
       },
       anchorMethod,
       anchorAccounts: anchorAccounts?.map(mapIAccountToIAccountExt),

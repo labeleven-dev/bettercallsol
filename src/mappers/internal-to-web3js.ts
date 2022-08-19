@@ -16,7 +16,10 @@ export const mapITransactionToWeb3Transaction = ({
   const transaction = new Transaction();
 
   toSortedArray(instructions).forEach(
-    ({ programId, accounts, data, disabled, anchorMethod, anchorAccounts }, index) => {
+    (
+      { programId, accounts, data, disabled, anchorMethod, anchorAccounts },
+      index
+    ) => {
       if (disabled) return;
 
       // handle instruction data
@@ -34,16 +37,18 @@ export const mapITransactionToWeb3Transaction = ({
           );
         } else if (data.format === "raw" && data.raw.content) {
           if (data.raw.encoding === "hex") {
-            buffer = Buffer.from(data.raw.content, 'hex');
+            buffer = Buffer.from(data.raw.content, "hex");
           } else {
             buffer = Buffer.from(bs58.decode(data.raw.content));
           }
         }
       } catch (err) {
         const message = Object.getOwnPropertyNames(err).includes("message")
-          ? (err as {message: string}).message
+          ? (err as { message: string }).message
           : JSON.stringify(err);
-        throw new Error(`Error at Instruction #${index + 1}: ${message} in Data`)
+        throw new Error(
+          `Error at Instruction #${index + 1}: ${message} in Data`
+        );
       }
 
       // accounts
@@ -52,13 +57,19 @@ export const mapITransactionToWeb3Transaction = ({
         .map(({ pubkey, isWritable, isSigner }, keyIdx) => ({
           pubkey: (() => {
             if (isValidPublicKey(pubkey)) {
-              return new PublicKey(pubkey)
+              return new PublicKey(pubkey);
             } else {
-              throw new Error(`Error at Instruction #${index + 1}: Invalid public key input ${pubkey} in Accounts #${keyIdx + 1}`)
+              throw new Error(
+                `Error at Instruction #${
+                  index + 1
+                }: Invalid public key input ${pubkey} in Accounts #${
+                  keyIdx + 1
+                }`
+              );
             }
           })(),
           isWritable,
-          isSigner
+          isSigner,
         }));
 
       // add transaction
@@ -66,16 +77,19 @@ export const mapITransactionToWeb3Transaction = ({
         new TransactionInstruction({
           programId: (() => {
             if (isValidPublicKey(programId)) {
-              return new PublicKey(programId)
+              return new PublicKey(programId);
             } else {
-              throw new Error(`Error at Instruction #${index + 1}: Invalid program id ${programId}`)
+              throw new Error(
+                `Error at Instruction #${
+                  index + 1
+                }: Invalid program id ${programId}`
+              );
             }
           })(),
           keys,
           data: buffer,
         })
       );
-
     }
   );
 

@@ -16,7 +16,12 @@ import {
 import { newAccount, newInstruction } from "./internal";
 import { toSortableCollection } from "./sortable";
 
-export const RPC_NETWORK_OPTIONS: string[] = ["devnet", "testnet", "mainnet-beta", "custom"];
+export const RPC_NETWORK_OPTIONS: string[] = [
+  "devnet",
+  "testnet",
+  "mainnet-beta",
+  "custom",
+];
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -106,8 +111,7 @@ export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
   rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   keypairs: {},
-  set: () => {
-  }, // set by the hook
+  set: () => {}, // set by the hook
 };
 
 export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
@@ -119,14 +123,12 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     infoOpen: false,
   },
   import: DEFAULT_IMPORT,
-  set: () => {
-  }, // set by the hook
+  set: () => {}, // set by the hook
 };
 
 export const DEFAULT_PERSISTENT_STATE: PersistentState = {
   transactionOptions: DEFAUT_TRANSACTION_OPTIONS,
   appOptions: DEFAULT_APP_OPTIONS,
   firstTime: true,
-  set: () => {
-  }, // set by the hook
+  set: () => {}, // set by the hook
 };

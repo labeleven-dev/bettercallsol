@@ -48,22 +48,22 @@ export const mapIInstructionExtToIInstruction = ({
       format: data.format,
       raw: {
         content: data.format === "raw" ? (data.value as string) : "",
-        encoding: "bs58"
+        encoding: "bs58",
       },
       borsh: mapToSortableCollection(
         data.format === "borsh"
           ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({
-            id: uuid(),
-            ...v,
-          }))
+              id: uuid(),
+              ...v,
+            }))
           : []
       ),
       bufferLayout: mapToSortableCollection(
         data.format === "bufferLayout"
           ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({
-            id: uuid(),
-            ...v,
-          }))
+              id: uuid(),
+              ...v,
+            }))
           : []
       ),
     },

@@ -17,7 +17,7 @@ import { IInstructionData } from "../../../types/internal";
 import { DataEditor } from "./editor/DataEditor";
 import { RawData } from "./RawData";
 
-export const Data: React.FC<{data: IInstructionData}> = ({
+export const Data: React.FC<{ data: IInstructionData }> = ({
   data: { format, raw, borsh, bufferLayout },
 }) => {
   const { isAnchor, update } = useInstruction();
@@ -89,4 +89,3 @@ export const Data: React.FC<{data: IInstructionData}> = ({
     </>
   );
 };
-

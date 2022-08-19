@@ -37,7 +37,7 @@ export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
   format: "raw",
   raw: {
     content: "",
-    encoding: "bs58"
+    encoding: "bs58",
   },
   borsh: toSortableCollection([]),
   bufferLayout: toSortableCollection([]),
