@@ -14,6 +14,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { INetwork, IRpcEndpoint } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
+import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
 import { DragHandle } from "../../common/DragHandle";
 
 const isValidUrl = (url: string) => {
@@ -78,7 +79,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
               })
             }
           >
-            {["devnet", "testnet", "mainnet-beta"].map((n) => (
+            {RPC_NETWORK_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
