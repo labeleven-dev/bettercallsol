@@ -44,9 +44,14 @@ export interface IInstrctionDataField {
 
 export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
+export interface IRaw {
+  content: string;
+  encoding: "hex" | "bs58";
+}
+
 export interface IInstructionData {
   format: DataFormat;
-  raw: string;
+  raw: IRaw;
   borsh: SortableCollection<IInstrctionDataField>;
   bufferLayout: SortableCollection<IInstrctionDataField>;
 }
@@ -70,7 +75,7 @@ export interface IInstruction {
   readonly expanded: boolean;
 }
 
-export type INetwork = "local" | "devnet" | "testnet" | "mainnet-beta";
+export type INetwork = "custom" | "devnet" | "testnet" | "mainnet-beta";
 
 export interface IRpcEndpoint {
   id: IID;

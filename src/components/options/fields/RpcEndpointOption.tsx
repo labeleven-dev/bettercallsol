@@ -9,11 +9,12 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { INetwork, IRpcEndpoint } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
+import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
 import { DragHandle } from "../../common/DragHandle";
 
 const isValidUrl = (url: string) => {
@@ -43,12 +44,23 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
 
   // TODO is this best way?
   const [notValidatedUrl, setNotValidatedUrl] = useState(url);
-  const setUrl = (url: string) => {
-    if (!isValidUrl(url)) return;
-    set((state) => {
-      state.appOptions.rpcEndpoints.map[id].url = url;
-    });
-  };
+
+  useEffect(() => {
+    const setUrl = (url: string) => {
+      if (!isValidUrl(url)) return;
+
+      set((state) => {
+        if (
+          !Object.values(state.appOptions.rpcEndpoints.map)
+            .map((element) => element.url)
+            .includes(url)
+        ) {
+          state.appOptions.rpcEndpoints.map[id].url = url;
+        }
+      });
+    };
+    setUrl(notValidatedUrl);
+  }, [notValidatedUrl, id, set]);
 
   return (
     <Flex alignItems="center">
@@ -78,7 +90,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
               })
             }
           >
-            {["devnet", "testnet", "mainnet-beta"].map((n) => (
+            {RPC_NETWORK_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
@@ -134,7 +146,6 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
           isInvalid={!isValidUrl(notValidatedUrl)}
           onChange={(e) => {
             setNotValidatedUrl(e.target.value);
-            setUrl(notValidatedUrl);
           }}
         />
       </Grid>

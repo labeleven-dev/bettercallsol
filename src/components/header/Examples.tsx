@@ -55,7 +55,7 @@ export const Example: React.FC = () => {
           label={
             walletPublicKey
               ? "Load an example transaction"
-              : "Please connect a wallet to contiune"
+              : "Please connect a wallet to continue"
           }
         >
           <MenuButton

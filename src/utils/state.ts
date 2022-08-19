@@ -1,6 +1,7 @@
 import { clusterApiUrl } from "@solana/web3.js";
 import { v4 as uuid } from "uuid";
 import {
+  INetwork,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
@@ -15,6 +16,13 @@ import {
 } from "../types/state";
 import { newAccount, newInstruction } from "./internal";
 import { toSortableCollection } from "./sortable";
+
+export const RPC_NETWORK_OPTIONS: INetwork[] = [
+  "devnet",
+  "testnet",
+  "mainnet-beta",
+  "custom",
+];
 
 export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   {
@@ -51,8 +59,8 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   },
   {
     id: uuid(),
-    provider: "You",
-    network: "local",
+    provider: "Localhost",
+    network: "custom",
     url: "http://127.0.0.1:8899",
     enabled: true,
     custom: true,

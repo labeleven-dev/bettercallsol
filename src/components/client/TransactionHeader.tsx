@@ -107,7 +107,7 @@ export const TransactionHeader: React.FC<{
           label={
             walletPublicKey
               ? "Run Transaction"
-              : "Please connect a wallet to contiune"
+              : "Please connect a wallet to continue"
           }
         >
           <Button

@@ -29,21 +29,23 @@ const explorerOpts: Record<
 > = {
   solana: {
     label: "Open in Solana Explorer",
-    supportedNetworks: ["devnet", "testnet", "mainnet-beta"],
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "custom"],
     url: (valueType, value, rpcEndpoint) =>
       `https://explorer.solana.com/${
         valueType === "account" ? "address" : valueType
-      }/${value}?cluster=${rpcEndpoint.network}`,
+      }/${value}?cluster=${
+        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
+      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
   },
   solanafm: {
     label: "Open in SolanaFM",
-    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "custom"],
     url: (valueType, value, rpcEndpoint) =>
       `https://solana.fm/${
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
         rpcEndpoint.custom
-          ? rpcEndpoint.custom
+          ? rpcEndpoint.url
           : rpcEndpoint.network === "devnet"
           ? "devnet-qn1"
           : rpcEndpoint.network === "testnet"
@@ -65,7 +67,7 @@ const explorerOpts: Record<
   },
   solscan: {
     label: "Open in Solscan",
-    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "custom"],
     url: (valueType, value, rpcEndpoint) =>
       `https://solscan.io/${valueType}/${value}?cluster=${
         rpcEndpoint.custom ? "custom" : rpcEndpoint.network
