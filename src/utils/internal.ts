@@ -35,7 +35,10 @@ export const newAccount = (): IAccount => ({
 
 export const EMPTY_INSTRUCTION_DATA: IInstructionData = {
   format: "raw",
-  raw: "",
+  raw: {
+    content: "",
+    encoding: "bs58",
+  },
   borsh: toSortableCollection([]),
   bufferLayout: toSortableCollection([]),
 };

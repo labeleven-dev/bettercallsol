@@ -35,8 +35,12 @@ export const mapITransactionToWeb3Transaction = ({
           buffer = new BufferLayoutCoder().encode(
             toSortedArray(data.bufferLayout)
           );
-        } else if (data.format === "raw" && data.raw) {
-          buffer = Buffer.from(bs58.decode(data.raw));
+        } else if (data.format === "raw" && data.raw.content) {
+          if (data.raw.encoding === "hex") {
+            buffer = Buffer.from(data.raw.content, "hex");
+          } else {
+            buffer = Buffer.from(bs58.decode(data.raw.content));
+          }
         }
       } catch (err) {
         const message = Object.getOwnPropertyNames(err).includes("message")
