@@ -29,11 +29,13 @@ const explorerOpts: Record<
 > = {
   solana: {
     label: "Open in Solana Explorer",
-    supportedNetworks: ["devnet", "testnet", "mainnet-beta"],
+    supportedNetworks: ["devnet", "testnet", "mainnet-beta", "local"],
     url: (valueType, value, rpcEndpoint) =>
       `https://explorer.solana.com/${
         valueType === "account" ? "address" : valueType
-      }/${value}?cluster=${rpcEndpoint.network}`,
+      }/${value}?cluster=${
+        rpcEndpoint.custom ? "custom" : rpcEndpoint.network
+      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
   },
   solanafm: {
     label: "Open in SolanaFM",
@@ -43,7 +45,7 @@ const explorerOpts: Record<
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
         rpcEndpoint.custom
-          ? rpcEndpoint.custom
+          ? rpcEndpoint.url
           : rpcEndpoint.network === "devnet"
           ? "devnet-qn1"
           : rpcEndpoint.network === "testnet"
