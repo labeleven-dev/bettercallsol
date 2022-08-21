@@ -14,7 +14,14 @@ const mapIdlAccountItemToIAccountExt = (
 ): IAccountExt | null => {
   if (Object.keys(account).includes("isMut")) {
     const { name, isMut, isSigner } = account as IdlAccount;
-    return { name, pubkey: "", isWritable: isMut, isSigner };
+    // TODO account resolver for common stuff
+    return {
+      type: { type: "unspecified" },
+      name,
+      pubkey: "",
+      isWritable: isMut,
+      isSigner,
+    };
   } else {
     return null; // TODO support nested accounts
   }

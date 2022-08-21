@@ -1,56 +1,50 @@
 import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Flex,
+  Grid,
   Icon,
   IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Tooltip,
   useBreakpointValue,
-  useToast,
+  Wrap,
 } from "@chakra-ui/react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { Keypair } from "@solana/web3.js";
 import { WritableDraft } from "immer/dist/internal";
 import React from "react";
-import { FaKey, FaPenNib, FaWallet } from "react-icons/fa";
+import { FaPenNib } from "react-icons/fa";
+import { useAccountType } from "../../../hooks/useAccountType";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IAccount } from "../../../types/internal";
+import { IAccount, IAccountTypeConfigPda } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
-import { isValidPublicKey } from "../../../utils/web3js";
 import { DragHandle } from "../../common/DragHandle";
 import { EditableName } from "../../common/EditableName";
-import { ExplorerButton } from "../../common/ExplorerButton";
 import { Numbering } from "../../common/Numbering";
 import { ToggleIconButton } from "../../common/ToggleIconButton";
-import { AirdropButton } from "./AirdropButton";
-import { PdaButton } from "./PdaButton";
+import { AccountInput } from "./AccountInput";
+import { PdaTypeConfig } from "./type-configs/PdaTypeConfig";
 
 export const Account: React.FC<{
   account: IAccount;
   index: number;
   isAnchor?: boolean;
-}> = ({
-  account: { id, name, pubkey, isWritable, isSigner },
-  index,
-  isAnchor = false,
-}) => {
+}> = ({ account, index, isAnchor = false }) => {
   const {
-    instruction: { programId },
-    update,
-  } = useInstruction();
+    id,
+    type: { type, config },
+    name,
+    pubkey,
+    isWritable,
+    isSigner,
+  } = account;
 
-  const { publicKey: walletPubkey } = useWallet();
-  const [rpcEndpoint, keypairs, setSession] = useSessionStoreWithUndo(
-    (state) => [state.rpcEndpoint, state.keypairs, state.set]
-  );
-  const toast = useToast();
+  const { update } = useInstruction();
+  const { isConfigurable: isTypeConfigurable } = useAccountType();
 
-  const isValid = isValidPublicKey(pubkey);
-  const isWallet = pubkey === walletPubkey?.toBase58();
+  const [keypairs, setSession] = useSessionStoreWithUndo((state) => [
+    state.keypairs,
+    state.set,
+  ]);
+
   const hasPrivateKey = Object.keys(keypairs).includes(pubkey);
 
   const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
@@ -71,26 +65,6 @@ export const Account: React.FC<{
     }
   };
 
-  const generateKeypair = () => {
-    const keypair = Keypair.generate();
-    const publicKey = keypair.publicKey.toBase58();
-    setSession((state) => {
-      state.keypairs[publicKey] = keypair.secretKey;
-    });
-    updateAccount((state) => {
-      state.pubkey = publicKey;
-      state.isSigner = true;
-    });
-    toast({
-      title: "Keypair has been successfully created!",
-      description:
-        "Private keys are stored in memory only. They will not survive page reloads.",
-      status: "info",
-      duration: 8000,
-      isClosable: true,
-    });
-  };
-
   const nameWidth = useBreakpointValue({
     base: "100px",
     lg: "150px",
@@ -98,17 +72,19 @@ export const Account: React.FC<{
   });
 
   return (
-    <Flex mb="2" alignItems="center">
+    <Flex mb="2" alignItems="start">
       <DragHandle
-        unlockedProps={{ h: "2.5", w: "2.5" }}
-        lockedProps={{ h: "3" }}
+        unlockedProps={{ mt: "2", h: "2.5", w: "2.5" }}
+        lockedProps={{ mt: "2", h: "3" }}
         locked={isAnchor}
       />
 
       <Numbering index={index} ml="2" minW="30px" fontSize="sm" />
 
       <EditableName
+        mt="0.5"
         ml="2"
+        mr="2"
         minW={nameWidth}
         maxW={nameWidth}
         textAlign="right"
@@ -124,90 +100,27 @@ export const Account: React.FC<{
         }}
       />
 
-      <InputGroup size="sm">
-        {isWallet && (
-          <InputLeftElement
-            pointerEvents="none"
-            ml="2"
-            children={<Icon as={FaWallet} color="gray.400" />}
-          />
-        )}
-        {hasPrivateKey && (
-          <InputLeftElement pointerEvents="none" ml="2">
-            <Icon as={FaKey} color="gray.400" />
-          </InputLeftElement>
-        )}
-        <Input
-          ml="2"
-          fontFamily="mono"
-          placeholder="Account Public Key"
-          // TODO should be smarter based on the number of children in InputRightElement
-          paddingEnd="14"
-          value={pubkey}
-          onChange={(e) => {
-            updateAccount((state) => {
-              state.pubkey = e.target.value.trim();
-            });
-          }}
-        ></Input>
-        <InputRightElement
-          // chakra hardcode the width so we can't have multiple buttons
-          w=""
-          mr="1"
+      <Grid flex="1">
+        <AccountInput account={account} />
+
+        <Wrap
+          // TODO ignores other future tags
+          pt={isTypeConfigurable ? "1" : undefined}
         >
-          {isValid ? (
-            <>
-              {rpcEndpoint.network !== "mainnet-beta" && (
-                <AirdropButton accountPubkey={pubkey} />
-              )}
-              <ExplorerButton
-                size="xs"
-                valueType="account"
-                value={pubkey}
-                rpcEndpoint={rpcEndpoint}
-              />
-            </>
-          ) : (
-            <>
-              {programId && (
-                <PdaButton
-                  programId={programId}
-                  setPubkey={(pubkey) => {
-                    updateAccount((state) => {
-                      state.pubkey = pubkey;
-                    });
-                  }}
-                />
-              )}
-              {walletPubkey && (
-                <Tooltip label="Use Wallet">
-                  <IconButton
-                    ml="1"
-                    size="xs"
-                    variant="ghost"
-                    aria-label="Use Wallet"
-                    icon={<Icon as={FaWallet} />}
-                    onClick={() => {
-                      updateAccount((state) => {
-                        state.pubkey = walletPubkey?.toBase58();
-                      });
-                    }}
-                  />
-                </Tooltip>
-              )}
-              <Tooltip label="Generate Keypair">
-                <IconButton
-                  size="xs"
-                  variant="ghost"
-                  aria-label="Generate Keypair"
-                  icon={<Icon as={FaKey} />}
-                  onClick={generateKeypair}
-                />
-              </Tooltip>
-            </>
+          {/* TODO */}
+          {/* {type === "ata" && (
+            <AtaTypeConfig config={config as IAccountTypeConfigAta} />
+          )} */}
+
+          {type === "pda" && (
+            <PdaTypeConfig config={config as IAccountTypeConfigPda} />
           )}
-        </InputRightElement>
-      </InputGroup>
+
+          {/* TODO account balance */}
+        </Wrap>
+
+        {/* TODO description when not minimised */}
+      </Grid>
 
       <ToggleIconButton
         ml="1"
@@ -240,6 +153,7 @@ export const Account: React.FC<{
       {!isAnchor && (
         <Tooltip label="Remove">
           <IconButton
+            mt="1"
             ml="3"
             size="xs"
             aria-label="Remove"

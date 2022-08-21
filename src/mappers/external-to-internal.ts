@@ -21,11 +21,13 @@ const mapToSortableCollection = <T>(
 
 const mpaIAccountExtToIAccount = ({
   name,
+  type,
   pubkey,
   isWritable,
   isSigner,
 }: IAccountExt): IAccount => ({
   id: uuid(),
+  type,
   name,
   pubkey: pubkey || "",
   isWritable,

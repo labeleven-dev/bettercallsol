@@ -1,32 +1,35 @@
 import { ITransactionExt } from "../types/external";
 
-// TODO use export model instead and map across
-
 export const EXAMPLES: Record<
   string,
   {
-    transaction: (walletPublicKey: string) => ITransactionExt;
+    transaction: ITransactionExt;
     help: string;
   }
 > = {
   systemProgramCreateAccount: {
-    transaction: (walletPublicKey: string) => ({
+    transaction: {
       name: "System Program: Create Account",
       instructions: [
         {
           name: "Create Account",
           programId: "11111111111111111111111111111111",
-          dynamic: true,
           accounts: [
             {
+              type: {
+                type: "wallet",
+              },
               name: "Payer",
-              pubkey: walletPublicKey,
+              pubkey: "",
               isWritable: true,
               isSigner: true,
             },
             {
+              type: {
+                type: "keypair",
+              },
               name: "New Account",
-              pubkey: "", // they need to generate a keypair
+              pubkey: "",
               isWritable: true,
               isSigner: true,
             },
@@ -58,26 +61,31 @@ export const EXAMPLES: Record<
           },
         },
       ],
-    }),
+    },
     help: 'Generate a keypair for the "New Account" using the 🔑 button and then click the "Send" button.',
   },
 
   systemProgramTransfer: {
-    transaction: (walletPublicKey: string) => ({
+    transaction: {
       name: "System Program: Transfer",
       instructions: [
         {
           name: "Transfer",
-          dynamic: true,
           programId: "11111111111111111111111111111111",
           accounts: [
             {
+              type: {
+                type: "wallet",
+              },
               name: "From",
-              pubkey: walletPublicKey,
+              pubkey: "",
               isWritable: true,
               isSigner: true,
             },
             {
+              type: {
+                type: "unspecified",
+              },
               name: "To",
               pubkey: "GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV",
               isWritable: true,
@@ -95,13 +103,13 @@ export const EXAMPLES: Record<
               {
                 name: "Lamport",
                 type: "u64",
-                value: 1,
+                value: 100_000,
               },
             ],
           },
         },
       ],
-    }),
+    },
     help: 'Click the "Send" button when you\'re ready.',
   },
 };

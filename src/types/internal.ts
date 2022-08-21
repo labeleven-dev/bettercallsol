@@ -6,8 +6,41 @@ import { IID, SortableCollection } from "./sortable";
 
 export type IPubKey = string;
 
+export interface IAccountTypeConfigPda {
+  seeds: string[];
+  bump?: number;
+}
+
+export interface IAccountTypeConfigAta {
+  mint: IPubKey;
+}
+
+export interface IAccountTypeConfigNamed {
+  name?: string;
+}
+
+export type AccountTypeType =
+  | "unspecified"
+  | "wallet"
+  | "keypair"
+  | "pda"
+  | "ata"
+  | "program"
+  | "sysvar";
+
+export type AccountTypeConfig =
+  | IAccountTypeConfigPda
+  | IAccountTypeConfigAta
+  | IAccountTypeConfigNamed;
+
+export interface IAccountType {
+  type: AccountTypeType;
+  config?: AccountTypeConfig;
+}
+
 export interface IAccount {
   id: IID;
+  type: IAccountType;
   name?: string;
   description?: string;
   pubkey: IPubKey;

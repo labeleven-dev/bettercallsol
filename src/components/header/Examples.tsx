@@ -29,9 +29,7 @@ export const Example: React.FC = () => {
   const loadExample = (name: string) => {
     const { transaction, help } = EXAMPLES[name];
     setTransaction((state) => {
-      state.transaction = mapITransactionExtToITransaction(
-        transaction(walletPublicKey?.toBase58()!)
-      );
+      state.transaction = mapITransactionExtToITransaction(transaction);
     });
     setResults((state) => {
       state.transactionRun = DEFAULT_TRANSACTION_RUN;
