@@ -11,11 +11,13 @@ import {
 import { toSortedArray } from "../utils/sortable";
 
 const mapIAccountToIAccountExt = ({
+  type,
   name,
   pubkey,
   isWritable,
   isSigner,
 }: IAccount): IAccountExt => ({
+  type,
   name: name || undefined,
   pubkey,
   isWritable,

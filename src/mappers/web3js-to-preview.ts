@@ -29,11 +29,14 @@ export const mapTransactionResponseToIPreview = (
 ): IPreview => {
   const { accountKeys, instructions } = response.transaction.message;
 
-  const parsedAccountKeys = accountKeys.map((account, index) => ({
-    pubkey: account.toBase58(),
-    isSigner: response.transaction.message.isAccountSigner(index),
-    isWritable: response.transaction.message.isAccountWritable(index),
-  }));
+  const parsedAccountKeys: IAccountExt[] = accountKeys.map(
+    (account, index) => ({
+      type: { type: "unspecified" },
+      pubkey: account.toBase58(),
+      isSigner: response.transaction.message.isAccountSigner(index),
+      isWritable: response.transaction.message.isAccountWritable(index),
+    })
+  );
 
   const mapInstruction = ({
     programIdIndex,

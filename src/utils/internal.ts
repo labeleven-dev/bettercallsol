@@ -28,6 +28,7 @@ export const newDataField = (): IInstrctionDataField => ({
 
 export const newAccount = (): IAccount => ({
   id: uuid(),
+  type: { type: "unspecified" },
   pubkey: "",
   isSigner: false,
   isWritable: false,

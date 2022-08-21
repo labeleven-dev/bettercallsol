@@ -20,6 +20,8 @@ import { addTo, toSortedArray } from "../../../utils/sortable";
 import { Sortable } from "../../common/Sortable";
 import { Account } from "./Account";
 
+export const AccountContext = React.createContext(newAccount());
+
 export const Accounts: React.FC<{
   accounts: SortableCollection<IAccount>;
   anchorAccounts?: IAccount[];
@@ -38,12 +40,9 @@ export const Accounts: React.FC<{
       </Flex>
 
       {anchorAccounts?.map((account, index) => (
-        <Account
-          account={account}
-          isAnchor={true}
-          index={index}
-          key={account.id}
-        />
+        <AccountContext.Provider value={account} key={account.id}>
+          <Account account={account} isAnchor={true} index={index} />
+        </AccountContext.Provider>
       ))}
 
       {isAnchor && (
@@ -66,11 +65,12 @@ export const Accounts: React.FC<{
           }}
         >
           {toSortedArray(accounts).map((account, index) => (
-            <Account
-              account={account}
-              index={index + (anchorAccounts?.length || 0)}
-              key={account.id}
-            />
+            <AccountContext.Provider value={account} key={account.id}>
+              <Account
+                account={account}
+                index={index + (anchorAccounts?.length || 0)}
+              />
+            </AccountContext.Provider>
           ))}
         </Sortable>
       </Box>
