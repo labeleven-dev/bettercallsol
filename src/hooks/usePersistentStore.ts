@@ -1,5 +1,6 @@
 import produce from "immer";
 import create from "zustand";
+import shallow from "zustand/shallow";
 import { PersistentState } from "../types/state";
 import { DEFAULT_PERSISTENT_STATE } from "../utils/state";
 
@@ -32,6 +33,11 @@ export const usePersistentStore = create<PersistentState>((set) => {
   };
 });
 
+export const useShallowPersistentStore = <U>(
+  selector: (state: PersistentState) => U
+) => usePersistentStore(selector, shallow);
+
+// TODO https://docs.pmnd.rs/zustand/recipes#persist-middleware
 usePersistentStore.subscribe((state) => {
   saveState(state);
 });

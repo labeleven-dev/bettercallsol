@@ -1,13 +1,13 @@
 import { Grid } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
 import { Explorer } from "../../types/state";
 import { EXPLORERS } from "../../utils/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const GeneralOptions: React.FC = () => {
-  const [appOptions, set] = usePersistentStore((state) => [
+  const [appOptions, set] = useShallowPersistentStore((state) => [
     state.appOptions,
     state.set,
   ]);

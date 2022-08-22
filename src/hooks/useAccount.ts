@@ -2,42 +2,48 @@ import { WritableDraft } from "immer/dist/internal";
 import { useContext } from "react";
 import { AccountContext } from "../components/client/accounts/Accounts";
 import { IAccount, IInstruction } from "../types/internal";
+import { IID } from "../types/sortable";
 import { useInstruction } from "./useInstruction";
-import { useSessionStoreWithUndo } from "./useSessionStore";
 
 /**
  * Provides the current account's details and methods to interact with it
  */
 export const useAccount = (): {
-  account: IAccount;
+  id: IID | number;
   isAnchor: boolean;
-  instruction: IInstruction;
+  useGet: <U>(select: (account: IAccount) => U) => U;
+  useShallowGet: <U>(select: (account: IAccount) => U) => U;
   update: (fn: (state: WritableDraft<IAccount>) => void) => void;
 } => {
-  const { instruction } = useInstruction();
-  const account = useContext(AccountContext);
-  const set = useSessionStoreWithUndo((state) => state.set);
+  const {
+    useGet: ixnUseGet,
+    useShallowGet: ixnUseShallowGet,
+    update: ixnUpdate,
+  } = useInstruction();
+  const { id, isAnchor } = useContext(AccountContext);
 
-  const anchorIndex = instruction.anchorAccounts?.findIndex(
-    (acc) => acc.id === account.id
-  );
-  const isAnchor = anchorIndex !== undefined && anchorIndex > -1;
+  const getter = (instruction: IInstruction): IAccount => {
+    return isAnchor
+      ? instruction.anchorAccounts![id as number]
+      : instruction.accounts.map[id];
+  };
+
+  const useGet = <U>(select: (acount: IAccount) => U) =>
+    ixnUseGet((state) => select(getter(state)));
+  const useShallowGet = <U>(select: (acount: IAccount) => U) =>
+    ixnUseShallowGet((state) => select(getter(state)));
 
   const update = (fn: (state: WritableDraft<IAccount>) => void) => {
-    set((state) => {
-      const ixn = state.transaction.instructions.map[instruction.id];
-      fn(
-        isAnchor
-          ? ixn.anchorAccounts![anchorIndex]
-          : ixn.accounts.map[account.id]
-      );
+    ixnUpdate((state) => {
+      fn(getter(state));
     });
   };
 
   return {
-    account,
+    id,
     isAnchor,
-    instruction,
+    useGet,
+    useShallowGet,
     update,
   };
 };

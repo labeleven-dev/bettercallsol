@@ -9,14 +9,14 @@ import { JSON_SCHEMA } from "../types/external";
 import { IPreview } from "../types/preview";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
-import { useSessionStoreWithoutUndo } from "./useSessionStore";
+import { useShallowSessionStoreWithoutUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
 /**
  * Encapsulates logic for importing transctions using HTTP query parameters
  */
 export const useImport = () => {
-  const [set, setIsLoading] = useSessionStoreWithoutUndo((state) => [
+  const [set, setIsLoading] = useShallowSessionStoreWithoutUndo((state) => [
     state.set,
     (value: boolean) => {
       state.set((state) => {

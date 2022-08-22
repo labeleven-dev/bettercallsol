@@ -1,6 +1,7 @@
 import produce from "immer";
 import create from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import shallow from "zustand/shallow";
 import { SessionStateWithoutUndo, SessionStateWithUndo } from "../types/state";
 import {
   DEFAULT_SESSION_STATE_WITHOUT_UNDO,
@@ -19,6 +20,10 @@ export const useSessionStoreWithUndo = create<SessionStateWithUndo>((set) => ({
   },
 }));
 
+export const useShallowSessionStoreWithUndo = <U>(
+  selector: (state: SessionStateWithUndo) => U
+) => useSessionStoreWithUndo(selector, shallow);
+
 /**
  * Provides access to in-memory Zustand store, for state that should not be undo/redo'ed
  */
@@ -30,3 +35,7 @@ export const useSessionStoreWithoutUndo = create<SessionStateWithoutUndo>()(
     },
   }))
 );
+
+export const useShallowSessionStoreWithoutUndo = <U>(
+  selector: (state: SessionStateWithoutUndo) => U
+) => useSessionStoreWithoutUndo(selector, shallow);

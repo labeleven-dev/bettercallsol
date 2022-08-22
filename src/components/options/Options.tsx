@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { usePersistentStore } from "../../hooks/usePersistentStore";
-import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
+import { useShallowSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 import {} from "../../types/state";
 import {
   DEFAULT_APP_OPTIONS,
@@ -26,7 +26,7 @@ import { RpcEndpointOptions } from "./RpcEndpointOptions";
 import { TransactionOptions } from "./TransactionOptions";
 
 export const Options: React.FC = () => {
-  const [isOpen, setSession] = useSessionStoreWithoutUndo((state) => [
+  const [isOpen, setSession] = useShallowSessionStoreWithoutUndo((state) => [
     state.uiState.optionsOpen,
     state.set,
   ]);
@@ -50,7 +50,7 @@ export const Options: React.FC = () => {
         <ModalCloseButton />
 
         <ModalBody>
-          <Tabs isFitted>
+          <Tabs isFitted isLazy>
             <TabList mb="1em">
               <Tab>General</Tab>
               <Tab>RPC Endpoints</Tab>

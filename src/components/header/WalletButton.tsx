@@ -18,10 +18,13 @@ import {
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import React from "react";
 import { FaLightbulb, FaWallet } from "react-icons/fa";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
 
 export const WalletButton: React.FC = () => {
-  const { firstTime, set } = usePersistentStore((state) => state);
+  const [firstTime, set] = useShallowPersistentStore((state) => [
+    state.firstTime,
+    state.set,
+  ]);
   const isWideEnough = useBreakpointValue({ base: false, md: true });
 
   return (

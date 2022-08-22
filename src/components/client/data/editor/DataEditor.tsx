@@ -11,17 +11,23 @@ import { WritableDraft } from "immer/dist/internal";
 import React from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
 import { DataFormat, IInstrctionDataField } from "../../../../types/internal";
-import { SortableCollection } from "../../../../types/sortable";
+import { IID, SortableCollection } from "../../../../types/sortable";
 import { newDataField } from "../../../../utils/internal";
-import { addTo, toSortedArray } from "../../../../utils/sortable";
+import { addTo } from "../../../../utils/sortable";
 import { Sortable } from "../../../common/Sortable";
 import { DataField } from "./DataField";
 
+export const InstructionDataFieldContext = React.createContext<IID>("");
+
 export const DataEditor: React.FC<{
   format: DataFormat;
-  fields: SortableCollection<IInstrctionDataField>;
-}> = ({ format, fields }) => {
-  const { isAnchor, update } = useInstruction();
+}> = ({ format }) => {
+  const { isAnchor, useGet, update } = useInstruction();
+  const fieldOrder = useGet(
+    (state) =>
+      (format === "bufferLayout" ? state.data.bufferLayout : state.data.borsh)
+        .order
+  );
 
   const updateFields = (
     fn: (state: WritableDraft<SortableCollection<IInstrctionDataField>>) => void
@@ -35,7 +41,7 @@ export const DataEditor: React.FC<{
 
   return (
     <Grid>
-      {fields.order.length === 0 && (
+      {fieldOrder.length === 0 && (
         <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
           <Text as="i" fontSize="sm" textColor="grey">
             No fields yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" /> below
@@ -44,20 +50,17 @@ export const DataEditor: React.FC<{
         </Center>
       )}
       <Sortable
-        itemOrder={fields.order}
+        itemOrder={fieldOrder}
         setItemOrder={(itemOrder) => {
           updateFields((state) => {
             state.order = itemOrder;
           });
         }}
       >
-        {toSortedArray(fields).map((field, index) => (
-          <DataField
-            key={field.id}
-            field={field}
-            format={format}
-            index={index}
-          />
+        {fieldOrder.map((id, index) => (
+          <InstructionDataFieldContext.Provider value={id} key={id}>
+            <DataField format={format} index={index} />
+          </InstructionDataFieldContext.Provider>
         ))}
       </Sortable>
 

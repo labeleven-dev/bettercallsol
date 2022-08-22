@@ -13,14 +13,12 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { IInstructionData } from "../../../types/internal";
 import { DataEditor } from "./editor/DataEditor";
 import { RawData } from "./RawData";
 
-export const Data: React.FC<{ data: IInstructionData }> = ({
-  data: { format, raw, borsh, bufferLayout },
-}) => {
-  const { isAnchor, update } = useInstruction();
+export const Data: React.FC = () => {
+  const { isAnchor, useGet, update } = useInstruction();
+  const format = useGet((state) => state.data.format);
 
   const tabStyle: TabProps = {
     mr: "1",
@@ -75,13 +73,13 @@ export const Data: React.FC<{ data: IInstructionData }> = ({
         </TabList>
         <TabPanels>
           <TabPanel p="0" pt="3">
-            <DataEditor format="borsh" fields={borsh} />
+            <DataEditor format="borsh" />
           </TabPanel>
           <TabPanel p="0" pt="3">
-            <DataEditor format="bufferLayout" fields={bufferLayout} />
+            <DataEditor format="bufferLayout" />
           </TabPanel>
           <TabPanel p="0" pt="3">
-            <RawData data={raw} />
+            <RawData />
           </TabPanel>
         </TabPanels>
       </Tabs>

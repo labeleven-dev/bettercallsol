@@ -1,20 +1,23 @@
 import { Box, Icon, Textarea, useToast } from "@chakra-ui/react";
-import React from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { IRaw } from "../../../types/internal";
-import { ToggleIconButton } from "../../common/ToggleIconButton";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import bs58 from "bs58";
+import React from "react";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { useInstruction } from "../../../hooks/useInstruction";
+import { ToggleIconButton } from "../../common/ToggleIconButton";
 
-export const RawData: React.FC<{ data: IRaw }> = ({ data }) => {
-  const { update } = useInstruction();
+export const RawData: React.FC = () => {
+  const { useShallowGet, update } = useInstruction();
+  const [encoding, content] = useShallowGet((state) => [
+    state.data.raw.encoding,
+    state.data.raw.content,
+  ]);
 
   const toast = useToast();
 
   const onToggle = () => {
     update((state) => {
-      if (data.encoding === "hex") {
-        state.data.raw.content = bs58.encode(Buffer.from(data.content, "hex"));
+      if (encoding === "hex") {
+        state.data.raw.content = bs58.encode(Buffer.from(content, "hex"));
         state.data.raw.encoding = "bs58";
       } else {
         try {
@@ -42,11 +45,11 @@ export const RawData: React.FC<{ data: IRaw }> = ({ data }) => {
         flex="1"
         fontFamily="mono"
         placeholder={
-          data.encoding === "hex"
+          encoding === "hex"
             ? "Instruction data (hex)"
             : "Instruction data (base58 encoded)"
         }
-        value={data.content}
+        value={content}
         onChange={(e) => {
           update((state) => {
             state.data.raw.content = e.target.value;
@@ -59,12 +62,12 @@ export const RawData: React.FC<{ data: IRaw }> = ({ data }) => {
           ml="1"
           size="sm"
           label={
-            data.encoding === "hex"
+            encoding === "hex"
               ? "Click to use encoded data"
               : "Click to use hex data"
           }
           icon={<Icon as={HiOutlineSwitchHorizontal} />}
-          toggled={data.encoding !== "hex"}
+          toggled={encoding !== "hex"}
           onToggle={onToggle}
         />
       </Box>

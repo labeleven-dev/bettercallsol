@@ -25,13 +25,13 @@ import {
 import { useMemo } from "react";
 import { FaFileImport, FaGithub } from "react-icons/fa";
 import {
-  useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
 } from "../hooks/useSessionStore";
 import { mapITransactionToTransactionExt } from "../mappers/internal-to-external";
 
 export const ShareModal: React.FC = () => {
-  const [isOpen, set] = useSessionStoreWithoutUndo((state) => [
+  const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [
     state.uiState.shareOpen,
     state.set,
   ]);

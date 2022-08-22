@@ -13,9 +13,9 @@ import {
   Tooltip,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { WritableDraft } from "immer/dist/internal";
 import React from "react";
 import { useInstruction } from "../../../../hooks/useInstruction";
+import { useInstrcutionDataField } from "../../../../hooks/useInstructionDataField";
 import {
   DataFormat,
   IInstrctionDataField,
@@ -32,21 +32,16 @@ import { EditableName } from "../../../common/EditableName";
 import { Numbering } from "../../../common/Numbering";
 
 export const DataField: React.FC<{
-  field: IInstrctionDataField;
   format: DataFormat;
   index: number;
-}> = ({ field: { id, name, type, value }, format, index }) => {
-  const { isAnchor, update } = useInstruction();
-
-  const updateField = (
-    fn: (state: WritableDraft<IInstrctionDataField>) => void
-  ) => {
-    update((state) => {
-      fn(
-        (state.data[format] as SortableCollection<IInstrctionDataField>).map[id]
-      );
-    });
-  };
+}> = ({ format, index }) => {
+  const { isAnchor, update: ixnUpdate } = useInstruction();
+  const { id, useShallowGet, update } = useInstrcutionDataField(format);
+  const [name, type, value] = useShallowGet((state) => [
+    state.name,
+    state.type,
+    state.value,
+  ]);
 
   return (
     <Flex mb="2" alignItems="center">
@@ -72,7 +67,7 @@ export const DataField: React.FC<{
         isDisabled={isAnchor}
         value={name}
         onChange={(value: string) => {
-          updateField((state) => {
+          update((state) => {
             state.name = value;
           });
         }}
@@ -87,7 +82,7 @@ export const DataField: React.FC<{
         isDisabled={isAnchor}
         value={type}
         onChange={(e) => {
-          updateField((state) => {
+          update((state) => {
             state.type = e.target.value as InstructionDataFieldType;
           });
         }}
@@ -105,7 +100,7 @@ export const DataField: React.FC<{
           size="sm"
           value={value}
           onChange={(_, value) => {
-            updateField((state) => {
+            update((state) => {
               state.value = value;
             });
           }}
@@ -122,7 +117,7 @@ export const DataField: React.FC<{
           size="sm"
           value={value}
           onChange={() => {
-            updateField((state) => {
+            update((state) => {
               state.value = !value;
             });
           }}
@@ -136,7 +131,7 @@ export const DataField: React.FC<{
           placeholder="Field Value"
           value={value}
           onChange={(e) => {
-            updateField((state) => {
+            update((state) => {
               state.value = e.target.value;
             });
           }}
@@ -152,7 +147,7 @@ export const DataField: React.FC<{
             icon={<CloseIcon />}
             variant="ghost"
             onClick={() => {
-              update((state) => {
+              ixnUpdate((state) => {
                 removeFrom(
                   state.data[
                     format
