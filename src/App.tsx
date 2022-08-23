@@ -42,7 +42,7 @@ export const App: React.FC = () => {
             <Header />
           </Box>
 
-          <Flex mt="45px" h="94vh">
+          <Flex mt="45px" h="calc(100vh - 60px)">
             <Box flex="2" overflow="scroll">
               {/* TODO it's Solana wallet button's fault, we need to replace it */}
               <Show below="md">
