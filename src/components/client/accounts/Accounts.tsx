@@ -13,20 +13,23 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { IAccount } from "../../../types/internal";
-import { SortableCollection } from "../../../types/sortable";
+import { IID } from "../../../types/sortable";
 import { newAccount } from "../../../utils/internal";
-import { addTo, toSortedArray } from "../../../utils/sortable";
+import { addTo } from "../../../utils/sortable";
 import { Sortable } from "../../common/Sortable";
 import { Account } from "./Account";
 
-export const AccountContext = React.createContext(newAccount());
+export const AccountContext = React.createContext<{
+  id: IID | number;
+  isAnchor: boolean;
+}>({ id: "", isAnchor: false });
 
-export const Accounts: React.FC<{
-  accounts: SortableCollection<IAccount>;
-  anchorAccounts?: IAccount[];
-}> = ({ accounts, anchorAccounts }) => {
-  const { update, isAnchor } = useInstruction();
+export const Accounts: React.FC = () => {
+  const { useShallowGet, update, isAnchor } = useInstruction();
+  const [anchorAccountCount, accountOrder] = useShallowGet((state) => [
+    state.anchorAccounts?.length || 0,
+    state.accounts.order,
+  ]);
 
   const emptyBgColour = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
 
@@ -39,9 +42,12 @@ export const Accounts: React.FC<{
         <Divider flex="1" />
       </Flex>
 
-      {anchorAccounts?.map((account, index) => (
-        <AccountContext.Provider value={account} key={account.id}>
-          <Account account={account} isAnchor={true} index={index} />
+      {[...Array(anchorAccountCount).keys()]?.map((index) => (
+        <AccountContext.Provider
+          value={{ id: index, isAnchor: true }}
+          key={index}
+        >
+          <Account index={index} />
         </AccountContext.Provider>
       ))}
 
@@ -57,25 +63,22 @@ export const Accounts: React.FC<{
 
       <Box>
         <Sortable
-          itemOrder={accounts.order}
+          itemOrder={accountOrder}
           setItemOrder={(itemOrder) => {
             update((state) => {
               state.accounts.order = itemOrder;
             });
           }}
         >
-          {toSortedArray(accounts).map((account, index) => (
-            <AccountContext.Provider value={account} key={account.id}>
-              <Account
-                account={account}
-                index={index + (anchorAccounts?.length || 0)}
-              />
+          {accountOrder.map((id, index) => (
+            <AccountContext.Provider value={{ id, isAnchor: false }} key={id}>
+              <Account index={index + anchorAccountCount} />
             </AccountContext.Provider>
           ))}
         </Sortable>
       </Box>
 
-      {accounts.order.length + (anchorAccounts?.length || 0) === 0 && (
+      {accountOrder.length + anchorAccountCount === 0 && (
         <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
           <Text as="i" fontSize="sm" textColor="grey">
             No accounts yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" />{" "}

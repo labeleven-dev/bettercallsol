@@ -5,6 +5,7 @@ import {
   Button,
   Collapse,
   Flex,
+  Heading,
   Icon,
   IconButton,
   Menu,
@@ -28,28 +29,26 @@ import {
 import { usePersistentStore } from "../../hooks/usePersistentStore";
 import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
-  useSessionStoreWithoutUndo,
-  useSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
+  useShallowSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
-import { ITransaction } from "../../types/internal";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
+import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
 
 export const TransactionHeader: React.FC<{
-  transaction: ITransaction;
   resultsRef: React.RefObject<HTMLDivElement>;
-}> = ({ transaction, resultsRef }) => {
+}> = ({ resultsRef }) => {
   const scrollToResults = usePersistentStore(
     (state) => state.appOptions.scrollToResults
   );
-  const [transactionRun, setUI] = useSessionStoreWithoutUndo((state) => [
-    state.transactionRun,
+  const [inProgress, setUI] = useShallowSessionStoreWithoutUndo((state) => [
+    state.transactionRun.inProgress,
     state.set,
   ]);
-  const [rpcEndpoint, setSession] = useSessionStoreWithUndo((state) => [
-    state.rpcEndpoint,
-    state.set,
-  ]);
+  const [transaction, rpcEndpoint, setSession] = useShallowSessionStoreWithUndo(
+    (state) => [state.transaction, state.rpcEndpoint, state.set]
+  );
 
   const { publicKey: walletPublicKey } = useWallet();
   const { send } = useSendWeb3Transaction({
@@ -111,7 +110,7 @@ export const TransactionHeader: React.FC<{
           }
         >
           <Button
-            isLoading={transactionRun.inProgress}
+            isLoading={inProgress}
             isDisabled={!walletPublicKey}
             ml="2"
             mr="2"
@@ -210,6 +209,24 @@ export const TransactionHeader: React.FC<{
           </AlertDescription>
         </Alert>
       </Collapse>
+
+      <Flex mt="5" mb="3" alignItems="center">
+        <Heading flex="1" size="lg">
+          <EditableName
+            tooltip="Click to edit"
+            tooltipProps={{ placement: "bottom-start" }}
+            previewProps={{ p: "3px 10px 3px 10px" }}
+            inputProps={{ p: "3px 10px 3px 10px" }}
+            placeholder="Unnamed Transaction"
+            value={transaction.name}
+            onChange={(value) =>
+              setSession((state) => {
+                state.transaction.name = value;
+              })
+            }
+          />
+        </Heading>
+      </Flex>
     </>
   );
 };

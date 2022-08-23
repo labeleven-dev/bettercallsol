@@ -28,18 +28,15 @@ import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
-  const {
-    instruction: {
-      programId,
-      accounts,
-      anchorMethod,
-      anchorAccounts,
-      data,
-      disabled,
-      expanded,
-    },
-    update,
-  } = useInstruction();
+  const { useShallowGet, update } = useInstruction();
+  const [programId, anchorMethod, disabled, expanded] = useShallowGet(
+    (state) => [
+      state.programId,
+      state.anchorMethod,
+      state.disabled,
+      state.expanded,
+    ]
+  );
   const programInfo = useWeb3Account(programId);
 
   return (
@@ -150,9 +147,9 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           )}
         </Flex>
 
-        <Accounts accounts={accounts} anchorAccounts={anchorAccounts} />
+        <Accounts />
 
-        <Data data={data} />
+        <Data />
       </Collapse>
     </Grid>
   );

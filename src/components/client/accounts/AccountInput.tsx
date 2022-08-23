@@ -12,20 +12,17 @@ import { FaMagic } from "react-icons/fa";
 import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
 import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IAccount } from "../../../types/internal";
 import { isValidPublicKey } from "../../../utils/web3js";
 import { ExplorerButton } from "../../common/ExplorerButton";
 import { AccountTypeButton } from "./AccountTypeButton";
 import { AirdropButton } from "./AirdropButton";
 
-export const AccountInput: React.FC<{
-  account: IAccount;
-}> = ({ account: { pubkey, type } }) => {
-  const { update } = useAccount();
+export const AccountInput: React.FC = () => {
+  const { useGet, update } = useAccount();
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
-  const { populate } = useAccountType();
+  const { type, populate } = useAccountType();
 
-  const isValid = isValidPublicKey(pubkey);
+  const pubkey = useGet((state) => state.pubkey);
 
   return (
     <InputGroup size="sm">
@@ -34,23 +31,23 @@ export const AccountInput: React.FC<{
         // chakra hardcode the width so we can't have multiple buttons
         w=""
       >
-        <AccountTypeButton type={type} />
+        <AccountTypeButton />
       </InputLeftElement>
 
       <Input
         fontFamily="mono"
         placeholder={
-          type?.type === "wallet"
+          type === "wallet"
             ? "Add connected wallet's public key"
-            : type.type === "keypair"
+            : type === "keypair"
             ? "Generate new keypair"
-            : type.type === "pda"
+            : type === "pda"
             ? "Configure program ID and seeds to find program address"
-            : type.type === "ata"
+            : type === "ata"
             ? "Configure mint to get token account associated with your wallet"
-            : type.type === "program"
+            : type === "program"
             ? "Start typing for well-known programs"
-            : type.type === "sysvar"
+            : type === "sysvar"
             ? "Start typing for sysvars"
             : "Account public key"
         }
@@ -70,7 +67,7 @@ export const AccountInput: React.FC<{
         w=""
         mr="1"
       >
-        {isValid && (
+        {isValidPublicKey(pubkey) && (
           <>
             {rpcEndpoint.network !== "mainnet-beta" && (
               <AirdropButton accountPubkey={pubkey} />
@@ -91,7 +88,7 @@ export const AccountInput: React.FC<{
             colorScheme="teal"
             aria-label="Auto-fill"
             icon={<Icon as={FaMagic} />}
-            isDisabled={type.type === "unspecified"}
+            isDisabled={type === "unspecified"}
             onClick={() => {
               populate();
             }}

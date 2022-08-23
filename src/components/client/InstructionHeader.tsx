@@ -25,22 +25,27 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
-import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
+import { useShallowSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { removeFrom } from "../../utils/sortable";
 import { DragHandle } from "../common/DragHandle";
 import { EditableName } from "../common/EditableName";
 import { Numbering } from "../common/Numbering";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
-  const { instruction, update, reset } = useInstruction();
+  const { id, useShallowGet, update, reset } = useInstruction();
+  const [expanded, name, disabled] = useShallowGet((state) => [
+    state.expanded,
+    state.name,
+    state.disabled,
+  ]);
 
-  const [instructionOrder, set] = useSessionStoreWithUndo((state) => [
+  const [instructionOrder, set] = useShallowSessionStoreWithUndo((state) => [
     state.transaction.instructions.order,
     state.set,
   ]);
 
   return (
-    <Flex mb={instruction.expanded ? "4" : undefined} alignItems="center">
+    <Flex mb={expanded ? "4" : undefined} alignItems="center">
       <DragHandle unlockedProps={{ mr: "2" }} />
 
       <IconButton
@@ -49,7 +54,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         mr="2"
         aria-label="Collapse"
         icon={
-          instruction.expanded ? (
+          expanded ? (
             <ChevronDownIcon h="6" w="6" />
           ) : (
             <ChevronRightIcon h="6" w="6" />
@@ -72,7 +77,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           placeholder="Unnamed Instruction"
           previewProps={{ p: "3px 6px 3px 6px" }}
           inputProps={{ p: "3px 6px 3px 6px" }}
-          value={instruction.name}
+          value={name}
           onChange={(value) => {
             update((state) => {
               state.name = value;
@@ -81,17 +86,11 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
         />
       </Heading>
 
-      <Tooltip label={instruction.disabled ? "Enable" : "Disable"}>
+      <Tooltip label={disabled ? "Enable" : "Disable"}>
         <IconButton
-          aria-label={instruction.disabled ? "Enable" : "Disable"}
+          aria-label={disabled ? "Enable" : "Disable"}
           variant="ghost"
-          icon={
-            instruction.disabled ? (
-              <Icon as={FaEyeSlash} />
-            ) : (
-              <Icon as={FaEye} />
-            )
-          }
+          icon={disabled ? <Icon as={FaEyeSlash} /> : <Icon as={FaEye} />}
           onClick={() => {
             update((state) => {
               state.disabled = !state.disabled;
@@ -150,7 +149,7 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
             icon={<DeleteIcon />}
             onClick={() => {
               set((state) => {
-                removeFrom(state.transaction.instructions, instruction.id);
+                removeFrom(state.transaction.instructions, id);
               });
             }}
           >

@@ -20,7 +20,7 @@ import {
 } from "react-icons/fa";
 import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
-import { AccountTypeType, IAccountType } from "../../../types/internal";
+import { AccountTypeType } from "../../../types/internal";
 
 const TYPES: AccountTypeType[] = [
   "wallet",
@@ -63,11 +63,9 @@ const TYPE_CONFIGS: Record<AccountTypeType, any> = {
   },
 };
 
-export const AccountTypeButton: React.FC<{ type: IAccountType }> = ({
-  type: { type },
-}) => {
+export const AccountTypeButton: React.FC = () => {
   const { update } = useAccount();
-  const { allPopulate } = useAccountType();
+  const { type, allPopulate } = useAccountType();
 
   const { name: selectedName, icon: selectedIcon } = TYPE_CONFIGS[type];
 

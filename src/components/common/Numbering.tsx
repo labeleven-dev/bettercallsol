@@ -6,7 +6,9 @@ export const Numbering: React.FC<{ index: number } & BadgeProps> = ({
   index,
   ...theRest
 }) => {
-  const { enableNumbering } = usePersistentStore((state) => state.appOptions);
+  const enableNumbering = usePersistentStore(
+    (state) => state.appOptions.enableNumbering
+  );
   const textColor = useColorModeValue("blackAlpha.500", "whiteAlpha.500");
 
   if (!enableNumbering) return null;

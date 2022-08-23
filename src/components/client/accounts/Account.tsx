@@ -8,13 +8,12 @@ import {
   useBreakpointValue,
   Wrap,
 } from "@chakra-ui/react";
-import { WritableDraft } from "immer/dist/internal";
 import React from "react";
 import { FaPenNib } from "react-icons/fa";
+import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
 import { useInstruction } from "../../../hooks/useInstruction";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IAccount, IAccountTypeConfigPda } from "../../../types/internal";
+import { useShallowSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { removeFrom } from "../../../utils/sortable";
 import { DragHandle } from "../../common/DragHandle";
 import { EditableName } from "../../common/EditableName";
@@ -24,41 +23,30 @@ import { AccountInput } from "./AccountInput";
 import { PdaTypeConfig } from "./type-configs/PdaTypeConfig";
 
 export const Account: React.FC<{
-  account: IAccount;
   index: number;
-  isAnchor?: boolean;
-}> = ({ account, index, isAnchor = false }) => {
-  const {
-    id,
-    type: { type, config },
-    name,
-    pubkey,
-    isWritable,
-    isSigner,
-  } = account;
+}> = ({ index }) => {
+  const { id, isAnchor, useShallowGet, update } = useAccount();
+  const { update: updateInstruction } = useInstruction();
+  const { type, isConfigurable: isTypeConfigurable } = useAccountType();
 
-  const { update } = useInstruction();
-  const { isConfigurable: isTypeConfigurable } = useAccountType();
-
-  const [keypairs, setSession] = useSessionStoreWithUndo((state) => [
+  const [keypairs, setSession] = useShallowSessionStoreWithUndo((state) => [
     state.keypairs,
     state.set,
   ]);
 
-  const hasPrivateKey = Object.keys(keypairs).includes(pubkey);
-
-  const updateAccount = (fn: (state: WritableDraft<IAccount>) => void) => {
-    update((state) => {
-      fn(isAnchor ? state.anchorAccounts![index] : state.accounts.map[id]);
-    });
-  };
+  const [name, pubkey, isWritable, isSigner] = useShallowGet((state) => [
+    state.name,
+    state.pubkey,
+    state.isWritable,
+    state.isSigner,
+  ]);
 
   const removeAccount = () => {
-    update((state) => {
+    updateInstruction((state) => {
       // no need for the anchor side since it is never deleted
-      removeFrom(state.accounts, id);
+      removeFrom(state.accounts, id as string);
     });
-    if (hasPrivateKey) {
+    if (Object.keys(keypairs).includes(pubkey)) {
       setSession((state) => {
         delete state.keypairs[pubkey];
       });
@@ -94,14 +82,14 @@ export const Account: React.FC<{
         isDisabled={isAnchor}
         value={name}
         onChange={(value: string) => {
-          updateAccount((state) => {
+          update((state) => {
             state.name = value;
           });
         }}
       />
 
       <Grid flex="1">
-        <AccountInput account={account} />
+        <AccountInput />
 
         <Wrap
           // TODO ignores other future tags
@@ -109,12 +97,10 @@ export const Account: React.FC<{
         >
           {/* TODO */}
           {/* {type === "ata" && (
-            <AtaTypeConfig config={config as IAccountTypeConfigAta} />
+            <AtaTypeConfig />
           )} */}
 
-          {type === "pda" && (
-            <PdaTypeConfig config={config as IAccountTypeConfigPda} />
-          )}
+          {type === "pda" && <PdaTypeConfig />}
 
           {/* TODO account balance */}
         </Wrap>
@@ -130,7 +116,7 @@ export const Account: React.FC<{
         isDisabled={isAnchor}
         toggled={isWritable}
         onToggle={(toggled) => {
-          updateAccount((state) => {
+          update((state) => {
             state.isWritable = toggled;
           });
         }}
@@ -144,7 +130,7 @@ export const Account: React.FC<{
         isDisabled={isAnchor}
         toggled={isSigner}
         onToggle={(toggled) => {
-          updateAccount((state) => {
+          update((state) => {
             state.isSigner = toggled;
           });
         }}

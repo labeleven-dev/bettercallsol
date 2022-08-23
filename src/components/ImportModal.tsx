@@ -14,15 +14,15 @@ import {
 } from "@chakra-ui/react";
 import { useImport } from "../hooks/useImportFromUrl";
 import {
-  useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
 } from "../hooks/useSessionStore";
 import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
 import { DEFAULT_IMPORT } from "../utils/state";
 import { Preview } from "./palette/preview/Preview";
 
 export const ImportModal: React.FC = () => {
-  const [isLoading, transaction, setImport] = useSessionStoreWithoutUndo(
+  const [isLoading, transaction, setImport] = useShallowSessionStoreWithoutUndo(
     (state) => [state.import.isLoading, state.import.transaction, state.set]
   );
   const setTransaction = useSessionStoreWithUndo((state) => state.set);

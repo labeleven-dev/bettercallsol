@@ -8,20 +8,20 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { IInstruction } from "../../types/internal";
-import { IID, SortableCollection } from "../../types/sortable";
+import { useShallowSessionStoreWithUndo } from "../../hooks/useSessionStore";
+import { IID } from "../../types/sortable";
 import { newInstruction } from "../../utils/internal";
-import { addTo, toSortedArray } from "../../utils/sortable";
+import { addTo } from "../../utils/sortable";
 import { Sortable } from "../common/Sortable";
 import { Instruction } from "./Instruction";
 
-export const InstructionContext = React.createContext(newInstruction());
+export const InstructionContext = React.createContext("");
 
-export const Instructions: React.FC<{
-  instructions: SortableCollection<IInstruction>;
-}> = ({ instructions }) => {
-  const set = useSessionStoreWithUndo((state) => state.set);
+export const Instructions: React.FC = () => {
+  const [instructionOrder, set] = useShallowSessionStoreWithUndo((state) => [
+    state.transaction.instructions.order,
+    state.set,
+  ]);
 
   const setOrderItem = (itemOrders: IID[]) => {
     set((state) => {
@@ -33,7 +33,7 @@ export const Instructions: React.FC<{
 
   return (
     <Grid>
-      {instructions.order.length === 0 && (
+      {instructionOrder.length === 0 && (
         <Center p="6" m="1" bgColor={emptyBgColour} rounded="md">
           <Text as="i" textColor="grey">
             No instructions yet. Click on <AddIcon ml="0.5" mr="0.5" w="2.5" />{" "}
@@ -42,10 +42,10 @@ export const Instructions: React.FC<{
         </Center>
       )}
 
-      <Sortable itemOrder={instructions.order} setItemOrder={setOrderItem}>
-        {toSortedArray(instructions).map((instruction, index) => (
+      <Sortable itemOrder={instructionOrder} setItemOrder={setOrderItem}>
+        {instructionOrder.map((id, index) => (
           // key must be stable so it can't be loop index
-          <InstructionContext.Provider value={instruction} key={instruction.id}>
+          <InstructionContext.Provider value={id} key={id}>
             <Instruction index={index} />
           </InstructionContext.Provider>
         ))}

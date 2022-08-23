@@ -13,7 +13,7 @@ import {
   SolflareWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import React, { useMemo } from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 
 export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
@@ -24,7 +24,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
     confirmTransactionInitialTimeout,
     disableRetryOnRateLimit,
     autoConnectWallet,
-  ] = usePersistentStore((state) => [
+  ] = useShallowPersistentStore((state) => [
     state.transactionOptions.confirmTransactionInitialTimeout,
     state.transactionOptions.disableRetryOnRateLimit,
     state.appOptions.autoConnectWallet,

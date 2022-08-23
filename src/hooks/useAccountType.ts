@@ -1,29 +1,48 @@
 import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { AccountTypeType, IAccountTypeConfigPda } from "../types/internal";
+import { WritableDraft } from "immer/dist/internal";
+import {
+  AccountTypeConfig,
+  AccountTypeType,
+  IAccountType,
+  IAccountTypeConfigPda,
+} from "../types/internal";
 import { isValidPublicKey } from "../utils/web3js";
 import { useAccount } from "./useAccount";
+import { useInstruction } from "./useInstruction";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 
 /**
  * Encapsulates logic to populate accounts based on their type
  */
 export const useAccountType = (): {
+  type: AccountTypeType;
+  config?: AccountTypeConfig;
+  update: (fn: (state: WritableDraft<IAccountType>) => void) => void;
   populate: () => void;
   isConfigurable: boolean;
   allPopulate: Record<AccountTypeType, () => void>;
 } => {
-  const {
-    instruction: { programId },
-    account: {
-      type: { type, config },
-    },
-    update,
-  } = useAccount();
+  const { useGet: instructionGet } = useInstruction();
+  const { useShallowGet, update: accountUpdate } = useAccount();
   const setSession = useSessionStoreWithUndo((state) => state.set);
   const { publicKey: walletPublicKey } = useWallet();
   const toast = useToast();
+
+  const programId = instructionGet((state) => state.programId);
+  const [type, config] = useShallowGet((state) => [
+    state.type.type,
+    state.type.config,
+  ]);
+
+  const update = (fn: (state: WritableDraft<IAccountType>) => void) => {
+    accountUpdate((state) => {
+      fn(state.type);
+    });
+  };
+
+  ///// Populate functions /////
 
   const wallet = () => {
     if (!walletPublicKey) {
@@ -37,7 +56,7 @@ export const useAccountType = (): {
       return;
     }
 
-    update((state) => {
+    accountUpdate((state) => {
       state.pubkey = walletPublicKey.toBase58();
     });
   };
@@ -50,7 +69,7 @@ export const useAccountType = (): {
       state.keypairs[publicKey] = keypair.secretKey;
     });
 
-    update((state) => {
+    accountUpdate((state) => {
       state.pubkey = publicKey;
     });
 
@@ -86,7 +105,7 @@ export const useAccountType = (): {
       new PublicKey(programId)
     );
 
-    update((state) => {
+    accountUpdate((state) => {
       state.pubkey = pubkey.toBase58();
       state.type.config = { seeds, bump } as IAccountTypeConfigPda;
     });
@@ -105,6 +124,10 @@ export const useAccountType = (): {
   };
 
   return {
+    type,
+    config,
+    isConfigurable: type === "pda" || type === "ata",
+    update,
     populate:
       type === "wallet"
         ? wallet
@@ -119,7 +142,6 @@ export const useAccountType = (): {
         : type === "sysvar"
         ? sysvar
         : () => {},
-    isConfigurable: type === "pda" || type === "ata",
     allPopulate: {
       wallet,
       keypair,
