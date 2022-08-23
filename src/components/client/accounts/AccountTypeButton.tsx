@@ -26,7 +26,8 @@ const TYPES: AccountTypeType[] = [
   "wallet",
   "keypair",
   "pda",
-  "ata",
+  // TODO implement
+  // "ata",
   "program",
   "sysvar",
   "unspecified",
