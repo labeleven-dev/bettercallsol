@@ -77,9 +77,11 @@ export interface IInstrctionDataField {
 
 export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
+export type RawEncoding = "hex" | "bs58";
+
 export interface IRaw {
   content: string;
-  encoding: "hex" | "bs58";
+  encoding: RawEncoding;
 }
 
 export interface IInstructionData {
