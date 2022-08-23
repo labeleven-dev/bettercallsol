@@ -33,7 +33,7 @@ export const RpcEndpointMenu: React.FC<{
   );
 
   return (
-    <Menu>
+    <Menu matchWidth={true}>
       <Tooltip label={endpoint.url}>
         <MenuButton
           as={Button}
