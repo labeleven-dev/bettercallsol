@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
   Portal,
   Tag,
+  Text,
   Wrap,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
@@ -22,6 +23,7 @@ import { IAccountTypeConfigPda } from "../../../../types/internal";
 
 export const PdaTypeConfig: React.FC = () => {
   const [seed, setSeed] = useState("");
+  const [error, setError] = useState("");
   const { config, update, populate } = useAccountType();
   const initialFocusRef = useRef(null);
 
@@ -32,6 +34,16 @@ export const PdaTypeConfig: React.FC = () => {
       state.config = { seeds: [...seeds, seed] };
     });
     setSeed("");
+  };
+
+  const generate = (onClose: () => void) => () => {
+    try {
+      setError("");
+      populate();
+      onClose();
+    } catch (e) {
+      setError((e as Error).toString());
+    }
   };
 
   return (
@@ -106,15 +118,14 @@ export const PdaTypeConfig: React.FC = () => {
 
               <PopoverFooter>
                 <HStack>
-                  <Button
-                    size="xs"
-                    onClick={() => {
-                      populate();
-                      onClose();
-                    }}
-                  >
+                  <Button size="xs" onClick={generate(onClose)}>
                     Done
                   </Button>
+                  {error && (
+                    <Text ml="2" color="red.500" fontSize="sm">
+                      {error}
+                    </Text>
+                  )}
                 </HStack>
               </PopoverFooter>
             </PopoverContent>
