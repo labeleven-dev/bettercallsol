@@ -4,9 +4,13 @@ import {
   IInstrctionDataField,
   IInstruction,
   IInstructionData,
+  INetwork,
   IRpcEndpoint,
 } from "../types/internal";
 import { toSortableCollection } from "./sortable";
+
+export const ALL_NETWORKS: INetwork[] = ["devnet", "testnet", "mainnet-beta"];
+export const LIVE_NETWORKS: INetwork[] = ["devnet", "testnet", "mainnet-beta"];
 
 ///// Initialisers /////
 

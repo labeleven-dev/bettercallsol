@@ -7,7 +7,6 @@ import {
   Grid,
   Icon,
   IconButton,
-  Input,
   InputGroup,
   InputLeftElement,
   InputRightElement,
@@ -21,6 +20,7 @@ import { FaAnchor, FaRocket } from "react-icons/fa";
 import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { useWeb3Account } from "../../hooks/useWeb3Account";
+import { AccountAutoComplete } from "../common/AccountAutoComplete";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
@@ -86,17 +86,22 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                 )}
               </InputLeftElement>
             )}
-            <Input
-              id="program-id"
-              fontFamily="mono"
-              placeholder="Program ID"
-              value={programId}
-              onChange={(e) => {
+
+            <AccountAutoComplete
+              chakraInputProps={{
+                id: "program-id",
+                placeholder: "Program ID",
+                paddingStart: "10",
+              }}
+              types={["program"]}
+              pubkey={programId}
+              setPubkey={(pubkey) => {
                 update((state) => {
-                  state.programId = e.target.value.trim();
+                  state.programId = pubkey.trim();
                 });
               }}
             />
+
             <InputRightElement
               // chakra hardcode the width so we can't have multiple buttons
               w=""
