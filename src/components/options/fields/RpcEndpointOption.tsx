@@ -1,18 +1,23 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
+  Button,
   Flex,
   Grid,
   Icon,
   IconButton,
   Input,
-  Select,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Portal,
   Tooltip,
 } from "@chakra-ui/react";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
-import { INetwork, IRpcEndpoint } from "../../../types/internal";
+import { IRpcEndpoint } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
 import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
 import { DragHandle } from "../../common/DragHandle";
@@ -78,24 +83,34 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
         }
       >
         <Flex mb="1">
-          <Select
-            minW="150px"
-            maxW="130px"
-            mr="1"
-            isDisabled={!custom}
-            value={network}
-            onChange={(e) =>
-              updateEndpoint((state) => {
-                state.network = e.target.value as INetwork;
-              })
-            }
-          >
-            {RPC_NETWORK_OPTIONS.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </Select>
+          <Menu>
+            <MenuButton
+              rightIcon={<ChevronDownIcon />}
+              minW="150px"
+              as={Button}
+              disabled={!custom}
+              mr="1"
+            >
+              {network}
+            </MenuButton>
+            <Portal>
+              <MenuList minW="150px" mr="1" zIndex="modal">
+                {RPC_NETWORK_OPTIONS.map((n) => (
+                  <MenuItem
+                    icon={network === n ? <CheckIcon /> : undefined}
+                    key={n}
+                    onClick={() => {
+                      updateEndpoint((state) => {
+                        state.network = n;
+                      });
+                    }}
+                  >
+                    {n}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </Portal>
+          </Menu>
           <Input
             flex="1"
             mr="1"
