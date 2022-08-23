@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaCompress,
   FaEllipsisV,
@@ -26,7 +26,10 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import {
+  usePersistentStore,
+  useShallowPersistentStore,
+} from "../../hooks/usePersistentStore";
 import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
   useShallowSessionStoreWithoutUndo,
@@ -48,6 +51,9 @@ export const TransactionHeader: React.FC<{
   ]);
   const [transaction, rpcEndpoint, setSession] = useShallowSessionStoreWithUndo(
     (state) => [state.transaction, state.rpcEndpoint, state.set]
+  );
+  const rpcEndpoints = useShallowPersistentStore(
+    (state) => state.appOptions.rpcEndpoints
   );
 
   const { publicKey: walletPublicKey } = useWallet();
@@ -85,6 +91,20 @@ export const TransactionHeader: React.FC<{
       });
     });
   };
+
+  useEffect(() => {
+    // when rpc endpoints setting change, update the current selected rpc
+    if (rpcEndpoints.map.hasOwnProperty(rpcEndpoint.id)) {
+      if (
+        rpcEndpoints.map[rpcEndpoint.id].url !== rpcEndpoint.url ||
+        rpcEndpoints.map[rpcEndpoint.id].network !== rpcEndpoint.network ||
+        rpcEndpoints.map[rpcEndpoint.id].provider !== rpcEndpoint.provider
+      )
+        setSession((state) => {
+          state.rpcEndpoint = rpcEndpoints.map[rpcEndpoint.id];
+        });
+    }
+  }, [rpcEndpoints, rpcEndpoint, setSession]);
 
   return (
     <>
