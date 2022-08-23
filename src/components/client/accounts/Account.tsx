@@ -4,6 +4,7 @@ import {
   Grid,
   Icon,
   IconButton,
+  Tag,
   Tooltip,
   useBreakpointValue,
   Wrap,
@@ -14,6 +15,7 @@ import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { useShallowSessionStoreWithUndo } from "../../../hooks/useSessionStore";
+import { IAccountTypeConfigNamed } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
 import { DragHandle } from "../../common/DragHandle";
 import { EditableName } from "../../common/EditableName";
@@ -27,7 +29,7 @@ export const Account: React.FC<{
 }> = ({ index }) => {
   const { id, isAnchor, useShallowGet, update } = useAccount();
   const { update: updateInstruction } = useInstruction();
-  const { type, isConfigurable: isTypeConfigurable } = useAccountType();
+  const { type, config, isConfigurable: isTypeConfigurable } = useAccountType();
 
   const [keypairs, setSession] = useShallowSessionStoreWithUndo((state) => [
     state.keypairs,
@@ -93,7 +95,11 @@ export const Account: React.FC<{
 
         <Wrap
           // TODO ignores other future tags
-          pt={isTypeConfigurable ? "1" : undefined}
+          pt={
+            isTypeConfigurable || config?.hasOwnProperty("name")
+              ? "1"
+              : undefined
+          }
         >
           {/* TODO */}
           {/* {type === "ata" && (
@@ -101,6 +107,10 @@ export const Account: React.FC<{
           )} */}
 
           {type === "pda" && <PdaTypeConfig />}
+
+          {config?.hasOwnProperty("name") && (
+            <Tag size="sm">{(config as IAccountTypeConfigNamed).name}</Tag>
+          )}
 
           {/* TODO account balance */}
         </Wrap>
