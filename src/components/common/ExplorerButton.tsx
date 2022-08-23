@@ -97,43 +97,38 @@ export const ExplorerButton: React.FC<
   const opts = explorerOpts[explorer];
   const disabled =
     isDisabled || !opts.supportedNetworks.includes(rpcEndpoint.network);
-
-  const child =
-    variant === "link" ? (
-      children || (
-        <Button variant="link" {...theRest}>
-          {value} <ExternalLinkIcon ml="1" />
-        </Button>
-      )
-    ) : (
-      <IconButton
-        variant="ghost"
-        icon={
-          explorer === "solscan" ? (
-            <SolscanIcon size={size} />
-          ) : explorer === "solanafm" ? (
-            <SolanaFmIcon size={size} />
-          ) : explorer === "solanaBeach" ? (
-            <SolanaBeachIcon size={size} />
-          ) : (
-            <SolanaExplorerIcon size={size} />
-          )
-        }
-        aria-label={opts.label}
-        size={size}
-        isDisabled={disabled}
-        {...theRest}
-      />
-    );
+  const href = !disabled ? opts.url(valueType, value, rpcEndpoint) : undefined;
 
   return (
     <Tooltip label={opts.label} isDisabled={disabled}>
-      {disabled ? (
-        <Link>{child}</Link>
+      {variant === "link" ? (
+        children || (
+          <Button as={Link} variant="link" href={href} isExternal {...theRest}>
+            {value} <ExternalLinkIcon ml="1" />
+          </Button>
+        )
       ) : (
-        <Link href={opts.url(valueType, value, rpcEndpoint)} isExternal>
-          {child}
-        </Link>
+        <IconButton
+          as={Link}
+          variant="ghost"
+          href={href}
+          isExternal
+          icon={
+            explorer === "solscan" ? (
+              <SolscanIcon size={size} />
+            ) : explorer === "solanafm" ? (
+              <SolanaFmIcon size={size} />
+            ) : explorer === "solanaBeach" ? (
+              <SolanaBeachIcon size={size} />
+            ) : (
+              <SolanaExplorerIcon size={size} />
+            )
+          }
+          aria-label={opts.label}
+          size={size}
+          isDisabled={disabled}
+          {...theRest}
+        />
       )}
     </Tooltip>
   );

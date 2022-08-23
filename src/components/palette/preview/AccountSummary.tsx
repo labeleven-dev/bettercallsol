@@ -6,6 +6,7 @@ import {
   Text,
   Tooltip,
   useColorModeValue,
+  Wrap,
 } from "@chakra-ui/react";
 import React from "react";
 import { IAccountSummary } from "../../../types/preview";
@@ -62,13 +63,15 @@ export const AccountSummary: React.FC<
         </Flex>
       </Tooltip>
 
-      {tags.map(({ label, tooltip, count, colourScheme }, index) => (
-        <Tooltip key={index} label={tooltip}>
-          <Tag mr="1" size="sm" colorScheme={colourScheme}>
-            {label}: {count}
-          </Tag>
-        </Tooltip>
-      ))}
+      <Wrap spacing={1}>
+        {tags.map(({ label, tooltip, count, colourScheme }, index) => (
+          <Tooltip key={index} label={tooltip}>
+            <Tag mr="1" size="sm" colorScheme={colourScheme}>
+              {label}: {count}
+            </Tag>
+          </Tooltip>
+        ))}
+      </Wrap>
     </Flex>
   );
 };
