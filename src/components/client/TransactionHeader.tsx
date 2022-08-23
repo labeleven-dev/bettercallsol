@@ -38,6 +38,7 @@ import {
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
 import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
+import shallow from "zustand/shallow";
 
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
@@ -95,11 +96,7 @@ export const TransactionHeader: React.FC<{
   useEffect(() => {
     // when rpc endpoints setting change, update the current selected rpc
     if (rpcEndpoints.map.hasOwnProperty(rpcEndpoint.id)) {
-      if (
-        rpcEndpoints.map[rpcEndpoint.id].url !== rpcEndpoint.url ||
-        rpcEndpoints.map[rpcEndpoint.id].network !== rpcEndpoint.network ||
-        rpcEndpoints.map[rpcEndpoint.id].provider !== rpcEndpoint.provider
-      )
+      if (!shallow(rpcEndpoints.map[rpcEndpoint.id], rpcEndpoint))
         setSession((state) => {
           state.rpcEndpoint = rpcEndpoints.map[rpcEndpoint.id];
         });
