@@ -25,7 +25,7 @@ export const PdaTypeConfig: React.FC = () => {
   const { config, update, populate } = useAccountType();
   const initialFocusRef = useRef(null);
 
-  const { seeds, bump } = config! as IAccountTypeConfigPda;
+  const { seeds, bump } = (config || { seeds: [] }) as IAccountTypeConfigPda;
 
   const add = () => {
     update((state) => {

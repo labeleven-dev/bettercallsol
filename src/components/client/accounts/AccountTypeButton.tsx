@@ -73,12 +73,6 @@ export const AccountTypeButton: React.FC = () => {
     update((state) => {
       state.type = {
         type,
-        config:
-          type === "pda"
-            ? { seeds: [] }
-            : type === "ata"
-            ? { mint: "" }
-            : undefined,
       };
     });
     // only populates for account types that receieve no config,

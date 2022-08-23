@@ -98,6 +98,7 @@ export const useAccountType = (): {
         duration: 8000,
         isClosable: true,
       });
+      return;
     }
 
     const [pubkey, bump] = PublicKey.findProgramAddressSync(
