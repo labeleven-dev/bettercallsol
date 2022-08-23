@@ -20,7 +20,7 @@ export const ChoiceOption: React.FC<{
     <FormLabel htmlFor={id} textAlign="right">
       {name}
     </FormLabel>
-    <Menu id={id}>
+    <Menu id={id} matchWidth={true}>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
         {get().name}
       </MenuButton>

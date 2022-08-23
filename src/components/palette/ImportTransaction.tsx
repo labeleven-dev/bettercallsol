@@ -35,7 +35,7 @@ export const ImportTransaction: React.FC = () => {
   return (
     <Grid>
       <Flex mb="1">
-        <Menu>
+        <Menu matchWidth={true}>
           <MenuButton flex="1" as={Button} size="sm">
             {IMPORT_TYPES[importType]} <ChevronDownIcon />
           </MenuButton>
