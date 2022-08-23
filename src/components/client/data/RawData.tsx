@@ -22,29 +22,40 @@ export const RawData: React.FC = () => {
   const toast = useToast();
 
   const onChange = (encoding: string) => {
-    if (encoding === "hex") {
+    if (encoding === "bs58") {
+      const encoded = bs58.encode(Buffer.from(content, "hex"));
+
+      if (content.length !== 0 && encoded.length === 0) {
+        toast({
+          title: "Invalid raw data",
+          description: "This is not a valid hexadecimal string.",
+          status: "error",
+          isClosable: true,
+        });
+        return;
+      }
+
       update((state) => {
-        state.data.raw.content = bs58.encode(Buffer.from(content, "hex"));
-        state.data.raw.encoding = "hex";
+        state.data.raw.content = encoded;
+        state.data.raw.encoding = "bs58";
       });
     }
 
-    if (encoding === "bs58") {
+    if (encoding === "hex") {
       try {
         const encoded = Buffer.from(bs58.decode(content)).toString("hex");
         update((state) => {
           state.data.raw.content = encoded;
-          state.data.raw.encoding = "bs58";
+          state.data.raw.encoding = "hex";
         });
       } catch (e) {
-        // it is not a valid base58 string
         toast({
-          title: "Invalid string",
-          description: "This is not a valid base58 encoded string.",
+          title: "Invalid raw data",
+          description: "This is not a valid base 58-encoded string.",
           status: "error",
           isClosable: true,
-          duration: 30_000,
         });
+        return;
       }
     }
   };
