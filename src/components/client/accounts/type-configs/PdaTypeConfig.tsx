@@ -74,6 +74,7 @@ export const PdaTypeConfig: React.FC = () => {
                   <IconButton
                     size="xs"
                     aria-label="Confirm"
+                    colorScheme="teal"
                     icon={<AddIcon />}
                     onClick={add}
                   />
@@ -81,7 +82,7 @@ export const PdaTypeConfig: React.FC = () => {
 
                 <Wrap mt="3" spacing="1">
                   {seeds.map((seed, index) => (
-                    <Tag colorScheme="blue" noOfLines={1} key={index}>
+                    <Tag colorScheme="blue" key={index} wordBreak="break-all">
                       {seed}
                       <IconButton
                         ml="1"
@@ -106,7 +107,6 @@ export const PdaTypeConfig: React.FC = () => {
               <PopoverFooter>
                 <HStack>
                   <Button
-                    colorScheme="teal"
                     size="xs"
                     onClick={() => {
                       populate();
