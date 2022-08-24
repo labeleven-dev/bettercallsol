@@ -1,4 +1,9 @@
-import { AddIcon, DeleteIcon, SettingsIcon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  DeleteIcon,
+  SearchIcon,
+  SettingsIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
   HStack,
@@ -47,12 +52,7 @@ export const PdaTypeConfig: React.FC = () => {
   };
 
   return (
-    <Popover
-      placement="right"
-      closeOnBlur={false}
-      initialFocusRef={initialFocusRef}
-      isLazy
-    >
+    <Popover placement="right" initialFocusRef={initialFocusRef} isLazy>
       {({ onClose }) => (
         <>
           <PopoverTrigger>
@@ -118,8 +118,12 @@ export const PdaTypeConfig: React.FC = () => {
 
               <PopoverFooter>
                 <HStack>
-                  <Button size="xs" onClick={generate(onClose)}>
-                    Done
+                  <Button
+                    size="xs"
+                    leftIcon={<SearchIcon />}
+                    onClick={generate(onClose)}
+                  >
+                    Find PDA
                   </Button>
                   {error && (
                     <Text ml="2" color="red.500" fontSize="sm">
