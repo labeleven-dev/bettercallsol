@@ -8,7 +8,9 @@
     "start": "react-app-rewired start",
     "test": "react-app-rewired test",
     "release": "semantic-release",
-    "license-report": "license-report --only=prod | node scripts/license-report.js"
+    "license-report": "license-report --only=prod | node scripts/license-report.js",
+    "cypress:open": "node_modules/.bin/cypress open",
+    "cypress:run": "node_modules/.bin/cypress run"
   },
   "browserslist": {
     "production": [
@@ -76,6 +78,7 @@
     "@types/react-dom": "^18.0.5",
     "@types/uuid": "^8.3.4",
     "customize-cra": "^1.0.0",
+    "cypress": "^10.6.0",
     "license-report": "^6.0.0",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.1",
