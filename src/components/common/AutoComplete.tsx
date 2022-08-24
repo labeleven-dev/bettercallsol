@@ -10,7 +10,7 @@ import {
 import type { AriaListBoxOptions } from "@react-aria/listbox";
 import type { ComboBoxProps } from "@react-types/combobox";
 import type { Node } from "@react-types/shared";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   DismissButton,
   FocusScope,
@@ -36,15 +36,24 @@ export { Item as AutoCompleteItem } from "react-stately";
  */
 export const Autocomplete = <T extends object>({
   chakraInputProps,
+  autoFocusSingleOption = true,
   ...props
 }: {
   chakraInputProps?: InputProps;
+  // if there is only one option available, then automatically focus on it
+  autoFocusSingleOption?: boolean;
 } & ComboBoxProps<T>) => {
   let { contains } = useFilter({ sensitivity: "base" });
   let state = useComboBoxState({
     ...props,
     defaultFilter: contains,
   });
+
+  useEffect(() => {
+    if (autoFocusSingleOption && state.collection.size === 1) {
+      state.selectionManager.setFocusedKey(state.collection.getFirstKey()!);
+    }
+  }, [autoFocusSingleOption, state.collection, state.selectionManager]);
 
   let inputRef = useRef<HTMLInputElement>(null);
   let listBoxRef = useRef(null);
