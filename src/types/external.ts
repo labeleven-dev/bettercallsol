@@ -4,6 +4,7 @@ import {
   DataFormat,
   IAccount,
   IInstrctionDataField,
+  IInstructionDataRaw,
   IPubKey,
 } from "./internal";
 
@@ -13,7 +14,7 @@ export type IAccountExt = Omit<IAccount, "id">;
 
 export interface IInstructionDataExt {
   format: DataFormat;
-  value: IInstrctionDataFieldExt[] | string;
+  value: IInstrctionDataFieldExt[] | IInstructionDataRaw;
 }
 
 export interface IInstructionExt {
