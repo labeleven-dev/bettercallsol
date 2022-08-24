@@ -70,9 +70,6 @@ export const AccountAutoComplete: React.FC<{
   const onSelectionChange = (key: React.Key) => {
     setSelectedKey(key);
     if (!key) {
-      // update((state) => {
-      //   state.pubkey = "";
-      // });
       return;
     }
 
@@ -124,7 +121,7 @@ export const AccountAutoComplete: React.FC<{
           <Flex w="100%" fontSize="sm">
             <Badge
               mr="1"
-              pt="0.5" // TODO why?
+              maxH="4" // otherwise it streches when the rest wrap
               colorScheme={
                 type === "type"
                   ? "green"
