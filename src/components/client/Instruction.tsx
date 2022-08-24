@@ -92,6 +92,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                 id: "program-id",
                 placeholder: "Program ID",
                 paddingStart: "10",
+                autoFocus: true,
               }}
               types={["program"]}
               pubkey={programId}

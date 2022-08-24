@@ -40,6 +40,7 @@ export const AccountInput: React.FC = () => {
           paddingStart: "12",
           // TODO should be smarter based on the number of children in InputRightElement
           paddingEnd: "14",
+          autoFocus: true,
           placeholder:
             type === "wallet"
               ? "Add connected wallet's public key"

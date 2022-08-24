@@ -105,7 +105,7 @@ export const DataField: React.FC<{
             });
           }}
         >
-          <NumberInputField fontFamily="mono" />
+          <NumberInputField fontFamily="mono" autoFocus />
           <NumberInputStepper>
             <NumberIncrementStepper />
             <NumberDecrementStepper />
@@ -115,6 +115,7 @@ export const DataField: React.FC<{
         <Switch
           ml="2"
           size="sm"
+          autoFocus
           value={value}
           onChange={() => {
             update((state) => {
@@ -129,6 +130,7 @@ export const DataField: React.FC<{
           size="sm"
           fontFamily="mono"
           placeholder="Field Value"
+          autoFocus
           value={value}
           onChange={(e) => {
             update((state) => {
