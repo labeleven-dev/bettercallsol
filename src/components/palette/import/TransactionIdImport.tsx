@@ -1,5 +1,5 @@
-import { SearchIcon } from "@chakra-ui/icons";
-import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
+import { SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { Button, ButtonGroup, Flex, Input, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
@@ -49,6 +49,7 @@ export const TransactionIdImport: React.FC<{
       <Input
         flex="1"
         mr="1"
+        size="sm"
         fontFamily="mono"
         placeholder="Transaction ID"
         value={transactionId}
@@ -57,22 +58,28 @@ export const TransactionIdImport: React.FC<{
         }}
       />
 
-      <RpcEndpointMenu
-        variant="short"
-        menuButtonProps={{ mr: "1" }}
-        menuListProps={{ fontSize: "sm" }}
-        endpoint={rpcEndpoint}
-        setEndpoint={setRpcEndpoint}
-      />
+      <ButtonGroup isAttached size="sm">
+        <Tooltip label="Search">
+          <Button
+            isLoading={inProgress}
+            leftIcon={<SearchIcon />}
+            onClick={search}
+          >
+            {rpcEndpoint.network}
+          </Button>
+        </Tooltip>
 
-      <Tooltip label="Search">
-        <IconButton
-          isLoading={inProgress}
-          aria-label="Search"
-          icon={<SearchIcon />}
-          onClick={search}
+        <RpcEndpointMenu
+          variant="icon"
+          menuButtonProps={{
+            icon: <TriangleDownIcon />,
+            isLoading: inProgress,
+          }}
+          menuListProps={{ fontSize: "sm" }}
+          endpoint={rpcEndpoint}
+          setEndpoint={setRpcEndpoint}
         />
-      </Tooltip>
+      </ButtonGroup>
     </Flex>
   );
 };

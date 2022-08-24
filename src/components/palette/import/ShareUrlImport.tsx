@@ -51,6 +51,7 @@ export const ShareUrlImport: React.FC<{
         mr="1"
         fontFamily="mono"
         placeholder="URL"
+        size="sm"
         value={url}
         onChange={(e) => {
           setUrl(e.target.value);
@@ -60,6 +61,7 @@ export const ShareUrlImport: React.FC<{
       <Tooltip label="Fetch">
         <IconButton
           isLoading={inProgress}
+          size="sm"
           aria-label="Fetch"
           icon={<DownloadIcon />}
           onClick={fetch}

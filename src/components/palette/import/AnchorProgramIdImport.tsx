@@ -1,5 +1,5 @@
-import { DownloadIcon } from "@chakra-ui/icons";
-import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
+import { SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { Button, ButtonGroup, Flex, Input, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
 import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
@@ -64,6 +64,7 @@ export const AnchorProgramIdImport: React.FC<{
         flex="1"
         mr="1"
         fontFamily="mono"
+        size="sm"
         placeholder="Program ID"
         value={programId}
         onChange={(e) => {
@@ -71,22 +72,28 @@ export const AnchorProgramIdImport: React.FC<{
         }}
       />
 
-      <RpcEndpointMenu
-        variant="short"
-        menuButtonProps={{ mr: "1" }}
-        menuListProps={{ fontSize: "sm" }}
-        endpoint={rpcEndpoint}
-        setEndpoint={setRpcEndpoint}
-      />
+      <ButtonGroup isAttached size="sm">
+        <Tooltip label="Fetch">
+          <Button
+            isLoading={inProgress}
+            leftIcon={<SearchIcon />}
+            onClick={fetch}
+          >
+            {rpcEndpoint.network}
+          </Button>
+        </Tooltip>
 
-      <Tooltip label="Fetch">
-        <IconButton
-          isLoading={inProgress}
-          aria-label="Fetch"
-          icon={<DownloadIcon />}
-          onClick={fetch}
+        <RpcEndpointMenu
+          variant="icon"
+          menuButtonProps={{
+            icon: <TriangleDownIcon />,
+            isLoading: inProgress,
+          }}
+          menuListProps={{ fontSize: "sm" }}
+          endpoint={rpcEndpoint}
+          setEndpoint={setRpcEndpoint}
         />
-      </Tooltip>
+      </ButtonGroup>
     </Flex>
   );
 };

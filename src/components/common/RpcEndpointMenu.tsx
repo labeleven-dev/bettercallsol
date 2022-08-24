@@ -1,12 +1,15 @@
 import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Button,
+  IconButton,
+  IconButtonProps,
   Menu,
   MenuButton,
   MenuButtonProps,
   MenuItem,
   MenuList,
   MenuListProps,
+  MenuProps,
   Portal,
   Tooltip,
 } from "@chakra-ui/react";
@@ -18,13 +21,15 @@ import { toSortedArray } from "../../utils/sortable";
 export const RpcEndpointMenu: React.FC<{
   endpoint: IRpcEndpoint;
   setEndpoint: (endpoint: IRpcEndpoint) => void;
-  variant?: "long" | "short";
-  menuButtonProps?: MenuButtonProps;
+  variant?: "long" | "short" | "icon";
+  menuProps?: MenuProps;
+  menuButtonProps?: MenuButtonProps | Omit<IconButtonProps, "aria-label">;
   menuListProps?: MenuListProps;
 }> = ({
   endpoint,
   setEndpoint,
   variant = "long",
+  menuProps,
   menuButtonProps,
   menuListProps,
 }) => {
@@ -33,10 +38,10 @@ export const RpcEndpointMenu: React.FC<{
   );
 
   return (
-    <Menu matchWidth={true}>
+    <Menu {...menuProps}>
       <Tooltip label={endpoint.url}>
         <MenuButton
-          as={Button}
+          as={variant === "icon" ? IconButton : Button}
           rightIcon={variant === "long" ? <ChevronDownIcon /> : undefined}
           {...menuButtonProps}
         >
@@ -44,7 +49,9 @@ export const RpcEndpointMenu: React.FC<{
             ? `${endpoint.network}${
                 endpoint.provider ? " (" + endpoint.provider + ")" : ""
               }`
-            : endpoint.network[0].toUpperCase()}
+            : variant === "short"
+            ? endpoint.network[0].toUpperCase()
+            : undefined}
         </MenuButton>
       </Tooltip>
 
