@@ -18,7 +18,9 @@ export class BorshCoder implements Coder {
       return acc;
     }, {} as Record<string, any>);
 
-    const buffer = Buffer.alloc(layout.span);
+    // TODO this is how Anchor does it atm https://github.com/coral-xyz/anchor/blob/5a025b949e67bf424a30641028973f00325b8f1e/ts/packages/anchor/src/coder/borsh/accounts.ts#L46
+    // const buffer = Buffer.alloc(layout.span);
+    const buffer = Buffer.alloc(1000);
     layout.encode(values, buffer);
     return buffer;
   }

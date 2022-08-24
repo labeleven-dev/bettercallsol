@@ -26,7 +26,7 @@ export const newRpcEndpoint = (): IRpcEndpoint => ({
 export const newDataField = (): IInstrctionDataField => ({
   id: uuid(),
   name: "",
-  type: "string",
+  type: "u8",
   value: "",
 });
 
