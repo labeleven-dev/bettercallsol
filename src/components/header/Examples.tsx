@@ -15,8 +15,8 @@ import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
+import { EXAMPLES } from "../../library/examples";
 import { mapITransactionExtToITransaction } from "../../mappers/external-to-internal";
-import { EXAMPLES } from "../../utils/examples";
 import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
 
 export const Example: React.FC = () => {

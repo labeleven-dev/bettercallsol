@@ -62,7 +62,9 @@ export const EXAMPLES: Record<
         },
       ],
     },
-    help: 'Generate a keypair for the "New Account" using the 🔑 button and then click the "Send" button.',
+    help:
+      'Press the wand on "Payer" and "New Account" accounts. ' +
+      'Then click the "Send" button!',
   },
 
   systemProgramTransfer: {
@@ -110,6 +112,9 @@ export const EXAMPLES: Record<
         },
       ],
     },
-    help: 'Click the "Send" button when you\'re ready.',
+    help:
+      'Click the wand on "From" account to fill in your Wallet address. ' +
+      'Optionally, change the "To" account to another address. ' +
+      'Then click the "Send" button!',
   },
 };
