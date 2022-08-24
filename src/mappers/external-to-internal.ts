@@ -5,7 +5,12 @@ import {
   IInstructionExt,
   ITransactionExt,
 } from "../types/external";
-import { IAccount, IInstruction, ITransaction } from "../types/internal";
+import {
+  IAccount,
+  IInstruction,
+  IInstructionDataRaw,
+  ITransaction,
+} from "../types/internal";
 import { Identifiable, SortableCollection } from "../types/sortable";
 import { toSortableCollection } from "../utils/sortable";
 
@@ -48,10 +53,13 @@ export const mapIInstructionExtToIInstruction = ({
     accounts: mapToSortableCollection(accounts.map(mpaIAccountExtToIAccount)),
     data: {
       format: data.format,
-      raw: {
-        content: data.format === "raw" ? (data.value as string) : "",
-        encoding: "bs58",
-      },
+      raw:
+        data.format === "raw"
+          ? (data.value as IInstructionDataRaw)
+          : {
+              content: "",
+              encoding: "bs58",
+            },
       borsh: mapToSortableCollection(
         data.format === "borsh"
           ? (data.value as IInstrctionDataFieldExt[]).map((v) => ({

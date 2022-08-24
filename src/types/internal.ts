@@ -79,14 +79,14 @@ export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
 export type RawEncoding = "hex" | "bs58";
 
-export interface IRaw {
+export interface IInstructionDataRaw {
   content: string;
   encoding: RawEncoding;
 }
 
 export interface IInstructionData {
   format: DataFormat;
-  raw: IRaw;
+  raw: IInstructionDataRaw;
   borsh: SortableCollection<IInstrctionDataField>;
   bufferLayout: SortableCollection<IInstrctionDataField>;
 }

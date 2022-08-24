@@ -49,7 +49,10 @@ export const mapTransactionResponseToIPreview = (
       accounts: mappedAccounts,
       data: {
         format: "raw",
-        value: data,
+        value: {
+          content: data,
+          encoding: "bs58",
+        },
       },
       accountSummary: accountSummary(mappedAccounts),
     };
