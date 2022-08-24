@@ -40,6 +40,7 @@ export const AnchorJsonImport: React.FC<{
         h="200px"
         fontFamily="mono"
         fontSize="sm"
+        size="sm"
         placeholder="Anchor JSON"
         onChange={(e) => {
           parse(e.target.value);

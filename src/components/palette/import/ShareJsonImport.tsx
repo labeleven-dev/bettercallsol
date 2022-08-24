@@ -43,6 +43,7 @@ export const ShareJsonImport: React.FC<{
         h="200px"
         fontFamily="mono"
         fontSize="sm"
+        size="sm"
         placeholder="Share JSON"
         onChange={(e) => {
           parse(e.target.value);
