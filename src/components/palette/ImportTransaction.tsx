@@ -1,5 +1,6 @@
 import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
   Button,
   Flex,
@@ -19,16 +20,16 @@ import { ShareUrlImport } from "./import/ShareUrlImport";
 import { TransactionIdImport } from "./import/TransactionIdImport";
 import { Preview } from "./preview/Preview";
 
-const IMPORT_TYPES: Record<PreviewSource, string> = {
-  tx: "Transaction ID",
-  shareUrl: "Share URL",
-  shareJson: "Share JSON",
-  anchorProgramId: "Anchor Program ID",
-  anchorJson: "Anchor IDL JSON",
-};
+const SOURCES: { source: PreviewSource; label: string; type: string }[] = [
+  { source: "tx", label: "Transaction ID", type: "tx" },
+  { source: "anchorProgramId", label: "Anchor Program ID", type: "anchor" },
+  { source: "shareUrl", label: "Share URL", type: "share" },
+  { source: "shareJson", label: "Share JSON", type: "share" },
+  { source: "anchorJson", label: "Anchor IDL JSON", type: "anchor" },
+];
 
 export const ImportTransaction: React.FC = () => {
-  const [importType, setImportType] = useState<PreviewSource>("tx");
+  const [source, setSource] = useState<PreviewSource>("tx");
   const [preview, setPreview] = useState<IPreview>();
   const [error, setError] = useState("");
 
@@ -37,18 +38,34 @@ export const ImportTransaction: React.FC = () => {
       <Flex mb="1">
         <Menu matchWidth={true}>
           <MenuButton flex="1" as={Button} size="sm">
-            {IMPORT_TYPES[importType]} <ChevronDownIcon />
+            {SOURCES.find((x) => x.source === source)?.label}{" "}
+            <ChevronDownIcon />
           </MenuButton>
           <MenuList fontSize="sm" zIndex="modal">
-            {Object.entries(IMPORT_TYPES).map(([type, label]) => (
+            {SOURCES.map(({ source: s, label, type }) => (
               <MenuItem
-                key={type}
-                icon={type === importType ? <CheckIcon /> : undefined}
+                key={s}
+                icon={source === s ? <CheckIcon /> : undefined}
                 onClick={() => {
                   setPreview(undefined); // clear
-                  setImportType(type as PreviewSource);
+                  setSource(s);
                 }}
               >
+                <Badge
+                  maxH="4"
+                  mr="1"
+                  colorScheme={
+                    type === "tx"
+                      ? "green"
+                      : type === "share"
+                      ? "purple"
+                      : type === "anchor"
+                      ? "blue"
+                      : undefined
+                  }
+                >
+                  {type}
+                </Badge>
                 {label}
               </MenuItem>
             ))}
@@ -56,19 +73,19 @@ export const ImportTransaction: React.FC = () => {
         </Menu>
       </Flex>
 
-      {importType === "tx" && (
+      {source === "tx" && (
         <TransactionIdImport setPreview={setPreview} setError={setError} />
       )}
-      {importType === "shareUrl" && (
+      {source === "shareUrl" && (
         <ShareUrlImport setPreview={setPreview} setError={setError} />
       )}
-      {importType === "shareJson" && (
+      {source === "shareJson" && (
         <ShareJsonImport setPreview={setPreview} setError={setError} />
       )}
-      {importType === "anchorProgramId" && (
+      {source === "anchorProgramId" && (
         <AnchorProgramIdImport setPreview={setPreview} setError={setError} />
       )}
-      {importType === "anchorJson" && (
+      {source === "anchorJson" && (
         <AnchorJsonImport setPreview={setPreview} setError={setError} />
       )}
 
