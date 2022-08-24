@@ -2,6 +2,7 @@ import { CheckIcon, CopyIcon, DownloadIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
+  AlertIcon,
   Box,
   Button,
   Center,
@@ -126,8 +127,12 @@ export const ShareModal: React.FC = () => {
               </UnorderedList>
             </Text>
           </Box>
-          <Alert status="info" variant="left-accent">
-            <AlertDescription>More share options coming soon!</AlertDescription>
+          <Alert fontSize="sm" status="warning" variant="left-accent">
+            <AlertIcon />
+            <AlertDescription>
+              During the Alpha phase of development, backward-compatibility is
+              NOT guaranteed.
+            </AlertDescription>
           </Alert>
         </ModalBody>
 
