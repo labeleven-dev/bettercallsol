@@ -59,6 +59,7 @@ export class PhantomWalletMock
   private _signer: Signer;
   private _connection: Connection | undefined;
   private _transactionSignatures: string[] = [];
+  private;
 
   private constructor(
     private readonly _connectionURL: string,
@@ -148,7 +149,7 @@ export class PhantomWalletMock
    * @category TestAPI
    */
   get transactionSignatures(): string[] {
-    return Array.from(this._transactionSignatures);
+    return this._transactionSignatures;
   }
 
   /**
@@ -181,6 +182,13 @@ export class PhantomWalletMock
       return Promise.resolve(null);
     }
     return this.connection.getTransaction(lastSig, { commitment });
+  }
+
+  getConfirmedTransaction(
+    signature: string,
+    commitment?: Finality
+  ): Promise<null | TransactionResponse> {
+    return this.connection.getTransaction(signature, { commitment });
   }
 
   /**
@@ -250,7 +258,6 @@ export class PhantomWalletMock
           ...oldSignatures,
         ].filter((it) => it.signature !== null);
         logDebug("Signed transaction successfully");
-        this._transactionSignatures.push(bs58.encode(transaction.signature!));
         resolve(transaction);
       } catch (err) {
         logError("Failed signing transaction");
@@ -277,7 +284,7 @@ export class PhantomWalletMock
   signMessage(message: Uint8Array): Promise<{ signature: Uint8Array }> {
     return new Promise(async (resolve, reject) => {
       try {
-        assert(this._connection != null, "Need to connect wallet first");
+        assert(this._connection != null);
         const signature = nacl.sign.detached(
           forceUint8Array(message),
           this._keypair.secretKey
@@ -385,6 +392,7 @@ export class PhantomWalletMock
       [this._signer],
       options
     );
+    this._transactionSignatures.push(signature);
     return { signature };
   }
 }

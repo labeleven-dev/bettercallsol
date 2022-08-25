@@ -16,7 +16,7 @@ before(() => {
 });
 
 describe("Connect Wallet", () => {
-  it("connect wallet", () => {
+  it("Connect Wallet", () => {
     cy.get(".wallet-adapter-button-trigger").click();
     cy.get(".wallet-adapter-modal-list")
       .children("li")

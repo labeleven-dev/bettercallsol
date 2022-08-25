@@ -9,8 +9,8 @@
     "test": "react-app-rewired test",
     "release": "semantic-release",
     "license-report": "license-report --only=prod | node scripts/license-report.js",
-    "cypress:open": "node_modules/.bin/cypress open",
-    "cypress:run": "node_modules/.bin/cypress run"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "browserslist": {
     "production": [
@@ -84,6 +84,7 @@
     "react-scripts": "5.0.1",
     "semantic-release": "^19.0.3",
     "semantic-release-export-data": "^1.0.0",
-    "tweetnacl": "^1.0.3"
+    "tweetnacl": "^1.0.3",
+    "@types/assert": "^1.5.6"
   }
 }

@@ -1,12 +1,14 @@
 import { EventEmitter } from "@solana/wallet-adapter-base";
 import {
   Commitment,
+  Finality,
   PublicKey,
   RpcResponseAndContext,
   SendOptions,
   SignatureResult,
   Transaction,
   TransactionError,
+  TransactionResponse,
   TransactionSignature,
 } from "@solana/web3.js";
 
@@ -59,8 +61,17 @@ export interface PhantomWallet extends EventEmitter<PhantomWalletEvents> {
   requestAirdrop(sol: number): Promise<RpcResponseAndContext<SignatureResult>>;
 
   connectionURL: string;
+
   getBalance(commitment: Commitment): Promise<number>;
+
   getBalanceSol(commitment: Commitment): Promise<number>;
+
+  transactionSignatures: string[];
+
+  getConfirmedTransaction(
+    signature: string,
+    commitment?: Finality
+  ): Promise<null | TransactionResponse>;
 }
 
 export interface PhantomWindow extends Window {
