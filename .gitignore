@@ -25,3 +25,7 @@ yarn-error.log*
 .firebase
 
 .version
+
+cypress/downloads
+cypress/videos
+.idea
