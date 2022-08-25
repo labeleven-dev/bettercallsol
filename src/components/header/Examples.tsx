@@ -62,6 +62,7 @@ export const Example: React.FC = () => {
             variant="ghost"
             textColor="white"
             isDisabled={!walletPublicKey}
+            data-cy="example-btn"
           >
             Examples
           </MenuButton>
@@ -69,6 +70,7 @@ export const Example: React.FC = () => {
       </DarkMode>
       <MenuList fontSize="md" zIndex="modal">
         <MenuItem
+          data-cy="example-systemProgramTransfer"
           onClick={() => {
             loadExample("systemProgramTransfer");
           }}
@@ -76,6 +78,7 @@ export const Example: React.FC = () => {
           System Program: Transfer SOL
         </MenuItem>
         <MenuItem
+          data-cy="example-systemProgramCreateAccount"
           onClick={() => {
             loadExample("systemProgramCreateAccount");
           }}

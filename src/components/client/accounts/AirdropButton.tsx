@@ -77,7 +77,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
     },
   });
 
-  const airdop = () => {
+  const airdrop = () => {
     setStatus("running");
     setMessage("Sending transcation...");
     connection
@@ -98,7 +98,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
 
   return (
     <Popover placement="left" initialFocusRef={initialFocusRef} isLazy>
-      <Tooltip label="Airdop SOL">
+      <Tooltip label="Airdrop SOL">
         {/* cannot use tooltips directly on trigger 
             https://github.com/chakra-ui/chakra-ui/issues/2843 */}
         <Box display="inline-block">
@@ -221,9 +221,9 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
                   size="sm"
                   colorScheme="teal"
                   leftIcon={<Icon as={FaParachuteBox} />}
-                  onClick={airdop}
+                  onClick={airdrop}
                 >
-                  Airdop
+                  Airdrop
                 </Button>
               )}
             </VStack>

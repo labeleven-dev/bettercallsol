@@ -58,7 +58,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
 
       <Collapse in={expanded}>
         <Flex alignItems="center" mb="1">
-          <FormLabel mb="0" htmlFor="program-id">
+          <FormLabel mb="0" htmlFor={`program-id-${index}`}>
             Program
           </FormLabel>
           <InputGroup>
@@ -89,7 +89,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
 
             <AccountAutoComplete
               chakraInputProps={{
-                id: "program-id",
+                id: `program-id-${index}`,
                 placeholder: "Program ID",
                 paddingStart: "10",
                 autoFocus: true,
@@ -153,7 +153,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           )}
         </Flex>
 
-        <Accounts />
+        <Accounts instructionIndex={index} />
 
         <Data />
       </Collapse>

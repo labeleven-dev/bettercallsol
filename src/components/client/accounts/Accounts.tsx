@@ -24,7 +24,9 @@ export const AccountContext = React.createContext<{
   isAnchor: boolean;
 }>({ id: "", isAnchor: false });
 
-export const Accounts: React.FC = () => {
+export const Accounts: React.FC<{ instructionIndex: number }> = ({
+  instructionIndex,
+}) => {
   const { useShallowGet, update, isAnchor } = useInstruction();
   const [anchorAccountCount, accountOrder] = useShallowGet((state) => [
     state.anchorAccounts?.length || 0,
@@ -47,7 +49,7 @@ export const Accounts: React.FC = () => {
           value={{ id: index, isAnchor: true }}
           key={index}
         >
-          <Account index={index} />
+          <Account instructionIndex={instructionIndex} index={index} />
         </AccountContext.Provider>
       ))}
 
@@ -72,7 +74,10 @@ export const Accounts: React.FC = () => {
         >
           {accountOrder.map((id, index) => (
             <AccountContext.Provider value={{ id, isAnchor: false }} key={id}>
-              <Account index={index + anchorAccountCount} />
+              <Account
+                instructionIndex={instructionIndex}
+                index={index + anchorAccountCount}
+              />
             </AccountContext.Provider>
           ))}
         </Sortable>

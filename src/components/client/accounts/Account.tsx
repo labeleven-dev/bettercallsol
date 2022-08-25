@@ -25,8 +25,9 @@ import { AccountInput } from "./AccountInput";
 import { PdaTypeConfig } from "./type-configs/PdaTypeConfig";
 
 export const Account: React.FC<{
+  instructionIndex: number;
   index: number;
-}> = ({ index }) => {
+}> = ({ instructionIndex, index }) => {
   const { id, isAnchor, useShallowGet, update } = useAccount();
   const { update: updateInstruction } = useInstruction();
   const { type, config, isConfigurable: isTypeConfigurable } = useAccountType();
@@ -91,7 +92,7 @@ export const Account: React.FC<{
       />
 
       <Grid flex="1">
-        <AccountInput />
+        <AccountInput instructionIndex={instructionIndex} index={index} />
 
         <Wrap
           // TODO ignores other future tags

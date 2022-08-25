@@ -17,7 +17,10 @@ import { ExplorerButton } from "../../common/ExplorerButton";
 import { AccountTypeButton } from "./AccountTypeButton";
 import { AirdropButton } from "./AirdropButton";
 
-export const AccountInput: React.FC = () => {
+export const AccountInput: React.FC<{
+  instructionIndex: number;
+  index: number;
+}> = ({ instructionIndex, index }) => {
   const { useGet, update } = useAccount();
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
   const { type, populate, allPopulate } = useAccountType();
@@ -25,7 +28,10 @@ export const AccountInput: React.FC = () => {
   const pubkey = useGet((state) => state.pubkey);
 
   return (
-    <InputGroup size="sm">
+    <InputGroup
+      id={`account-input-group-${instructionIndex}-${index}`}
+      size="sm"
+    >
       <InputLeftElement
         ml="1"
         // chakra hardcode the width so we can't have multiple buttons
@@ -36,6 +42,7 @@ export const AccountInput: React.FC = () => {
 
       <AccountAutoComplete
         chakraInputProps={{
+          id: `account-${instructionIndex}-${index}`,
           size: "sm",
           paddingStart: "12",
           // TODO should be smarter based on the number of children in InputRightElement
