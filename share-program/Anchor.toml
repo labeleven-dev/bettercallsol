@@ -1,0 +1,20 @@
+[features]
+seeds = false
+
+[workspace]
+members = [
+    "programs/bettercallsol",
+]
+
+[programs.localnet]
+bettercallsol = "5JmbcHej3bKWA43BDpzWsqpfYM7gWdDBWsnYiJxHUE8s"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = ".key/localhost.json"
+
+[scripts]
+test = "ts-mocha -p tsconfig.json -t 1000000 tests/*.ts"

@@ -1,0 +1,30 @@
+[package]
+name = "bettercallsol"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "bettercallsol"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[profile.release]
+overflow-checks = true
+
+[dependencies]
+anchor-lang = "0.25.0"
+anchor-spl = "0.25.0"
+solana-program = "1.9.29"
+borsh = "0.9.3"
+num-derive = "0.3.3"
+num-traits = "0.2.14"
+thiserror = "1.0.30"
+uint = "0.9.1"
+arrayref = "0.3.6"
