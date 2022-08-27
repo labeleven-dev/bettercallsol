@@ -5,11 +5,12 @@ import {
   getAllTransactionsFromWallet,
   shareTransaction,
 } from "./lib/bettercallsol";
-import { BCSTransaction } from "./lib/types";
+import * as ion from "ion-js";
 
 async function main() {
-  let transactionData =
-    '{"nnnnnn":"System Program: Transfer","instructions":[{"name":"Transfer","programId":"11111111111111111111111111111111","accounts":[{"type":{"type":"wallet"},"name":"From","pubkey":"9Cu4vedBwbXaFArdSRkWugedyGwPckxuoAEVmg37jbfV","isWritable":true,"isSigner":true},{"type":{"type":"unspecified"},"name":"To","pubkey":"GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV","isWritable":true,"isSigner":false}],"data":{"format":"bufferLayout","value":[{"name":"Instruction","type":"u32","value":2},{"name":"Lamport","type":"u64","value":100000}]}}]}';
+  let transactionDataJson =
+    '{"name":"System Program: Transfer","instructions":[{"name":"Transfer","programId":"11111111111111111111111111111111","accounts":[{"type":{"type":"wallet"},"name":"From","pubkey":"9Cu4vedBwbXaFArdSRkWugedyGwPckxuoAEVmg37jbfV","isWritable":true,"isSigner":true},{"type":{"type":"unspecified"},"name":"To","pubkey":"GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV","isWritable":true,"isSigner":false}],"data":{"format":"bufferLayout","value":[{"name":"Instruction","type":"u32","value":2},{"name":"Lamport","type":"u64","value":100000}]}}]}';
+  // let transactionData = JSON.parse(transactionDataJson);
 
   const TXN_OPTS: ConfirmOptions = {
     commitment: "confirmed",
@@ -26,7 +27,7 @@ async function main() {
   let transactionAccount = await shareTransaction(
     connection,
     payer,
-    transactionData,
+    transactionDataJson,
     "confirmed",
     TXN_OPTS
   );

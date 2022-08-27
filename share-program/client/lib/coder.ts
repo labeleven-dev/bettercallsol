@@ -1,6 +1,7 @@
 import { Buffer } from "buffer";
 import { BCSTransaction } from "./types";
 import { PublicKey } from "@solana/web3.js";
+import * as brotli from "brotli";
 
 export function decodeBCSTransaction(
   address: PublicKey,
@@ -11,7 +12,15 @@ export function decodeBCSTransaction(
   let authority = new PublicKey(buffer.slice(10, 42));
   let md5 = buffer.slice(42, 42 + 16).toString("hex");
   let size = buffer.slice(58, 60).readUint16BE();
-  let data = buffer.slice(60, 60 + size).toString("utf-8");
+  let dataBuffer = buffer.slice(60, 60 + size);
+  let data;
+  try {
+    let decompressed = brotli.decompress(dataBuffer, size);
+    data = Buffer.from(decompressed).toString("utf-8");
+  } catch (e) {
+    // brotli decompress error when there is no data
+    data = dataBuffer.toString("utf-8");
+  }
 
   return {
     address: address,
@@ -19,6 +28,7 @@ export function decodeBCSTransaction(
     bump: bump,
     authority: authority,
     md5: md5,
+
     size: size,
     data: data,
   };

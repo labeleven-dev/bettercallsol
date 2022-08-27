@@ -28,6 +28,7 @@ import {
 import { Buffer } from "buffer";
 import { BCSTransaction } from "./types";
 import { decodeBCSTransaction } from "./coder";
+import * as brotli from "brotli";
 
 export function initializeTransactionInstruction(
   hash: string,
@@ -177,8 +178,7 @@ export async function shareTransaction(
   commitment?: Commitment,
   confirmOptions?: ConfirmOptions
 ): Promise<BCSTransaction> {
-  // todo: compress data
-  let transactionBytes = Buffer.from(transactionJson);
+  let transactionBytes = brotli.compress(Buffer.from(transactionJson));
   let hash = createHash(transactionJson);
 
   // get or create transaction account
