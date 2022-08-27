@@ -11,6 +11,7 @@ import {
   getEstimatedTransactionAccountCost,
   shareTransaction,
 } from "./lib/bettercallsol";
+import { DEVNET } from "./lib/constants";
 
 async function main() {
   let transactionDataJson =
@@ -22,7 +23,7 @@ async function main() {
     preflightCommitment: "confirmed",
     skipPreflight: true,
   };
-  const connection = new Connection("http://127.0.0.1:8899", TXN_OPTS);
+  const connection = new Connection(DEVNET, TXN_OPTS);
   const payer = Keypair.fromSecretKey(
     Uint8Array.from(
       JSON.parse(fs.readFileSync("./.key/localhost.json", "utf8"))

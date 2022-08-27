@@ -44,3 +44,6 @@ export const TRANSACTION_BASIC_LENGTH =
   32 + // authority
   16 + // md5
   2; // size
+
+export const DEVNET = "https://api.devnet.solana.com";
+export const LOCALNET = "http://127.0.0.1:8899";
