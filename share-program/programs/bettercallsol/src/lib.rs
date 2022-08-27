@@ -15,7 +15,7 @@ pub const PROGRAM_VERSION: u8 = 1;
 const PREFIX: &str = "bcs";
 const TRANSACTION_SEED: &str = "transaction";
 
-declare_id!("5JmbcHej3bKWA43BDpzWsqpfYM7gWdDBWsnYiJxHUE8s");
+declare_id!("HCcwD495j265Vqunp55pS8z64ddt9FnoswnBi61FH22S");
 
 #[program]
 pub mod bettercallsol {
@@ -44,6 +44,7 @@ pub mod bettercallsol {
         size: u16,
         data: Vec<u8>,
     ) -> Result<()> {
+        msg!("update transaction");
         let transaction = &mut ctx.accounts.transaction;
         let mut transaction_data = transaction.as_ref().data.borrow_mut();
 
@@ -55,6 +56,18 @@ pub mod bettercallsol {
 
         let array_slice: &mut [u8] = &mut transaction_data[position..(position + size as usize)];
         array_slice.copy_from_slice(&data.as_slice()[..]);
+
+        Ok(())
+    }
+
+    pub fn delete_transaction(ctx: Context<DeleteTransaction>) -> Result<()> {
+        msg!("delete transaction");
+        let transaction = &mut ctx.accounts.transaction;
+        let mut transaction_data = transaction.as_ref().data.borrow_mut();
+        let transaction_data_length = transaction_data.len();
+        let zeros = vec![0; transaction_data_length];
+        let array_slice: &mut [u8] = &mut transaction_data[..];
+        array_slice.copy_from_slice(&zeros.as_slice()[..]);
 
         Ok(())
     }
@@ -86,13 +99,30 @@ pub struct InitializeTransaction<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(offset: u32, size: u32)]
+#[instruction(offset: u16, size: u16)]
 pub struct UpdateTransaction<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
     #[account(
     mut,
     constraint = transaction.load() ?.authority.key() == authority.key(),
+    )]
+    pub transaction: AccountLoader<'info, Transaction>,
+    pub system_program: Program<'info, System>,
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+}
+
+#[derive(Accounts)]
+#[instruction()]
+pub struct DeleteTransaction<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    #[account(
+    mut,
+    constraint = transaction.load() ?.authority.key() == authority.key(),
+    close = authority
     )]
     pub transaction: AccountLoader<'info, Transaction>,
     pub system_program: Program<'info, System>,

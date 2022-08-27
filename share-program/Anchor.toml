@@ -7,7 +7,7 @@ members = [
 ]
 
 [programs.localnet]
-bettercallsol = "5JmbcHej3bKWA43BDpzWsqpfYM7gWdDBWsnYiJxHUE8s"
+bettercallsol = "HCcwD495j265Vqunp55pS8z64ddt9FnoswnBi61FH22S"
 
 [registry]
 url = "https://anchor.projectserum.com"

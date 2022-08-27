@@ -5,7 +5,8 @@
   "scripts": {
     "build:anchor": "anchor build",
     "test:anchor": "anchor test",
-    "clean:anchor": "rm -rf ./.anchor && rm -rf ./target"
+    "clean:anchor": "rm -rf ./.anchor && rm -rf ./target",
+    "start:client": "ts-node client/client.ts"
   },
   "dependencies": {
     "@project-serum/anchor": "^0.25.0",
