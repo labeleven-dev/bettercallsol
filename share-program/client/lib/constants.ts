@@ -36,3 +36,11 @@ export const TRANSACTION_SIZE_LOC =
   1 + // bump
   32 + // authority
   16; // md5
+
+export const TRANSACTION_BASIC_LENGTH =
+  8 + // discriminator
+  1 + // version
+  1 + // bump
+  32 + // authority
+  16 + // md5
+  2; // size

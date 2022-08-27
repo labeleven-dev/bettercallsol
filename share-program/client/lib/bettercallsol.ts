@@ -24,6 +24,7 @@ import {
   SYSTEM_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   TRANSACTION_AUTHORITY_LOC,
+  TRANSACTION_BASIC_LENGTH,
 } from "./constants";
 import { Buffer } from "buffer";
 import { BCSTransaction } from "./types";
@@ -298,5 +299,20 @@ export async function deleteTransactionAccount(
     new Transaction().add(ix),
     [payer],
     confirmOptions
+  );
+}
+
+export async function getEstimatedTransactionAccountCost(
+  connection: Connection,
+  transactionJson: string,
+  commitment: Commitment
+): Promise<number> {
+  let transactionBytes = brotli.compress(Buffer.from(transactionJson));
+
+  let dataLength = TRANSACTION_BASIC_LENGTH + transactionBytes.length;
+
+  return await connection.getMinimumBalanceForRentExemption(
+    dataLength,
+    commitment
   );
 }

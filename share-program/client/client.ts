@@ -1,11 +1,16 @@
-import { ConfirmOptions, Connection, Keypair } from "@solana/web3.js";
+import {
+  ConfirmOptions,
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+} from "@solana/web3.js";
 import fs from "fs";
 import {
   deleteTransactionAccount,
   getAllTransactionsFromWallet,
+  getEstimatedTransactionAccountCost,
   shareTransaction,
 } from "./lib/bettercallsol";
-import * as ion from "ion-js";
 
 async function main() {
   let transactionDataJson =
@@ -22,6 +27,18 @@ async function main() {
     Uint8Array.from(
       JSON.parse(fs.readFileSync("./.key/localhost.json", "utf8"))
     )
+  );
+
+  let estimatedRent = await getEstimatedTransactionAccountCost(
+    connection,
+    transactionDataJson,
+    "confirmed"
+  );
+
+  console.log(
+    `Estimated minimal balance for rent exemption: ${
+      estimatedRent / LAMPORTS_PER_SOL
+    } sol`
   );
 
   let transactionAccount = await shareTransaction(
