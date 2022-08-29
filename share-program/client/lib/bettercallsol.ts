@@ -19,6 +19,7 @@ import {
 import { getTransactionAccountAddress } from "./addresses";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  CHUNK_SIZE,
   PROGRAM_ID,
   RENT_PROGRAM_ID,
   SYSTEM_PROGRAM_ID,
@@ -58,8 +59,6 @@ export function initializeTransactionInstruction(
       isSigner: false,
     },
     { pubkey: SYSTEM_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: ASSOCIATED_TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
     { pubkey: RENT_PROGRAM_ID, isWritable: false, isSigner: false },
   ];
 
@@ -79,7 +78,6 @@ export function updateTransactionInstruction(
 ): TransactionInstruction {
   let dataLayout = BufferLayout.struct([
     BufferLayout.u16("offset"),
-    BufferLayout.u16("size"),
     BufferLayout.u32("vec"), // size of vector
   ]);
 
@@ -103,8 +101,6 @@ export function updateTransactionInstruction(
       isSigner: false,
     },
     { pubkey: SYSTEM_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: ASSOCIATED_TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
   ];
 
   return new TransactionInstruction({
@@ -128,8 +124,6 @@ export function deleteTransactionInstruction(
       isSigner: false,
     },
     { pubkey: SYSTEM_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
-    { pubkey: ASSOCIATED_TOKEN_PROGRAM_ID, isWritable: false, isSigner: false },
   ];
 
   return new TransactionInstruction({
@@ -201,9 +195,7 @@ export async function shareTransaction(
   if (transactionAccount.md5 !== createHash(transactionAccount.data)) {
     // update transaction
 
-    const chunkSize = 768;
-
-    if (transactionBytes.length < chunkSize) {
+    if (transactionBytes.length < CHUNK_SIZE) {
       let ix = await updateTransactionInstruction(
         hash,
         payer,
@@ -223,13 +215,13 @@ export async function shareTransaction(
       do {
         let transactionBytesBatch = transactionBytes.subarray(
           offset,
-          offset + chunkSize
+          offset + CHUNK_SIZE
         );
         let ix = await updateTransactionInstruction(
           hash,
           payer,
           offset,
-          Math.min(chunkSize, transactionBytes.length - offset),
+          Math.min(CHUNK_SIZE, transactionBytes.length - offset),
           transactionBytesBatch
         );
 
@@ -239,7 +231,7 @@ export async function shareTransaction(
           [payer],
           confirmOptions
         );
-        offset = offset + chunkSize;
+        offset = offset + CHUNK_SIZE;
       } while (offset < transactionBytes.length);
     }
     // get transaction account

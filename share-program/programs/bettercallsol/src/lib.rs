@@ -41,13 +41,13 @@ pub mod bettercallsol {
     pub fn update_transaction(
         ctx: Context<UpdateTransaction>,
         offset: u16,
-        size: u16,
         data: Vec<u8>,
     ) -> Result<()> {
         msg!("update transaction");
         let transaction = &mut ctx.accounts.transaction;
         let mut transaction_data = transaction.as_ref().data.borrow_mut();
 
+        let size = data.len();
         let position = TRANSACTION_SIZE_START + offset as usize;
 
         if (position + size as usize) > transaction_data.len() {
@@ -64,8 +64,8 @@ pub mod bettercallsol {
         msg!("delete transaction");
         let transaction = &mut ctx.accounts.transaction;
         let mut transaction_data = transaction.as_ref().data.borrow_mut();
-        let transaction_data_length = transaction_data.len();
-        let zeros = vec![0; transaction_data_length];
+        let size = transaction_data.len();
+        let zeros = vec![0; size];
         let array_slice: &mut [u8] = &mut transaction_data[..];
         array_slice.copy_from_slice(&zeros.as_slice()[..]);
 
@@ -92,14 +92,11 @@ pub struct InitializeTransaction<'info> {
     )]
     pub transaction: AccountLoader<'info, Transaction>,
     pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
     pub rent: Sysvar<'info, Rent>,
 }
 
 #[derive(Accounts)]
-#[instruction(offset: u16, size: u16)]
+#[instruction(offset: u16)]
 pub struct UpdateTransaction<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
@@ -109,9 +106,6 @@ pub struct UpdateTransaction<'info> {
     )]
     pub transaction: AccountLoader<'info, Transaction>,
     pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
 #[derive(Accounts)]
@@ -126,9 +120,6 @@ pub struct DeleteTransaction<'info> {
     )]
     pub transaction: AccountLoader<'info, Transaction>,
     pub system_program: Program<'info, System>,
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
 pub const TRANSACTION_SIZE_START: usize = 8 + // discriminator

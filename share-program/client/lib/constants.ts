@@ -47,3 +47,5 @@ export const TRANSACTION_BASIC_LENGTH =
 
 export const DEVNET = "https://api.devnet.solana.com";
 export const LOCALNET = "http://127.0.0.1:8899";
+
+export const CHUNK_SIZE = 876;

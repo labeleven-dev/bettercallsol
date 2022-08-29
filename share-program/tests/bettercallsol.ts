@@ -65,7 +65,7 @@ describe("better call sol", () => {
   let transaction;
   let transactionBump;
   let transactionData =
-    '{"name10":"System Program: Transfer","instructions":[{"name":"Transfer","programId":"11111111111111111111111111111111","accounts":[{"type":{"type":"wallet"},"name":"From","pubkey":"9Cu4vedBwbXaFArdSRkWugedyGwPckxuoAEVmg37jbfV","isWritable":true,"isSigner":true},{"type":{"type":"unspecified"},"name":"To","pubkey":"GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV","isWritable":true,"isSigner":false}],"data":{"format":"bufferLayout","value":[{"name":"Instruction","type":"u32","value":2},{"name":"Lamport","type":"u64","value":100000}]}}]}';
+    '{"name10":"System Program: Transfer","instructions":[{"name":"Transfer","programId":"11111111111111111111111111111111","accounts":[{"type":{"type":"wallet"},"name":"From","pubkey":"9Cu4vedBwbXaFArdSRkWugedyGwPckxuoAEVmg37jbfV","isWritable":true,"isSigner":true},{"type":{"type":"unspecified"},"name":"To","pubkey":"GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV","isWritable":true,"isSigner":false}],"data":{"format":"bufferLayout","value":[{"name":"Instruction","type":"u32","value":2},{"name":"Lamport","type":"u64","value":100000}]}}]}{"name10":"System Program: Transfer","instructions":[{"name":"Transfer","programId":"11111111111111111111111111111111","accounts":[{"type":{"type":"wallet"},"name":"From","pubkey":"9Cu4vedBwbXaFArdSRkWugedyGwPckxuoAEVmg37jbfV","isWritable":true,"isSigner":true},{"type":{"type":"unspecified"},"name":"To","pubkey":"GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV","isWritable":true,"isSigner":false}],"data":{"format":"bufferLayout","value":[{"name":"Instruction","type":"u32","value":2},{"name":"Lamport","type":"u64","value":100000}]}}]}';
   let transactionBytes = Buffer.from(transactionData);
 
   it("initialize transaction", async () => {
@@ -99,8 +99,6 @@ describe("better call sol", () => {
         authority: authority.publicKey,
         transaction: transaction,
         systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       })
       .signers([authority])
@@ -119,17 +117,15 @@ describe("better call sol", () => {
   });
 
   it("update transaction", async () => {
-    let chunkSize = 768;
+    let chunkSize = 876;
 
     if (transactionBytes.length < chunkSize) {
       const tx = await program.methods
-        .updateTransaction(0, transactionBytes.length, transactionBytes)
+        .updateTransaction(0, transactionBytes)
         .accounts({
           authority: authority.publicKey,
           transaction: transaction,
           systemProgram: anchor.web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .signers([authority])
         .rpc();
@@ -141,17 +137,11 @@ describe("better call sol", () => {
           offset + chunkSize
         );
         let tx = await program.methods
-          .updateTransaction(
-            offset,
-            Math.min(chunkSize, transactionBytes.length - offset),
-            transactionBytesBatch
-          )
+          .updateTransaction(offset, transactionBytesBatch)
           .accounts({
             authority: authority.publicKey,
             transaction: transaction,
             systemProgram: anchor.web3.SystemProgram.programId,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           })
           .signers([authority])
           .rpc();
