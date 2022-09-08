@@ -21,8 +21,8 @@ export class BorshCoder implements Coder {
     // TODO this is how Anchor does it atm https://github.com/coral-xyz/anchor/blob/5a025b949e67bf424a30641028973f00325b8f1e/ts/packages/anchor/src/coder/borsh/accounts.ts#L46
     // const buffer = Buffer.alloc(layout.span);
     const buffer = Buffer.alloc(1000);
-    layout.encode(values, buffer);
-    return buffer;
+    const length = layout.encode(values, buffer);
+    return buffer.slice(0, length);
   }
 }
 
