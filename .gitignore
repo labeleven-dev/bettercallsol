@@ -25,3 +25,14 @@ yarn-error.log*
 .firebase
 
 .version
+
+.idea
+share-program/.anchor
+share-program/.key
+share-program/node_modules
+share-program/target
+share-program/package-lock.json
+share-program/Cargo.lock
+
+cypress/videos
+cypress/downloads
