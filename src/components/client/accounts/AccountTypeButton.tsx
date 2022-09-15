@@ -20,9 +20,9 @@ import {
 } from "react-icons/fa";
 import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
-import { AccountTypeType } from "../../../types/internal";
+import { AccountType } from "../../../types/internal";
 
-const TYPES: AccountTypeType[] = [
+const TYPES: AccountType[] = [
   "wallet",
   "keypair",
   "pda",
@@ -33,7 +33,7 @@ const TYPES: AccountTypeType[] = [
   "unspecified",
 ];
 
-const TYPE_CONFIGS: Record<AccountTypeType, any> = {
+const TYPE_CONFIGS: Record<AccountType, any> = {
   unspecified: {
     name: "Unspecified",
     icon: <Icon as={FaDiaspora} />,
@@ -70,11 +70,9 @@ export const AccountTypeButton: React.FC = () => {
 
   const { name: selectedName, icon: selectedIcon } = TYPE_CONFIGS[type];
 
-  const onClick = (type: AccountTypeType) => () => {
+  const onClick = (type: AccountType) => () => {
     update((state) => {
-      state.type = {
-        type,
-      };
+      state.type = type;
     });
     // only populates for account types that receieve no config,
     // e.g. wallet or new key pair

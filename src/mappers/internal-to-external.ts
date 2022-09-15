@@ -40,9 +40,18 @@ export const mapITransactionToTransactionExt = ({
 }: ITransaction): ITransactionExt => ({
   name,
   instructions: toSortedArray(instructions).map(
-    ({ name, programId, accounts, data, anchorMethod, anchorAccounts }) => ({
+    ({
+      name,
+      programId,
+      programMetadata,
+      accounts,
+      data,
+      anchorMethod,
+      anchorAccounts,
+    }) => ({
       name: name || undefined,
       programId,
+      programMetadata,
       accounts: toSortedArray(accounts).map(mapIAccountToIAccountExt),
       data: {
         format: data.format,

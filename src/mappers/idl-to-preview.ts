@@ -16,7 +16,7 @@ const mapIdlAccountItemToIAccountExt = (
     const { name, isMut, isSigner } = account as IdlAccount;
     // TODO account resolver for common stuff
     return {
-      type: { type: "unspecified" },
+      type: "unspecified",
       name,
       pubkey: "",
       isWritable: isMut,

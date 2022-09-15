@@ -6,20 +6,7 @@ import { IID, SortableCollection } from "./sortable";
 
 export type IPubKey = string;
 
-export interface IAccountTypeConfigPda {
-  seeds: string[];
-  bump?: number;
-}
-
-export interface IAccountTypeConfigAta {
-  mint: IPubKey;
-}
-
-export interface IAccountTypeConfigNamed {
-  name?: string;
-}
-
-export type AccountTypeType =
+export type AccountType =
   | "unspecified"
   | "wallet"
   | "keypair"
@@ -28,24 +15,22 @@ export type AccountTypeType =
   | "program"
   | "sysvar";
 
-export type AccountTypeConfig =
-  | IAccountTypeConfigPda
-  | IAccountTypeConfigAta
-  | IAccountTypeConfigNamed;
-
-export interface IAccountType {
-  type: AccountTypeType;
-  config?: AccountTypeConfig;
+export interface IAccountMetadata {
+  name?: string;
+  mint?: IPubKey;
+  seeds?: string[];
+  bump?: number;
 }
 
 export interface IAccount {
   id: IID;
-  type: IAccountType;
+  type: AccountType;
   name?: string;
   description?: string;
   pubkey: IPubKey;
   isWritable: boolean;
   isSigner: boolean;
+  metadata?: IAccountMetadata;
 }
 
 export type InstructionDataFieldType =
@@ -96,6 +81,8 @@ export interface IInstruction {
   name?: string;
   description?: string;
   programId: IPubKey;
+  programMetadata?: IAccountMetadata;
+
   accounts: SortableCollection<IAccount>;
   data: IInstructionData;
 

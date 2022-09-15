@@ -31,7 +31,7 @@ export const mapTransactionResponseToIPreview = (
 
   const parsedAccountKeys: IAccountExt[] = accountKeys.map(
     (account, index) => ({
-      type: { type: "unspecified" },
+      type: "unspecified",
       pubkey: account.toBase58(),
       isSigner: response.transaction.message.isAccountSigner(index),
       isWritable: response.transaction.message.isAccountWritable(index),

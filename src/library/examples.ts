@@ -16,18 +16,14 @@ export const EXAMPLES: Record<
           programId: "11111111111111111111111111111111",
           accounts: [
             {
-              type: {
-                type: "wallet",
-              },
+              type: "wallet",
               name: "Payer",
               pubkey: "",
               isWritable: true,
               isSigner: true,
             },
             {
-              type: {
-                type: "keypair",
-              },
+              type: "keypair",
               name: "New Account",
               pubkey: "",
               isWritable: true,
@@ -76,18 +72,14 @@ export const EXAMPLES: Record<
           programId: "11111111111111111111111111111111",
           accounts: [
             {
-              type: {
-                type: "wallet",
-              },
+              type: "wallet",
               name: "From",
               pubkey: "",
               isWritable: true,
               isSigner: true,
             },
             {
-              type: {
-                type: "unspecified",
-              },
+              type: "unspecified",
               name: "To",
               pubkey: "GoctE4EU5jZqbWg1Ffo5sjCqjrnzW1m76JmWwd84pwtV",
               isWritable: true,

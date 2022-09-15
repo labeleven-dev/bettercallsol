@@ -42,6 +42,7 @@ const mpaIAccountExtToIAccount = ({
 export const mapIInstructionExtToIInstruction = ({
   name,
   programId,
+  programMetadata,
   accounts,
   data,
   anchorMethod,
@@ -50,6 +51,7 @@ export const mapIInstructionExtToIInstruction = ({
   mapToSortable({
     name,
     programId,
+    programMetadata,
     accounts: mapToSortableCollection(accounts.map(mpaIAccountExtToIAccount)),
     data: {
       format: data.format,

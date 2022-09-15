@@ -3,6 +3,7 @@
 import {
   DataFormat,
   IAccount,
+  IAccountMetadata,
   IInstrctionDataField,
   IInstructionDataRaw,
   IPubKey,
@@ -21,6 +22,7 @@ export interface IInstructionExt {
   name?: string;
   description?: string;
   programId: IPubKey;
+  programMetadata?: IAccountMetadata;
   accounts: IAccountExt[];
   data: IInstructionDataExt;
   anchorMethod?: string;
