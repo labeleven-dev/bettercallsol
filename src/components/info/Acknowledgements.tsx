@@ -50,8 +50,6 @@ export const Acknowledgements: React.FC = () => (
         <br />
         @solana/web3.js (1.51.0), licenced MIT
         <br />
-        ajv (8.11.0), licenced MIT
-        <br />
         axios (0.27.2), licenced MIT
         <br />
         bignumber.js (9.0.2), licenced MIT

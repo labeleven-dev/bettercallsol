@@ -6,9 +6,6 @@ export const AnchorJsonImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;
   setError: (error: string) => void;
 }> = ({ setPreview, setError }) => {
-  // TODO
-  // const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
-
   const parse = (json: string) => {
     if (!json) return;
 
@@ -18,18 +15,11 @@ export const AnchorJsonImport: React.FC<{
     let prasedJson;
     try {
       prasedJson = JSON.parse(json);
+      setPreview(mapIdlToIPreview(prasedJson, "anchorJson", ""));
     } catch (e) {
       setError("Invalid JSON");
       return;
     }
-
-    // TODO
-    // if (!validate(prasedJson)) {
-    //   setError(validate.errors?.map((e) => e.message).join(", ")!);
-    //   return;
-    // }
-
-    setPreview(mapIdlToIPreview(prasedJson, "anchorJson", ""));
   };
 
   return (

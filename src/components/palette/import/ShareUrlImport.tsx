@@ -1,10 +1,8 @@
 import { DownloadIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
-import Ajv from "ajv";
 import axios from "axios";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { mapITransactionExtToIPreview } from "../../../mappers/external-to-preview";
-import { JSON_SCHEMA } from "../../../types/external";
 import { IPreview } from "../../../types/preview";
 
 export const ShareUrlImport: React.FC<{
@@ -13,7 +11,6 @@ export const ShareUrlImport: React.FC<{
 }> = ({ setPreview, setError }) => {
   const [url, setUrl] = useState("");
   const [inProgress, setInprogress] = useState(false);
-  const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
 
   const fetch = async () => {
     if (!url) return;
@@ -24,10 +21,6 @@ export const ShareUrlImport: React.FC<{
 
     try {
       const response = await axios.get(url);
-      if (!validate(response.data)) {
-        setError(validate.errors?.map((e) => e.message).join(", ")!);
-        return;
-      }
       setPreview(
         mapITransactionExtToIPreview(response.data as IPreview, "shareUrl", url)
       );
