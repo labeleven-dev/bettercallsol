@@ -1,11 +1,9 @@
 import { useToast } from "@chakra-ui/react";
-import Ajv from "ajv";
 import axios from "axios";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
 import { mapTransactionResponseToIPreview } from "../mappers/web3js-to-preview";
-import { JSON_SCHEMA } from "../types/external";
 import { IPreview } from "../types/preview";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
@@ -60,8 +58,6 @@ export const useImport = () => {
     },
   });
 
-  const validate = useMemo(() => new Ajv().compile(JSON_SCHEMA), []);
-
   // TODO load the transaction in the preview sidebar
   // const preview = searchParams.has("preview");
 
@@ -88,19 +84,6 @@ export const useImport = () => {
     axios
       .get(share)
       .then((response) => {
-        if (!validate(response.data)) {
-          setIsLoading(false);
-          // TODO why is this triggering 3 times?
-          toast({
-            title: "Transaction import failed",
-            description: `Invalid JSON from URL`,
-            status: "error",
-            duration: 15000,
-            isClosable: true,
-          });
-          return;
-        }
-
         set((state) => {
           state.import = {
             isLoading: false,
@@ -122,5 +105,5 @@ export const useImport = () => {
           isClosable: true,
         });
       });
-  }, [share, set, setIsLoading, setSearchParams, toast, validate]);
+  }, [share, set, setIsLoading, setSearchParams, toast]);
 };

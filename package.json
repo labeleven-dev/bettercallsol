@@ -41,7 +41,6 @@
     "@solana/wallet-adapter-react-ui": "^0.9.12",
     "@solana/wallet-adapter-wallets": "^0.17.2",
     "@solana/web3.js": "^1.44.2",
-    "ajv": "^8.11.0",
     "axios": "^0.27.2",
     "bignumber.js": "^9.0.2",
     "crypto-browserify": "^3.12.0",
