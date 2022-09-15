@@ -62,11 +62,11 @@ export const AccountInput: React.FC = () => {
             state.pubkey = pubkey.trim();
           });
         }}
-        setAccountType={(type) => {
+        updateAccount={(fn) => {
           update((state) => {
-            state.type = type;
+            fn(state);
           });
-          allPopulate[type.type]();
+          allPopulate[type]();
         }}
       />
 

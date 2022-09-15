@@ -1,13 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { WritableDraft } from "immer/dist/internal";
-import {
-  AccountTypeConfig,
-  AccountTypeType,
-  IAccountType,
-  IAccountTypeConfigPda,
-} from "../types/internal";
+import { AccountType, IAccountMetadata } from "../types/internal";
 import { isValidPublicKey } from "../utils/web3js";
 import { useAccount } from "./useAccount";
 import { useInstruction } from "./useInstruction";
@@ -17,12 +11,11 @@ import { useSessionStoreWithUndo } from "./useSessionStore";
  * Encapsulates logic to populate accounts based on their type
  */
 export const useAccountType = (): {
-  type: AccountTypeType;
-  config?: AccountTypeConfig;
-  update: (fn: (state: WritableDraft<IAccountType>) => void) => void;
+  type: AccountType;
+  metadata?: IAccountMetadata;
   populate: () => void;
   isConfigurable: boolean;
-  allPopulate: Record<AccountTypeType, () => void>;
+  allPopulate: Record<AccountType, () => void>;
 } => {
   const { useGet: instructionGet } = useInstruction();
   const { useShallowGet, update: accountUpdate } = useAccount();
@@ -31,16 +24,10 @@ export const useAccountType = (): {
   const toast = useToast();
 
   const programId = instructionGet((state) => state.programId);
-  const [type, config] = useShallowGet((state) => [
-    state.type.type,
-    state.type.config,
+  const [type, metadata] = useShallowGet((state) => [
+    state.type,
+    state.metadata,
   ]);
-
-  const update = (fn: (state: WritableDraft<IAccountType>) => void) => {
-    accountUpdate((state) => {
-      fn(state.type);
-    });
-  };
 
   ///// Populate functions /////
 
@@ -84,7 +71,7 @@ export const useAccountType = (): {
   };
 
   const pda = () => {
-    const seeds = (config as IAccountTypeConfigPda)?.seeds;
+    const seeds = metadata?.seeds;
     // TODO needed?
     if (!seeds) {
       return;
@@ -108,7 +95,7 @@ export const useAccountType = (): {
 
     accountUpdate((state) => {
       state.pubkey = pubkey.toBase58();
-      state.type.config = { seeds, bump } as IAccountTypeConfigPda;
+      state.metadata = { seeds, bump };
     });
   };
 
@@ -126,9 +113,8 @@ export const useAccountType = (): {
 
   return {
     type,
-    config,
+    metadata: metadata,
     isConfigurable: type === "pda" || type === "ata",
-    update,
     populate:
       type === "wallet"
         ? wallet

@@ -1,4 +1,5 @@
 import { Badge, Flex, InputProps, Spacer, Text } from "@chakra-ui/react";
+import { WritableDraft } from "immer/dist/internal";
 import React, { useState } from "react";
 import { useFilter } from "react-aria";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
@@ -8,12 +9,7 @@ import {
   PROGRAM_INFO_BY_ID,
 } from "../../library/programs";
 import { SYSVARS_BY_ID } from "../../library/sysvars";
-import {
-  AccountTypeType,
-  IAccountType,
-  INetwork,
-  IPubKey,
-} from "../../types/internal";
+import { AccountType, IAccount, INetwork, IPubKey } from "../../types/internal";
 import { ALL_NETWORKS } from "../../utils/internal";
 import { Autocomplete, AutoCompleteItem } from "./AutoComplete";
 
@@ -35,10 +31,10 @@ interface Option {
 export const AccountAutoComplete: React.FC<{
   pubkey: IPubKey;
   setPubkey: (pubkey: IPubKey) => void;
-  setAccountType?: (type: IAccountType) => void;
+  updateAccount?: (fn: (state: WritableDraft<IAccount>) => void) => void;
   types?: OptionType[];
   chakraInputProps?: InputProps;
-}> = ({ pubkey, setPubkey, setAccountType, types, chakraInputProps }) => {
+}> = ({ pubkey, setPubkey, updateAccount, types, chakraInputProps }) => {
   const [options, setOptions] = useState(OPTIONS);
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null);
 
@@ -79,27 +75,27 @@ export const AccountAutoComplete: React.FC<{
       setPubkey(value);
     } else if (type === "type") {
       setPubkey("");
-      if (setAccountType) {
-        setAccountType({ type: value as AccountTypeType });
+      if (updateAccount) {
+        updateAccount((state) => {
+          state.type = value as AccountType;
+        });
       }
     } else if (type === "program") {
       setPubkey(value);
-      if (setAccountType) {
-        setAccountType({
-          type: "program",
-          config: {
-            name: programLabel(value, network),
-          },
+      if (updateAccount) {
+        updateAccount((state) => {
+          state.type = "program";
+          state.metadata = { name: programLabel(value, network) };
         });
       }
     } else if (type === "sysvar") {
       setPubkey(value);
-      if (setAccountType) {
-        setAccountType({
-          type: "sysvar",
-          config: {
+      if (updateAccount) {
+        updateAccount((state) => {
+          state.type = "sysvar";
+          state.metadata = {
             name: SYSVARS_BY_ID[value].name,
-          },
+          };
         });
       }
     }

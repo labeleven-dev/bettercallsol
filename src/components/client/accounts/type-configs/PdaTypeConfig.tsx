@@ -21,22 +21,24 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
+import { useAccount } from "../../../../hooks/useAccount";
 import { useAccountType } from "../../../../hooks/useAccountType";
-import { IAccountTypeConfigPda } from "../../../../types/internal";
 
 // TODO not sophisticated enough, we need to handle many types of numbers, basically Buffer.write*()
 
 export const PdaTypeConfig: React.FC = () => {
   const [seed, setSeed] = useState("");
   const [error, setError] = useState("");
-  const { config, update, populate } = useAccountType();
+  const { update } = useAccount();
+  const { metadata, populate } = useAccountType();
   const initialFocusRef = useRef(null);
 
-  const { seeds, bump } = (config || { seeds: [] }) as IAccountTypeConfigPda;
+  const seeds = metadata?.seeds || [];
+  const bump = metadata?.bump;
 
   const add = () => {
     update((state) => {
-      state.config = { seeds: [...seeds, seed] };
+      state.metadata = { seeds: [...seeds, seed] };
     });
     setSeed("");
   };
@@ -105,7 +107,7 @@ export const PdaTypeConfig: React.FC = () => {
                         icon={<DeleteIcon />}
                         onClick={() => {
                           update((state) => {
-                            state.config = {
+                            state.metadata = {
                               seeds: seeds.filter((_, i) => i !== index),
                             };
                           });
