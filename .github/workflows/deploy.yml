@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Staging
 
+    concurrency: Staging
+
     outputs:
       version: ${{ steps.version.outputs.version }}
 
@@ -90,6 +92,8 @@ jobs:
   deployProd:
     runs-on: ubuntu-latest
     environment: Prod
+    
+    concurrency: Prod
 
     needs:
       - deployStaging
