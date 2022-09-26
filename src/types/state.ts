@@ -34,6 +34,7 @@ export interface UIState {
   readonly optionsOpen: boolean;
   readonly shareOpen: boolean;
   readonly infoOpen: boolean;
+  readonly descriptionVisible: boolean;
 }
 
 export interface ImportState {

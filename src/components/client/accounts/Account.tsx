@@ -1,4 +1,4 @@
-import { CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Grid,
@@ -10,12 +10,13 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React from "react";
-import { FaPenNib } from "react-icons/fa";
+import { FaFeather, FaICursor } from "react-icons/fa";
 import { useAccount } from "../../../hooks/useAccount";
 import { useAccountType } from "../../../hooks/useAccountType";
 import { useInstruction } from "../../../hooks/useInstruction";
 import { useShallowSessionStoreWithUndo } from "../../../hooks/useSessionStore";
 import { removeFrom } from "../../../utils/sortable";
+import { Description } from "../../common/Description";
 import { DragHandle } from "../../common/DragHandle";
 import { EditableName } from "../../common/EditableName";
 import { Numbering } from "../../common/Numbering";
@@ -39,12 +40,15 @@ export const Account: React.FC<{
     state.set,
   ]);
 
-  const [name, pubkey, isWritable, isSigner] = useShallowGet((state) => [
-    state.name,
-    state.pubkey,
-    state.isWritable,
-    state.isSigner,
-  ]);
+  const [name, description, pubkey, isWritable, isSigner] = useShallowGet(
+    (state) => [
+      state.name,
+      state.description,
+      state.pubkey,
+      state.isWritable,
+      state.isSigner,
+    ]
+  );
 
   const removeAccount = () => {
     updateInstruction((state) => {
@@ -65,7 +69,7 @@ export const Account: React.FC<{
   });
 
   return (
-    <Flex mb="2" alignItems="start">
+    <Flex mb="1" alignItems="start">
       <DragHandle
         unlockedProps={{ mt: "2", h: "2.5", w: "2.5" }}
         lockedProps={{ mt: "2", h: "3" }}
@@ -94,68 +98,79 @@ export const Account: React.FC<{
       />
 
       <Grid flex="1">
-        <AccountInput />
+        <Flex>
+          <Grid flex="1">
+            <AccountInput />
 
-        <Wrap
-          // TODO ignores other future tags
-          pt={isTypeConfigurable || metadata?.name ? "1" : undefined}
-        >
-          {/* TODO */}
-          {/* {type === "ata" && (
+            <Wrap
+              // TODO ignores other future tags
+              pt={isTypeConfigurable || metadata?.name ? "1" : undefined}
+            >
+              {/* TODO */}
+              {/* {type === "ata" && (
             <AtaTypeConfig />
           )} */}
 
-          {type === "pda" && <PdaTypeConfig />}
+              {type === "pda" && <PdaTypeConfig />}
 
-          {metadata?.name && <Tag size="sm">{metadata.name}</Tag>}
+              {metadata?.name && <Tag size="sm">{metadata.name}</Tag>}
 
-          {/* TODO account balance */}
-        </Wrap>
+              {/* TODO account balance */}
+            </Wrap>
+          </Grid>
 
-        {/* TODO description when not minimised */}
-      </Grid>
-
-      <ToggleIconButton
-        ml="1"
-        size="sm"
-        label="Writable"
-        icon={<EditIcon />}
-        isDisabled={isAnchor}
-        toggled={isWritable}
-        onToggle={(toggled) => {
-          update((state) => {
-            state.isWritable = toggled;
-          });
-        }}
-      />
-
-      <ToggleIconButton
-        ml="1"
-        size="sm"
-        label="Signer"
-        icon={<Icon as={FaPenNib} />}
-        isDisabled={isAnchor}
-        toggled={isSigner}
-        onToggle={(toggled) => {
-          update((state) => {
-            state.isSigner = toggled;
-          });
-        }}
-      />
-
-      {!isAnchor && (
-        <Tooltip label="Remove">
-          <IconButton
-            mt="1"
-            ml="3"
-            size="xs"
-            aria-label="Remove"
-            icon={<CloseIcon />}
-            variant="ghost"
-            onClick={removeAccount}
+          <ToggleIconButton
+            ml="1"
+            size="sm"
+            label="Writable"
+            icon={<Icon as={FaICursor} />}
+            isDisabled={isAnchor}
+            toggled={isWritable}
+            onToggle={(toggled) => {
+              update((state) => {
+                state.isWritable = toggled;
+              });
+            }}
           />
-        </Tooltip>
-      )}
+
+          <ToggleIconButton
+            ml="1"
+            size="sm"
+            label="Signer"
+            icon={<Icon as={FaFeather} />}
+            isDisabled={isAnchor}
+            toggled={isSigner}
+            onToggle={(toggled) => {
+              update((state) => {
+                state.isSigner = toggled;
+              });
+            }}
+          />
+
+          {!isAnchor && (
+            <Tooltip label="Remove">
+              <IconButton
+                mt="1"
+                ml="3"
+                size="xs"
+                aria-label="Remove"
+                icon={<CloseIcon />}
+                variant="ghost"
+                onClick={removeAccount}
+              />
+            </Tooltip>
+          )}
+        </Flex>
+
+        <Description
+          mt="1"
+          fontSize="sm"
+          description={description}
+          setDescription={(description) => {
+            update((state) => (state.description = description));
+          }}
+        />
+      </Grid>
     </Flex>
   );
 };

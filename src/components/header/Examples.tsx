@@ -9,8 +9,8 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
@@ -20,48 +20,51 @@ import { mapITransactionExtToITransaction } from "../../mappers/external-to-inte
 import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
 
 export const Example: React.FC = () => {
-  const { publicKey: walletPublicKey } = useWallet();
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
-  const setResults = useSessionStoreWithoutUndo((state) => state.set);
-
+  const setTransient = useSessionStoreWithoutUndo((state) => state.set);
+  const [firstTime, setPersistent] = useShallowPersistentStore((state) => [
+    state.firstTime,
+    state.set,
+  ]);
   const toast = useToast();
 
   const loadExample = (name: string) => {
-    const { transaction, help } = EXAMPLES[name];
     setTransaction((state) => {
-      state.transaction = mapITransactionExtToITransaction(transaction);
+      state.transaction = mapITransactionExtToITransaction(EXAMPLES[name]);
     });
-    setResults((state) => {
+    setTransient((state) => {
       state.transactionRun = DEFAULT_TRANSACTION_RUN;
-    });
-
-    toast({
-      title: "The example has been loaded!",
-      description: help,
-      status: "info",
-      isClosable: true,
-      duration: 30_000,
+      state.uiState.descriptionVisible = true;
     });
   };
+
+  useEffect(() => {
+    if (!firstTime) {
+      return;
+    }
+
+    toast({
+      title: "Welcome to Better Call Sol!",
+      description:
+        "To get started, you can try one of the options in the Example menu at the top.",
+      status: "info",
+      duration: 10000,
+      isClosable: true,
+    });
+    setPersistent((state) => {
+      state.firstTime = false;
+    });
+  }, [firstTime, toast, setPersistent]);
 
   return (
     <Menu>
       <DarkMode>
-        <Tooltip
-          shouldWrapChildren
-          hasArrow={!walletPublicKey}
-          label={
-            walletPublicKey
-              ? "Load an example transaction"
-              : "Please connect a wallet to continue"
-          }
-        >
+        <Tooltip shouldWrapChildren label="Load an example transaction">
           <MenuButton
             as={Button}
             rightIcon={<ChevronDownIcon />}
             variant="ghost"
             textColor="white"
-            isDisabled={!walletPublicKey}
           >
             Examples
           </MenuButton>
@@ -82,8 +85,6 @@ export const Example: React.FC = () => {
         >
           System Program: Create Account
         </MenuItem>
-
-        {/* TODO more examples */}
       </MenuList>
     </Menu>
   );

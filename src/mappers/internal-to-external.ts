@@ -36,12 +36,15 @@ const mapToIInstrctionDataFieldExt = ({
 
 export const mapITransactionToTransactionExt = ({
   name,
+  description,
   instructions,
 }: ITransaction): ITransactionExt => ({
   name,
+  description,
   instructions: toSortedArray(instructions).map(
     ({
       name,
+      description,
       programId,
       programMetadata,
       accounts,
@@ -50,6 +53,7 @@ export const mapITransactionToTransactionExt = ({
       anchorAccounts,
     }) => ({
       name: name || undefined,
+      description,
       programId,
       programMetadata,
       accounts: toSortedArray(accounts).map(mapIAccountToIAccountExt),

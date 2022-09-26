@@ -11,12 +11,14 @@ import {
 import bs58 from "bs58";
 import React from "react";
 import { useInstruction } from "../../../hooks/useInstruction";
+import { Description } from "../../common/Description";
 
 export const RawData: React.FC = () => {
   const { useShallowGet, update } = useInstruction();
-  const [encoding, content] = useShallowGet((state) => [
+  const [encoding, content, description] = useShallowGet((state) => [
     state.data.raw.encoding,
     state.data.raw.content,
+    state.data.raw.description,
   ]);
 
   const toast = useToast();
@@ -90,6 +92,17 @@ export const RawData: React.FC = () => {
         onChange={(e) => {
           update((state) => {
             state.data.raw.content = e.target.value;
+          });
+        }}
+      />
+
+      <Description
+        mt="1"
+        fontSize="sm"
+        description={description}
+        setDescription={(description) => {
+          update((state) => {
+            state.description = description;
           });
         }}
       />

@@ -122,6 +122,7 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     optionsOpen: false,
     shareOpen: false,
     infoOpen: false,
+    descriptionVisible: false,
   },
   import: DEFAULT_IMPORT,
   set: () => {}, // set by the hook

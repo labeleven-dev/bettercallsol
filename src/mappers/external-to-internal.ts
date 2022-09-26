@@ -26,12 +26,14 @@ const mapToSortableCollection = <T>(
 
 const mpaIAccountExtToIAccount = ({
   name,
+  description,
   type,
   pubkey,
   isWritable,
   isSigner,
 }: IAccountExt): IAccount => ({
   id: uuid(),
+  description,
   type,
   name,
   pubkey: pubkey || "",
@@ -41,6 +43,7 @@ const mpaIAccountExtToIAccount = ({
 
 export const mapIInstructionExtToIInstruction = ({
   name,
+  description,
   programId,
   programMetadata,
   accounts,
@@ -50,6 +53,7 @@ export const mapIInstructionExtToIInstruction = ({
 }: IInstructionExt): IInstruction =>
   mapToSortable({
     name,
+    description,
     programId,
     programMetadata,
     accounts: mapToSortableCollection(accounts.map(mpaIAccountExtToIAccount)),
@@ -87,9 +91,11 @@ export const mapIInstructionExtToIInstruction = ({
 
 export const mapITransactionExtToITransaction = ({
   name,
+  description,
   instructions,
 }: ITransactionExt): ITransaction => ({
   name,
+  description,
   instructions: mapToSortableCollection(
     instructions.map(mapIInstructionExtToIInstruction)
   ),
