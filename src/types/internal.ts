@@ -67,6 +67,7 @@ export type RawEncoding = "hex" | "bs58";
 export interface IInstructionDataRaw {
   content: string;
   encoding: RawEncoding;
+  description?: string;
 }
 
 export interface IInstructionData {

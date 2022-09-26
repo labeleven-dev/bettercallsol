@@ -23,6 +23,7 @@ import {
   FaEraser,
   FaExpand,
   FaFileImport,
+  FaInfo,
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
@@ -36,8 +37,10 @@ import {
   useShallowSessionStoreWithUndo,
 } from "../../hooks/useSessionStore";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
+import { Description } from "../common/Description";
 import { EditableName } from "../common/EditableName";
 import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
+import { ToggleIconButton } from "../common/ToggleIconButton";
 
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
@@ -45,10 +48,12 @@ export const TransactionHeader: React.FC<{
   const scrollToResults = usePersistentStore(
     (state) => state.appOptions.scrollToResults
   );
-  const [inProgress, setUI] = useShallowSessionStoreWithoutUndo((state) => [
-    state.transactionRun.inProgress,
-    state.set,
-  ]);
+  const [inProgress, descriptionVisible, setUI] =
+    useShallowSessionStoreWithoutUndo((state) => [
+      state.transactionRun.inProgress,
+      state.uiState.descriptionVisible,
+      state.set,
+    ]);
   const [transaction, rpcEndpoint, setSession] = useShallowSessionStoreWithUndo(
     (state) => [state.transaction, state.rpcEndpoint, state.set]
   );
@@ -145,6 +150,20 @@ export const TransactionHeader: React.FC<{
 
         <Spacer />
 
+        <ToggleIconButton
+          ml="1"
+          label={
+            descriptionVisible ? "Hide annotations" : "Display annotations"
+          }
+          icon={<Icon as={FaInfo} />}
+          toggled={descriptionVisible}
+          onToggle={(toggled) => {
+            setUI((state) => {
+              state.uiState.descriptionVisible = toggled;
+            });
+          }}
+        />
+
         <Tooltip label="Import">
           <IconButton
             aria-label="Import"
@@ -225,23 +244,32 @@ export const TransactionHeader: React.FC<{
         </Alert>
       </Collapse>
 
-      <Flex mt="5" mb="3" alignItems="center">
-        <Heading flex="1" size="lg">
-          <EditableName
-            tooltip="Click to edit"
-            tooltipProps={{ placement: "bottom-start" }}
-            previewProps={{ p: "3px 10px 3px 10px" }}
-            inputProps={{ p: "3px 10px 3px 10px" }}
-            placeholder="Unnamed Transaction"
-            value={transaction.name}
-            onChange={(value) =>
-              setSession((state) => {
-                state.transaction.name = value;
-              })
-            }
-          />
-        </Heading>
-      </Flex>
+      <Heading mt="5" mb="2" alignItems="center" flex="1" size="lg">
+        <EditableName
+          tooltip="Click to edit"
+          tooltipProps={{ placement: "bottom-start" }}
+          previewProps={{ p: "3px 10px 3px 10px" }}
+          inputProps={{ p: "3px 10px 3px 10px" }}
+          placeholder="Unnamed Transaction"
+          value={transaction.name}
+          onChange={(value) =>
+            setSession((state) => {
+              state.transaction.name = value;
+            })
+          }
+        />
+      </Heading>
+
+      <Description
+        ml="3"
+        mb="3"
+        description={transaction.description}
+        setDescription={(description) => {
+          setSession((state) => {
+            state.transaction.description = description;
+          });
+        }}
+      />
     </>
   );
 };

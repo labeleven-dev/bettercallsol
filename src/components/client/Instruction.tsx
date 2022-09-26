@@ -21,6 +21,7 @@ import { useInstruction } from "../../hooks/useInstruction";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 import { useWeb3Account } from "../../hooks/useWeb3Account";
 import { AccountAutoComplete } from "../common/AccountAutoComplete";
+import { Description } from "../common/Description";
 import { ExplorerButton } from "../common/ExplorerButton";
 import { Accounts } from "./accounts/Accounts";
 import { Data } from "./data/Data";
@@ -29,14 +30,14 @@ import { InstructionHeader } from "./InstructionHeader";
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
   const { useShallowGet, update } = useInstruction();
-  const [programId, anchorMethod, disabled, expanded] = useShallowGet(
-    (state) => [
+  const [programId, description, anchorMethod, disabled, expanded] =
+    useShallowGet((state) => [
       state.programId,
+      state.description,
       state.anchorMethod,
       state.disabled,
       state.expanded,
-    ]
-  );
+    ]);
   const programInfo = useWeb3Account(programId);
 
   return (
@@ -57,6 +58,17 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
       <InstructionHeader index={index} />
 
       <Collapse in={expanded}>
+        <Description
+          mb="2"
+          fontSize="sm"
+          description={description}
+          setDescription={(description) => {
+            update((state) => {
+              state.description = description;
+            });
+          }}
+        />
+
         <Flex alignItems="center" mb="1">
           <FormLabel mb="0" htmlFor="program-id">
             Program
