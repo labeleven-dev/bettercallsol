@@ -83,7 +83,7 @@ const encodeBase64Url = (byteArray: Uint8Array): string =>
   )
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
-    .replace(/\=/g, "");
+    .replace(/=/g, "");
 
 export const mapITransactionExtToProtobuf = ({
   version,

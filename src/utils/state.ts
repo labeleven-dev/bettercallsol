@@ -9,7 +9,6 @@ import {
 } from "../types/internal";
 import {
   AppOptions,
-  ImportState,
   PersistentState,
   SessionStateWithoutUndo,
   SessionStateWithUndo,
@@ -104,10 +103,6 @@ export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
   error: "",
 };
 
-export const DEFAULT_IMPORT: ImportState = {
-  isLoading: false,
-};
-
 export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
   rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
@@ -124,7 +119,6 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     infoOpen: false,
     descriptionVisible: false,
   },
-  import: DEFAULT_IMPORT,
   set: () => {}, // set by the hook
 };
 

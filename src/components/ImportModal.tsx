@@ -1,88 +1,43 @@
 import {
-  Alert,
-  AlertIcon,
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
+  Spinner,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useImportFromUrl } from "../hooks/useImportFromUrl";
-import {
-  useSessionStoreWithUndo,
-  useShallowSessionStoreWithoutUndo,
-} from "../hooks/useSessionStore";
-import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
-import { DEFAULT_IMPORT } from "../utils/state";
-import { Preview } from "./palette/preview/Preview";
 
 export const ImportModal: React.FC = () => {
-  const [isLoading, transaction, setImport] = useShallowSessionStoreWithoutUndo(
-    (state) => [state.import.isLoading, state.import.transaction, state.set]
-  );
-  const setTransaction = useSessionStoreWithUndo((state) => state.set);
-
-  useImportFromUrl(); // reads the query params
-
-  const onConfirm = () => {
-    setTransaction((state) => {
-      state.transaction = mapIPreviewToITransaction(transaction!);
-    });
-    onClose();
-  };
-
-  const onClose = () => {
-    setImport((state) => {
-      state.import = DEFAULT_IMPORT;
-    });
-  };
+  const { isLoading, status, cancel } = useImportFromUrl();
 
   return (
     <Modal
-      size="lg"
+      size="sm"
+      isCentered
       closeOnOverlayClick={false}
       // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
       blockScrollOnMount={false}
-      isOpen={transaction !== undefined || isLoading}
-      onClose={onClose}
+      isOpen={isLoading}
+      onClose={cancel}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Import Transaction</ModalHeader>
+        <ModalHeader>Importing Transaction...</ModalHeader>
 
         <ModalCloseButton />
 
         <ModalBody>
-          <Alert variant="left-accent" status="warning" mb="3">
-            <AlertIcon />
-            Only import and run transactions from trusted sources!
-          </Alert>
-
-          <Text mb="5">You are about to import the following transaction:</Text>
-
-          {transaction === undefined ? (
-            <Skeleton h="200px" />
-          ) : (
-            <Preview preview={transaction!} interactive={false} />
-          )}
+          <VStack mb="5">
+            <Spinner mb="4" />
+            <Text fontSize="sm" noOfLines={2}>
+              {status}
+            </Text>
+          </VStack>
         </ModalBody>
-
-        <ModalFooter>
-          <Button
-            colorScheme="teal"
-            mr="2"
-            isDisabled={transaction === undefined}
-            onClick={onConfirm}
-          >
-            Confirm
-          </Button>
-          <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

@@ -8,7 +8,6 @@ import {
   ITransactionOptions,
   ITransactionRun,
 } from "./internal";
-import { IPreview } from "./preview";
 import { SortableCollection } from "./sortable";
 
 export type Explorer =
@@ -37,11 +36,6 @@ export interface UIState {
   readonly descriptionVisible: boolean;
 }
 
-export interface ImportState {
-  readonly isLoading: boolean;
-  readonly transaction?: IPreview;
-}
-
 ////// State Stores //////
 
 export interface PersistentState {
@@ -61,6 +55,5 @@ export interface SessionStateWithUndo {
 export interface SessionStateWithoutUndo {
   readonly transactionRun: ITransactionRun;
   readonly uiState: UIState;
-  readonly import: ImportState;
   set: (fn: (state: Draft<SessionStateWithoutUndo>) => void) => void;
 }

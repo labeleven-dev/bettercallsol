@@ -1,73 +1,50 @@
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { mapITransactionExtToITransaction } from "../mappers/external-to-internal";
 import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
+import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
 import { mapProtobufToITransactionExt } from "../mappers/protobuf-to-external";
 import { mapTransactionResponseToIPreview } from "../mappers/web3js-to-preview";
+import { short } from "../utils/web3js";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
 import {
+  useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
-  useShallowSessionStoreWithoutUndo,
 } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
+
+const DEFAULT_STATUS = { isLoading: false, status: "" };
 
 /**
  * Encapsulates logic for importing transctions using HTTP query parameters
  */
-export const useImportFromUrl = () => {
-  const [set, setIsLoading] = useShallowSessionStoreWithoutUndo((state) => [
-    state.set,
-    (value: boolean) => {
-      state.set((state) => {
-        state.import.isLoading = value;
-      });
-    },
-  ]);
+export const useImportFromUrl = (): {
+  isLoading: boolean;
+  status: string;
+  cancel: () => void;
+} => {
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
+  const setUI = useSessionStoreWithoutUndo((state) => state.set);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [status, setStatus] = useState(DEFAULT_STATUS);
   const toast = useToast();
 
-  // determine network
   const network = searchParams.get("network");
+  const showDescriptions = searchParams.get("annotate") !== null;
+  const share = searchParams.get("share");
+  const tx = searchParams.get("tx");
+  const shareJson = searchParams.get("shareJson");
+
+  // determine network
   const rpcEndpoints = usePersistentStore(
     (state) => state.appOptions.rpcEndpoints
   );
   const rpcEndpoint = Object.values(rpcEndpoints.map).find(
     (endpoint) => endpoint.network === (network || "mainnet-beta")
   )!;
-
-  const connection = useWeb3Connection(rpcEndpoint.url);
-  const { start } = useGetWeb3Transaction({
-    connection,
-    onSuccess: (response) => {
-      set((state) => {
-        state.import = {
-          isLoading: false,
-          transaction: mapTransactionResponseToIPreview(response, rpcEndpoint),
-        };
-      });
-    },
-    onError: (error) => {
-      setIsLoading(false);
-      toast({
-        title: "Transaction import failed",
-        description: `Failed to fetch transcation: ${error.message}`,
-        status: "error",
-        duration: 15000,
-        isClosable: true,
-      });
-    },
-  });
-
-  const showDescriptions = searchParams.get("annotate") !== null;
-
-  const share = searchParams.get("share");
-  const tx = searchParams.get("tx");
-  const shareJson = searchParams.get("shareJson");
 
   // import from URL-encoded transaction
   useEffect(() => {
@@ -80,7 +57,7 @@ export const useImportFromUrl = () => {
       setTransaction((state) => {
         state.transaction = internal;
       });
-      set((state) => {
+      setUI((state) => {
         state.uiState.descriptionVisible = showDescriptions;
       });
 
@@ -93,42 +70,85 @@ export const useImportFromUrl = () => {
         duration: 10000,
         isClosable: true,
       });
+      throw e;
     }
   });
 
   // import from transaction ID
+  const connection = useWeb3Connection(rpcEndpoint.url);
+  const { start: startGetWeb3Transcation, cancel: cancelGetWeb3Transaction } =
+    useGetWeb3Transaction({
+      connection,
+      onSuccess: (response) => {
+        setStatus(DEFAULT_STATUS);
+        setTransaction((state) => {
+          state.transaction = mapIPreviewToITransaction(
+            mapTransactionResponseToIPreview(response, rpcEndpoint)
+          );
+        });
+        setUI((state) => {
+          state.uiState.descriptionVisible = showDescriptions;
+        });
+      },
+      onError: (error) => {
+        setStatus(DEFAULT_STATUS);
+        toast({
+          title: "Transaction import failed",
+          description: `Failed to fetch transcation: ${error.message}`,
+          status: "error",
+          duration: 15000,
+          isClosable: true,
+        });
+        throw error;
+      },
+    });
+
   useEffect(() => {
     if (!tx) return;
 
-    setIsLoading(true);
+    setStatus({
+      isLoading: true,
+      status: `Fetching ${short(tx)} from ${rpcEndpoint.network} (${
+        rpcEndpoint.provider
+      })...`,
+    });
     setSearchParams({});
-
-    start(tx, true);
-  }, [tx, setIsLoading, start, setSearchParams]);
+    startGetWeb3Transcation(tx, true);
+  }, [
+    tx,
+    startGetWeb3Transcation,
+    setSearchParams,
+    rpcEndpoint.network,
+    rpcEndpoint.provider,
+  ]);
 
   // import from share URL
-  useEffect(() => {
+  const abortController = useMemo(() => {
     if (!shareJson) return;
 
-    setIsLoading(true);
+    const abortController = new AbortController();
+
+    setStatus({
+      isLoading: true,
+      status: `Fetching from ${shareJson.substring(
+        0,
+        Math.min(shareJson.length, 40)
+      )}...`,
+    });
     setSearchParams({});
 
     axios
-      .get(shareJson)
+      .get(shareJson, { signal: abortController.signal })
       .then((response) => {
-        set((state) => {
-          state.import = {
-            isLoading: false,
-            transaction: mapITransactionExtToIPreview(
-              response.data,
-              "shareUrl",
-              shareJson
-            ),
-          };
+        setStatus(DEFAULT_STATUS);
+        setTransaction((state) => {
+          state.transaction = mapIPreviewToITransaction(
+            mapITransactionExtToIPreview(response.data, "shareUrl", shareJson)
+          );
         });
       })
       .catch((err) => {
-        setIsLoading(false);
+        setStatus(DEFAULT_STATUS);
         toast({
           title: "Transaction import failed",
           description: `Cannot fetch transaction from URL: ${err}`,
@@ -137,5 +157,15 @@ export const useImportFromUrl = () => {
           isClosable: true,
         });
       });
-  }, [shareJson, set, setIsLoading, setSearchParams, toast]);
+
+    return abortController;
+  }, [shareJson, setStatus, setSearchParams, toast, setTransaction]);
+
+  return {
+    ...status,
+    cancel: () => {
+      if (cancelGetWeb3Transaction) cancelGetWeb3Transaction();
+      if (abortController) abortController.abort();
+    },
+  };
 };
