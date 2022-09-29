@@ -14,12 +14,14 @@ import { toSortedArray } from "../utils/sortable";
 const mapIAccountToIAccountExt = ({
   type,
   name,
+  description,
   pubkey,
   isWritable,
   isSigner,
 }: IAccount): IAccountExt => ({
   type,
-  name: name || undefined,
+  name: name,
+  description,
   pubkey,
   isWritable,
   isSigner,
@@ -27,10 +29,12 @@ const mapIAccountToIAccountExt = ({
 
 const mapToIInstrctionDataFieldExt = ({
   name,
+  description,
   type,
   value,
 }: IInstrctionDataField): IInstrctionDataFieldExt => ({
   name,
+  description,
   type,
   value,
 });
