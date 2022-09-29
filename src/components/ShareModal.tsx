@@ -3,56 +3,80 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
-  Box,
   Button,
   Center,
-  Divider,
-  Icon,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
   Kbd,
   Link,
-  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Switch,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   Tooltip,
-  UnorderedList,
   useClipboard,
 } from "@chakra-ui/react";
-import { useMemo } from "react";
-import { FaFileImport, FaGithub } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import {
-  useSessionStoreWithUndo,
   useShallowSessionStoreWithoutUndo,
+  useShallowSessionStoreWithUndo,
 } from "../hooks/useSessionStore";
+import { mapITransactionExtToProtobuf } from "../mappers/external-to-protobuf";
 import { mapITransactionToTransactionExt } from "../mappers/internal-to-external";
+import { CopyButton } from "./common/CopyButton";
 
 export const ShareModal: React.FC = () => {
   const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [
     state.uiState.shareOpen,
     state.set,
   ]);
-  const transaction = useSessionStoreWithUndo((state) => state.transaction);
-  const transactionJson = JSON.stringify(
-    mapITransactionToTransactionExt(transaction)
-  );
+  const [transaction, rpcEndpoint] = useShallowSessionStoreWithUndo((state) => [
+    state.transaction,
+    state.rpcEndpoint,
+  ]);
 
-  const { hasCopied, onCopy } = useClipboard(transactionJson);
-  const downloadUrl = useMemo(
-    () =>
+  const [externalJson, setExternalJson] = useState("");
+  const [encodedUrl, setEncodedUrl] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const [annotate, setAnnotate] = useState(false);
+
+  const { hasCopied, onCopy } = useClipboard(externalJson);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const external = mapITransactionToTransactionExt(transaction, rpcEndpoint);
+
+    // encode transaction
+    const encoded = mapITransactionExtToProtobuf(external);
+    setEncodedUrl(
+      `${window.location.href}?${annotate ? "annotate&" : ""}share=${encoded}`
+    );
+
+    // create download URL
+    setExternalJson(JSON.stringify(external));
+    setDownloadUrl(
       URL.createObjectURL(
-        new Blob([transactionJson], { type: "application/json" })
-      ),
-    [transactionJson]
-  );
+        new Blob([externalJson], { type: "application/json" })
+      )
+    );
+  }, [isOpen, transaction, rpcEndpoint, annotate, externalJson]);
 
   return (
     <Modal
-      size="lg"
+      size="xl"
       // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
       blockScrollOnMount={false}
       isOpen={isOpen}
@@ -69,74 +93,102 @@ export const ShareModal: React.FC = () => {
         <ModalCloseButton />
 
         <ModalBody>
-          <Center mb="2">
-            <Tooltip label="Paste from clipboard when you get there!">
-              <Button
-                mr="2"
-                as={Link}
-                leftIcon={<FaGithub />}
-                href="https://gist.github.com/"
-                onClick={onCopy}
-                isExternal
-              >
-                Copy &amp; Open New Gist
-              </Button>
-            </Tooltip>
-          </Center>
+          <Text mb="3">
+            Send your friends and family Better Call Sol transcations.
+          </Text>
 
-          <Center mb="6">
-            <Button
-              mr="2"
-              leftIcon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-              onClick={onCopy}
-            >
-              Copy to Clipboard
-            </Button>
-            <Button
-              as="a"
-              leftIcon={<DownloadIcon />}
-              href={downloadUrl}
-              download="transaction.json"
-            >
-              Download
-            </Button>
-          </Center>
-
-          <Divider mb="6" />
-
-          <Box mb="2">
-            <Text mb="2" as="i">
-              Tip: You can import a transaction using the{" "}
-              <Icon as={FaFileImport} mr="0.5" /> Import button.
-            </Text>
-          </Box>
-          <Box mb="4">
-            <Text as="i">
-              Better Call Sol also accepts the following URLs:
-              <UnorderedList ml="8">
-                <ListItem>
-                  <Kbd>
-                    {window.location.href}?share=&lt;URL to a share file&gt;
-                  </Kbd>
-                </ListItem>
-                <ListItem>
-                  <Kbd>
-                    {window.location.href}?tx=&lt;Solana Transaction ID&gt;
-                  </Kbd>
-                </ListItem>
-              </UnorderedList>
-            </Text>
-          </Box>
-          <Alert fontSize="sm" status="warning" variant="left-accent">
+          {/* TODO remove when out of beta */}
+          <Alert mb="3" fontSize="sm" status="warning" variant="left-accent">
             <AlertIcon />
             <AlertDescription>
-              During the Alpha phase of development, backward-compatibility is
-              NOT guaranteed.
+              We'll try our best but during the Alpha, we may not be able to
+              guarantee backward compatibility.
             </AlertDescription>
           </Alert>
-        </ModalBody>
 
-        <ModalFooter></ModalFooter>
+          <Tabs variant="enclosed">
+            <TabList>
+              <Tab>URL</Tab>
+              <Tab>JSON</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <Flex>
+                  <Input
+                    flex="1"
+                    fontFamily="mono"
+                    isReadOnly
+                    value={encodedUrl}
+                  />
+                  <CopyButton ml="1" size="md" value={encodedUrl} />
+                </Flex>
+
+                <FormControl mt="1" display="flex" alignItems="center">
+                  <FormLabel htmlFor="expand-annotations" mb="0">
+                    Expand annotations on load
+                  </FormLabel>
+                  <Switch
+                    id="expand-annotations"
+                    isChecked={annotate}
+                    onChange={() => {
+                      setAnnotate(!annotate);
+                    }}
+                  />
+                </FormControl>
+              </TabPanel>
+
+              <TabPanel>
+                <Center mb="2">
+                  <Tooltip label="Paste from clipboard when you get there!">
+                    <Button
+                      mr="2"
+                      as={Link}
+                      leftIcon={<FaGithub />}
+                      href="https://gist.github.com/"
+                      onClick={onCopy}
+                      isExternal
+                    >
+                      Copy &amp; Open New Gist
+                    </Button>
+                  </Tooltip>
+                </Center>
+                <Center>
+                  <Button
+                    mr="2"
+                    leftIcon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                    onClick={onCopy}
+                  >
+                    Copy to Clipboard
+                  </Button>
+                  <Button
+                    as="a"
+                    leftIcon={<DownloadIcon />}
+                    href={downloadUrl}
+                    download={`${transaction.name || "transaction"}.json`}
+                  >
+                    Download
+                  </Button>
+                </Center>
+
+                <Alert mt="8" fontSize="md" status="info" variant="top-accent">
+                  <AlertDescription>
+                    You can point to a URL containing the JSON:{" "}
+                    <Kbd>{window.location.href}?shareJson=&lt; URL &gt;</Kbd>
+                    <br />
+                    E.g.
+                    <br />
+                    <Kbd overflowWrap="anywhere">
+                      {window.location.href}
+                      <br />
+                      ?shareJson=https://gist.githubusercontent.com/...
+                    </Kbd>
+                  </AlertDescription>
+                </Alert>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </ModalBody>
       </ModalContent>
     </Modal>
   );

@@ -8,6 +8,7 @@
     "start": "react-app-rewired start",
     "test": "react-app-rewired test",
     "release": "semantic-release",
+    "protobuf": "pbjs -t static-module -w es6 -o src/types/protobuf/index.js src/types/protobuf/external.proto && pbts -o src/types/protobuf/index.d.ts src/types/protobuf/index.js",
     "license-report": "license-report --only=prod | node scripts/license-report.js"
   },
   "browserslist": {
@@ -50,6 +51,7 @@
     "js-sha256": "^0.9.0",
     "jsbi": "^3.2.5",
     "pako": "^2.0.4",
+    "protobufjs": "^7.1.2",
     "react": "^18.2.0",
     "react-aria": "^3.18.0",
     "react-dom": "^18.2.0",
@@ -79,6 +81,7 @@
     "@types/uuid": "^8.3.4",
     "customize-cra": "^1.0.0",
     "license-report": "^6.0.0",
+    "protobufjs-cli": "^1.0.2",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.1",
     "semantic-release": "^19.0.3",

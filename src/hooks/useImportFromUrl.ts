@@ -2,18 +2,22 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { mapITransactionExtToITransaction } from "../mappers/external-to-internal";
 import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
+import { mapProtobufToITransactionExt } from "../mappers/protobuf-to-external";
 import { mapTransactionResponseToIPreview } from "../mappers/web3js-to-preview";
-import { IPreview } from "../types/preview";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
 import { usePersistentStore } from "./usePersistentStore";
-import { useShallowSessionStoreWithoutUndo } from "./useSessionStore";
+import {
+  useSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
+} from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
 /**
  * Encapsulates logic for importing transctions using HTTP query parameters
  */
-export const useImport = () => {
+export const useImportFromUrl = () => {
   const [set, setIsLoading] = useShallowSessionStoreWithoutUndo((state) => [
     state.set,
     (value: boolean) => {
@@ -22,6 +26,7 @@ export const useImport = () => {
       });
     },
   ]);
+  const setTransaction = useSessionStoreWithUndo((state) => state.set);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const toast = useToast();
@@ -58,11 +63,38 @@ export const useImport = () => {
     },
   });
 
-  // TODO load the transaction in the preview sidebar
-  // const preview = searchParams.has("preview");
+  const showDescriptions = searchParams.get("annotate") !== null;
 
-  const tx = searchParams.get("tx");
   const share = searchParams.get("share");
+  const tx = searchParams.get("tx");
+  const shareJson = searchParams.get("shareJson");
+
+  // import from URL-encoded transaction
+  useEffect(() => {
+    if (!share) return;
+
+    try {
+      const external = mapProtobufToITransactionExt(share);
+      const internal = mapITransactionExtToITransaction(external);
+
+      setTransaction((state) => {
+        state.transaction = internal;
+      });
+      set((state) => {
+        state.uiState.descriptionVisible = showDescriptions;
+      });
+
+      setSearchParams({});
+    } catch (e) {
+      toast({
+        title: "Transaction import failed",
+        description: `Could not decode provided transcation`,
+        status: "error",
+        duration: 10000,
+        isClosable: true,
+      });
+    }
+  });
 
   // import from transaction ID
   useEffect(() => {
@@ -76,21 +108,21 @@ export const useImport = () => {
 
   // import from share URL
   useEffect(() => {
-    if (!share) return;
+    if (!shareJson) return;
 
     setIsLoading(true);
     setSearchParams({});
 
     axios
-      .get(share)
+      .get(shareJson)
       .then((response) => {
         set((state) => {
           state.import = {
             isLoading: false,
             transaction: mapITransactionExtToIPreview(
-              response.data as IPreview,
+              response.data,
               "shareUrl",
-              share
+              shareJson
             ),
           };
         });
@@ -101,9 +133,9 @@ export const useImport = () => {
           title: "Transaction import failed",
           description: `Cannot fetch transaction from URL: ${err}`,
           status: "error",
-          duration: 15000,
+          duration: 10000,
           isClosable: true,
         });
       });
-  }, [share, set, setIsLoading, setSearchParams, toast]);
+  }, [shareJson, set, setIsLoading, setSearchParams, toast]);
 };

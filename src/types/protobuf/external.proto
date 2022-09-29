@@ -1,0 +1,110 @@
+package bettercallsol;
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+message Transaction {
+    string version = 1;
+
+    enum Network {
+        MAINNET_BETA = 0;
+        TESTNET = 1;
+        DEVNET = 2;
+        CUSTOM = 3;
+    }
+    Network network = 2;
+    optional string name = 3;
+    optional string description = 4;
+
+    message Instruction {
+        optional string name = 1;
+        optional string description = 2;
+        optional string programId = 3;
+        optional string anchor_method = 4;
+
+
+        message AccountMetadata {
+            optional string name = 1;
+            optional string mint = 2;
+            repeated google.protobuf.Value seeds = 3;
+            optional uint32 bump = 4;
+        }
+        optional AccountMetadata program_metadata = 5;
+
+        message Account {
+            optional string name = 1;
+            optional string description = 2;
+            
+            enum AccountType {
+                UNSPECIFIED = 0;
+                WALLET = 1;
+                KEYPAIR = 2;
+                PROGRAM = 3;
+                SYSVAR = 4;
+                PDA = 5;
+                ATA = 6;
+            }
+            AccountType type = 3;
+
+            optional string pubkey = 4;
+            bool isWritable = 5;
+            bool isSigner = 6;
+
+            optional AccountMetadata metadata = 7;
+        }
+        repeated Account accounts = 6;
+        repeated Account anchor_accounts = 7;
+
+        message Data {
+            enum DataFormat {
+                RAW = 0;
+                BUFFER_LAYOUT = 1;
+                BORSH = 2;
+            }
+            DataFormat format = 1;
+
+            message DataRaw {
+                string content = 0;
+
+                enum Encoding {
+                    HEX = 0;
+                    BS58 = 1;
+                }
+                Encoding encoding = 1;
+
+                optional string description = 2;
+            }
+            optional DataRaw raw_value = 2;
+
+            message DataField {
+                optional string name = 1;
+                optional string description = 2;
+
+                enum DataFieldType {
+                    UNSUPPORTED = 0;
+                    U8 = 1;
+                    I8 = 2;
+                    U16 = 3;
+                    I16 = 4;
+                    U32 = 5;
+                    I32 = 6;
+                    F32 = 7;
+                    U64 = 8;
+                    I64 = 9;
+                    F64 = 10;
+                    U128 = 11;
+                    I128 = 12;
+                    BOOL = 13;
+                    BYTES = 14;
+                    PUBLIC_KEY = 15;
+                    STRING = 16;
+                }
+                DataFieldType type = 3;
+                google.protobuf.Value value = 4;
+            }   
+            repeated DataField field_value = 3;
+        }
+        optional Data data = 8;
+    }
+    repeated Instruction instructions = 5;
+}

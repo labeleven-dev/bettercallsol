@@ -18,7 +18,7 @@ export type AccountType =
 export interface IAccountMetadata {
   name?: string;
   mint?: IPubKey;
-  seeds?: string[];
+  seeds?: any[];
   bump?: number;
 }
 
