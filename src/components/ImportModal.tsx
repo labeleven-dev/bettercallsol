@@ -12,7 +12,7 @@ import {
   Skeleton,
   Text,
 } from "@chakra-ui/react";
-import { useImport } from "../hooks/useImportFromUrl";
+import { useImportFromUrl } from "../hooks/useImportFromUrl";
 import {
   useSessionStoreWithUndo,
   useShallowSessionStoreWithoutUndo,
@@ -27,7 +27,7 @@ export const ImportModal: React.FC = () => {
   );
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
 
-  useImport(); // reads the query params
+  useImportFromUrl(); // reads the query params
 
   const onConfirm = () => {
     setTransaction((state) => {
