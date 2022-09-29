@@ -89,6 +89,7 @@ export const mapIInstructionExtToIInstruction = ({
     expanded: true,
   });
 
+// TODO fail if not versionCompatible
 export const mapITransactionExtToITransaction = ({
   name,
   description,

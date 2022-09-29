@@ -21,9 +21,7 @@ export const ShareUrlImport: React.FC<{
 
     try {
       const response = await axios.get(url);
-      setPreview(
-        mapITransactionExtToIPreview(response.data as IPreview, "shareUrl", url)
-      );
+      setPreview(mapITransactionExtToIPreview(response.data, "shareUrl", url));
       setInprogress(false);
     } catch (err) {
       const error =

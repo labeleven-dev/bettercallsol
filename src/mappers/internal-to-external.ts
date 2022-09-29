@@ -6,6 +6,7 @@ import {
 import {
   IAccount,
   IInstrctionDataField,
+  IRpcEndpoint,
   ITransaction,
 } from "../types/internal";
 import { toSortedArray } from "../utils/sortable";
@@ -34,11 +35,12 @@ const mapToIInstrctionDataFieldExt = ({
   value,
 });
 
-export const mapITransactionToTransactionExt = ({
-  name,
-  description,
-  instructions,
-}: ITransaction): ITransactionExt => ({
+export const mapITransactionToTransactionExt = (
+  { name, description, instructions }: ITransaction,
+  rpcEndpoint: IRpcEndpoint
+): ITransactionExt => ({
+  version: "1.0.0",
+  network: rpcEndpoint.network,
   name,
   description,
   instructions: toSortedArray(instructions).map(

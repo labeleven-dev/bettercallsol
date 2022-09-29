@@ -12,12 +12,9 @@ export const ShareJsonImport: React.FC<{
     setPreview(undefined);
     setError("");
 
-    let prasedJson;
     try {
-      prasedJson = JSON.parse(json);
-      setPreview(
-        mapITransactionExtToIPreview(prasedJson as IPreview, "shareJson", "")
-      );
+      let parsedJson = JSON.parse(json);
+      setPreview(mapITransactionExtToIPreview(parsedJson, "shareJson", ""));
     } catch (e) {
       setError("Invalid JSON");
       return;
