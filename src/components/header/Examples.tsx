@@ -17,20 +17,26 @@ import {
 } from "../../hooks/useSessionStore";
 import { EXAMPLES } from "../../library/examples";
 import { mapITransactionExtToITransaction } from "../../mappers/external-to-internal";
+import { toSortedArray } from "../../utils/sortable";
 import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
 
 export const Example: React.FC = () => {
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
   const setTransient = useSessionStoreWithoutUndo((state) => state.set);
-  const [firstTime, setPersistent] = useShallowPersistentStore((state) => [
-    state.firstTime,
-    state.set,
-  ]);
+  const [firstTime, rpcEndpoints, setPersistent] = useShallowPersistentStore(
+    (state) => [state.firstTime, state.appOptions.rpcEndpoints, state.set]
+  );
   const toast = useToast();
 
   const loadExample = (name: string) => {
     setTransaction((state) => {
-      state.transaction = mapITransactionExtToITransaction(EXAMPLES[name]);
+      const transaction = EXAMPLES[name];
+      state.transaction = mapITransactionExtToITransaction(transaction);
+
+      const sortedRpcEndpoints = toSortedArray(rpcEndpoints);
+      state.rpcEndpoint =
+        sortedRpcEndpoints.find((r) => r.network === transaction.network) ||
+        sortedRpcEndpoints[0];
     });
     setTransient((state) => {
       state.transactionRun = DEFAULT_TRANSACTION_RUN;

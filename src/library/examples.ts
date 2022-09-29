@@ -4,6 +4,8 @@ import { ITransactionExt } from "../types/external";
 
 export const EXAMPLES: Record<string, ITransactionExt> = {
   systemProgramCreateAccount: {
+    version: "1.0.0",
+    network: "devnet",
     name: "System Program: Create Account",
     description: `This transaction demonstrates how to use Solana's native [System Program](https://docs.solana.com/developing/runtime-facilities/programs#system-program) to create a Solana account.
 
@@ -73,6 +75,8 @@ We are putting in 140000 lamports, which is the amount to make a 64 byte account
   },
 
   systemProgramTransfer: {
+    version: "1.0.0",
+    network: "devnet",
     name: "System Program: Transfer",
     description: `This transaction demonstrates how to use Solana's native [System Program](https://docs.solana.com/developing/runtime-facilities/programs#system-program) to transfer some funds between accounts.
 

@@ -6,6 +6,7 @@ import {
   IAccountMetadata,
   IInstrctionDataField,
   IInstructionDataRaw,
+  INetwork,
   IPubKey,
 } from "./internal";
 
@@ -30,6 +31,8 @@ export interface IInstructionExt {
 }
 
 export interface ITransactionExt {
+  version: string;
+  network: INetwork;
   name?: string;
   description?: string;
   instructions: IInstructionExt[];
