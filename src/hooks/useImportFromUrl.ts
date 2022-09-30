@@ -42,9 +42,6 @@ export const useImportFromUrl = (): {
   const rpcEndpoints = usePersistentStore(
     (state) => state.appOptions.rpcEndpoints
   );
-  const rpcEndpoint = Object.values(rpcEndpoints.map).find(
-    (endpoint) => endpoint.network === (network || "mainnet-beta")
-  )!;
 
   // import from URL-encoded transaction
   useEffect(() => {
@@ -56,6 +53,10 @@ export const useImportFromUrl = (): {
 
       setTransaction((state) => {
         state.transaction = internal;
+        state.rpcEndpoint = Object.values(rpcEndpoints.map).find(
+          (endpoint) =>
+            endpoint.network === (network || external.network || "mainnet-beta")
+        )!;
       });
       setUI((state) => {
         state.uiState.descriptionVisible = showDescriptions;
@@ -75,6 +76,10 @@ export const useImportFromUrl = (): {
   });
 
   // import from transaction ID
+  const rpcEndpoint = Object.values(rpcEndpoints.map).find(
+    (endpoint) => endpoint.network === (network || "mainnet-beta")
+  )!;
+
   const connection = useWeb3Connection(rpcEndpoint.url);
   const { start: startGetWeb3Transcation, cancel: cancelGetWeb3Transaction } =
     useGetWeb3Transaction({
@@ -114,13 +119,7 @@ export const useImportFromUrl = (): {
     });
     setSearchParams({});
     startGetWeb3Transcation(tx, true);
-  }, [
-    tx,
-    startGetWeb3Transcation,
-    setSearchParams,
-    rpcEndpoint.network,
-    rpcEndpoint.provider,
-  ]);
+  }, [tx, startGetWeb3Transcation, setSearchParams, rpcEndpoint]);
 
   // import from share URL
   const abortController = useMemo(() => {
