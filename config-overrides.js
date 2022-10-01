@@ -1,9 +1,6 @@
 //@ts-ignore
-const {
-  override,
-  addWebpackModuleRule,
-  setWebpackTarget,
-} = require("customize-cra");
+const { override, addWebpackModuleRule } = require("customize-cra");
+const webpack = require("webpack");
 
 module.exports = override(
   addWebpackModuleRule({
@@ -27,12 +24,27 @@ module.exports = override(
     },
   }),
   function override(config, env) {
-    // resolve the issue with wallet-adapter dependencies that don't include polyfill
+    // resolve the issue with dependencies that don't include polyfill
     config.resolve.fallback = {
+      assert: require.resolve("assert/"),
+      buffer: require.resolve("buffer"),
       fs: false,
       crypto: require.resolve("crypto-browserify"),
       stream: require.resolve("stream-browserify"),
     };
+    config.plugins = [
+      ...config.plugins,
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ];
+    config.module.rules.push({
+      test: /\.m?js/,
+      resolve: {
+        fullySpecified: false,
+      },
+    });
     return config;
   }
 );
