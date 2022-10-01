@@ -40,4 +40,7 @@ Best Practices
 Tips
 ---
 
+* If it is the first time you have cloned the repo or seeing errors about not finding modules in `generated`, simply run `npm run generate` to generate the necessary files.
+    * This is automatically run during `build` and `start`.
+    * If you are changing anything in `src/types`, you will need to restart the dev server.    
 * If something you have added to the state is not reflecting, try clearing the localstorage cache.

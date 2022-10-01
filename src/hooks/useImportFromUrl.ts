@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import validateITransactionExt from "../generated/validate";
 import { mapITransactionExtToITransaction } from "../mappers/external-to-internal";
 import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
 import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
@@ -47,6 +48,9 @@ export const useImportFromUrl = (): {
 
     try {
       const external = mapProtobufToITransactionExt(share);
+      if (!validateITransactionExt(external)) {
+        throw new Error("Invalid payload");
+      }
       const internal = mapITransactionExtToITransaction(external);
 
       setTransaction((state) => {
@@ -64,12 +68,11 @@ export const useImportFromUrl = (): {
     } catch (e) {
       toast({
         title: "Transaction import failed",
-        description: `Could not decode provided transcation`,
+        description: `Could not decode the provided transcation`,
         status: "error",
         duration: 10000,
         isClosable: true,
       });
-      throw e;
     }
   });
 
@@ -97,12 +100,11 @@ export const useImportFromUrl = (): {
         setStatus(DEFAULT_STATUS);
         toast({
           title: "Transaction import failed",
-          description: `Failed to fetch transcation: ${error.message}`,
+          description: `Failed to fetch the transcation: ${error.message}`,
           status: "error",
           duration: 15000,
           isClosable: true,
         });
-        throw error;
       },
     });
 
@@ -139,6 +141,11 @@ export const useImportFromUrl = (): {
       .then((response) => {
         setStatus(DEFAULT_STATUS);
         setTransaction((state) => {
+          if (!validateITransactionExt(shareJson)) {
+            // @ts-ignore
+            console.log(validateITransactionExt.errors);
+            throw new Error("Invalid payload");
+          }
           state.transaction = mapIPreviewToITransaction(
             mapITransactionExtToIPreview(response.data, "shareUrl", shareJson)
           );
@@ -148,7 +155,7 @@ export const useImportFromUrl = (): {
         setStatus(DEFAULT_STATUS);
         toast({
           title: "Transaction import failed",
-          description: `Cannot fetch transaction from URL: ${err}`,
+          description: `Cannot fetch transaction from the URL: ${err}`,
           status: "error",
           duration: 10000,
           isClosable: true,
