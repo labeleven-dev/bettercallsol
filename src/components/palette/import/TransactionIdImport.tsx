@@ -1,8 +1,8 @@
 import { SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, ButtonGroup, Flex, Input, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
+import { useConfigStore } from "../../../hooks/useConfigStore";
 import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { mapTransactionResponseToIPreview } from "../../../mappers/web3js-to-preview";
 import { IRpcEndpoint } from "../../../types/internal";
@@ -13,9 +13,7 @@ export const TransactionIdImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;
   setError: (error: string) => void;
 }> = ({ setPreview, setError }) => {
-  const rpcEndpoints = usePersistentStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
+  const rpcEndpoints = useConfigStore((state) => state.appOptions.rpcEndpoints);
 
   const [transactionId, setTransactionId] = useState("");
   const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(

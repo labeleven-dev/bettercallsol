@@ -1,12 +1,12 @@
 import { Badge, BadgeProps, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useConfigStore } from "../../hooks/useConfigStore";
 
 export const Numbering: React.FC<{ index: number } & BadgeProps> = ({
   index,
   ...theRest
 }) => {
-  const enableNumbering = usePersistentStore(
+  const enableNumbering = useConfigStore(
     (state) => state.appOptions.enableNumbering
   );
   const textColor = useColorModeValue("blackAlpha.500", "whiteAlpha.500");

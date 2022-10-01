@@ -6,7 +6,7 @@ import {
 } from "@solana/web3.js";
 import { useState } from "react";
 import { IPubKey } from "../types/internal";
-import { usePersistentStore } from "./usePersistentStore";
+import { useConfigStore } from "./useConfigStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
 /**
@@ -39,7 +39,7 @@ export const useGetWeb3Transaction = ({
   const [startedAt, setStartedAt] = useState<number>();
   const [endedAt, setFinalisedAt] = useState<number>();
 
-  const transactionOptions = usePersistentStore(
+  const transactionOptions = useConfigStore(
     (state) => state.transactionOptions
   );
   const defaultConnection = useWeb3Connection();

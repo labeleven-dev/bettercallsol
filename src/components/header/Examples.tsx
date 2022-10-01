@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
+import { useShallowConfigStore } from "../../hooks/useConfigStore";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
@@ -23,7 +23,7 @@ import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
 export const Example: React.FC = () => {
   const setTransaction = useSessionStoreWithUndo((state) => state.set);
   const setTransient = useSessionStoreWithoutUndo((state) => state.set);
-  const [firstTime, rpcEndpoints, setPersistent] = useShallowPersistentStore(
+  const [firstTime, rpcEndpoints, setPersistent] = useShallowConfigStore(
     (state) => [state.firstTime, state.appOptions.rpcEndpoints, state.set]
   );
   const toast = useToast();
