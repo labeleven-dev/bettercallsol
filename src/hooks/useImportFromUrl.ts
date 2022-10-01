@@ -8,8 +8,8 @@ import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
 import { mapProtobufToITransactionExt } from "../mappers/protobuf-to-external";
 import { mapTransactionResponseToIPreview } from "../mappers/web3js-to-preview";
 import { short } from "../utils/web3js";
+import { useConfigStore } from "./useConfigStore";
 import { useGetWeb3Transaction } from "./useGetWeb3Transaction";
-import { usePersistentStore } from "./usePersistentStore";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
@@ -39,9 +39,7 @@ export const useImportFromUrl = (): {
   const shareJson = searchParams.get("shareJson");
 
   // determine network
-  const rpcEndpoints = usePersistentStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
+  const rpcEndpoints = useConfigStore((state) => state.appOptions.rpcEndpoints);
 
   // import from URL-encoded transaction
   useEffect(() => {

@@ -14,7 +14,7 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useConfigStore } from "../../hooks/useConfigStore";
 import { useShallowSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 import {} from "../../types/state";
 import {
@@ -30,7 +30,7 @@ export const Options: React.FC = () => {
     state.uiState.optionsOpen,
     state.set,
   ]);
-  const setPersistent = usePersistentStore((state) => state.set);
+  const setPersistent = useConfigStore((state) => state.set);
 
   return (
     <Modal

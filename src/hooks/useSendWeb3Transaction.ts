@@ -3,7 +3,7 @@ import { Connection, PublicKey, Signer } from "@solana/web3.js";
 import { mapITransactionToWeb3Transaction } from "../mappers/internal-to-web3js";
 import { ITransaction } from "../types/internal";
 import { sentryCaptureException } from "../utils/sentry";
-import { usePersistentStore } from "./usePersistentStore";
+import { useConfigStore } from "./useConfigStore";
 import { useSessionStoreWithUndo } from "./useSessionStore";
 import { useWeb3Connection } from "./useWeb3Connection";
 
@@ -21,7 +21,7 @@ export const useSendWeb3Transaction = ({
 }): {
   send: (transaction: ITransaction) => void;
 } => {
-  const transactionOptions = usePersistentStore(
+  const transactionOptions = useConfigStore(
     (state) => state.transactionOptions
   );
   const keypairs = useSessionStoreWithUndo((state) => state.keypairs);

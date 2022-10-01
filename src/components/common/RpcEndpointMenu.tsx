@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import { usePersistentStore } from "../../hooks/usePersistentStore";
+import { useConfigStore } from "../../hooks/useConfigStore";
 import { IRpcEndpoint } from "../../types/internal";
 import { toSortedArray } from "../../utils/sortable";
 
@@ -33,9 +33,7 @@ export const RpcEndpointMenu: React.FC<{
   menuButtonProps,
   menuListProps,
 }) => {
-  const rpcEndpoints = usePersistentStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
+  const rpcEndpoints = useConfigStore((state) => state.appOptions.rpcEndpoints);
 
   return (
     <Menu {...menuProps}>

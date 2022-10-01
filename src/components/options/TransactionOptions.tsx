@@ -1,14 +1,14 @@
 import { Grid } from "@chakra-ui/react";
 import { Commitment, Finality } from "@solana/web3.js";
 import React from "react";
-import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
+import { useShallowConfigStore } from "../../hooks/useConfigStore";
 import { COMMITMENT_LEVELS, FINALITY_LEVELS } from "../../utils/ui-constants";
 import { ChoiceOption } from "./fields/ChoiceOption";
 import { NumberOption } from "./fields/NumberOption";
 import { ToggleOption } from "./fields/ToggleOption";
 
 export const TransactionOptions: React.FC = () => {
-  const [transactionOptions, set] = useShallowPersistentStore((state) => [
+  const [transactionOptions, set] = useShallowConfigStore((state) => [
     state.transactionOptions,
     state.set,
   ]);

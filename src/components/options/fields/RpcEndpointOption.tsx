@@ -16,7 +16,7 @@ import {
 import { WritableDraft } from "immer/dist/internal";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useConfigStore } from "../../../hooks/useConfigStore";
 import { IRpcEndpoint } from "../../../types/internal";
 import { removeFrom } from "../../../utils/sortable";
 import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
@@ -39,7 +39,7 @@ export const RpcEndpointOption: React.FC<IRpcEndpoint> = ({
   custom,
   enabled,
 }) => {
-  const set = usePersistentStore((state) => state.set);
+  const set = useConfigStore((state) => state.set);
 
   const updateEndpoint = (fn: (state: WritableDraft<IRpcEndpoint>) => void) => {
     set((state) => {

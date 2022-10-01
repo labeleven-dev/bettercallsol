@@ -1,14 +1,14 @@
 import { useConnection } from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
 import { useMemo } from "react";
-import { usePersistentStore } from "./usePersistentStore";
+import { useConfigStore } from "./useConfigStore";
 
 /**
  * Returns a Solana connection for the given RPC URL,
  * or just the default one used for the client
  */
 export const useWeb3Connection = (rpcEndpointUrl?: string): Connection => {
-  const transactionOptions = usePersistentStore(
+  const transactionOptions = useConfigStore(
     (state) => state.transactionOptions
   );
   const { connection: defaultConnection } = useConnection();

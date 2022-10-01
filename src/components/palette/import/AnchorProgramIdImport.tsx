@@ -1,7 +1,7 @@
 import { SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, ButtonGroup, Flex, Input, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
-import { usePersistentStore } from "../../../hooks/usePersistentStore";
+import { useConfigStore } from "../../../hooks/useConfigStore";
 import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
 import { mapIdlToIPreview } from "../../../mappers/idl-to-preview";
 import { IRpcEndpoint } from "../../../types/internal";
@@ -16,9 +16,7 @@ export const AnchorProgramIdImport: React.FC<{
 }> = ({ setPreview, setError }) => {
   const [programId, setProgramId] = useState("");
   const [inProgress, setInprogress] = useState(false);
-  const rpcEndpoints = usePersistentStore(
-    (state) => state.appOptions.rpcEndpoints
-  );
+  const rpcEndpoints = useConfigStore((state) => state.appOptions.rpcEndpoints);
   const [rpcEndpoint, setRpcEndpoint] = useState<IRpcEndpoint>(
     Object.values(rpcEndpoints.map).find(
       (endpoint) => endpoint.network === "mainnet-beta"

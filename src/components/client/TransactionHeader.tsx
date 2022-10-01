@@ -28,9 +28,9 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import {
-  usePersistentStore,
-  useShallowPersistentStore,
-} from "../../hooks/usePersistentStore";
+  useConfigStore,
+  useShallowConfigStore,
+} from "../../hooks/useConfigStore";
 import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
 import {
   useShallowSessionStoreWithoutUndo,
@@ -45,7 +45,7 @@ import { ToggleIconButton } from "../common/ToggleIconButton";
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
 }> = ({ resultsRef }) => {
-  const scrollToResults = usePersistentStore(
+  const scrollToResults = useConfigStore(
     (state) => state.appOptions.scrollToResults
   );
   const [inProgress, descriptionVisible, setUI] =
@@ -57,7 +57,7 @@ export const TransactionHeader: React.FC<{
   const [transaction, rpcEndpoint, setSession] = useShallowSessionStoreWithUndo(
     (state) => [state.transaction, state.rpcEndpoint, state.set]
   );
-  const rpcEndpoints = useShallowPersistentStore(
+  const rpcEndpoints = useShallowConfigStore(
     (state) => state.appOptions.rpcEndpoints
   );
 
