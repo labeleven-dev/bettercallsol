@@ -5,8 +5,6 @@ import shallow from "zustand/shallow";
 import { PersistentState } from "../types/state";
 import { DEFAULT_PERSISTENT_STATE } from "../utils/state";
 
-const LOCAL_STORAGE_KEY = "bcsol-config";
-
 /**
  * Provides access to the LocalStorage Zustand store
  */
@@ -19,7 +17,7 @@ export const useConfigStore = create<PersistentState>()(
       },
     }),
     {
-      name: LOCAL_STORAGE_KEY,
+      name: "bcsol-config",
       version: 1,
     }
   )
