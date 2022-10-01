@@ -119,15 +119,15 @@ export const ShareModal: React.FC = () => {
                     flex="1"
                     fontFamily="mono"
                     isReadOnly
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
                     value={encodedUrl}
                   />
                   <CopyButton ml="1" size="md" value={encodedUrl} />
                 </Flex>
 
-                <FormControl mt="1" display="flex" alignItems="center">
-                  <FormLabel htmlFor="expand-annotations" mb="0">
-                    Expand annotations on load
-                  </FormLabel>
+                <FormControl mt="2" display="flex" alignItems="center">
                   <Switch
                     id="expand-annotations"
                     isChecked={annotate}
@@ -135,6 +135,9 @@ export const ShareModal: React.FC = () => {
                       setAnnotate(!annotate);
                     }}
                   />
+                  <FormLabel htmlFor="expand-annotations" ml="1" mb="0">
+                    Expand annotations on load
+                  </FormLabel>
                 </FormControl>
               </TabPanel>
 

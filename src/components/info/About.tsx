@@ -14,7 +14,7 @@ import {
 import GitHubButton from "react-github-btn";
 import { FaGithub, FaTwitter, FaYoutube } from "react-icons/fa";
 
-const GITHUB_URL = "https://github.com/labeleven-dev/bettercallsol";
+export const GITHUB_URL = "https://github.com/labeleven-dev/bettercallsol";
 
 export const About: React.FC = () => {
   const { colorMode } = useColorMode();
@@ -144,8 +144,8 @@ export const About: React.FC = () => {
         </Link>
       </HStack>
 
-      <Text fontSize="sm" pt="5">
-        Made with ❤ in Australia
+      <Text fontSize="md" pt="5">
+        Made with ❤ in 🇦🇺
       </Text>
     </VStack>
   );
