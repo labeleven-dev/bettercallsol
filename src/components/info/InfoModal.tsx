@@ -15,6 +15,7 @@ import { useShallowSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 import { About } from "./About";
 import { Acknowledgements } from "./Acknowledgements";
 import { Help } from "./Help";
+import { Privacy } from "./Privacy";
 
 export const InfoModal: React.FC = () => {
   const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [
@@ -43,6 +44,7 @@ export const InfoModal: React.FC = () => {
             <TabList>
               <Tab>Help</Tab>
               <Tab>About</Tab>
+              <Tab>Privacy</Tab>
               <Tab>Acknowledgements</Tab>
             </TabList>
 
@@ -53,7 +55,9 @@ export const InfoModal: React.FC = () => {
               <TabPanel>
                 <About />
               </TabPanel>
-
+              <TabPanel>
+                <Privacy />
+              </TabPanel>
               <TabPanel>
                 <Acknowledgements />
               </TabPanel>
