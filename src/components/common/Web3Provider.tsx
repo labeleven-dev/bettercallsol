@@ -1,17 +1,15 @@
+import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { BraveWalletAdapter } from "@solana/wallet-adapter-brave";
+import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
+import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  BackpackWalletAdapter,
-  BraveWalletAdapter,
-  GlowWalletAdapter,
-  LedgerWalletAdapter,
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 import React, { useMemo } from "react";
 import { useShallowPersistentStore } from "../../hooks/usePersistentStore";
 import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
