@@ -36,3 +36,5 @@ share-program/Cargo.lock
 
 cypress/videos
 cypress/downloads
+
+src/generated

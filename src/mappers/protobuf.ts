@@ -1,3 +1,4 @@
+import { bettercallsol as protobuf } from "../generated/protobuf";
 import {
   AccountType,
   DataFormat,
@@ -5,7 +6,6 @@ import {
   InstructionDataFieldType,
   RawEncoding,
 } from "../types/internal";
-import { bettercallsol as protobuf } from "../types/protobuf";
 
 // enums
 const ProtoNetwork = protobuf.Transaction.Network;

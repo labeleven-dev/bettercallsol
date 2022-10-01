@@ -1,11 +1,11 @@
 import pako from "pako";
+import { bettercallsol as protobuf, google } from "../generated/protobuf";
 import {
   IAccountExt,
   IInstrctionDataFieldExt,
   ITransactionExt,
 } from "../types/external";
 import { IAccountMetadata, IInstructionDataRaw } from "../types/internal";
-import { bettercallsol as protobuf, google } from "../types/protobuf";
 import {
   mapAccountTypeToProtobuf,
   mapDataFormatToProtobuf,
