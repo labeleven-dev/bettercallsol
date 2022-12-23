@@ -1,7 +1,6 @@
 import { ColorModeScript } from "@chakra-ui/react";
 import * as Sentry from "@sentry/react";
 import { App } from "App";
-import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "reportWebVitals";
@@ -18,7 +17,9 @@ if (!container) throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <React.StrictMode>
+  <>
+    // TODO https://github.com/adobe/react-spectrum/issues/779
+    {/* <React.StrictMode> */}
     <>
       {
         // TODO initial colour mode is broken https://github.com/chakra-ui/chakra-ui/discussions/5051
@@ -32,7 +33,8 @@ root.render(
         <App />
       </Sentry.ErrorBoundary>
     </BrowserRouter>
-  </React.StrictMode>
+    {/* </React.StrictMode> */}
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function

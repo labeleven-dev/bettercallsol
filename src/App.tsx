@@ -42,18 +42,18 @@ export const App: React.FC = () => {
             <Header />
           </Box>
 
+          <Show below="md">
+            <Alert mt="55px" mb="-50px" status="warning" variant="left-accent">
+              <AlertIcon />
+              <AlertDescription>
+                This tool has been optimised for desktop use. It may look wonky
+                on mobile devices.
+              </AlertDescription>
+            </Alert>
+          </Show>
+
           <Flex mt="45px" pb="10px" h="calc(100vh - 60px)">
             <Box flex="2" overflow="scroll">
-              {/* TODO it's Solana wallet button's fault, we need to replace it */}
-              <Show below="md">
-                <Alert mt="10px" status="warning" variant="left-accent">
-                  <AlertIcon />
-                  <AlertDescription>
-                    This app is optimised for desktop. It may look wonky on your
-                    mobile device.
-                  </AlertDescription>
-                </Alert>
-              </Show>
               <Transaction />
             </Box>
             {paletteOpen && (

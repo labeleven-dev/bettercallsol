@@ -1,4 +1,3 @@
-import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { BraveWalletAdapter } from "@solana/wallet-adapter-brave";
 import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
@@ -29,7 +28,6 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
 
   const wallets = useMemo(
     () => [
-      new BackpackWalletAdapter(),
       new BraveWalletAdapter(),
       new GlowWalletAdapter(),
       new PhantomWalletAdapter(),
