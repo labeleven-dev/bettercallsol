@@ -23,10 +23,10 @@ jobs:
     steps:
       # setup
       - uses: actions/checkout@v3
-      - name: Use Node.js 16.x (LTS)
+      - name: Use Node.js 18.x (LTS)
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
           cache: npm
       - run: npm ci
 
@@ -40,13 +40,13 @@ jobs:
         run: |
           if [[ ${{ steps.semantic-version.outputs.new-release-published }} = 'true' ]]; then
             echo "New version: ${{ steps.semantic-version.outputs.new-release-version }}"
-            echo '::set-output name=semver::${{ steps.semantic-version.outputs.new-release-version }}'
-            echo '::set-output name=version::${{ steps.semantic-version.outputs.new-release-version }} (Build ${{ github.run_number }}-${{ github.run_attempt }})'
+            echo 'semver=${{ steps.semantic-version.outputs.new-release-version }}' >> $GITHUB_OUTPUTS
+            echo 'version=${{ steps.semantic-version.outputs.new-release-version }} (Build ${{ github.run_number }}-${{ github.run_attempt }})' >> $GITHUB_OUTPUTS
           else
             LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
             echo "Existing version: ${LATEST_TAG}"
-            echo "::set-output name=semver::${LATEST_TAG}"
-            echo "::set-output name=version::${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt	}})"
+            echo "semver=${LATEST_TAG}" >> $GITHUB_OUTPUTS
+            echo "version=${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt }})" >> $GITHUB_OUTPUTS
           fi
 
       # test
@@ -58,10 +58,10 @@ jobs:
       - run: npm run build
         env:
           # GENERATE_SOURCEMAP: false
-          REACT_APP_SEMVER: ${{ steps.version.outputs.semver }}
-          REACT_APP_BUILD: ${{ github.run_number }}-${{ github.run_attempt }}
-          REACT_APP_BUILD_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          VITE_SEMVER: ${{ steps.version.outputs.semver }}
+          VITE_BUILD: ${{ github.run_number }}-${{ github.run_attempt }}
+          VITE_BUILD_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       
       # release
       - run: npm run release
@@ -100,10 +100,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 16.x (LTS)
+      - name: Use Node.js 18.x (LTS)
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       # setup firebase CLI
       - run: npm install -g firebase-tools

@@ -5,12 +5,11 @@ import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
-import * as serviceWorker from "./serviceWorker";
 
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  release: process.env.REACT_APP_SEMVER
-    ? `${process.env.REACT_APP_SEMVER} (${process.env.REACT_APP_BUILD})`
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  release: import.meta.env.VITE_SEMVER
+    ? `${import.meta.env.VITE_SEMVER} (${import.meta.env.VITE_BUILD})`
     : "local",
 });
 
@@ -35,11 +34,6 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
-serviceWorker.unregister();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
