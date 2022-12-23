@@ -70,16 +70,6 @@ export const About: React.FC = () => {
 
           <WrapItem>
             <GitHubButton
-              href="https://github.com/orgs/labeleven-dev/projects/1"
-              data-color-scheme={colorMode}
-              aria-label="Discuss labeleven-dev/bettercallsol on GitHub"
-            >
-              Roadmap
-            </GitHubButton>
-          </WrapItem>
-
-          <WrapItem>
-            <GitHubButton
               href="https://github.com/labeleven-dev/bettercallsol/discussions"
               data-icon="octicon-comment-discussion"
               data-color-scheme={colorMode}

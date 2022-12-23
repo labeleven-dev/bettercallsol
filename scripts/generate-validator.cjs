@@ -8,7 +8,7 @@ const standaloneCode = require("ajv/dist/standalone").default;
 
 const schema = JSON.parse(
   fs.readFileSync(
-    path.join(__dirname, "src/generated/validate/external-schema.json")
+    path.join(__dirname, "../src/generated/validate/external-schema.json")
   )
 );
 
@@ -25,6 +25,6 @@ let moduleCode = standaloneCode(ajv, validate);
 
 // Now you can write the module code to file
 fs.writeFileSync(
-  path.join(__dirname, "src/generated/validate/index.mjs"),
+  path.join(__dirname, "../src/generated/validate/index.mjs"),
   moduleCode
 );
