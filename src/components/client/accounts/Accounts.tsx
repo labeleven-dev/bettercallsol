@@ -11,13 +11,13 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { Account } from "components/client/accounts/Account";
+import { Sortable } from "components/common/Sortable";
+import { useInstruction } from "hooks/useInstruction";
 import React from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { IID } from "../../../types/sortable";
-import { newAccount } from "../../../utils/internal";
-import { addTo } from "../../../utils/sortable";
-import { Sortable } from "../../common/Sortable";
-import { Account } from "./Account";
+import { IID } from "types/sortable";
+import { newAccount } from "utils/internal";
+import { addTo } from "utils/sortable";
 
 export const AccountContext = React.createContext<{
   id: IID | number;

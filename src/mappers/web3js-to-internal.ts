@@ -1,5 +1,5 @@
 import { TransactionResponse } from "@solana/web3.js";
-import { IBalance } from "../types/internal";
+import { IBalance } from "types/internal";
 
 export const extractBalances = (
   transaction: TransactionResponse

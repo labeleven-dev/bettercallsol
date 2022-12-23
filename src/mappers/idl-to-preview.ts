@@ -4,10 +4,10 @@ import {
   IdlAccountItem,
   IdlInstruction,
 } from "@project-serum/anchor/dist/cjs/idl";
-import { IAccountExt, IInstrctionDataFieldExt } from "../types/external";
-import { IPubKey, IRpcEndpoint } from "../types/internal";
-import { IInstructionPreview, IPreview, PreviewSource } from "../types/preview";
-import { accountSummary } from "./web3js-to-preview";
+import { accountSummary } from "mappers/web3js-to-preview";
+import { IAccountExt, IInstrctionDataFieldExt } from "types/external";
+import { IPubKey, IRpcEndpoint } from "types/internal";
+import { IInstructionPreview, IPreview, PreviewSource } from "types/preview";
 
 const mapIdlAccountItemToIAccountExt = (
   account: IdlAccountItem

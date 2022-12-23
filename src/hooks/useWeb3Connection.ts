@@ -1,7 +1,7 @@
 import { useConnection } from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
+import { useConfigStore } from "hooks/useConfigStore";
 import { useMemo } from "react";
-import { useConfigStore } from "./useConfigStore";
 
 /**
  * Returns a Solana connection for the given RPC URL,

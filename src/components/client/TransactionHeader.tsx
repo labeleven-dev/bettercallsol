@@ -16,6 +16,16 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { Description } from "components/common/Description";
+import { EditableName } from "components/common/EditableName";
+import { RpcEndpointMenu } from "components/common/RpcEndpointMenu";
+import { ToggleIconButton } from "components/common/ToggleIconButton";
+import { useConfigStore, useShallowConfigStore } from "hooks/useConfigStore";
+import { useSendWeb3Transaction } from "hooks/useSendWeb3Transaction";
+import {
+  useShallowSessionStoreWithoutUndo,
+  useShallowSessionStoreWithUndo,
+} from "hooks/useSessionStore";
 import React, { useEffect } from "react";
 import {
   FaCompress,
@@ -27,20 +37,7 @@ import {
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
-import {
-  useConfigStore,
-  useShallowConfigStore,
-} from "../../hooks/useConfigStore";
-import { useSendWeb3Transaction } from "../../hooks/useSendWeb3Transaction";
-import {
-  useShallowSessionStoreWithoutUndo,
-  useShallowSessionStoreWithUndo,
-} from "../../hooks/useSessionStore";
-import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "../../utils/state";
-import { Description } from "../common/Description";
-import { EditableName } from "../common/EditableName";
-import { RpcEndpointMenu } from "../common/RpcEndpointMenu";
-import { ToggleIconButton } from "../common/ToggleIconButton";
+import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "utils/state";
 
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;

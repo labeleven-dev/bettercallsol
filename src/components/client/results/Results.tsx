@@ -22,19 +22,19 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { TransactionConfirmationStatus } from "@solana/web3.js";
-import { useEffect, useState } from "react";
-import { useConfigStore } from "../../../hooks/useConfigStore";
-import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
-import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
+import { BalanceTable } from "components/client/results/BalanceTable";
+import { ProgramLogs } from "components/client/results/ProgramLogs";
+import { Signature } from "components/client/results/Signature";
+import { ErrorAlert } from "components/common/ErrorAlert";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useGetWeb3Transaction } from "hooks/useGetWeb3Transaction";
+import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import {
   extractBalances,
   mapWeb3TransactionError,
-} from "../../../mappers/web3js-to-internal";
-import { IBalance } from "../../../types/internal";
-import { ErrorAlert } from "../../common/ErrorAlert";
-import { BalanceTable } from "./BalanceTable";
-import { ProgramLogs } from "./ProgramLogs";
-import { Signature } from "./Signature";
+} from "mappers/web3js-to-internal";
+import { useEffect, useState } from "react";
+import { IBalance } from "types/internal";
 
 type State = {
   slot?: number;

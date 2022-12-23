@@ -13,17 +13,14 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
+import { GeneralOptions } from "components/options/GeneralOptions";
+import { RpcEndpointOptions } from "components/options/RpcEndpointOptions";
+import { TransactionOptions } from "components/options/TransactionOptions";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useShallowSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import React from "react";
-import { useConfigStore } from "../../hooks/useConfigStore";
-import { useShallowSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
-import {} from "../../types/state";
-import {
-  DEFAULT_APP_OPTIONS,
-  DEFAUT_TRANSACTION_OPTIONS,
-} from "../../utils/state";
-import { GeneralOptions } from "./GeneralOptions";
-import { RpcEndpointOptions } from "./RpcEndpointOptions";
-import { TransactionOptions } from "./TransactionOptions";
+import {} from "types/state";
+import { DEFAULT_APP_OPTIONS, DEFAUT_TRANSACTION_OPTIONS } from "utils/state";
 
 export const Options: React.FC = () => {
   const [isOpen, setSession] = useShallowSessionStoreWithoutUndo((state) => [

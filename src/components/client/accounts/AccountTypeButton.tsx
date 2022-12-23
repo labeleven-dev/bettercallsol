@@ -9,6 +9,8 @@ import {
   Portal,
   Tooltip,
 } from "@chakra-ui/react";
+import { useAccount } from "hooks/useAccount";
+import { useAccountType } from "hooks/useAccountType";
 import {
   FaCog,
   FaCoins,
@@ -18,9 +20,7 @@ import {
   FaRobot,
   FaWallet,
 } from "react-icons/fa";
-import { useAccount } from "../../../hooks/useAccount";
-import { useAccountType } from "../../../hooks/useAccountType";
-import { AccountType } from "../../../types/internal";
+import { AccountType } from "types/internal";
 
 const TYPES: AccountType[] = [
   "wallet",

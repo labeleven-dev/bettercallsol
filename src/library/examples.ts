@@ -1,4 +1,4 @@
-import { ITransactionExt } from "../types/external";
+import { ITransactionExt } from "types/external";
 
 // TODO add an Anchor example
 

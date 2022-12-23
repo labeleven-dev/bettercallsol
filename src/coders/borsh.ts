@@ -1,7 +1,7 @@
 import * as Borsh from "@project-serum/borsh";
 import { PublicKey } from "@solana/web3.js";
-import { Coder } from ".";
-import { IInstrctionDataField } from "../types/internal";
+import { Coder } from "coders";
+import { IInstrctionDataField } from "types/internal";
 
 export class BorshCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {

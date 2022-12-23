@@ -4,10 +4,10 @@ import {
   SignatureStatus,
   TransactionResponse,
 } from "@solana/web3.js";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useWeb3Connection } from "hooks/useWeb3Connection";
 import { useState } from "react";
-import { IPubKey } from "../types/internal";
-import { useConfigStore } from "./useConfigStore";
-import { useWeb3Connection } from "./useWeb3Connection";
+import { IPubKey } from "types/internal";
 
 /**
  * Use it to poll for the results of a transaction

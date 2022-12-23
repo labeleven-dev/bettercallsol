@@ -13,10 +13,10 @@ import {
   Portal,
   Tooltip,
 } from "@chakra-ui/react";
+import { useConfigStore } from "hooks/useConfigStore";
 import React from "react";
-import { useConfigStore } from "../../hooks/useConfigStore";
-import { IRpcEndpoint } from "../../types/internal";
-import { toSortedArray } from "../../utils/sortable";
+import { IRpcEndpoint } from "types/internal";
+import { toSortedArray } from "utils/sortable";
 
 export const RpcEndpointMenu: React.FC<{
   endpoint: IRpcEndpoint;

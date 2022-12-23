@@ -10,15 +10,15 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { ErrorAlert } from "components/common/ErrorAlert";
+import { AnchorJsonImport } from "components/palette/import/AnchorJsonImport";
+import { AnchorProgramIdImport } from "components/palette/import/AnchorProgramIdImport";
+import { ShareJsonImport } from "components/palette/import/ShareJsonImport";
+import { ShareUrlImport } from "components/palette/import/ShareUrlImport";
+import { TransactionIdImport } from "components/palette/import/TransactionIdImport";
+import { Preview } from "components/palette/preview/Preview";
 import { useState } from "react";
-import { IPreview, PreviewSource } from "../../types/preview";
-import { ErrorAlert } from "../common/ErrorAlert";
-import { AnchorJsonImport } from "./import/AnchorJsonImport";
-import { AnchorProgramIdImport } from "./import/AnchorProgramIdImport";
-import { ShareJsonImport } from "./import/ShareJsonImport";
-import { ShareUrlImport } from "./import/ShareUrlImport";
-import { TransactionIdImport } from "./import/TransactionIdImport";
-import { Preview } from "./preview/Preview";
+import { IPreview, PreviewSource } from "types/preview";
 
 const SOURCES: { source: PreviewSource; label: string; type: string }[] = [
   { source: "tx", label: "Transaction ID", type: "tx" },

@@ -1,13 +1,13 @@
 import { SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, ButtonGroup, Flex, Input, Tooltip } from "@chakra-ui/react";
+import { RpcEndpointMenu } from "components/common/RpcEndpointMenu";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useGetWeb3Transaction } from "hooks/useGetWeb3Transaction";
+import { useWeb3Connection } from "hooks/useWeb3Connection";
+import { mapTransactionResponseToIPreview } from "mappers/web3js-to-preview";
 import { useState } from "react";
-import { useConfigStore } from "../../../hooks/useConfigStore";
-import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
-import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
-import { mapTransactionResponseToIPreview } from "../../../mappers/web3js-to-preview";
-import { IRpcEndpoint } from "../../../types/internal";
-import { IPreview } from "../../../types/preview";
-import { RpcEndpointMenu } from "../../common/RpcEndpointMenu";
+import { IRpcEndpoint } from "types/internal";
+import { IPreview } from "types/preview";
 
 export const TransactionIdImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;

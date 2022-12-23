@@ -1,10 +1,10 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Grid, IconButton, Text, Tooltip } from "@chakra-ui/react";
-import { useShallowConfigStore } from "../../hooks/useConfigStore";
-import { newRpcEndpoint } from "../../utils/internal";
-import { addTo, toSortedArray } from "../../utils/sortable";
-import { Sortable } from "../common/Sortable";
-import { RpcEndpointOption } from "./fields/RpcEndpointOption";
+import { Sortable } from "components/common/Sortable";
+import { RpcEndpointOption } from "components/options/fields/RpcEndpointOption";
+import { useShallowConfigStore } from "hooks/useConfigStore";
+import { newRpcEndpoint } from "utils/internal";
+import { addTo, toSortedArray } from "utils/sortable";
 
 export const RpcEndpointOptions: React.FC = () => {
   const [rpcEndpoints, set] = useShallowConfigStore((state) => [

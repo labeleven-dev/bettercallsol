@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useImportFromUrl } from "../hooks/useImportFromUrl";
+import { useImportFromUrl } from "hooks/useImportFromUrl";
 
 export const ImportModal: React.FC = () => {
   const { isLoading, status, cancel } = useImportFromUrl();

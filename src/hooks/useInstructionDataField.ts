@@ -1,13 +1,9 @@
+import { InstructionDataFieldContext } from "components/client/data/editor/DataEditor";
+import { useInstruction } from "hooks/useInstruction";
 import { WritableDraft } from "immer/dist/internal";
 import { useContext } from "react";
-import { InstructionDataFieldContext } from "../components/client/data/editor/DataEditor";
-import {
-  DataFormat,
-  IInstrctionDataField,
-  IInstruction,
-} from "../types/internal";
-import { IID } from "../types/sortable";
-import { useInstruction } from "./useInstruction";
+import { DataFormat, IInstrctionDataField, IInstruction } from "types/internal";
+import { IID } from "types/sortable";
 
 /**
  * Provides the current instruction data's details and methods to interact with it

@@ -13,14 +13,14 @@ import {
   Portal,
   Tooltip,
 } from "@chakra-ui/react";
+import { DragHandle } from "components/common/DragHandle";
+import { useConfigStore } from "hooks/useConfigStore";
 import { WritableDraft } from "immer/dist/internal";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useConfigStore } from "../../../hooks/useConfigStore";
-import { IRpcEndpoint } from "../../../types/internal";
-import { removeFrom } from "../../../utils/sortable";
-import { RPC_NETWORK_OPTIONS } from "../../../utils/state";
-import { DragHandle } from "../../common/DragHandle";
+import { IRpcEndpoint } from "types/internal";
+import { removeFrom } from "utils/sortable";
+import { RPC_NETWORK_OPTIONS } from "utils/state";
 
 const isValidUrl = (url: string) => {
   try {

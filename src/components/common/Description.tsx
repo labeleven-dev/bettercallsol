@@ -20,10 +20,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import ChakraUIRenderer from "chakra-ui-markdown-renderer";
+import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import React, { ReactFragment, useState } from "react";
 import { FaMarkdown } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
-import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
 
 export const Description: React.FC<
   {

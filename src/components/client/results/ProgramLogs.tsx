@@ -8,9 +8,9 @@ import {
   Stack,
   Tooltip,
 } from "@chakra-ui/react";
+import { CopyButton } from "components/common/CopyButton";
+import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import React, { useMemo } from "react";
-import { useSessionStoreWithoutUndo } from "../../../hooks/useSessionStore";
-import { CopyButton } from "../../common/CopyButton";
 
 export const ProgramLogs: React.FC<{
   inProgress: boolean;

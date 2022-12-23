@@ -1,12 +1,12 @@
 import produce from "immer";
-import create from "zustand";
-import { persist, subscribeWithSelector } from "zustand/middleware";
-import shallow from "zustand/shallow";
-import { SessionStateWithoutUndo, SessionStateWithUndo } from "../types/state";
+import { SessionStateWithoutUndo, SessionStateWithUndo } from "types/state";
 import {
   DEFAULT_SESSION_STATE_WITHOUT_UNDO,
   DEFAULT_SESSION_STATE_WITH_UNDO,
-} from "../utils/state";
+} from "utils/state";
+import create from "zustand";
+import { persist, subscribeWithSelector } from "zustand/middleware";
+import shallow from "zustand/shallow";
 
 // TODO implement undo/redo once this is resolved: https://github.com/charkour/zundo/issues/38
 

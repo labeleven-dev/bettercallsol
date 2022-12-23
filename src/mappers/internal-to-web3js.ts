@@ -3,12 +3,12 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js";
-import { BorshCoder } from "../coders/borsh";
-import { BufferLayoutCoder } from "../coders/buffer-layout";
-import { ITransaction } from "../types/internal";
-import { toSortedArray } from "../utils/sortable";
-import { anchorMethodSighash, isValidPublicKey } from "../utils/web3js";
 import bs58 from "bs58";
+import { BorshCoder } from "coders/borsh";
+import { BufferLayoutCoder } from "coders/buffer-layout";
+import { ITransaction } from "types/internal";
+import { toSortedArray } from "utils/sortable";
+import { anchorMethodSighash, isValidPublicKey } from "utils/web3js";
 
 export const mapITransactionToWeb3Transaction = ({
   instructions,

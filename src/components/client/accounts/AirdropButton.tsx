@@ -30,14 +30,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { ExplorerButton } from "components/common/ExplorerButton";
+import { useGetWeb3Transaction } from "hooks/useGetWeb3Transaction";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { useWeb3Connection } from "hooks/useWeb3Connection";
 import React, { useRef, useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
-import { useGetWeb3Transaction } from "../../../hooks/useGetWeb3Transaction";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { useWeb3Connection } from "../../../hooks/useWeb3Connection";
-import { IPubKey } from "../../../types/internal";
-import { short, toLamports } from "../../../utils/web3js";
-import { ExplorerButton } from "../../common/ExplorerButton";
+import { IPubKey } from "types/internal";
+import { short, toLamports } from "utils/web3js";
 
 export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   accountPubkey,

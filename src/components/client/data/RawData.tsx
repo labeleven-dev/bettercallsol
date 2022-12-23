@@ -9,9 +9,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import bs58 from "bs58";
+import { Description } from "components/common/Description";
+import { useInstruction } from "hooks/useInstruction";
 import React from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { Description } from "../../common/Description";
 
 export const RawData: React.FC = () => {
   const { useShallowGet, update } = useInstruction();

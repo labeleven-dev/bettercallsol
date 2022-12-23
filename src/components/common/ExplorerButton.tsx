@@ -8,10 +8,10 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useConfigStore } from "hooks/useConfigStore";
 import React from "react";
-import { useConfigStore } from "../../hooks/useConfigStore";
-import { INetwork, IRpcEndpoint } from "../../types/internal";
-import { Explorer } from "../../types/state";
+import { INetwork, IRpcEndpoint } from "types/internal";
+import { Explorer } from "types/state";
 
 export type AddressType = "tx" | "account";
 

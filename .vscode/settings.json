@@ -15,4 +15,5 @@
             "source.organizeImports": true
         },        
     },
+    "typescript.preferences.importModuleSpecifier": "non-relative"
 }

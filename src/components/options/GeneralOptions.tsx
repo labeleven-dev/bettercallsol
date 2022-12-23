@@ -1,10 +1,10 @@
 import { Grid } from "@chakra-ui/react";
+import { ChoiceOption } from "components/options/fields/ChoiceOption";
+import { ToggleOption } from "components/options/fields/ToggleOption";
+import { useShallowConfigStore } from "hooks/useConfigStore";
 import React from "react";
-import { useShallowConfigStore } from "../../hooks/useConfigStore";
-import { Explorer } from "../../types/state";
-import { EXPLORERS } from "../../utils/ui-constants";
-import { ChoiceOption } from "./fields/ChoiceOption";
-import { ToggleOption } from "./fields/ToggleOption";
+import { Explorer } from "types/state";
+import { EXPLORERS } from "utils/ui-constants";
 
 export const GeneralOptions: React.FC = () => {
   const [appOptions, set] = useShallowConfigStore((state) => [

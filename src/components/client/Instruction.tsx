@@ -15,17 +15,17 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { Accounts } from "components/client/accounts/Accounts";
+import { Data } from "components/client/data/Data";
+import { InstructionHeader } from "components/client/InstructionHeader";
+import { AccountAutoComplete } from "components/common/AccountAutoComplete";
+import { Description } from "components/common/Description";
+import { ExplorerButton } from "components/common/ExplorerButton";
+import { useInstruction } from "hooks/useInstruction";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { useWeb3Account } from "hooks/useWeb3Account";
 import React from "react";
 import { FaAnchor, FaRocket } from "react-icons/fa";
-import { useInstruction } from "../../hooks/useInstruction";
-import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { useWeb3Account } from "../../hooks/useWeb3Account";
-import { AccountAutoComplete } from "../common/AccountAutoComplete";
-import { Description } from "../common/Description";
-import { ExplorerButton } from "../common/ExplorerButton";
-import { Accounts } from "./accounts/Accounts";
-import { Data } from "./data/Data";
-import { InstructionHeader } from "./InstructionHeader";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);

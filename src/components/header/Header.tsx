@@ -11,12 +11,12 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
+import { ColorModeSwitcher } from "components/header/ColorModeSwitcher";
+import { Example } from "components/header/Examples";
+import { WalletButton } from "components/header/WalletButton";
+import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import { useState } from "react";
 import { FaWrench } from "react-icons/fa";
-import { useSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Example } from "./Examples";
-import { WalletButton } from "./WalletButton";
 
 export const Header: React.FC = () => {
   const [funTitle, setFunTitle] = useState(true);
@@ -83,7 +83,6 @@ export const Header: React.FC = () => {
             />
           </Tooltip>
         </Hide> */}
-
 
       <ColorModeSwitcher justifySelf="flex-end" />
 

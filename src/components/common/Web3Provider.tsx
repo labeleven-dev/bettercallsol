@@ -9,9 +9,9 @@ import {
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
+import { useShallowConfigStore } from "hooks/useConfigStore";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import React, { useMemo } from "react";
-import { useShallowConfigStore } from "../../hooks/useConfigStore";
-import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
 
 export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
   children,

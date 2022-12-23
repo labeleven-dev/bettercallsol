@@ -1,6 +1,6 @@
-import { ITransactionExt } from "../types/external";
-import { IPreview, PreviewSource } from "../types/preview";
-import { accountSummary } from "./web3js-to-preview";
+import { accountSummary } from "mappers/web3js-to-preview";
+import { ITransactionExt } from "types/external";
+import { IPreview, PreviewSource } from "types/preview";
 
 export const mapITransactionExtToIPreview = (
   { name, instructions }: ITransactionExt,

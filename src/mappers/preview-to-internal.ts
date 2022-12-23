@@ -1,7 +1,7 @@
-import { IInstruction, ITransaction } from "../types/internal";
-import { IInstructionPreview, IPreview, PreviewSource } from "../types/preview";
-import { toSortableCollection, toSortedArray } from "../utils/sortable";
-import { mapIInstructionExtToIInstruction } from "./external-to-internal";
+import { mapIInstructionExtToIInstruction } from "mappers/external-to-internal";
+import { IInstruction, ITransaction } from "types/internal";
+import { IInstructionPreview, IPreview, PreviewSource } from "types/preview";
+import { toSortableCollection, toSortedArray } from "utils/sortable";
 
 export const mapIInstructionPreviewToIInstruction = (
   instruction: IInstructionPreview,

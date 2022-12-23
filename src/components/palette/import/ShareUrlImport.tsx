@@ -1,9 +1,9 @@
 import { DownloadIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Tooltip } from "@chakra-ui/react";
 import axios from "axios";
+import { mapITransactionExtToIPreview } from "mappers/external-to-preview";
 import { useState } from "react";
-import { mapITransactionExtToIPreview } from "../../../mappers/external-to-preview";
-import { IPreview } from "../../../types/preview";
+import { IPreview } from "types/preview";
 
 export const ShareUrlImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;

@@ -1,12 +1,8 @@
 import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
-import { IAccountExt } from "../types/external";
-import { IRpcEndpoint } from "../types/internal";
-import {
-  IAccountSummary,
-  IInstructionPreview,
-  IPreview,
-} from "../types/preview";
-import { mapWeb3TransactionError } from "./web3js-to-internal";
+import { mapWeb3TransactionError } from "mappers/web3js-to-internal";
+import { IAccountExt } from "types/external";
+import { IRpcEndpoint } from "types/internal";
+import { IAccountSummary, IInstructionPreview, IPreview } from "types/preview";
 
 // TODO getParsedTransaction has some more info for specific instructions
 // {

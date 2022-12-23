@@ -1,9 +1,9 @@
 import produce from "immer";
+import { PersistentState } from "types/state";
+import { DEFAULT_PERSISTENT_STATE } from "utils/state";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import shallow from "zustand/shallow";
-import { PersistentState } from "../types/state";
-import { DEFAULT_PERSISTENT_STATE } from "../utils/state";
 
 /**
  * Provides access to the LocalStorage Zustand store

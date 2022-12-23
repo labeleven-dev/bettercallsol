@@ -9,16 +9,16 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import { useShallowConfigStore } from "../../hooks/useConfigStore";
+import { useShallowConfigStore } from "hooks/useConfigStore";
 import {
   useSessionStoreWithoutUndo,
   useSessionStoreWithUndo,
-} from "../../hooks/useSessionStore";
-import { EXAMPLES } from "../../library/examples";
-import { mapITransactionExtToITransaction } from "../../mappers/external-to-internal";
-import { toSortedArray } from "../../utils/sortable";
-import { DEFAULT_TRANSACTION_RUN } from "../../utils/state";
+} from "hooks/useSessionStore";
+import { EXAMPLES } from "library/examples";
+import { mapITransactionExtToITransaction } from "mappers/external-to-internal";
+import React, { useEffect } from "react";
+import { toSortedArray } from "utils/sortable";
+import { DEFAULT_TRANSACTION_RUN } from "utils/state";
 
 export const Example: React.FC = () => {
   const setTransaction = useSessionStoreWithUndo((state) => state.set);

@@ -1,5 +1,5 @@
 import { WritableDraft } from "immer/dist/internal";
-import { Identifiable, IID, SortableCollection } from "../types/sortable";
+import { Identifiable, IID, SortableCollection } from "types/sortable";
 
 export const addTo = <T extends Identifiable>(
   collection: SortableCollection<T> | WritableDraft<SortableCollection<T>>,

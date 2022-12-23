@@ -27,15 +27,15 @@ import {
   Tooltip,
   useClipboard,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
+import { CopyButton } from "components/common/CopyButton";
 import {
   useShallowSessionStoreWithoutUndo,
   useShallowSessionStoreWithUndo,
-} from "../hooks/useSessionStore";
-import { mapITransactionExtToProtobuf } from "../mappers/external-to-protobuf";
-import { mapITransactionToTransactionExt } from "../mappers/internal-to-external";
-import { CopyButton } from "./common/CopyButton";
+} from "hooks/useSessionStore";
+import { mapITransactionExtToProtobuf } from "mappers/external-to-protobuf";
+import { mapITransactionToTransactionExt } from "mappers/internal-to-external";
+import { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 
 export const ShareModal: React.FC = () => {
   const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [

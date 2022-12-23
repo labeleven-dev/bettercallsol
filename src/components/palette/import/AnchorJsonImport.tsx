@@ -1,6 +1,6 @@
 import { Flex, Textarea } from "@chakra-ui/react";
-import { mapIdlToIPreview } from "../../../mappers/idl-to-preview";
-import { IPreview } from "../../../types/preview";
+import { mapIdlToIPreview } from "mappers/idl-to-preview";
+import { IPreview } from "types/preview";
 
 export const AnchorJsonImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;

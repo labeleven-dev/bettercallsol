@@ -11,10 +11,10 @@ import {
   Tabs,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { DataEditor } from "components/client/data/editor/DataEditor";
+import { RawData } from "components/client/data/RawData";
+import { useInstruction } from "hooks/useInstruction";
 import React from "react";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { DataEditor } from "./editor/DataEditor";
-import { RawData } from "./RawData";
 
 export const Data: React.FC = () => {
   const { isAnchor, useGet, update } = useInstruction();

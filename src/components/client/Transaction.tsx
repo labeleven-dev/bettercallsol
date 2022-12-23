@@ -1,8 +1,8 @@
 import { Box, Divider, Grid } from "@chakra-ui/react";
+import { Instructions } from "components/client/Instructions";
+import { Results } from "components/client/results/Results";
+import { TransactionHeader } from "components/client/TransactionHeader";
 import React, { useRef } from "react";
-import { Instructions } from "./Instructions";
-import { Results } from "./results/Results";
-import { TransactionHeader } from "./TransactionHeader";
 
 export const Transaction: React.FC = () => {
   // used for scrolling to results

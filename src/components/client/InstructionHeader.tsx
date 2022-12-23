@@ -15,6 +15,11 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { arrayMove } from "@dnd-kit/sortable";
+import { DragHandle } from "components/common/DragHandle";
+import { EditableName } from "components/common/EditableName";
+import { Numbering } from "components/common/Numbering";
+import { useInstruction } from "hooks/useInstruction";
+import { useShallowSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
 import {
   FaAngleDoubleDown,
@@ -24,12 +29,7 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-import { useInstruction } from "../../hooks/useInstruction";
-import { useShallowSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { removeFrom } from "../../utils/sortable";
-import { DragHandle } from "../common/DragHandle";
-import { EditableName } from "../common/EditableName";
-import { Numbering } from "../common/Numbering";
+import { removeFrom } from "utils/sortable";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
   const { id, useShallowGet, update, reset } = useInstruction();

@@ -1,17 +1,13 @@
 import { Badge, Flex, InputProps, Spacer, Text } from "@chakra-ui/react";
+import { Autocomplete, AutoCompleteItem } from "components/common/AutoComplete";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { WritableDraft } from "immer/dist/internal";
+import { LOADER_IDS, programLabel, PROGRAM_INFO_BY_ID } from "library/programs";
+import { SYSVARS_BY_ID } from "library/sysvars";
 import React, { useState } from "react";
 import { useFilter } from "react-aria";
-import { useSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import {
-  LOADER_IDS,
-  programLabel,
-  PROGRAM_INFO_BY_ID,
-} from "../../library/programs";
-import { SYSVARS_BY_ID } from "../../library/sysvars";
-import { AccountType, IAccount, INetwork, IPubKey } from "../../types/internal";
-import { ALL_NETWORKS } from "../../utils/internal";
-import { Autocomplete, AutoCompleteItem } from "./AutoComplete";
+import { AccountType, IAccount, INetwork, IPubKey } from "types/internal";
+import { ALL_NETWORKS } from "utils/internal";
 
 type OptionType = "input" | "type" | "program" | "sysvar";
 

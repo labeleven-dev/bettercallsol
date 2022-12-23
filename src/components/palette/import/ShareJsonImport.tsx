@@ -1,6 +1,6 @@
 import { Flex, Textarea } from "@chakra-ui/react";
-import { mapITransactionExtToIPreview } from "../../../mappers/external-to-preview";
-import { IPreview } from "../../../types/preview";
+import { mapITransactionExtToIPreview } from "mappers/external-to-preview";
+import { IPreview } from "types/preview";
 
 export const ShareJsonImport: React.FC<{
   setPreview: (tranaction: IPreview | undefined) => void;

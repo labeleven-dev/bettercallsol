@@ -9,20 +9,20 @@ import {
   useBreakpointValue,
   Wrap,
 } from "@chakra-ui/react";
+import { AccountInput } from "components/client/accounts/AccountInput";
+import { PdaTypeConfig } from "components/client/accounts/type-configs/PdaTypeConfig";
+import { Description } from "components/common/Description";
+import { DragHandle } from "components/common/DragHandle";
+import { EditableName } from "components/common/EditableName";
+import { Numbering } from "components/common/Numbering";
+import { ToggleIconButton } from "components/common/ToggleIconButton";
+import { useAccount } from "hooks/useAccount";
+import { useAccountType } from "hooks/useAccountType";
+import { useInstruction } from "hooks/useInstruction";
+import { useShallowSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
 import { FaFeather, FaICursor } from "react-icons/fa";
-import { useAccount } from "../../../hooks/useAccount";
-import { useAccountType } from "../../../hooks/useAccountType";
-import { useInstruction } from "../../../hooks/useInstruction";
-import { useShallowSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { removeFrom } from "../../../utils/sortable";
-import { Description } from "../../common/Description";
-import { DragHandle } from "../../common/DragHandle";
-import { EditableName } from "../../common/EditableName";
-import { Numbering } from "../../common/Numbering";
-import { ToggleIconButton } from "../../common/ToggleIconButton";
-import { AccountInput } from "./AccountInput";
-import { PdaTypeConfig } from "./type-configs/PdaTypeConfig";
+import { removeFrom } from "utils/sortable";
 
 export const Account: React.FC<{
   index: number;

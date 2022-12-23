@@ -1,7 +1,7 @@
 import { DragHandleIcon, LockIcon } from "@chakra-ui/icons";
 import { IconProps, useColorModeValue } from "@chakra-ui/react";
+import { SortableItemContext } from "components/common/Sortable";
 import { useContext } from "react";
-import { SortableItemContext } from "./Sortable";
 
 export const DragHandle: React.FC<{
   locked?: boolean;

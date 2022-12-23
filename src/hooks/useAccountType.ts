@@ -1,11 +1,11 @@
 import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { AccountType, IAccountMetadata } from "../types/internal";
-import { isValidPublicKey } from "../utils/web3js";
-import { useAccount } from "./useAccount";
-import { useInstruction } from "./useInstruction";
-import { useSessionStoreWithUndo } from "./useSessionStore";
+import { useAccount } from "hooks/useAccount";
+import { useInstruction } from "hooks/useInstruction";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { AccountType, IAccountMetadata } from "types/internal";
+import { isValidPublicKey } from "utils/web3js";
 
 /**
  * Encapsulates logic to populate accounts based on their type

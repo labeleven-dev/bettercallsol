@@ -7,7 +7,7 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
-import { GITHUB_URL } from "./About";
+import { GITHUB_URL } from "components/info/About";
 
 export const Privacy: React.FC = () => (
   <Grid gridGap="3" bgGradient="linear(45deg,#9945ff,#19fb9d)" bgClip="text">

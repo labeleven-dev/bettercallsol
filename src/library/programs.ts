@@ -7,8 +7,8 @@ import {
   SystemProgram,
   VOTE_PROGRAM_ID,
 } from "@solana/web3.js";
-import { INetwork } from "../types/internal";
-import { ALL_NETWORKS, LIVE_NETWORKS } from "../utils/internal";
+import { INetwork } from "types/internal";
+import { ALL_NETWORKS, LIVE_NETWORKS } from "utils/internal";
 
 // Copied and modified from https://github.com/solana-labs/solana/blob/adcc36da8e1961e2730c926b77faede12c9c5407/explorer/src/utils/tx.ts
 

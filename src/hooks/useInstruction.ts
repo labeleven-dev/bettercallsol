@@ -1,13 +1,13 @@
-import { WritableDraft } from "immer/dist/internal";
-import { useContext } from "react";
-import { InstructionContext } from "../components/client/Instructions";
-import { IInstruction } from "../types/internal";
-import { IID } from "../types/sortable";
-import { newInstruction } from "../utils/internal";
+import { InstructionContext } from "components/client/Instructions";
 import {
   useSessionStoreWithUndo,
   useShallowSessionStoreWithUndo,
-} from "./useSessionStore";
+} from "hooks/useSessionStore";
+import { WritableDraft } from "immer/dist/internal";
+import { useContext } from "react";
+import { IInstruction } from "types/internal";
+import { IID } from "types/sortable";
+import { newInstruction } from "utils/internal";
 
 /**
  * Provides the current instruction details and methods to interact with it

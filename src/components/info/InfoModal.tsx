@@ -11,11 +11,11 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import { useShallowSessionStoreWithoutUndo } from "../../hooks/useSessionStore";
-import { About } from "./About";
-import { Acknowledgements } from "./Acknowledgements";
-import { Help } from "./Help";
-import { Privacy } from "./Privacy";
+import { About } from "components/info/About";
+import { Acknowledgements } from "components/info/Acknowledgements";
+import { Help } from "components/info/Help";
+import { Privacy } from "components/info/Privacy";
+import { useShallowSessionStoreWithoutUndo } from "hooks/useSessionStore";
 
 export const InfoModal: React.FC = () => {
   const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [

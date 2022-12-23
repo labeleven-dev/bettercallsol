@@ -8,10 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import {
-  IInstrctionDataFieldExt,
-  IInstructionDataExt,
-} from "../../../types/external";
+import { IInstrctionDataFieldExt, IInstructionDataExt } from "types/external";
 
 export const DataPreview: React.FC<
   { data: IInstructionDataExt } & FlexProps

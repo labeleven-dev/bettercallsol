@@ -16,14 +16,14 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { CopyButton } from "components/common/CopyButton";
+import { AccountSummary } from "components/palette/preview/AccountSummary";
+import { InstructionPreview } from "components/palette/preview/InstructionPreview";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { mapIPreviewToITransaction } from "mappers/preview-to-internal";
 import { FaAnchor } from "react-icons/fa";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapIPreviewToITransaction } from "../../../mappers/preview-to-internal";
-import { IPreview, PreviewSource } from "../../../types/preview";
-import { short } from "../../../utils/web3js";
-import { CopyButton } from "../../common/CopyButton";
-import { AccountSummary } from "./AccountSummary";
-import { InstructionPreview } from "./InstructionPreview";
+import { IPreview, PreviewSource } from "types/preview";
+import { short } from "utils/web3js";
 
 export const Preview: React.FC<{
   preview: IPreview;

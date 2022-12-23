@@ -1,9 +1,9 @@
+import { AccountContext } from "components/client/accounts/Accounts";
+import { useInstruction } from "hooks/useInstruction";
 import { WritableDraft } from "immer/dist/internal";
 import { useContext } from "react";
-import { AccountContext } from "../components/client/accounts/Accounts";
-import { IAccount, IInstruction } from "../types/internal";
-import { IID } from "../types/sortable";
-import { useInstruction } from "./useInstruction";
+import { IAccount, IInstruction } from "types/internal";
+import { IID } from "types/sortable";
 
 /**
  * Provides the current account's details and methods to interact with it

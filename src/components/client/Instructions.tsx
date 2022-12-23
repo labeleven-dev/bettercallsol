@@ -7,13 +7,13 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { Instruction } from "components/client/Instruction";
+import { Sortable } from "components/common/Sortable";
+import { useShallowSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
-import { useShallowSessionStoreWithUndo } from "../../hooks/useSessionStore";
-import { IID } from "../../types/sortable";
-import { newInstruction } from "../../utils/internal";
-import { addTo } from "../../utils/sortable";
-import { Sortable } from "../common/Sortable";
-import { Instruction } from "./Instruction";
+import { IID } from "types/sortable";
+import { newInstruction } from "utils/internal";
+import { addTo } from "utils/sortable";
 
 export const InstructionContext = React.createContext("");
 

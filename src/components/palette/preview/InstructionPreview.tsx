@@ -9,15 +9,15 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { mapIInstructionPreviewToIInstruction } from "../../../mappers/preview-to-internal";
-import { IInstructionPreview, PreviewSource } from "../../../types/preview";
-import { addTo } from "../../../utils/sortable";
-import { short } from "../../../utils/web3js";
-import { CopyButton } from "../../common/CopyButton";
-import { Numbering } from "../../common/Numbering";
-import { AccountSummary } from "./AccountSummary";
-import { DataPreview } from "./DataPreview";
+import { CopyButton } from "components/common/CopyButton";
+import { Numbering } from "components/common/Numbering";
+import { AccountSummary } from "components/palette/preview/AccountSummary";
+import { DataPreview } from "components/palette/preview/DataPreview";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
+import { IInstructionPreview, PreviewSource } from "types/preview";
+import { addTo } from "utils/sortable";
+import { short } from "utils/web3js";
 
 export const InstructionPreview: React.FC<{
   index: number;

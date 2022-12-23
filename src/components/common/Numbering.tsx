@@ -1,6 +1,6 @@
 import { Badge, BadgeProps, useColorModeValue } from "@chakra-ui/react";
+import { useConfigStore } from "hooks/useConfigStore";
 import React from "react";
-import { useConfigStore } from "../../hooks/useConfigStore";
 
 export const Numbering: React.FC<{ index: number } & BadgeProps> = ({
   index,

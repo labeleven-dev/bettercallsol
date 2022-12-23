@@ -1,10 +1,10 @@
 import { ColorModeScript } from "@chakra-ui/react";
 import * as Sentry from "@sentry/react";
+import { App } from "App";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { App } from "./App";
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "reportWebVitals";
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,

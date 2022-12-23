@@ -1,7 +1,7 @@
 import * as BufferLayout from "@solana/buffer-layout";
 import { PublicKey } from "@solana/web3.js";
-import { Coder, rustString } from ".";
-import { IInstrctionDataField } from "../types/internal";
+import { Coder, rustString } from "coders";
+import { IInstrctionDataField } from "types/internal";
 
 export class BufferLayoutCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {

@@ -6,8 +6,8 @@ import {
   Tabs,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ImportTransaction } from "components/palette/ImportTransaction";
 import React from "react";
-import { ImportTransaction } from "./ImportTransaction";
 
 export const Palette: React.FC = () => {
   return (

@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import {
   IAccount,
   IInstrctionDataField,
@@ -6,8 +5,9 @@ import {
   IInstructionData,
   INetwork,
   IRpcEndpoint,
-} from "../types/internal";
-import { toSortableCollection } from "./sortable";
+} from "types/internal";
+import { toSortableCollection } from "utils/sortable";
+import { v4 as uuid } from "uuid";
 
 export const ALL_NETWORKS: INetwork[] = ["devnet", "testnet", "mainnet-beta"];
 export const LIVE_NETWORKS: INetwork[] = ["devnet", "testnet", "mainnet-beta"];

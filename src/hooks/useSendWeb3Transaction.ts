@@ -1,11 +1,11 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
-import { mapITransactionToWeb3Transaction } from "../mappers/internal-to-web3js";
-import { ITransaction } from "../types/internal";
-import { sentryCaptureException } from "../utils/sentry";
-import { useConfigStore } from "./useConfigStore";
-import { useSessionStoreWithUndo } from "./useSessionStore";
-import { useWeb3Connection } from "./useWeb3Connection";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import { useWeb3Connection } from "hooks/useWeb3Connection";
+import { mapITransactionToWeb3Transaction } from "mappers/internal-to-web3js";
+import { ITransaction } from "types/internal";
+import { sentryCaptureException } from "utils/sentry";
 
 /**
  * Use it to send transactions to Solana

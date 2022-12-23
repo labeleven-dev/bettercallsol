@@ -1,18 +1,18 @@
-import { v4 as uuid } from "uuid";
 import {
   IAccountExt,
   IInstrctionDataFieldExt,
   IInstructionExt,
   ITransactionExt,
-} from "../types/external";
+} from "types/external";
 import {
   IAccount,
   IInstruction,
   IInstructionDataRaw,
   ITransaction,
-} from "../types/internal";
-import { Identifiable, SortableCollection } from "../types/sortable";
-import { toSortableCollection } from "../utils/sortable";
+} from "types/internal";
+import { Identifiable, SortableCollection } from "types/sortable";
+import { toSortableCollection } from "utils/sortable";
+import { v4 as uuid } from "uuid";
 
 const mapToSortable = <T>(item: T): T & Identifiable => ({
   ...item,

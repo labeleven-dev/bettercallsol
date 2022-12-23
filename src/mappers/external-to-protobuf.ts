@@ -1,18 +1,18 @@
-import pako from "pako";
-import { bettercallsol as protobuf, google } from "../generated/protobuf";
-import {
-  IAccountExt,
-  IInstrctionDataFieldExt,
-  ITransactionExt,
-} from "../types/external";
-import { IAccountMetadata, IInstructionDataRaw } from "../types/internal";
+import { bettercallsol as protobuf, google } from "generated/protobuf";
 import {
   mapAccountTypeToProtobuf,
   mapDataFormatToProtobuf,
   mapINetworkToProtobuf,
   mapInstructionDataFieldTypeToProtobuf,
   mapRawEncodingToProtobuf,
-} from "./protobuf";
+} from "mappers/protobuf";
+import pako from "pako";
+import {
+  IAccountExt,
+  IInstrctionDataFieldExt,
+  ITransactionExt,
+} from "types/external";
+import { IAccountMetadata, IInstructionDataRaw } from "types/internal";
 
 const mapAnyToProtobuf = (x: any): google.protobuf.IValue =>
   typeof x === "boolean"

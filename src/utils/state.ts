@@ -1,20 +1,20 @@
 import { clusterApiUrl } from "@solana/web3.js";
-import { v4 as uuid } from "uuid";
 import {
   INetwork,
   IRpcEndpoint,
   ITransaction,
   ITransactionOptions,
   ITransactionRun,
-} from "../types/internal";
+} from "types/internal";
 import {
   AppOptions,
   PersistentState,
   SessionStateWithoutUndo,
   SessionStateWithUndo,
-} from "../types/state";
-import { newAccount, newInstruction } from "./internal";
-import { toSortableCollection } from "./sortable";
+} from "types/state";
+import { newAccount, newInstruction } from "utils/internal";
+import { toSortableCollection } from "utils/sortable";
+import { v4 as uuid } from "uuid";
 
 export const RPC_NETWORK_OPTIONS: INetwork[] = [
   "devnet",

@@ -7,15 +7,15 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { DataField } from "components/client/data/editor/DataField";
+import { Sortable } from "components/common/Sortable";
+import { useInstruction } from "hooks/useInstruction";
 import { WritableDraft } from "immer/dist/internal";
 import React from "react";
-import { useInstruction } from "../../../../hooks/useInstruction";
-import { DataFormat, IInstrctionDataField } from "../../../../types/internal";
-import { IID, SortableCollection } from "../../../../types/sortable";
-import { newDataField } from "../../../../utils/internal";
-import { addTo } from "../../../../utils/sortable";
-import { Sortable } from "../../../common/Sortable";
-import { DataField } from "./DataField";
+import { DataFormat, IInstrctionDataField } from "types/internal";
+import { IID, SortableCollection } from "types/sortable";
+import { newDataField } from "utils/internal";
+import { addTo } from "utils/sortable";
 
 export const InstructionDataFieldContext = React.createContext<IID>("");
 

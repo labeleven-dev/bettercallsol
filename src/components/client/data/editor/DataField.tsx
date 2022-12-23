@@ -14,24 +14,21 @@ import {
   Tooltip,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { Description } from "components/common/Description";
+import { DragHandle } from "components/common/DragHandle";
+import { EditableName } from "components/common/EditableName";
+import { Numbering } from "components/common/Numbering";
+import { useInstruction } from "hooks/useInstruction";
+import { useInstrcutionDataField } from "hooks/useInstructionDataField";
 import React from "react";
-import { useInstruction } from "../../../../hooks/useInstruction";
-import { useInstrcutionDataField } from "../../../../hooks/useInstructionDataField";
 import {
   DataFormat,
   IInstrctionDataField,
   InstructionDataFieldType,
-} from "../../../../types/internal";
-import { SortableCollection } from "../../../../types/sortable";
-import { removeFrom } from "../../../../utils/sortable";
-import {
-  FORMAT_DATA_TYPES,
-  NUMERICAL_DATA_TYPES,
-} from "../../../../utils/ui-constants";
-import { Description } from "../../../common/Description";
-import { DragHandle } from "../../../common/DragHandle";
-import { EditableName } from "../../../common/EditableName";
-import { Numbering } from "../../../common/Numbering";
+} from "types/internal";
+import { SortableCollection } from "types/sortable";
+import { removeFrom } from "utils/sortable";
+import { FORMAT_DATA_TYPES, NUMERICAL_DATA_TYPES } from "utils/ui-constants";
 
 export const DataField: React.FC<{
   format: DataFormat;

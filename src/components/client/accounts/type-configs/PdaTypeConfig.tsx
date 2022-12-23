@@ -20,9 +20,9 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/react";
+import { useAccount } from "hooks/useAccount";
+import { useAccountType } from "hooks/useAccountType";
 import React, { useRef, useState } from "react";
-import { useAccount } from "../../../../hooks/useAccount";
-import { useAccountType } from "../../../../hooks/useAccountType";
 
 // TODO not sophisticated enough, we need to handle many types of numbers, basically Buffer.write*()
 

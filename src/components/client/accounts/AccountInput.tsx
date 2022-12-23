@@ -6,16 +6,16 @@ import {
   InputRightElement,
   Tooltip,
 } from "@chakra-ui/react";
+import { AccountTypeButton } from "components/client/accounts/AccountTypeButton";
+import { AirdropButton } from "components/client/accounts/AirdropButton";
+import { AccountAutoComplete } from "components/common/AccountAutoComplete";
+import { ExplorerButton } from "components/common/ExplorerButton";
+import { useAccount } from "hooks/useAccount";
+import { useAccountType } from "hooks/useAccountType";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
 import { FaMagic } from "react-icons/fa";
-import { useAccount } from "../../../hooks/useAccount";
-import { useAccountType } from "../../../hooks/useAccountType";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { isValidPublicKey } from "../../../utils/web3js";
-import { AccountAutoComplete } from "../../common/AccountAutoComplete";
-import { ExplorerButton } from "../../common/ExplorerButton";
-import { AccountTypeButton } from "./AccountTypeButton";
-import { AirdropButton } from "./AirdropButton";
+import { isValidPublicKey } from "utils/web3js";
 
 export const AccountInput: React.FC = () => {
   const { useGet, update } = useAccount();

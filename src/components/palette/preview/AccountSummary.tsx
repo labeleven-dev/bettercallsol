@@ -9,7 +9,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React from "react";
-import { IAccountSummary } from "../../../types/preview";
+import { IAccountSummary } from "types/preview";
 
 export const AccountSummary: React.FC<
   {

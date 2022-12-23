@@ -11,11 +11,11 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { ExplorerButton } from "components/common/ExplorerButton";
+import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import React, { useState } from "react";
-import { useSessionStoreWithUndo } from "../../../hooks/useSessionStore";
-import { IBalance } from "../../../types/internal";
-import { toSol } from "../../../utils/web3js";
-import { ExplorerButton } from "../../common/ExplorerButton";
+import { IBalance } from "types/internal";
+import { toSol } from "utils/web3js";
 
 export const BalanceTable: React.FC<{
   balances: IBalance[];

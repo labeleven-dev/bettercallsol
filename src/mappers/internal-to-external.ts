@@ -2,14 +2,14 @@ import {
   IAccountExt,
   IInstrctionDataFieldExt,
   ITransactionExt,
-} from "../types/external";
+} from "types/external";
 import {
   IAccount,
   IInstrctionDataField,
   IRpcEndpoint,
   ITransaction,
-} from "../types/internal";
-import { toSortedArray } from "../utils/sortable";
+} from "types/internal";
+import { toSortedArray } from "utils/sortable";
 
 const mapIAccountToIAccountExt = ({
   type,
