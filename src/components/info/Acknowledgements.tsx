@@ -34,37 +34,59 @@ export const Acknowledgements: React.FC = () => (
         <br />
         @project-serum/anchor (0.25.0), licenced (MIT OR Apache-2.0)
         <br />
-        @semantic-release/exec (6.0.3), licenced MIT
-        <br />
-        @sentry/react (7.10.0), licenced BSD-3-Clause
+        @sentry/react (7.28.1), licenced MIT
         <br />
         @solana/buffer-layout (4.0.0), licenced MIT
         <br />
-        @solana/wallet-adapter-base (0.9.10), licenced Apache-2.0
+        @solana/wallet-adapter-backpack (0.1.7), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-react (0.15.9), licenced Apache-2.0
+        @solana/wallet-adapter-base (0.9.17), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-react-ui (0.9.12), licenced Apache-2.0
+        @solana/wallet-adapter-brave (0.1.11), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-wallets (0.17.2), licenced Apache-2.0
+        @solana/wallet-adapter-glow (0.1.12), licenced Apache-2.0
         <br />
-        @solana/web3.js (1.51.0), licenced MIT
+        @solana/wallet-adapter-ledger (0.9.19), licenced Apache-2.0
+        <br />
+        @solana/wallet-adapter-phantom (0.9.16), licenced Apache-2.0
+        <br />
+        @solana/wallet-adapter-react (0.15.19), licenced Apache-2.0
+        <br />
+        @solana/wallet-adapter-react-ui (0.9.17), licenced Apache-2.0
+        <br />
+        @solana/wallet-adapter-solflare (0.6.16), licenced Apache-2.0
+        <br />
+        @solana/web3.js (1.63.1), licenced MIT
+        <br />
+        assert (2.0.0), licenced MIT
         <br />
         axios (0.27.2), licenced MIT
         <br />
         bignumber.js (9.0.2), licenced MIT
         <br />
+        buffer (6.0.3), licenced MIT
+        <br />
+        chakra-ui-markdown-renderer (4.1.0), licenced MIT
+        <br />
         crypto-browserify (3.12.0), licenced MIT
         <br />
         framer-motion (6.3.15), licenced MIT
         <br />
-        immer (9.0.15), licenced MIT
+        immer (9.0.16), licenced MIT
         <br />
         js-sha256 (0.9.0), licenced MIT
         <br />
+        jsbi (3.2.5), licenced Apache-2.0
+        <br />
         pako (2.0.4), licenced (MIT AND Zlib)
         <br />
+        process (0.11.10), licenced MIT
+        <br />
+        protobufjs (7.1.2), licenced BSD-3-Clause
+        <br />
         react (18.2.0), licenced MIT
+        <br />
+        react-aria (3.18.0), licenced Apache-2.0
         <br />
         react-dom (18.2.0), licenced MIT
         <br />
@@ -72,19 +94,23 @@ export const Acknowledgements: React.FC = () => (
         <br />
         react-icons (3.11.0), licenced MIT
         <br />
+        react-markdown (8.0.3), licenced MIT
+        <br />
         react-router-dom (6.3.0), licenced MIT
+        <br />
+        react-stately (3.16.0), licenced Apache-2.0
         <br />
         snake-case (3.0.4), licenced MIT
         <br />
         stream-browserify (3.0.0), licenced MIT
         <br />
-        typescript (4.7.4), licenced Apache-2.0
+        typescript (4.9.4), licenced Apache-2.0
         <br />
         uuid (8.3.2), licenced MIT
         <br />
         web-vitals (0.2.4), licenced Apache-2.0
         <br />
-        zustand (4.0.0), licenced MIT
+        zustand (4.1.5), licenced MIT
         <br />
         Phone icons created by Freepik - Flaticon
       </Text>

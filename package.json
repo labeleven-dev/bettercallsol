@@ -12,7 +12,7 @@
     "release": "semantic-release",
     "generate": "npm run generate:protobuf && npm run generate:validation",
     "generate:protobuf": "mkdir -p src/generated/protobuf && pbjs -t static-module -w es6 -o src/generated/protobuf/index.js src/types/external.proto && pbts -o src/generated/protobuf/index.d.ts src/generated/protobuf/index.js",
-    "generate:validation": "ts-json-schema-generator --path 'src/types/*.ts' --type 'ITransactionExt' -o 'src/generated/validate/external-schema.json' && node generate-validator.cjs",
+    "generate:validation": "ts-json-schema-generator --path 'src/types/*.ts' --type 'ITransactionExt' -o 'src/generated/validate/external-schema.json' && node scripts/generate-validator.cjs",
     "license-report": "license-report --only=prod | node scripts/license-report.js"
   },
   "browserslist": {
@@ -39,7 +39,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@project-serum/anchor": "^0.25.0",
-    "@sentry/react": "^7.10.0",
+    "@sentry/react": "^7.28.1",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/wallet-adapter-backpack": "^0.1.7",
     "@solana/wallet-adapter-base": "^0.9.17",
@@ -58,7 +58,7 @@
     "chakra-ui-markdown-renderer": "^4.1.0",
     "crypto-browserify": "^3.12.0",
     "framer-motion": "^6.3.15",
-    "immer": "^9.0.15",
+    "immer": "^9.0.16",
     "js-sha256": "^0.9.0",
     "jsbi": "^3.2.5",
     "pako": "^2.0.4",
@@ -74,13 +74,12 @@
     "react-stately": "^3.16.0",
     "snake-case": "^3.0.4",
     "stream-browserify": "^3.0.0",
-    "typescript": "^4.7.4",
+    "typescript": "^4.9.4",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",
-    "zustand": "^4.1.1"
+    "zustand": "^4.1.5"
   },
   "devDependencies": {
-    "@semantic-release/exec": "^6.0.3",
     "@types/bs58": "^4.0.1",
     "@types/node": "^18.11.17",
     "@types/pako": "^2.0.0",
@@ -89,11 +88,11 @@
     "@types/uuid": "^8.3.4",
     "@vitejs/plugin-react": "^3.0.0",
     "ajv": "^8.11.2",
-    "license-report": "^6.0.0",
+    "license-report": "^6.3.0",
     "protobufjs-cli": "^1.0.2",
-    "semantic-release": "^19.0.3",
-    "semantic-release-export-data": "^1.0.0",
-    "ts-json-schema-generator": "^1.1.2",
+    "semantic-release": "^19.0.5",
+    "semantic-release-export-data": "^1.0.1",
+    "ts-json-schema-generator": "^1.2.0",
     "vite": "^4.0.3",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.0.3"

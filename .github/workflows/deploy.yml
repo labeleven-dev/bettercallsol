@@ -40,13 +40,13 @@ jobs:
         run: |
           if [[ ${{ steps.semantic-version.outputs.new-release-published }} = 'true' ]]; then
             echo "New version: ${{ steps.semantic-version.outputs.new-release-version }}"
-            echo 'semver=${{ steps.semantic-version.outputs.new-release-version }}' >> $GITHUB_OUTPUTS
-            echo 'version=${{ steps.semantic-version.outputs.new-release-version }} (Build ${{ github.run_number }}-${{ github.run_attempt }})' >> $GITHUB_OUTPUTS
+            echo 'semver=${{ steps.semantic-version.outputs.new-release-version }}' >> $GITHUB_OUTPUT
+            echo 'version=${{ steps.semantic-version.outputs.new-release-version }} (Build ${{ github.run_number }}-${{ github.run_attempt }})' >> $GITHUB_OUTPUT
           else
             LATEST_TAG=$(git describe --abbrev=0 --tags | tr -d v)
             echo "Existing version: ${LATEST_TAG}"
-            echo "semver=${LATEST_TAG}" >> $GITHUB_OUTPUTS
-            echo "version=${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt }})" >> $GITHUB_OUTPUTS
+            echo "semver=${LATEST_TAG}" >> $GITHUB_OUTPUT
+            echo "version=${LATEST_TAG} (Build ${{ github.run_number }}-${{ github.run_attempt }})" >> $GITHUB_OUTPUT
           fi
 
       # test
