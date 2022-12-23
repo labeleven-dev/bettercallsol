@@ -22,7 +22,7 @@ import { useSessionStoreWithoutUndo } from "./hooks/useSessionStore";
 
 import theme from "./theme";
 
-require("@solana/wallet-adapter-react-ui/styles.css");
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 export const App: React.FC = () => {
   const paletteOpen = useSessionStoreWithoutUndo(

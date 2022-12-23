@@ -1,18 +1,18 @@
 {
   "name": "bcsol",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "prebuild": "npm run generate",
-    "build": "react-app-rewired build",
-    "eject": "react-app-rewired eject",
+    "build": "tsc && vite build",
     "prestart": "npm run generate",
-    "start": "react-app-rewired start",
-    "test": "react-app-rewired test",
+    "start": "vite dev",
+    "serve": "vite preview",
     "release": "semantic-release",
     "generate": "npm run generate:protobuf && npm run generate:validation",
     "generate:protobuf": "mkdir -p src/generated/protobuf && pbjs -t static-module -w es6 -o src/generated/protobuf/index.js src/types/external.proto && pbts -o src/generated/protobuf/index.d.ts src/generated/protobuf/index.js",
-    "generate:validation": "ts-json-schema-generator --path 'src/types/*.ts' --type 'ITransactionExt' -o 'src/generated/validate/external-schema.json' && ajv compile -s src/generated/validate/external-schema.json -o src/generated/validate/index.js",
+    "generate:validation": "ts-json-schema-generator --path 'src/types/*.ts' --type 'ITransactionExt' -o 'src/generated/validate/external-schema.json' && node generate-validator.cjs",
     "license-report": "license-report --only=prod | node scripts/license-report.js"
   },
   "browserslist": {
@@ -81,24 +81,21 @@
   },
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.2.1",
     "@types/bs58": "^4.0.1",
-    "@types/jest": "^25.2.3",
-    "@types/node": "^12.20.55",
+    "@types/node": "^18.11.17",
     "@types/pako": "^2.0.0",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "@types/uuid": "^8.3.4",
-    "ajv-cli": "^5.0.0",
-    "customize-cra": "^1.0.0",
+    "@vitejs/plugin-react": "^3.0.0",
+    "ajv": "^8.11.2",
     "license-report": "^6.0.0",
     "protobufjs-cli": "^1.0.2",
-    "react-app-rewired": "^2.2.1",
-    "react-scripts": "5.0.1",
     "semantic-release": "^19.0.3",
     "semantic-release-export-data": "^1.0.0",
-    "ts-json-schema-generator": "^1.1.2"
+    "ts-json-schema-generator": "^1.1.2",
+    "vite": "^4.0.3",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.3"
   }
 }

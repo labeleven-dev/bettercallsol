@@ -50,14 +50,6 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
   },
   {
     id: uuid(),
-    provider: "Serum",
-    network: "mainnet-beta",
-    url: "https://solana-api.projectserum.com",
-    enabled: true,
-    custom: false,
-  },
-  {
-    id: uuid(),
     provider: "Localhost",
     network: "custom",
     url: "http://127.0.0.1:8899",
@@ -67,7 +59,7 @@ export const DEFAULT_RPC_ENDPOINTS: IRpcEndpoint[] = [
 ];
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
-  explorer: "solanafm",
+  explorer: "solana",
   autoConnectWallet: true,
   enableNumbering: false,
   scrollToResults: true,

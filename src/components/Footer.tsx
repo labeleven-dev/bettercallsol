@@ -46,17 +46,19 @@ export const Footer: React.FC = () => (
       <Box fontSize="xs">
         <Link
           href={
-            process.env.REACT_APP_SEMVER
-              ? `https://github.com/labeleven-dev/bettercallsol/releases/tag/v${process.env.REACT_APP_SEMVER}`
+            import.meta.env.VITE_SEMVER
+              ? `https://github.com/labeleven-dev/bettercallsol/releases/tag/v${
+                  import.meta.env.VITE_SEMVER
+                }`
               : undefined
           }
           isExternal
         >
-          v{process.env.REACT_APP_SEMVER || "LOCAL"}
+          v{import.meta.env.VITE_SEMVER || "LOCAL"}
         </Link>
         {" ("}
-        <Link href={process.env.REACT_APP_BUILD_URL} isExternal>
-          {process.env.REACT_APP_BUILD || "N/A"}
+        <Link href={import.meta.env.VITE_BUILD_URL} isExternal>
+          {import.meta.env.VITE_BUILD || "N/A"}
         </Link>
         {")"}
       </Box>

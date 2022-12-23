@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import validateITransactionExt from "../generated/validate";
+import { validate } from "../generated/validate/index.mjs";
 import { mapITransactionExtToITransaction } from "../mappers/external-to-internal";
 import { mapITransactionExtToIPreview } from "../mappers/external-to-preview";
 import { mapIPreviewToITransaction } from "../mappers/preview-to-internal";
@@ -48,7 +48,7 @@ export const useImportFromUrl = (): {
 
     try {
       const external = mapProtobufToITransactionExt(share);
-      if (!validateITransactionExt(external)) {
+      if (!validate(external)) {
         throw new Error("Invalid payload");
       }
       const internal = mapITransactionExtToITransaction(external);
@@ -141,7 +141,7 @@ export const useImportFromUrl = (): {
       .then((response) => {
         setStatus(DEFAULT_STATUS);
         setTransaction((state) => {
-          if (!validateITransactionExt(shareJson)) {
+          if (!validate(shareJson)) {
             // @ts-ignore
             console.log(validateITransactionExt.errors);
             throw new Error("Invalid payload");

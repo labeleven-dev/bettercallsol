@@ -38,3 +38,5 @@ cypress/videos
 cypress/downloads
 
 src/generated
+
+dist
