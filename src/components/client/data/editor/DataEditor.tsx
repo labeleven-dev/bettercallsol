@@ -1,5 +1,6 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Center,
   Grid,
   IconButton,
@@ -49,20 +50,23 @@ export const DataEditor: React.FC<{
           </Text>
         </Center>
       )}
-      <Sortable
-        itemOrder={fieldOrder}
-        setItemOrder={(itemOrder) => {
-          updateFields((state) => {
-            state.order = itemOrder;
-          });
-        }}
-      >
-        {fieldOrder.map((id, index) => (
-          <InstructionDataFieldContext.Provider value={id} key={id}>
-            <DataField format={format} index={index} />
-          </InstructionDataFieldContext.Provider>
-        ))}
-      </Sortable>
+
+      <Box>
+        <Sortable
+          itemOrder={fieldOrder}
+          setItemOrder={(itemOrder) => {
+            updateFields((state) => {
+              state.order = itemOrder;
+            });
+          }}
+        >
+          {fieldOrder.map((id, index) => (
+            <InstructionDataFieldContext.Provider value={id} key={id}>
+              <DataField format={format} index={index} />
+            </InstructionDataFieldContext.Provider>
+          ))}
+        </Sortable>
+      </Box>
 
       {!isAnchor && (
         <Tooltip label="Add Data">

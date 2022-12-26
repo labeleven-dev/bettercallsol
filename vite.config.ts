@@ -22,6 +22,8 @@ export default defineConfig({
       buffer: "buffer",
       crypto: "crypto-browserify",
       stream: "stream-browserify",
+      events: "rollup-plugin-node-polyfills/polyfills/events",
+      // util: "rollup-plugin-node-polyfills/polyfills/util",
     },
   },
 });

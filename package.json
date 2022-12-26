@@ -88,6 +88,7 @@
     "ajv": "^8.11.2",
     "license-report": "^6.3.0",
     "protobufjs-cli": "^1.0.2",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^19.0.5",
     "semantic-release-export-data": "^1.0.1",
     "ts-json-schema-generator": "^1.2.0",

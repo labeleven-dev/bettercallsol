@@ -18,7 +18,7 @@ const root = ReactDOM.createRoot(container);
 
 root.render(
   <>
-    // TODO https://github.com/adobe/react-spectrum/issues/779
+    {/* TODO https://github.com/adobe/react-spectrum/issues/779 */}
     {/* <React.StrictMode> */}
     <>
       {
