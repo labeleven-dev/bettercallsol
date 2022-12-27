@@ -1,9 +1,15 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, PublicKey, Signer } from "@solana/web3.js";
+import {
+  Connection,
+  PublicKey,
+  Signer,
+  TransactionMessage,
+  VersionedTransaction,
+} from "@solana/web3.js";
 import { useConfigStore } from "hooks/useConfigStore";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { useWeb3Connection } from "hooks/useWeb3Connection";
-import { mapITransactionToWeb3Transaction } from "mappers/internal-to-web3js";
+import { mapITransactionToWeb3Instructions } from "mappers/internal-to-web3js";
 import { ITransaction } from "types/internal";
 import { sentryCaptureException } from "utils/sentry";
 
@@ -28,7 +34,7 @@ export const useSendWeb3Transaction = ({
 
   const defaultConnection = useWeb3Connection();
   const activeConnection = connection || defaultConnection;
-  const { sendTransaction } = useWallet();
+  const { publicKey: payerKey, sendTransaction, wallet } = useWallet();
 
   // send the transaction to the chain
   const send = async (transaction: ITransaction) => {
@@ -40,32 +46,67 @@ export const useSendWeb3Transaction = ({
       return;
     }
 
+    if (!payerKey) {
+      onError && onError(new Error("Wallet not connected"));
+      return;
+    }
+
+    if (
+      !wallet?.adapter?.supportedTransactionVersions?.has(transaction.version)
+    ) {
+      onError &&
+        onError(
+          new Error(
+            `Wallet does not support versioned transactions or ${transaction.version} specifically`
+          )
+        );
+      return;
+    }
+
     try {
-      const web3Transaction = mapITransactionToWeb3Transaction(transaction);
+      const message = new TransactionMessage({
+        instructions: mapITransactionToWeb3Instructions(transaction),
+        payerKey,
+        recentBlockhash: (await activeConnection.getLatestBlockhash())
+          .blockhash,
+      });
+
+      const web3Transaction = new VersionedTransaction(
+        transaction.version === 0
+          ? message.compileToV0Message()
+          : message.compileToLegacyMessage()
+      );
 
       // add additional signers
-      const signerPubkeys = Object.values(transaction.instructions.map)
-        .flatMap((instruction) =>
-          (instruction.anchorAccounts || []).concat(
-            Object.values(instruction.accounts.map)
-          )
-        )
-        .filter((account) => account.isSigner && keypairs[account.pubkey])
-        .map((account) => account.pubkey);
+      const signerPubkeys = [
+        ...new Set(
+          Object.values(transaction.instructions.map)
+            .flatMap((instruction) =>
+              (instruction.anchorAccounts || []).concat(
+                Object.values(instruction.accounts.map)
+              )
+            )
+            .filter((account) => account.isSigner && keypairs[account.pubkey])
+            .map((account) => account.pubkey)
+        ),
+      ];
 
-      const additionalSigners = [...new Set(signerPubkeys)].map(
-        (pubkey) =>
-          ({
-            publicKey: new PublicKey(pubkey),
-            secretKey: keypairs[pubkey],
-          } as Signer)
-      );
+      if (signerPubkeys) {
+        web3Transaction.sign(
+          signerPubkeys.map(
+            (pubkey) =>
+              ({
+                publicKey: new PublicKey(pubkey),
+                secretKey: keypairs[pubkey],
+              } as Signer)
+          )
+        );
+      }
 
       const signature = await sendTransaction(
         web3Transaction,
         activeConnection,
         {
-          signers: additionalSigners || undefined,
           skipPreflight: transactionOptions.skipPreflight,
           maxRetries: transactionOptions.maxRetries,
           preflightCommitment: transactionOptions.preflightCommitment,

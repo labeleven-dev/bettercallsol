@@ -12,6 +12,7 @@ import {
 } from "types/internal";
 import { Identifiable, SortableCollection } from "types/sortable";
 import { toSortableCollection } from "utils/sortable";
+import { toTransactionVersion } from "utils/web3js";
 import { v4 as uuid } from "uuid";
 
 const mapToSortable = <T>(item: T): T & Identifiable => ({
@@ -92,10 +93,12 @@ export const mapIInstructionExtToIInstruction = ({
 // TODO fail if not versionCompatible
 export const mapITransactionExtToITransaction = ({
   name,
+  txnVersion,
   description,
   instructions,
 }: ITransactionExt): ITransaction => ({
   name,
+  version: toTransactionVersion(txnVersion),
   description,
   instructions: mapToSortableCollection(
     instructions.map(mapIInstructionExtToIInstruction)

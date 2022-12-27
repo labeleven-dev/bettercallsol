@@ -1,3 +1,4 @@
+import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -38,6 +39,7 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "utils/state";
+import { TRANSACTION_VERSIONS } from "utils/ui-constants";
 
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
@@ -106,6 +108,40 @@ export const TransactionHeader: React.FC<{
   return (
     <>
       <Flex alignItems="center">
+        <Menu>
+          <Tooltip label="Transaction version">
+            <MenuButton
+              as={Button}
+              mr="2"
+              minW="120px"
+              rightIcon={<ChevronDownIcon />}
+            >
+              {
+                TRANSACTION_VERSIONS.find(
+                  ({ id }) => id === transaction.version
+                )?.name
+              }
+            </MenuButton>
+          </Tooltip>
+          {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
+          <MenuList fontSize="md" zIndex="modal">
+            {TRANSACTION_VERSIONS.map(({ id, name, description }, index) => (
+              <MenuItem
+                key={index}
+                icon={transaction.version === id ? <CheckIcon /> : undefined}
+                command={description}
+                onClick={() => {
+                  setSession((state) => {
+                    state.transaction.version = id;
+                  });
+                }}
+              >
+                {name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+
         <RpcEndpointMenu
           menuButtonProps={{ minW: "250px", maxW: "250px" }}
           menuListProps={{ fontSize: "md" }}

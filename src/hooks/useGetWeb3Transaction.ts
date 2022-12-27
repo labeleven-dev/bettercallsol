@@ -2,7 +2,7 @@ import { useInterval } from "@chakra-ui/react";
 import {
   Connection,
   SignatureStatus,
-  TransactionResponse,
+  VersionedTransactionResponse,
 } from "@solana/web3.js";
 import { useConfigStore } from "hooks/useConfigStore";
 import { useWeb3Connection } from "hooks/useWeb3Connection";
@@ -21,7 +21,7 @@ export const useGetWeb3Transaction = ({
 }: {
   connection?: Connection;
   onStatus?: (status: SignatureStatus) => void;
-  onSuccess?: (response: TransactionResponse) => void;
+  onSuccess?: (response: VersionedTransactionResponse) => void;
   onTimeout?: () => void;
   onError?: (error: Error) => void;
 }): {
@@ -65,6 +65,7 @@ export const useGetWeb3Transaction = ({
           status?.confirmationStatus === transactionOptions.finality
         ) {
           const transaction = await activeConnection.getTransaction(signature, {
+            maxSupportedTransactionVersion: 0,
             commitment: transactionOptions.finality,
           });
 

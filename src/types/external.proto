@@ -107,4 +107,6 @@ message Transaction {
         optional Data data = 8;
     }
     repeated Instruction instructions = 5;
+
+    string txnVersion = 6;
 }

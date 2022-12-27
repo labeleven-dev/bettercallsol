@@ -40,10 +40,11 @@ const mapToIInstrctionDataFieldExt = ({
 });
 
 export const mapITransactionToTransactionExt = (
-  { name, description, instructions }: ITransaction,
+  { name, version, description, instructions }: ITransaction,
   rpcEndpoint: IRpcEndpoint
 ): ITransactionExt => ({
   version: "1.0.0",
+  txnVersion: version.toString(),
   network: rpcEndpoint.network,
   name,
   description,

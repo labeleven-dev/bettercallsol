@@ -61,6 +61,7 @@ export const mapIdlToIPreview = (
 ): IPreview => ({
   source,
   sourceValue: programId,
+  version: 0,
   rpcEndpoint,
   name,
   instructions: instructions.map((instruction) =>

@@ -1,4 +1,4 @@
-import { Commitment, Finality } from "@solana/web3.js";
+import { Commitment, Finality, TransactionVersion } from "@solana/web3.js";
 import { DataFormat, InstructionDataFieldType } from "types/internal";
 import { Explorer } from "types/state";
 
@@ -27,6 +27,16 @@ export const COMMITMENT_LEVELS: { id: Commitment; name: string }[] = [
 export const FINALITY_LEVELS: { id: Finality; name: string }[] = [
   { id: "confirmed", name: "Confirmed" },
   { id: "finalized", name: "Finalized" },
+];
+
+// for transaction version drop-down
+export const TRANSACTION_VERSIONS: {
+  id: TransactionVersion;
+  name: string;
+  description: string;
+}[] = [
+  { id: "legacy", name: "Legacy", description: "The OG" },
+  { id: 0, name: "v0", description: "Address Lookup Table" },
 ];
 
 // for the data type drop-down

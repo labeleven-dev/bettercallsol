@@ -23,9 +23,11 @@ export const mapIInstructionPreviewToIInstruction = (
 
 export const mapIPreviewToITransaction = ({
   source,
+  version,
   name,
   instructions,
 }: IPreview): ITransaction => ({
+  version,
   name,
   instructions: toSortableCollection(
     instructions.map((instruction) =>

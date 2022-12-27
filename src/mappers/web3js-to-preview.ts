@@ -1,4 +1,9 @@
-import { CompiledInstruction, TransactionResponse } from "@solana/web3.js";
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
+import {
+  CompiledInstruction,
+  MessageCompiledInstruction,
+  VersionedTransactionResponse,
+} from "@solana/web3.js";
 import { mapWeb3TransactionError } from "mappers/web3js-to-internal";
 import { IAccountExt } from "types/external";
 import { IRpcEndpoint } from "types/internal";
@@ -20,12 +25,13 @@ import { IAccountSummary, IInstructionPreview, IPreview } from "types/preview";
 // },
 
 export const mapTransactionResponseToIPreview = (
-  response: TransactionResponse,
+  response: VersionedTransactionResponse,
   rpcEndpoint: IRpcEndpoint
 ): IPreview => {
-  const { accountKeys, instructions } = response.transaction.message;
+  const { version, staticAccountKeys, compiledInstructions } =
+    response.transaction.message;
 
-  const parsedAccountKeys: IAccountExt[] = accountKeys.map(
+  const parsedAccountKeys: IAccountExt[] = staticAccountKeys.map(
     (account, index) => ({
       type: "unspecified",
       pubkey: account.toBase58(),
@@ -36,12 +42,34 @@ export const mapTransactionResponseToIPreview = (
 
   const mapInstruction = ({
     programIdIndex,
+    accountKeyIndexes,
+    data,
+  }: MessageCompiledInstruction): IInstructionPreview => {
+    const mappedAccounts = accountKeyIndexes.map(
+      (index) => parsedAccountKeys[index]
+    );
+    return {
+      programId: staticAccountKeys[programIdIndex].toBase58(),
+      accounts: mappedAccounts,
+      data: {
+        format: "raw",
+        value: {
+          content: bs58.encode(data),
+          encoding: "bs58",
+        },
+      },
+      accountSummary: accountSummary(mappedAccounts),
+    };
+  };
+
+  const mapInnerInstruction = ({
+    programIdIndex,
     accounts,
     data,
   }: CompiledInstruction): IInstructionPreview => {
     const mappedAccounts = accounts.map((index) => parsedAccountKeys[index]);
     return {
-      programId: accountKeys[programIdIndex].toBase58(),
+      programId: staticAccountKeys[programIdIndex].toBase58(),
       accounts: mappedAccounts,
       data: {
         format: "raw",
@@ -57,15 +85,16 @@ export const mapTransactionResponseToIPreview = (
   return {
     source: "tx",
     sourceValue: response.transaction.signatures[0],
+    version,
     rpcEndpoint,
     accountSummary: accountSummary(parsedAccountKeys),
     fee: response.meta?.fee,
     error: mapWeb3TransactionError(response.meta?.err),
-    instructions: instructions.map((instruction, ixnIndex) => ({
+    instructions: compiledInstructions.map((instruction, ixnIndex) => ({
       ...mapInstruction(instruction),
       innerInstructions: response.meta?.innerInstructions
         ?.find(({ index }) => index === ixnIndex)
-        ?.instructions.map((ixn) => mapInstruction(ixn)),
+        ?.instructions.map((ixn) => mapInnerInstruction(ixn)),
     })),
   };
 };

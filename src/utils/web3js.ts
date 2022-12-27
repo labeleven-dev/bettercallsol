@@ -1,5 +1,5 @@
 import { SIGHASH_GLOBAL_NAMESPACE } from "@project-serum/anchor/dist/cjs/coder/borsh/instruction";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, TransactionVersion } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import bs58 from "bs58";
 import { sha256 } from "js-sha256";
@@ -27,6 +27,13 @@ export const isValidPublicKey = (key: string): boolean => {
 
   return valid;
 };
+
+export const toTransactionVersion = (
+  version: string | undefined
+): TransactionVersion =>
+  !version || version === "legacy"
+    ? "legacy"
+    : (Number(version) as TransactionVersion);
 
 // https://github.com/coral-xyz/anchor/blob/ebe88187e3c7ba07df023f0ebfc19afb3d663bf6/ts/src/coder/borsh/instruction.ts#L386-L392
 export const anchorMethodSighash = (anchorMethod: string): Buffer => {

@@ -92,10 +92,12 @@ export const mapProtobufToITransactionExt = (
   const buffer = pako.inflate(decodeBase64Url(encoded));
   const decoded = protobuf.Transaction.decode(buffer);
 
-  const { version, network, name, description, instructions } = decoded;
+  const { version, txnVersion, network, name, description, instructions } =
+    decoded;
 
   return {
     version,
+    txnVersion,
     network: mapProtobufToINetwork[network],
     name: name || undefined,
     description: description || undefined,

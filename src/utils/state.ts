@@ -79,6 +79,7 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 
 export const DEFAULT_TRANSACTION: ITransaction = {
   name: "",
+  version: "legacy",
   instructions: toSortableCollection([
     { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
   ]),
@@ -86,6 +87,7 @@ export const DEFAULT_TRANSACTION: ITransaction = {
 
 export const EMPTY_TRANSACTION: ITransaction = {
   name: "",
+  version: "legacy",
   instructions: toSortableCollection([]),
 };
 

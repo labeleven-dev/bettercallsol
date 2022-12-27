@@ -32,6 +32,7 @@ export const Preview: React.FC<{
   const {
     source,
     sourceValue,
+    version,
     name,
     rpcEndpoint,
     instructions,
@@ -127,6 +128,12 @@ export const Preview: React.FC<{
             JSON
           </Tag>
         )}
+
+        <Tooltip label={`Transaction version: ${version}`}>
+          <Tag mr="1" fontSize="xs">
+            {version}
+          </Tag>
+        </Tooltip>
 
         <Spacer />
 

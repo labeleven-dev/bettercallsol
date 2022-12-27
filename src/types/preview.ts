@@ -1,5 +1,6 @@
 // Models for transactions fetched from the chain, as part of import
 
+import { TransactionVersion } from "@solana/web3.js";
 import { IInstructionExt } from "./external";
 import { IRpcEndpoint } from "./internal";
 
@@ -27,6 +28,7 @@ export type PreviewSource =
 export interface IPreview {
   source: PreviewSource;
   sourceValue: string; // could transaction ID, URL, file path, etc.
+  version: TransactionVersion;
   name?: string;
   description?: string;
   rpcEndpoint?: IRpcEndpoint;

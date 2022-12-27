@@ -1,7 +1,7 @@
 // The internal common model
 // Use as intermediate for other models and for tracking transaction state in the app
 
-import { Commitment, Finality } from "@solana/web3.js";
+import { Commitment, Finality, TransactionVersion } from "@solana/web3.js";
 import { IID, SortableCollection } from "./sortable";
 
 export type IPubKey = string;
@@ -112,6 +112,7 @@ export interface IRpcEndpoint {
 export interface ITransaction {
   name?: string;
   description?: string;
+  version: TransactionVersion;
   instructions: SortableCollection<IInstruction>;
 }
 

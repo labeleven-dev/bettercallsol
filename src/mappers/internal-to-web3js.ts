@@ -1,8 +1,4 @@
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import bs58 from "bs58";
 import { BorshCoder } from "coders/borsh";
 import { BufferLayoutCoder } from "coders/buffer-layout";
@@ -10,10 +6,10 @@ import { ITransaction } from "types/internal";
 import { toSortedArray } from "utils/sortable";
 import { anchorMethodSighash, isValidPublicKey } from "utils/web3js";
 
-export const mapITransactionToWeb3Transaction = ({
+export const mapITransactionToWeb3Instructions = ({
   instructions,
-}: ITransaction): Transaction => {
-  const transaction = new Transaction();
+}: ITransaction): TransactionInstruction[] => {
+  const mapped: TransactionInstruction[] = [];
 
   toSortedArray(instructions).forEach(
     (
@@ -73,7 +69,7 @@ export const mapITransactionToWeb3Transaction = ({
         }));
 
       // add transaction
-      transaction.add(
+      mapped.push(
         new TransactionInstruction({
           programId: (() => {
             if (isValidPublicKey(programId)) {
@@ -93,5 +89,5 @@ export const mapITransactionToWeb3Transaction = ({
     }
   );
 
-  return transaction;
+  return mapped;
 };

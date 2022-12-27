@@ -48,7 +48,7 @@
     "@solana/wallet-adapter-react": "^0.15.26",
     "@solana/wallet-adapter-react-ui": "^0.9.25",
     "@solana/wallet-adapter-solflare": "^0.6.20",
-    "@solana/web3.js": "^1.63.1",
+    "@solana/web3.js": "^1.70.3",
     "assert": "^2.0.0",
     "axios": "^0.27.2",
     "bignumber.js": "^9.0.2",

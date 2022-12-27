@@ -87,6 +87,7 @@ const encodeBase64Url = (byteArray: Uint8Array): string =>
 
 export const mapITransactionExtToProtobuf = ({
   version,
+  txnVersion,
   network,
   name,
   description,
@@ -94,6 +95,7 @@ export const mapITransactionExtToProtobuf = ({
 }: ITransactionExt): string => {
   const transaction: protobuf.ITransaction = {
     version,
+    txnVersion,
     network: mapINetworkToProtobuf[network],
     name,
     description,

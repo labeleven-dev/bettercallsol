@@ -32,6 +32,7 @@ export interface IInstructionExt {
 
 export interface ITransactionExt {
   version: string;
+  txnVersion: string;
   network: INetwork;
   name?: string;
   description?: string;

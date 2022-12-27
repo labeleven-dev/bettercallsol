@@ -1,13 +1,14 @@
-import { TransactionResponse } from "@solana/web3.js";
+import { VersionedTransactionResponse } from "@solana/web3.js";
 import { IBalance } from "types/internal";
 
 export const extractBalances = (
-  transaction: TransactionResponse
+  transaction: VersionedTransactionResponse
 ): IBalance[] => {
-  const { accountKeys } = transaction.transaction.message;
+  // TODO handle non-static account keys
+  const { staticAccountKeys } = transaction.transaction.message;
   const { preBalances, postBalances } = transaction.meta!;
 
-  return accountKeys.map((address, index) => ({
+  return staticAccountKeys.map((address, index) => ({
     address: address.toBase58(),
     before: preBalances[index],
     after: postBalances[index],
