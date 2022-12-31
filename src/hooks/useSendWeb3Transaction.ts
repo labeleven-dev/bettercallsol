@@ -2,7 +2,9 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import {
   Connection,
   PublicKey,
+  RpcResponseAndContext,
   Signer,
+  SimulatedTransactionResponse,
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
@@ -18,13 +20,22 @@ import { sentryCaptureException } from "utils/sentry";
  */
 export const useSendWeb3Transaction = ({
   connection,
+  onSimulated,
   onSent,
   onError,
 }: {
   connection?: Connection;
-  onSent?: (signature: string) => void;
+  onSimulated?: (
+    response: RpcResponseAndContext<SimulatedTransactionResponse>,
+    transaction: VersionedTransaction
+  ) => void;
+  onSent?: (signature: string, transaction: VersionedTransaction) => void;
   onError?: (error: Error) => void;
 }): {
+  buildTransaction: (
+    transaction: ITransaction
+  ) => Promise<VersionedTransaction | undefined>;
+  simulate: (transaction: ITransaction) => void;
   send: (transaction: ITransaction) => void;
 } => {
   const transactionOptions = useConfigStore(
@@ -34,10 +45,16 @@ export const useSendWeb3Transaction = ({
 
   const defaultConnection = useWeb3Connection();
   const activeConnection = connection || defaultConnection;
-  const { publicKey: payerKey, sendTransaction, wallet } = useWallet();
+  const {
+    publicKey: payerKey,
+    sendTransaction,
+    signTransaction,
+    wallet,
+  } = useWallet();
 
-  // send the transaction to the chain
-  const send = async (transaction: ITransaction) => {
+  const buildTransaction = async (
+    transaction: ITransaction
+  ): Promise<VersionedTransaction | undefined> => {
     if (
       !transaction.instructions.map ||
       Object.values(transaction.instructions.map).every((x) => x.disabled)
@@ -63,45 +80,78 @@ export const useSendWeb3Transaction = ({
       return;
     }
 
-    try {
-      const message = new TransactionMessage({
-        instructions: mapITransactionToWeb3Instructions(transaction),
-        payerKey,
-        recentBlockhash: (await activeConnection.getLatestBlockhash())
-          .blockhash,
-      });
+    const message = new TransactionMessage({
+      instructions: mapITransactionToWeb3Instructions(transaction),
+      payerKey,
+      recentBlockhash: (await activeConnection.getLatestBlockhash()).blockhash,
+    });
 
-      const web3Transaction = new VersionedTransaction(
-        transaction.version === 0
-          ? message.compileToV0Message()
-          : message.compileToLegacyMessage()
-      );
+    const web3Transaction = new VersionedTransaction(
+      transaction.version === 0
+        ? message.compileToV0Message()
+        : message.compileToLegacyMessage()
+    );
 
-      // add additional signers
-      const signerPubkeys = [
-        ...new Set(
-          Object.values(transaction.instructions.map)
-            .flatMap((instruction) =>
-              (instruction.anchorAccounts || []).concat(
-                Object.values(instruction.accounts.map)
-              )
+    // add additional signers
+    const signerPubkeys = [
+      ...new Set(
+        Object.values(transaction.instructions.map)
+          .flatMap((instruction) =>
+            (instruction.anchorAccounts || []).concat(
+              Object.values(instruction.accounts.map)
             )
-            .filter((account) => account.isSigner && keypairs[account.pubkey])
-            .map((account) => account.pubkey)
-        ),
-      ];
-
-      if (signerPubkeys) {
-        web3Transaction.sign(
-          signerPubkeys.map(
-            (pubkey) =>
-              ({
-                publicKey: new PublicKey(pubkey),
-                secretKey: keypairs[pubkey],
-              } as Signer)
           )
-        );
+          .filter((account) => account.isSigner && keypairs[account.pubkey])
+          .map((account) => account.pubkey)
+      ),
+    ];
+
+    if (signerPubkeys) {
+      web3Transaction.sign(
+        signerPubkeys.map(
+          (pubkey) =>
+            ({
+              publicKey: new PublicKey(pubkey),
+              secretKey: keypairs[pubkey],
+            } as Signer)
+        )
+      );
+    }
+
+    return web3Transaction;
+  };
+
+  // simulate transaction
+  const simulate = async (transaction: ITransaction) => {
+    let web3Transaction = await buildTransaction(transaction);
+    if (!web3Transaction) return;
+
+    web3Transaction = signTransaction
+      ? await signTransaction(web3Transaction)
+      : web3Transaction;
+
+    const response = await activeConnection.simulateTransaction(
+      web3Transaction,
+      {
+        accounts: {
+          encoding: "base64",
+          // TODO support dynamic
+          addresses: web3Transaction.message.staticAccountKeys.map((account) =>
+            account.toBase58()
+          ),
+        },
+        sigVerify: signTransaction !== undefined,
       }
+    );
+
+    onSimulated && onSimulated(response, web3Transaction);
+  };
+
+  // send the transaction to the chain
+  const send = async (transaction: ITransaction) => {
+    try {
+      const web3Transaction = await buildTransaction(transaction);
+      if (!web3Transaction) return;
 
       const signature = await sendTransaction(
         web3Transaction,
@@ -113,7 +163,7 @@ export const useSendWeb3Transaction = ({
         }
       );
 
-      onSent && onSent(signature);
+      onSent && onSent(signature, web3Transaction);
     } catch (err) {
       sentryCaptureException(err);
       const message = Object.getOwnPropertyNames(err).includes("message")
@@ -123,5 +173,5 @@ export const useSendWeb3Transaction = ({
     }
   };
 
-  return { send };
+  return { buildTransaction, simulate, send };
 };

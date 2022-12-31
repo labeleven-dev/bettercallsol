@@ -1,4 +1,8 @@
-import { VersionedTransactionResponse } from "@solana/web3.js";
+import {
+  SimulatedTransactionResponse,
+  VersionedMessage,
+  VersionedTransactionResponse,
+} from "@solana/web3.js";
 import { IBalance } from "types/internal";
 
 export const extractBalances = (
@@ -14,6 +18,17 @@ export const extractBalances = (
     after: postBalances[index],
   }));
 };
+
+export const extractBalancesFromSimulation = (
+  response: SimulatedTransactionResponse,
+  message: VersionedMessage
+): IBalance[] =>
+  // TODO handle non-static account keys
+  message.staticAccountKeys.map((address, index) => ({
+    address: address.toBase58(),
+    before: -1, // TODO fetch existing balances
+    after: (response.accounts && response.accounts[index]?.lamports) || -1,
+  }));
 
 export const mapWeb3TransactionError = (err: any): string => {
   if (!err) return "";

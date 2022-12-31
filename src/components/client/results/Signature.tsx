@@ -4,15 +4,24 @@ import { CopyButton } from "components/common/CopyButton";
 import { ExplorerButton } from "components/common/ExplorerButton";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
+import { SIMULATED_SIGNATURE } from "utils/ui-constants";
 import { toSol } from "utils/web3js";
 
 export const Signature: React.FC<{
   signature: string;
   confirmations?: number;
-  confirmationStatus?: TransactionConfirmationStatus;
+  confirmationStatus?: TransactionConfirmationStatus | "simulated";
   slot?: number;
   fee?: number;
-}> = ({ signature, confirmations, confirmationStatus, slot, fee }) => {
+  unitsConsumed?: number;
+}> = ({
+  signature,
+  confirmations,
+  confirmationStatus,
+  slot,
+  fee,
+  unitsConsumed,
+}) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
 
   return (
@@ -40,7 +49,7 @@ export const Signature: React.FC<{
         <ExplorerButton
           size="xs"
           valueType="tx"
-          isDisabled={!signature}
+          isDisabled={!signature || signature === SIMULATED_SIGNATURE}
           value={signature}
           rpcEndpoint={rpcEndpoint}
         />
@@ -49,7 +58,7 @@ export const Signature: React.FC<{
       <Flex mb="4" alignItems="center">
         <Box width="70px" />
 
-        {confirmationStatus && (
+        {confirmationStatus && confirmationStatus !== "simulated" && (
           <Tag
             mr="1"
             colorScheme={
@@ -76,10 +85,15 @@ export const Signature: React.FC<{
             <strong>Slot:&nbsp;</strong> {slot}
           </Tag>
         )}
-        {fee && (
+        {fee != undefined && (
           <Tag mr="1">
             <strong>Fee:&nbsp;</strong> {toSol(fee).toFixed()}{" "}
             {/* TODO with logo */}
+          </Tag>
+        )}
+        {unitsConsumed != undefined && (
+          <Tag mr="1">
+            <strong>Units Consumed:&nbsp;</strong> {unitsConsumed}{" "}
           </Tag>
         )}
       </Flex>

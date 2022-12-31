@@ -8,7 +8,7 @@ import {
   Hide,
   Show,
 } from "@chakra-ui/react";
-import { Transaction } from "components/client/Transaction";
+import { Client } from "components/client/Client";
 import { Web3Provider } from "components/common/Web3Provider";
 import { Footer } from "components/Footer";
 import { Header } from "components/header/Header";
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
 
           <Flex mt="45px" pb="10px" h="calc(100vh - 60px)">
             <Box flex="2" overflow="scroll">
-              <Transaction />
+              <Client />
             </Box>
             {paletteOpen && (
               // TODO overlaps with main pane on smaller width

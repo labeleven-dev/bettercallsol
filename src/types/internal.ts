@@ -128,6 +128,13 @@ export interface ITransactionRun {
   error?: string;
 }
 
+export interface ISimulationResults {
+  slot?: number;
+  balances?: IBalance[];
+  logs?: string[];
+  unitsConsumed?: number;
+}
+
 export interface ICommitment {
   id: Commitment;
   name: string;

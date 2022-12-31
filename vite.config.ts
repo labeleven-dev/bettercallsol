@@ -14,6 +14,9 @@ export default defineConfig({
   server: {
     open: true,
   },
+  build: {
+    sourcemap: true,
+  },
   // the polyfill plugins don't seem to work with vite 4.x
   resolve: {
     alias: {

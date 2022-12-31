@@ -79,7 +79,7 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
 
 export const DEFAULT_TRANSACTION: ITransaction = {
   name: "",
-  version: "legacy",
+  version: 0,
   instructions: toSortableCollection([
     { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
   ]),
@@ -107,6 +107,7 @@ export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
 export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
   transactionRun: DEFAULT_TRANSACTION_RUN,
   uiState: {
+    runType: "send",
     paletteOpen: false,
     optionsOpen: false,
     shareOpen: false,

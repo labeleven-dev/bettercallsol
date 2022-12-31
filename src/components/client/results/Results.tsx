@@ -35,26 +35,29 @@ import {
 } from "mappers/web3js-to-internal";
 import { useEffect, useState } from "react";
 import { IBalance } from "types/internal";
+import { SIMULATED_SIGNATURE } from "utils/ui-constants";
 
 type State = {
   slot?: number;
   confirmations?: number;
-  confirmationStatus?: TransactionConfirmationStatus;
+  confirmationStatus?: TransactionConfirmationStatus | "simulated";
   blockTime?: number;
   fee?: number;
   balances?: IBalance[];
   error?: string;
   logs?: string[];
+  unitsConsumed?: number;
 };
 
 export const Results = forwardRef<{}, "div">((_, ref) => {
   const [results, setResults] = useState<State>({});
   const finality = useConfigStore((state) => state.transactionOptions.finality);
 
-  const [error, set] = useSessionStoreWithoutUndo((state) => [
-    state.transactionRun.error,
-    state.set,
-  ]);
+  const isSimulated = results.confirmationStatus === "simulated";
+
+  const [simulationResults, error, set] = useSessionStoreWithoutUndo(
+    (state) => [state.simulationResults, state.transactionRun.error, state.set]
+  );
 
   const setInProgress = (value: boolean) =>
     set((state) => {
@@ -113,7 +116,19 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
     useSessionStoreWithoutUndo.subscribe(
       (state) => state.transactionRun.signature,
       (signature) => {
-        start(signature);
+        if (signature === SIMULATED_SIGNATURE) {
+          setResults({
+            confirmationStatus: "simulated",
+            confirmations: 0,
+            slot: simulationResults?.slot,
+            logs: simulationResults?.logs,
+            balances: simulationResults?.balances,
+            error,
+            unitsConsumed: simulationResults?.unitsConsumed,
+          });
+        } else {
+          start(signature);
+        }
       }
     );
   });
@@ -130,19 +145,22 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
           Results
         </Heading>
         {results.confirmationStatus === finality ||
-        results.confirmationStatus === "finalized" ? (
+        results.confirmationStatus === "finalized" ||
+        isSimulated ? (
           results.error ? (
             <>
               <WarningIcon mr="1" color="red.400" />
               <Text color="red.400" fontSize="sm">
-                Fail
+                Fail{""}
+                {isSimulated ? " (Simulated)" : ""}
               </Text>
             </>
           ) : (
             <>
               <CheckCircleIcon mr="1" color="green.400" />
               <Text color="green.400" fontSize="sm">
-                Success
+                Success{""}
+                {isSimulated ? " (Simulated)" : ""}
               </Text>
             </>
           )
@@ -207,11 +225,12 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
       />
 
       <Signature
-        signature={signature}
+        signature={isSimulated ? SIMULATED_SIGNATURE : signature}
         confirmationStatus={results.confirmationStatus}
         confirmations={results.confirmations}
         slot={results.slot}
         fee={results.fee}
+        unitsConsumed={results.unitsConsumed}
       />
 
       <Tabs colorScheme="main" variant="enclosed">

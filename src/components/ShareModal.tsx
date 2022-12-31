@@ -42,6 +42,7 @@ export const ShareModal: React.FC = () => {
     state.uiState.shareOpen,
     state.set,
   ]);
+  // TODO causes component reload
   const [transaction, rpcEndpoint] = useShallowSessionStoreWithUndo((state) => [
     state.transaction,
     state.rpcEndpoint,

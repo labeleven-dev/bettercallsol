@@ -4,7 +4,7 @@ import { Results } from "components/client/results/Results";
 import { TransactionHeader } from "components/client/TransactionHeader";
 import React, { useRef } from "react";
 
-export const Transaction: React.FC = () => {
+export const Client: React.FC = () => {
   // used for scrolling to results
   const resultsRef = useRef<HTMLDivElement>(null);
 

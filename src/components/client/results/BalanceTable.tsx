@@ -65,6 +65,7 @@ export const BalanceTable: React.FC<{
                       variant="link"
                       fontFamily="mono"
                       fontWeight="normal"
+                      fontSize="sm"
                     />
                     {/* TODO tag with account names from instructions */}
                     {/* <br />
@@ -72,18 +73,26 @@ export const BalanceTable: React.FC<{
                       <Tag key={index}>{name}</Tag>
                     ))} */}
                   </Td>
-                  <Td isNumeric>{toSol(before).toFixed()}</Td>
-                  <Td isNumeric>{toSol(after).toFixed()}</Td>
                   <Td isNumeric>
-                    {toSol(change).toFixed()}&nbsp;
-                    {change > 0 ? (
-                      <ArrowUpIcon color="green" />
-                    ) : change < 0 ? (
-                      <ArrowDownIcon color="red" />
-                    ) : (
-                      ""
-                    )}
+                    {before >= 0 ? toSol(before).toFixed() : "N/A"}
                   </Td>
+                  <Td isNumeric>
+                    {after >= 0 ? toSol(after).toFixed() : "N/A"}
+                  </Td>
+                  {before >= 0 && after >= 0 ? (
+                    <Td isNumeric>
+                      {toSol(change).toFixed()}&nbsp;
+                      {change > 0 ? (
+                        <ArrowUpIcon color="green" />
+                      ) : change < 0 ? (
+                        <ArrowDownIcon color="red" />
+                      ) : (
+                        ""
+                      )}
+                    </Td>
+                  ) : (
+                    <Td isNumeric>N/A</Td>
+                  )}
                 </Tr>
               );
             })}

@@ -4,6 +4,7 @@ import { Draft } from "immer";
 import {
   IPubKey,
   IRpcEndpoint,
+  ISimulationResults,
   ITransaction,
   ITransactionOptions,
   ITransactionRun,
@@ -17,6 +18,8 @@ export type Explorer =
   | "solscan"
   | "none";
 
+export type RunType = "send" | "simulate";
+
 // We mutate state using immerjs. All state fields are set to readonly
 // so we don't by mistake try to mutate outside immerjs.
 
@@ -29,6 +32,7 @@ export interface AppOptions {
 }
 
 export interface UIState {
+  readonly runType: RunType;
   readonly paletteOpen: boolean;
   readonly optionsOpen: boolean;
   readonly shareOpen: boolean;
@@ -54,6 +58,7 @@ export interface SessionStateWithUndo {
 
 export interface SessionStateWithoutUndo {
   readonly transactionRun: ITransactionRun;
+  readonly simulationResults?: ISimulationResults;
   readonly uiState: UIState;
   set: (fn: (state: Draft<SessionStateWithoutUndo>) => void) => void;
 }

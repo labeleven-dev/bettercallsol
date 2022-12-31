@@ -1,9 +1,10 @@
-import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
   Button,
+  ButtonGroup,
   Collapse,
   Flex,
   Heading,
@@ -27,6 +28,10 @@ import {
   useShallowSessionStoreWithoutUndo,
   useShallowSessionStoreWithUndo,
 } from "hooks/useSessionStore";
+import {
+  extractBalancesFromSimulation,
+  mapWeb3TransactionError,
+} from "mappers/web3js-to-internal";
 import React, { useEffect } from "react";
 import {
   FaCompress,
@@ -34,12 +39,17 @@ import {
   FaEraser,
   FaExpand,
   FaFileImport,
+  FaFlask,
   FaInfo,
   FaPlay,
   FaShareAlt,
 } from "react-icons/fa";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "utils/state";
-import { TRANSACTION_VERSIONS } from "utils/ui-constants";
+import {
+  RUN_TYPES,
+  SIMULATED_SIGNATURE,
+  TRANSACTION_VERSIONS,
+} from "utils/ui-constants";
 
 export const TransactionHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
@@ -47,12 +57,14 @@ export const TransactionHeader: React.FC<{
   const scrollToResults = useConfigStore(
     (state) => state.appOptions.scrollToResults
   );
-  const [inProgress, descriptionVisible, setUI] =
+  const [runType, inProgress, descriptionVisible, setUI] =
     useShallowSessionStoreWithoutUndo((state) => [
+      state.uiState.runType,
       state.transactionRun.inProgress,
       state.uiState.descriptionVisible,
       state.set,
     ]);
+  // TODO causes component reload
   const [transaction, rpcEndpoint, setSession] = useShallowSessionStoreWithUndo(
     (state) => [state.transaction, state.rpcEndpoint, state.set]
   );
@@ -61,30 +73,47 @@ export const TransactionHeader: React.FC<{
   );
 
   const { publicKey: walletPublicKey } = useWallet();
-  const { send } = useSendWeb3Transaction({
+
+  const scrollDown = () => {
+    if (scrollToResults) {
+      resultsRef.current?.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }
+  };
+  const { simulate, send } = useSendWeb3Transaction({
+    onSimulated: (response, tranaction) => {
+      setUI((state) => {
+        state.transactionRun = {
+          inProgress: false, // instantenous
+          signature: SIMULATED_SIGNATURE,
+          error: mapWeb3TransactionError(response.value.err),
+        };
+        state.simulationResults = {
+          logs: response.value.logs ?? [],
+          unitsConsumed: response.value.unitsConsumed,
+          slot: response.context.slot,
+          balances: extractBalancesFromSimulation(
+            response.value,
+            tranaction.message
+          ),
+        };
+      });
+      scrollDown();
+    },
     onSent: (signature) => {
       setUI((state) => {
         state.transactionRun = { inProgress: true, signature };
       });
-      if (scrollToResults) {
-        resultsRef.current?.scrollIntoView({
-          block: "end",
-          inline: "nearest",
-          behavior: "smooth",
-        });
-      }
+      scrollDown();
     },
     onError: (error) => {
       setUI((state) => {
         state.transactionRun.error = error.message;
       });
-      if (scrollToResults) {
-        resultsRef.current?.scrollIntoView({
-          block: "end",
-          inline: "nearest",
-          behavior: "smooth",
-        });
-      }
+      scrollDown();
     },
   });
 
@@ -162,23 +191,57 @@ export const TransactionHeader: React.FC<{
               : "Please connect a wallet to continue"
           }
         >
-          <Button
-            isLoading={inProgress}
-            isDisabled={!walletPublicKey}
-            ml="2"
-            mr="2"
-            colorScheme="purple"
-            aria-label="Run Program"
-            rightIcon={<Icon as={FaPlay} />}
-            onClick={() => {
-              setUI((state) => {
-                state.transactionRun = DEFAULT_TRANSACTION_RUN;
-              });
-              send(transaction);
-            }}
-          >
-            Send
-          </Button>
+          <ButtonGroup isAttached>
+            <Button
+              isLoading={inProgress}
+              isDisabled={!walletPublicKey}
+              ml="2"
+              w="110px"
+              colorScheme="purple"
+              aria-label="Run Program"
+              rightIcon={
+                <Icon as={runType === "simulate" ? FaFlask : FaPlay} />
+              }
+              onClick={() => {
+                setUI((state) => {
+                  state.transactionRun = DEFAULT_TRANSACTION_RUN;
+                });
+                if (runType === "simulate") {
+                  simulate(transaction);
+                } else {
+                  send(transaction);
+                }
+              }}
+            >
+              {RUN_TYPES.find(({ id }) => id === runType)?.name}
+            </Button>
+            <Menu placement="right-start">
+              <MenuButton
+                as={IconButton}
+                minW="5"
+                mr="2"
+                variant="outline"
+                colorScheme="purple"
+                aria-label="More"
+                icon={<TriangleDownIcon w="2" />}
+              />
+              <MenuList>
+                {RUN_TYPES.map(({ id, name }, index) => (
+                  <MenuItem
+                    key={index}
+                    icon={id === runType ? <CheckIcon /> : undefined}
+                    onClick={() => {
+                      setUI((state) => {
+                        state.uiState.runType = id;
+                      });
+                    }}
+                  >
+                    {name}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
+          </ButtonGroup>
         </Tooltip>
 
         <Spacer />
@@ -261,7 +324,10 @@ export const TransactionHeader: React.FC<{
       </Flex>
 
       {/* TODO remove once out of beta */}
-      <Collapse in={rpcEndpoint.network === "mainnet-beta"} unmountOnExit>
+      <Collapse
+        in={runType === "send" && rpcEndpoint.network === "mainnet-beta"}
+        unmountOnExit
+      >
         <Alert
           mt="2"
           fontSize="sm"
