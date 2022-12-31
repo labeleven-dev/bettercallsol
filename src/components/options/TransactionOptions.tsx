@@ -115,6 +115,17 @@ export const TransactionOptions: React.FC = () => {
           });
         }}
       />
+
+      <ToggleOption
+        id="verify-sign-sim"
+        name="Verify signature on simulation"
+        get={() => transactionOptions.signVerifySimulation}
+        set={(x) => {
+          set((state) => {
+            state.transactionOptions.signVerifySimulation = x;
+          });
+        }}
+      />
     </Grid>
   );
 };

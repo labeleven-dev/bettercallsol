@@ -149,4 +149,5 @@ export interface ITransactionOptions {
   confirmTransactionInitialTimeout: number;
   confirmTransactionTimeout: number;
   pollingPeriod: number; // used in our app, rather than passed to web3.js stuff
+  signVerifySimulation: boolean;
 }

@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   Connection,
@@ -43,6 +44,8 @@ export const useSendWeb3Transaction = ({
   );
   const keypairs = useSessionStoreWithUndo((state) => state.keypairs);
 
+  const toast = useToast();
+
   const defaultConnection = useWeb3Connection();
   const activeConnection = connection || defaultConnection;
   const {
@@ -74,7 +77,7 @@ export const useSendWeb3Transaction = ({
       onError &&
         onError(
           new Error(
-            `Wallet does not support versioned transactions or ${transaction.version} specifically`
+            `Wallet does not support versioned transactions or version ${transaction.version} specifically`
           )
         );
       return;
@@ -126,9 +129,21 @@ export const useSendWeb3Transaction = ({
     let web3Transaction = await buildTransaction(transaction);
     if (!web3Transaction) return;
 
-    web3Transaction = signTransaction
-      ? await signTransaction(web3Transaction)
-      : web3Transaction;
+    if (transactionOptions.signVerifySimulation && !signTransaction) {
+      toast({
+        title: "Signature verifications skipped.",
+        description:
+          "Your wallet does not support signing simulated tranasction",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    web3Transaction =
+      transactionOptions.signVerifySimulation && signTransaction
+        ? await signTransaction(web3Transaction)
+        : web3Transaction;
 
     const response = await activeConnection.simulateTransaction(
       web3Transaction,
@@ -140,7 +155,9 @@ export const useSendWeb3Transaction = ({
             account.toBase58()
           ),
         },
-        sigVerify: signTransaction !== undefined,
+        sigVerify:
+          transactionOptions.signVerifySimulation &&
+          signTransaction !== undefined,
       }
     );
 

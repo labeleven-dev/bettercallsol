@@ -75,6 +75,7 @@ export const DEFAUT_TRANSACTION_OPTIONS: ITransactionOptions = {
   maxRetries: 5,
   disableRetryOnRateLimit: true,
   pollingPeriod: 1_000,
+  signVerifySimulation: false,
 };
 
 export const DEFAULT_TRANSACTION: ITransaction = {
