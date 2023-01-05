@@ -26,6 +26,7 @@ export const mapIPreviewToITransaction = ({
   version,
   name,
   instructions,
+  addressLookupTables,
 }: IPreview): ITransaction => ({
   version,
   name,
@@ -34,4 +35,5 @@ export const mapIPreviewToITransaction = ({
       mapIInstructionPreviewToIInstruction(instruction, source)
     )
   ),
+  addressLookupTables,
 });

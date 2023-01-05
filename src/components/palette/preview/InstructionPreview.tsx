@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { CopyButton } from "components/common/CopyButton";
 import { Numbering } from "components/common/Numbering";
-import { AccountSummary } from "components/palette/preview/AccountSummary";
 import { DataPreview } from "components/palette/preview/DataPreview";
+import { InstructionAccountSummary } from "components/palette/preview/InstructionAccountSummary";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
 import { IInstructionPreview, PreviewSource } from "types/preview";
@@ -90,7 +90,7 @@ export const InstructionPreview: React.FC<{
         </Flex>
       )}
 
-      <AccountSummary ml="5" summary={accountSummary} />
+      <InstructionAccountSummary ml="5" summary={accountSummary} />
       {data && <DataPreview ml="5" mt="1" data={data} />}
 
       {(innerInstructions?.length || 0) > 0 && (

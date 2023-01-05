@@ -2,9 +2,19 @@
 
 import { TransactionVersion } from "@solana/web3.js";
 import { IInstructionExt } from "./external";
-import { IRpcEndpoint } from "./internal";
+import { IPubKey, IRpcEndpoint } from "./internal";
 
-export interface IAccountSummary {
+export interface ITransactionAccountSummary {
+  staticKeys: number;
+  lookupTables: number;
+  writableLookup: number;
+  readonlyLookup: number;
+  signatures: number;
+  readonlySigned: number;
+  readonlyUnsigned: number;
+}
+
+export interface IInstructionAccountSummary {
   total: number;
   writableSigner: number;
   readonlySigner: number;
@@ -14,7 +24,7 @@ export interface IAccountSummary {
 
 export interface IInstructionPreview
   extends Omit<IInstructionExt, "anchorMethod" | "anchorAccounts"> {
-  accountSummary: IAccountSummary;
+  accountSummary: IInstructionAccountSummary;
   innerInstructions?: IInstructionPreview[];
 }
 
@@ -33,7 +43,8 @@ export interface IPreview {
   description?: string;
   rpcEndpoint?: IRpcEndpoint;
   instructions: IInstructionPreview[];
-  accountSummary?: IAccountSummary; // only set in source=tx
+  accountSummary?: ITransactionAccountSummary; // only set in source=tx
   fee?: number;
   error?: string;
+  addressLookupTables: IPubKey[];
 }

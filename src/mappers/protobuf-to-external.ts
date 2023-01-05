@@ -92,8 +92,15 @@ export const mapProtobufToITransactionExt = (
   const buffer = pako.inflate(decodeBase64Url(encoded));
   const decoded = protobuf.Transaction.decode(buffer);
 
-  const { version, txnVersion, network, name, description, instructions } =
-    decoded;
+  const {
+    version,
+    txnVersion,
+    network,
+    name,
+    description,
+    instructions,
+    addressLookupTables,
+  } = decoded;
 
   return {
     version,
@@ -132,5 +139,6 @@ export const mapProtobufToITransactionExt = (
         anchorAccounts: anchorAccounts?.map(mapProtobufToIAccountExt),
       })
     ),
+    addressLookupTables,
   };
 };

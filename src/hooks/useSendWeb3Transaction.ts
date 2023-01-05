@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
+  AddressLookupTableAccount,
   Connection,
   PublicKey,
   RpcResponseAndContext,
@@ -15,6 +16,7 @@ import { useWeb3Connection } from "hooks/useWeb3Connection";
 import { mapITransactionToWeb3Instructions } from "mappers/internal-to-web3js";
 import { ITransaction } from "types/internal";
 import { sentryCaptureException } from "utils/sentry";
+import { isValidPublicKey } from "utils/web3js";
 
 /**
  * Use it to send transactions to Solana
@@ -55,6 +57,35 @@ export const useSendWeb3Transaction = ({
     wallet,
   } = useWallet();
 
+  const getAddressLookupTableAccounts = async (
+    transaction: ITransaction
+  ): Promise<AddressLookupTableAccount[]> => {
+    if (transaction.version === "legacy") {
+      return [];
+    }
+
+    return Promise.all(
+      transaction.addressLookupTables.map(async (address, index) => {
+        if (isValidPublicKey(address)) {
+          const lookup = await activeConnection.getAddressLookupTable(
+            new PublicKey(address)
+          );
+          if (!lookup.value) {
+            throw new Error(
+              `Cannot retrieve address lookup table (#${index + 1}): ${address}`
+            );
+          }
+          return lookup.value;
+        } else {
+          throw new Error(
+            `Invalid address lookup table (#${index + 1}): ${address}`
+          );
+        }
+      })
+    );
+  };
+
+  // convert from ITransaction to VersionedTransaction
   const buildTransaction = async (
     transaction: ITransaction
   ): Promise<VersionedTransaction | undefined> => {
@@ -83,6 +114,7 @@ export const useSendWeb3Transaction = ({
       return;
     }
 
+    // message
     const message = new TransactionMessage({
       instructions: mapITransactionToWeb3Instructions(transaction),
       payerKey,
@@ -91,7 +123,9 @@ export const useSendWeb3Transaction = ({
 
     const web3Transaction = new VersionedTransaction(
       transaction.version === 0
-        ? message.compileToV0Message()
+        ? message.compileToV0Message(
+            await getAddressLookupTableAccounts(transaction)
+          )
         : message.compileToLegacyMessage()
     );
 
@@ -126,42 +160,60 @@ export const useSendWeb3Transaction = ({
 
   // simulate transaction
   const simulate = async (transaction: ITransaction) => {
-    let web3Transaction = await buildTransaction(transaction);
-    if (!web3Transaction) return;
+    try {
+      let web3Transaction = await buildTransaction(transaction);
+      if (!web3Transaction) return;
 
-    if (transactionOptions.signVerifySimulation && !signTransaction) {
-      toast({
-        title: "Signature verifications skipped.",
-        description:
-          "Your wallet does not support signing simulated tranasction",
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-
-    web3Transaction =
-      transactionOptions.signVerifySimulation && signTransaction
-        ? await signTransaction(web3Transaction)
-        : web3Transaction;
-
-    const response = await activeConnection.simulateTransaction(
-      web3Transaction,
-      {
-        accounts: {
-          encoding: "base64",
-          // TODO support dynamic
-          addresses: web3Transaction.message.staticAccountKeys.map((account) =>
-            account.toBase58()
-          ),
-        },
-        sigVerify:
-          transactionOptions.signVerifySimulation &&
-          signTransaction !== undefined,
+      if (transactionOptions.signVerifySimulation && !signTransaction) {
+        toast({
+          title: "Signature verifications skipped.",
+          description:
+            "Your wallet does not support signing simulated tranasction",
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
       }
-    );
 
-    onSimulated && onSimulated(response, web3Transaction);
+      web3Transaction =
+        transactionOptions.signVerifySimulation && signTransaction
+          ? await signTransaction(web3Transaction)
+          : web3Transaction;
+
+      const accountKeys = web3Transaction.message.getAccountKeys({
+        addressLookupTableAccounts: await getAddressLookupTableAccounts(
+          transaction
+        ),
+      });
+      const addresses = accountKeys.staticAccountKeys
+        .concat(
+          (accountKeys.accountKeysFromLookups?.writable || []).concat(
+            accountKeys.accountKeysFromLookups?.readonly || []
+          )
+        )
+        .map((account) => account.toBase58());
+
+      const response = await activeConnection.simulateTransaction(
+        web3Transaction,
+        {
+          accounts: {
+            encoding: "base64",
+            addresses,
+          },
+          sigVerify:
+            transactionOptions.signVerifySimulation &&
+            signTransaction !== undefined,
+        }
+      );
+
+      onSimulated && onSimulated(response, web3Transaction);
+    } catch (err) {
+      sentryCaptureException(err);
+      const message = Object.getOwnPropertyNames(err).includes("message")
+        ? (err as { message: string }).message
+        : JSON.stringify(err);
+      onError && onError(new Error(message));
+    }
   };
 
   // send the transaction to the chain

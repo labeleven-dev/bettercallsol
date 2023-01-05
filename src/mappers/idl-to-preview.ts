@@ -67,4 +67,5 @@ export const mapIdlToIPreview = (
   instructions: instructions.map((instruction) =>
     mapIdlInstructionToIInstructionPreview(instruction, programId)
   ),
+  addressLookupTables: [],
 });

@@ -17,8 +17,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { CopyButton } from "components/common/CopyButton";
-import { AccountSummary } from "components/palette/preview/AccountSummary";
 import { InstructionPreview } from "components/palette/preview/InstructionPreview";
+import { TransactionAccountSummary } from "components/palette/preview/TranasctionAccountSummary";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { mapIPreviewToITransaction } from "mappers/preview-to-internal";
 import { FaAnchor } from "react-icons/fa";
@@ -131,7 +131,7 @@ export const Preview: React.FC<{
 
         <Tooltip label={`Transaction version: ${version}`}>
           <Tag mr="1" fontSize="xs">
-            {version}
+            {version === "legacy" ? "LEGACY" : `v${version}`}
           </Tag>
         </Tooltip>
 
@@ -151,7 +151,7 @@ export const Preview: React.FC<{
       </Flex>
 
       {accountSummary && (
-        <AccountSummary ml="5" mb="3" summary={accountSummary} />
+        <TransactionAccountSummary ml="5" mb="3" summary={accountSummary} />
       )}
 
       {instructions.map((instruction, index) => (

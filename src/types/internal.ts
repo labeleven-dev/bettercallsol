@@ -114,6 +114,7 @@ export interface ITransaction {
   description?: string;
   version: TransactionVersion;
   instructions: SortableCollection<IInstruction>;
+  addressLookupTables: IPubKey[];
 }
 
 export interface IBalance {

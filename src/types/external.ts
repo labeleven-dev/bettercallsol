@@ -37,4 +37,5 @@ export interface ITransactionExt {
   name?: string;
   description?: string;
   instructions: IInstructionExt[];
+  addressLookupTables: IPubKey[];
 }

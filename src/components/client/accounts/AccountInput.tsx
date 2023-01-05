@@ -71,7 +71,7 @@ export const AccountInput: React.FC = () => {
       />
 
       <InputRightElement
-        // chakra hardcode the width so we can't have multiple buttons
+        // chakra hardcode the width so we can have multiple buttons
         w=""
         mr="1"
       >

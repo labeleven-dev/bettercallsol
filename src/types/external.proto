@@ -109,4 +109,5 @@ message Transaction {
     repeated Instruction instructions = 5;
 
     string txnVersion = 6;
+    repeated string addressLookupTables = 7;
 }

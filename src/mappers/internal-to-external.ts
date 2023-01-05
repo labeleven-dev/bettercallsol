@@ -40,7 +40,13 @@ const mapToIInstrctionDataFieldExt = ({
 });
 
 export const mapITransactionToTransactionExt = (
-  { name, version, description, instructions }: ITransaction,
+  {
+    name,
+    version,
+    description,
+    instructions,
+    addressLookupTables,
+  }: ITransaction,
   rpcEndpoint: IRpcEndpoint
 ): ITransactionExt => ({
   version: "1.0.0",
@@ -48,6 +54,7 @@ export const mapITransactionToTransactionExt = (
   network: rpcEndpoint.network,
   name,
   description,
+  addressLookupTables,
   instructions: toSortedArray(instructions).map(
     ({
       name,

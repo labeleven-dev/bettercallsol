@@ -38,6 +38,7 @@ export interface UIState {
   readonly shareOpen: boolean;
   readonly infoOpen: boolean;
   readonly descriptionVisible: boolean;
+  readonly addressLookupTableExpanded: boolean;
 }
 
 ////// State Stores //////

@@ -9,11 +9,11 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React from "react";
-import { IAccountSummary } from "types/preview";
+import { IInstructionAccountSummary } from "types/preview";
 
-export const AccountSummary: React.FC<
+export const InstructionAccountSummary: React.FC<
   {
-    summary: IAccountSummary;
+    summary: IInstructionAccountSummary;
   } & FlexProps
 > = ({
   summary: {

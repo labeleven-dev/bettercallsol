@@ -4,7 +4,7 @@ import { IPreview, PreviewSource } from "types/preview";
 import { toTransactionVersion } from "utils/web3js";
 
 export const mapITransactionExtToIPreview = (
-  { txnVersion, name, instructions }: ITransactionExt,
+  { txnVersion, name, instructions, addressLookupTables }: ITransactionExt,
   source: PreviewSource,
   sourceValue: string
 ): IPreview => {
@@ -17,5 +17,6 @@ export const mapITransactionExtToIPreview = (
       ...instruction,
       accountSummary: accountSummary(instruction.accounts),
     })),
+    addressLookupTables,
   };
 };

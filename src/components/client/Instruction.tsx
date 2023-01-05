@@ -43,7 +43,8 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   return (
     <Grid
       mb="2"
-      p="5"
+      px="5"
+      py="3"
       border="1px"
       rounded="md"
       borderColor={useColorModeValue("gray.200", "gray.600")}

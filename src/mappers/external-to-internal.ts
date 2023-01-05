@@ -96,6 +96,7 @@ export const mapITransactionExtToITransaction = ({
   txnVersion,
   description,
   instructions,
+  addressLookupTables,
 }: ITransactionExt): ITransaction => ({
   name,
   version: toTransactionVersion(txnVersion),
@@ -103,4 +104,5 @@ export const mapITransactionExtToITransaction = ({
   instructions: mapToSortableCollection(
     instructions.map(mapIInstructionExtToIInstruction)
   ),
+  addressLookupTables,
 });

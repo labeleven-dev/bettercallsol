@@ -15,6 +15,7 @@ export const EXAMPLES: Record<string, ITransactionExt> = {
 1. Airdrop 🪂 some funds to your wallet if required (only in devnet/testnet)
 1. Populate the "New Account" account with a new keypair by clicking on the green 🪄
 1. Send!`,
+    addressLookupTables: [],
     instructions: [
       {
         name: "Create Account",
@@ -86,6 +87,7 @@ We are putting in 140000 lamports, which is the amount to make a 64 byte account
 1. Populate the "From" account by clicking on the green 🪄
 1. Airdrop 🪂 some funds to your wallet if required (only in devnet/testnet)
 1. Send!`,
+    addressLookupTables: [],
     instructions: [
       {
         name: "Transfer",

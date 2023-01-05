@@ -84,12 +84,14 @@ export const DEFAULT_TRANSACTION: ITransaction = {
   instructions: toSortableCollection([
     { ...newInstruction(), accounts: toSortableCollection([newAccount()]) },
   ]),
+  addressLookupTables: [],
 };
 
 export const EMPTY_TRANSACTION: ITransaction = {
   name: "",
-  version: "legacy",
+  version: 0,
   instructions: toSortableCollection([]),
+  addressLookupTables: [],
 };
 
 export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
@@ -114,6 +116,7 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     shareOpen: false,
     infoOpen: false,
     descriptionVisible: false,
+    addressLookupTableExpanded: false,
   },
   set: () => {}, // set by the hook
 };

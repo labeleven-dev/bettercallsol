@@ -28,7 +28,10 @@ import { Signature } from "components/client/results/Signature";
 import { ErrorAlert } from "components/common/ErrorAlert";
 import { useConfigStore } from "hooks/useConfigStore";
 import { useGetWeb3Transaction } from "hooks/useGetWeb3Transaction";
-import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
+import {
+  useSessionStoreWithoutUndo,
+  useShallowSessionStoreWithoutUndo,
+} from "hooks/useSessionStore";
 import {
   extractBalances,
   mapWeb3TransactionError,
@@ -55,7 +58,7 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
 
   const isSimulated = results.confirmationStatus === "simulated";
 
-  const [simulationResults, error, set] = useSessionStoreWithoutUndo(
+  const [simulationResults, error, set] = useShallowSessionStoreWithoutUndo(
     (state) => [state.simulationResults, state.transactionRun.error, state.set]
   );
 
@@ -110,6 +113,7 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
     startWeb3Transaction(signature, skipPolling);
   };
 
+  // TODO find a different way
   // start confirming the tranaction when signature is set
   // by TransactionHeader component
   useEffect(() => {

@@ -1,7 +1,8 @@
 import { Box, Divider, Grid } from "@chakra-ui/react";
+import { AddressLookupTables } from "components/client/AddressLookupTables";
+import { ClientHeader } from "components/client/ClientHeader";
 import { Instructions } from "components/client/Instructions";
 import { Results } from "components/client/results/Results";
-import { TransactionHeader } from "components/client/TransactionHeader";
 import React, { useRef } from "react";
 
 export const Client: React.FC = () => {
@@ -11,7 +12,9 @@ export const Client: React.FC = () => {
   return (
     <Grid m="2">
       <Box p="5">
-        <TransactionHeader resultsRef={resultsRef} />
+        {/* TODO split ClientHeader from TransactionHeader, without causing excessive reloads */}
+        <ClientHeader resultsRef={resultsRef} />
+        <AddressLookupTables />
         <Instructions />
       </Box>
 

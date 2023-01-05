@@ -51,7 +51,7 @@ import {
   TRANSACTION_VERSIONS,
 } from "utils/ui-constants";
 
-export const TransactionHeader: React.FC<{
+export const ClientHeader: React.FC<{
   resultsRef: React.RefObject<HTMLDivElement>;
 }> = ({ resultsRef }) => {
   const scrollToResults = useConfigStore(
@@ -91,6 +91,7 @@ export const TransactionHeader: React.FC<{
           signature: SIMULATED_SIGNATURE,
           error: mapWeb3TransactionError(response.value.err),
         };
+        // TODO returnData
         state.simulationResults = {
           logs: response.value.logs ?? [],
           unitsConsumed: response.value.unitsConsumed,
@@ -112,6 +113,9 @@ export const TransactionHeader: React.FC<{
     onError: (error) => {
       setUI((state) => {
         state.transactionRun.error = error.message;
+        if (runType === "simulate") {
+          state.transactionRun.signature = SIMULATED_SIGNATURE; // trigger results
+        }
       });
       scrollDown();
     },
@@ -205,6 +209,7 @@ export const TransactionHeader: React.FC<{
               onClick={() => {
                 setUI((state) => {
                   state.transactionRun = DEFAULT_TRANSACTION_RUN;
+                  state.simulationResults = undefined;
                 });
                 if (runType === "simulate") {
                   simulate(transaction);
