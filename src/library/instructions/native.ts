@@ -22,7 +22,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
         value: [
           {
             name: "Instruction",
-            description: "Index of SetComputeUnitLimit instruction",
+            description: "Index of the instruction",
             type: "u8",
             value: 0,
           },
@@ -54,7 +54,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
         value: [
           {
             name: "Instruction",
-            description: "Index of SetComputeUnitLimit instruction",
+            description: "Index of the instruction",
             type: "u8",
             value: 2,
           },
@@ -79,7 +79,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
         value: [
           {
             name: "Instruction",
-            description: "Index of SetComputeUnitPrice instruction",
+            description: "Index of the instruction",
             type: "u8",
             value: 3,
           },
@@ -106,7 +106,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
       accounts: [
         {
           type: "wallet",
-          description: `The wallet that signs and pays for the transaction`,
+          description: "The wallet that signs and pays for the transaction",
           name: "Payer",
           pubkey: "",
           isWritable: true,
@@ -127,7 +127,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
         value: [
           {
             name: "Instruction",
-            description: "Index of Create Account instruction",
+            description: "Index of the instruction",
             type: "u32",
             value: 0,
           },
@@ -140,7 +140,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
           },
           {
             name: "Space",
-            description: `The size of the account in bytes`,
+            description: "The size of the account in bytes",
             type: "u64",
             value: 0,
           },
@@ -155,7 +155,39 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
     },
   },
 
-  // TODO Native.System.Assign
+  "Native.System.Assign": {
+    program: "System Program (Native)",
+    instruction: {
+      name: "System Program: Assign",
+      programId: "11111111111111111111111111111111",
+      accounts: [
+        {
+          type: "keypair",
+          name: "Account",
+          pubkey: "",
+          isWritable: true,
+          isSigner: true,
+        },
+      ],
+      data: {
+        format: "bufferLayout",
+        value: [
+          {
+            name: "Instruction",
+            description: "Index of the instruction",
+            type: "u32",
+            value: 0,
+          },
+          {
+            name: "Program ID",
+            description: "The account that should be set as the owner",
+            type: "publicKey",
+            value: "",
+          },
+        ],
+      },
+    },
+  },
 
   "Native.System.Transfer": {
     program: "System Program (Native)",
@@ -183,7 +215,7 @@ export const NATIVE_INSTRUCTIONS: InstructionLibrary = {
         value: [
           {
             name: "Instruction",
-            description: `Index of Transfer instruction`,
+            description: "Index of the instruction",
             type: "u32",
             value: 2,
           },

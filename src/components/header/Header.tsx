@@ -1,4 +1,4 @@
-import { HamburgerIcon, InfoIcon } from "@chakra-ui/icons";
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   DarkMode,
   Flex,
@@ -119,25 +119,6 @@ export const Header: React.FC = () => {
       </DarkMode>
 
       <WalletButton />
-
-      <DarkMode>
-        <Hide below="md">
-          <Tooltip label="Palette">
-            <IconButton
-              mr="0.5"
-              aria-label="Palette"
-              icon={<HamburgerIcon />}
-              variant="ghost"
-              color="white"
-              onClick={() => {
-                set((state) => {
-                  state.uiState.paletteOpen = !state.uiState.paletteOpen;
-                });
-              }}
-            />
-          </Tooltip>
-        </Hide>
-      </DarkMode>
     </Flex>
   );
 };

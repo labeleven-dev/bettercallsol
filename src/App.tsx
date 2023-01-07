@@ -6,7 +6,10 @@ import {
   ChakraProvider,
   Flex,
   Hide,
+  Icon,
+  IconButton,
   Show,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Client } from "components/client/Client";
 import { Web3Provider } from "components/common/Web3Provider";
@@ -23,11 +26,13 @@ import React from "react";
 import theme from "theme";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export const App: React.FC = () => {
-  const paletteOpen = useSessionStoreWithoutUndo(
-    (state) => state.uiState.paletteOpen
-  );
+  const [paletteOpen, setUI] = useSessionStoreWithoutUndo((state) => [
+    state.uiState.paletteOpen,
+    state.set,
+  ]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -53,9 +58,34 @@ export const App: React.FC = () => {
           </Show>
 
           <Flex mt="45px" pb="10px" h="calc(100vh - 60px)">
-            <Box flex="2" overflow="scroll">
+            <Box flex="2" overflow="scroll" position="relative">
               <Client />
+
+              <Tooltip label={paletteOpen ? "Close side-bar" : "Open side-bar"}>
+                <IconButton
+                  position="absolute"
+                  top="140px"
+                  right="0"
+                  rounded="none"
+                  roundedBottomLeft="md"
+                  roundedTopLeft="md"
+                  aria-label={paletteOpen ? "Close side-bar" : "Open side-bar"}
+                  icon={
+                    paletteOpen ? (
+                      <Icon as={FaChevronRight} />
+                    ) : (
+                      <Icon as={FaChevronLeft} />
+                    )
+                  }
+                  onClick={() => {
+                    setUI((state) => {
+                      state.uiState.paletteOpen = !paletteOpen;
+                    });
+                  }}
+                />
+              </Tooltip>
             </Box>
+
             {paletteOpen && (
               // TODO overlaps with main pane on smaller width
               <Hide below="md">

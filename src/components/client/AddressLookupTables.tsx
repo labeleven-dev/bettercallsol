@@ -40,6 +40,7 @@ export const AddressLookupTables: React.FC = () => {
   ]);
 
   const emptyBgColour = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
+  const totalCountColour = useColorModeValue("gray.400", "gray.600");
 
   if (transactionVersion === "legacy") return null;
 
@@ -68,7 +69,11 @@ export const AddressLookupTables: React.FC = () => {
           onClick={toggleExpand}
         />
         <Heading mr="3" size="sm" onClick={toggleExpand} cursor="pointer">
-          Address Lookup Tables
+          Address Lookup Tables{" "}
+          <Text
+            as="span"
+            textColor={totalCountColour}
+          >{`(${tables.length})`}</Text>
         </Heading>
         <Divider flex="1" />
       </Flex>
