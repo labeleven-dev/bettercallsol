@@ -6,20 +6,24 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
 
 export const ChoiceOption: React.FC<{
   id: string;
   name: string;
+  moreInfo?: string;
   get: () => { id: string; name: string };
   getChoices: () => { id: string; name: string }[];
   set: (id: string) => void;
-}> = ({ id, name, get, getChoices, set }) => (
+}> = ({ id, name, moreInfo, get, getChoices, set }) => (
   <>
-    <FormLabel htmlFor={id} textAlign="right">
-      {name}
-    </FormLabel>
+    <Tooltip label={moreInfo} placement="bottom-end">
+      <FormLabel htmlFor={id} textAlign="right">
+        {name}
+      </FormLabel>
+    </Tooltip>
     <Menu id={id} matchWidth={true}>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
         {get().name}

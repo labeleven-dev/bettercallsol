@@ -118,7 +118,8 @@ export const TransactionOptions: React.FC = () => {
 
       <ToggleOption
         id="verify-sign-sim"
-        name="Verify signature on simulation"
+        name="Verify signature on simulation ℹ️"
+        moreInfo="The wallet will prompt for signing the transaction, even though it is a simulation."
         get={() => transactionOptions.signVerifySimulation}
         set={(x) => {
           set((state) => {
