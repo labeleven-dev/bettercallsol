@@ -23,12 +23,14 @@ import {
 } from "mappers/web3js-to-internal";
 import React from "react";
 import { FaFlask, FaPlay } from "react-icons/fa";
+import { IPubKey } from "types/internal";
 import { DEFAULT_TRANSACTION_RUN } from "utils/state";
 import { RUN_TYPES, SIMULATED_SIGNATURE } from "utils/ui-constants";
 
 export const SendButton: React.FC<{
+  startGet: (signature: IPubKey, skipPolling?: boolean) => void;
   resultsRef: React.RefObject<HTMLDivElement>;
-}> = ({ resultsRef }) => {
+}> = ({ startGet, resultsRef }) => {
   const scrollToResults = useConfigStore(
     (state) => state.appOptions.scrollToResults
   );
@@ -59,12 +61,11 @@ export const SendButton: React.FC<{
     onSimulated: (response, tranaction) => {
       setUI((state) => {
         state.transactionRun = {
-          inProgress: false, // instantenous
+          inProgress: false,
           signature: SIMULATED_SIGNATURE,
+          confirmationStatus: "simulated",
+          confirmations: 0,
           error: mapWeb3TransactionError(response.value.err),
-        };
-        // TODO returnData
-        state.simulationResults = {
           logs: response.value.logs ?? [],
           unitsConsumed: response.value.unitsConsumed,
           slot: response.context.slot,
@@ -72,22 +73,22 @@ export const SendButton: React.FC<{
             response.value,
             tranaction.message
           ),
+          // TODO returnData
         };
       });
       scrollDown();
     },
     onSent: (signature) => {
       setUI((state) => {
-        state.transactionRun = { inProgress: true, signature };
+        state.transactionRun.signature = signature;
       });
+      startGet(signature);
       scrollDown();
     },
     onError: (error) => {
       setUI((state) => {
+        state.transactionRun.inProgress = false;
         state.transactionRun.error = error.message;
-        if (runType === "simulate") {
-          state.transactionRun.signature = SIMULATED_SIGNATURE; // trigger results
-        }
       });
       scrollDown();
     },
@@ -114,8 +115,10 @@ export const SendButton: React.FC<{
           rightIcon={<Icon as={runType === "simulate" ? FaFlask : FaPlay} />}
           onClick={() => {
             setUI((state) => {
-              state.transactionRun = DEFAULT_TRANSACTION_RUN;
-              state.simulationResults = undefined;
+              state.transactionRun = {
+                ...DEFAULT_TRANSACTION_RUN,
+                inProgress: true,
+              };
             });
             if (runType === "simulate") {
               simulate(transaction);

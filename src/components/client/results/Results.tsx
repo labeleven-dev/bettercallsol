@@ -21,126 +21,31 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import { TransactionConfirmationStatus } from "@solana/web3.js";
 import { BalanceTable } from "components/client/results/BalanceTable";
 import { ProgramLogs } from "components/client/results/ProgramLogs";
 import { Signature } from "components/client/results/Signature";
 import { ErrorAlert } from "components/common/ErrorAlert";
 import { useConfigStore } from "hooks/useConfigStore";
-import { useGetWeb3Transaction } from "hooks/useGetWeb3Transaction";
-import {
-  useSessionStoreWithoutUndo,
-  useShallowSessionStoreWithoutUndo,
-} from "hooks/useSessionStore";
-import {
-  extractBalances,
-  mapWeb3TransactionError,
-} from "mappers/web3js-to-internal";
-import { useEffect, useState } from "react";
-import { IBalance } from "types/internal";
+import { useShallowSessionStoreWithoutUndo } from "hooks/useSessionStore";
+import { IPubKey } from "types/internal";
 import { SIMULATED_SIGNATURE } from "utils/ui-constants";
 
-type State = {
-  slot?: number;
-  confirmations?: number;
-  confirmationStatus?: TransactionConfirmationStatus | "simulated";
-  blockTime?: number;
-  fee?: number;
-  balances?: IBalance[];
-  error?: string;
-  logs?: string[];
-  unitsConsumed?: number;
-};
-
-export const Results = forwardRef<{}, "div">((_, ref) => {
-  const [results, setResults] = useState<State>({});
+export const Results = forwardRef<
+  {
+    startGet: (signature: IPubKey, skipPolling?: boolean) => void;
+    cancelGet: () => void;
+    endedAt?: number;
+  },
+  "div"
+>(({ startGet, cancelGet, endedAt }, ref) => {
   const finality = useConfigStore((state) => state.transactionOptions.finality);
 
-  const isSimulated = results.confirmationStatus === "simulated";
+  const [transactionRun, set] = useShallowSessionStoreWithoutUndo((state) => [
+    state.transactionRun,
+    state.set,
+  ]);
 
-  const [simulationResults, error, set] = useShallowSessionStoreWithoutUndo(
-    (state) => [state.simulationResults, state.transactionRun.error, state.set]
-  );
-
-  const setInProgress = (value: boolean) =>
-    set((state) => {
-      state.transactionRun.inProgress = value;
-    });
-
-  const {
-    signature,
-    inProgress,
-    endedAt,
-    start: startWeb3Transaction,
-    cancel: cancelWeb3Transaction,
-  } = useGetWeb3Transaction({
-    onStatus: ({ slot, confirmationStatus, confirmations, err }) => {
-      setResults({
-        ...results,
-        slot,
-        confirmationStatus,
-        confirmations: confirmations || undefined,
-        error: mapWeb3TransactionError(err),
-      });
-    },
-    onSuccess: (response) => {
-      setResults({
-        confirmationStatus: "finalized",
-        blockTime: response.blockTime || undefined,
-        slot: response.slot,
-        balances: extractBalances(response),
-        logs: response.meta?.logMessages || [],
-        error: mapWeb3TransactionError(response.meta?.err),
-        fee: response.meta?.fee,
-      });
-      setInProgress(false);
-    },
-    onTimeout: () => {
-      setInProgress(false);
-    },
-    onError: (error) => {
-      setResults({
-        ...results,
-        error: error.message,
-      });
-      setInProgress(false);
-    },
-  });
-
-  const start = (signature: string, skipPolling: boolean = false) => {
-    if (!signature) return;
-    setResults({});
-    startWeb3Transaction(signature, skipPolling);
-  };
-
-  // TODO find a different way
-  // start confirming the tranaction when signature is set
-  // by TransactionHeader component
-  useEffect(() => {
-    useSessionStoreWithoutUndo.subscribe(
-      (state) => state.transactionRun.signature,
-      (signature) => {
-        if (signature === SIMULATED_SIGNATURE) {
-          setResults({
-            confirmationStatus: "simulated",
-            confirmations: 0,
-            slot: simulationResults?.slot,
-            logs: simulationResults?.logs,
-            balances: simulationResults?.balances,
-            error,
-            unitsConsumed: simulationResults?.unitsConsumed,
-          });
-        } else {
-          start(signature);
-        }
-      }
-    );
-  });
-
-  const cancel = () => {
-    cancelWeb3Transaction();
-    setInProgress(false);
-  };
+  const isSimulated = transactionRun.signature === SIMULATED_SIGNATURE;
 
   return (
     <Grid ref={ref} pt="2" pl="5" pr="5">
@@ -148,10 +53,10 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
         <Heading mr="3" size="md">
           Results
         </Heading>
-        {results.confirmationStatus === finality ||
-        results.confirmationStatus === "finalized" ||
+        {transactionRun.confirmationStatus === finality ||
+        transactionRun.confirmationStatus === "finalized" ||
         isSimulated ? (
-          results.error ? (
+          transactionRun.error ? (
             <>
               <WarningIcon mr="1" color="red.400" />
               <Text color="red.400" fontSize="sm">
@@ -169,8 +74,8 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
             </>
           )
         ) : (
-          signature &&
-          !inProgress && (
+          transactionRun.signature &&
+          !transactionRun.inProgress && (
             <>
               <QuestionIcon mr="1" color="yellow.400" />
               <Text color="yellow.400" fontSize="sm">
@@ -191,12 +96,17 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
             </Tag>
           </Tooltip>
         )}
-        {inProgress ? (
-          <Button color="red.600" variant="outline" size="xs" onClick={cancel}>
+        {transactionRun.inProgress ? (
+          <Button
+            color="red.600"
+            variant="outline"
+            size="xs"
+            onClick={cancelGet}
+          >
             Cancel
           </Button>
         ) : (
-          signature && (
+          transactionRun.signature && (
             <Tooltip label="Refresh">
               <IconButton
                 ml="1"
@@ -205,7 +115,7 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  start(signature, true);
+                  startGet(transactionRun.signature, true);
                 }}
               />
             </Tooltip>
@@ -214,27 +124,21 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
       </Flex>
 
       <ErrorAlert
-        error={error}
+        error={transactionRun.error}
         onClose={() => {
           set((state) => {
             state.transactionRun.error = "";
           });
         }}
       />
-      <ErrorAlert
-        error={results.error}
-        onClose={() => {
-          setResults({ ...results, error: "" });
-        }}
-      />
 
       <Signature
-        signature={isSimulated ? SIMULATED_SIGNATURE : signature}
-        confirmationStatus={results.confirmationStatus}
-        confirmations={results.confirmations}
-        slot={results.slot}
-        fee={results.fee}
-        unitsConsumed={results.unitsConsumed}
+        signature={transactionRun.signature}
+        confirmationStatus={transactionRun.confirmationStatus}
+        confirmations={transactionRun.confirmations}
+        slot={transactionRun.slot}
+        fee={transactionRun.fee}
+        unitsConsumed={transactionRun.unitsConsumed}
       />
 
       <Tabs colorScheme="main" variant="enclosed">
@@ -244,10 +148,13 @@ export const Results = forwardRef<{}, "div">((_, ref) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ProgramLogs inProgress={inProgress} logs={results.logs} />
+            <ProgramLogs
+              inProgress={transactionRun.inProgress}
+              logs={transactionRun.logs}
+            />
           </TabPanel>
           <TabPanel>
-            <BalanceTable balances={results.balances || []} />
+            <BalanceTable balances={transactionRun.balances || []} />
           </TabPanel>
         </TabPanels>
       </Tabs>

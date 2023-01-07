@@ -4,7 +4,6 @@ import { Draft } from "immer";
 import {
   IPubKey,
   IRpcEndpoint,
-  ISimulationResults,
   ITransaction,
   ITransactionOptions,
   ITransactionRun,
@@ -59,7 +58,6 @@ export interface SessionStateWithUndo {
 
 export interface SessionStateWithoutUndo {
   readonly transactionRun: ITransactionRun;
-  readonly simulationResults?: ISimulationResults;
   readonly uiState: UIState;
   set: (fn: (state: Draft<SessionStateWithoutUndo>) => void) => void;
 }

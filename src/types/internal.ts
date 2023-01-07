@@ -1,7 +1,12 @@
 // The internal common model
 // Use as intermediate for other models and for tracking transaction state in the app
 
-import { Commitment, Finality, TransactionVersion } from "@solana/web3.js";
+import {
+  Commitment,
+  Finality,
+  TransactionConfirmationStatus,
+  TransactionVersion,
+} from "@solana/web3.js";
 import { IID, SortableCollection } from "./sortable";
 
 export type IPubKey = string;
@@ -127,10 +132,11 @@ export interface ITransactionRun {
   inProgress: boolean;
   signature: string; // not optional to work-around uncontrolled input issue
   error?: string;
-}
-
-export interface ISimulationResults {
   slot?: number;
+  confirmations?: number;
+  confirmationStatus?: TransactionConfirmationStatus | "simulated";
+  blockTime?: number;
+  fee?: number;
   balances?: IBalance[];
   logs?: string[];
   unitsConsumed?: number;
