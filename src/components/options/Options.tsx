@@ -29,12 +29,14 @@ export const Options: React.FC = () => {
   ]);
   const setPersistent = useConfigStore((state) => state.set);
 
+  if (!isOpen) return null;
+
   return (
     <Modal
       size="lg"
       // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
       blockScrollOnMount={false}
-      isOpen={isOpen}
+      isOpen={true}
       onClose={() => {
         setSession((state) => {
           state.uiState.optionsOpen = false;

@@ -103,7 +103,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
             <AccountAutoComplete
               chakraInputProps={{
                 id: "program-id",
-                placeholder: "Program ID",
+                placeholder: "Start typing...",
                 paddingStart: "10",
                 autoFocus: true,
               }}

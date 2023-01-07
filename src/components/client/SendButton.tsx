@@ -1,0 +1,158 @@
+import { CheckIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  ButtonGroup,
+  Icon,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from "@chakra-ui/react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useConfigStore } from "hooks/useConfigStore";
+import { useSendWeb3Transaction } from "hooks/useSendWeb3Transaction";
+import {
+  useSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
+} from "hooks/useSessionStore";
+import {
+  extractBalancesFromSimulation,
+  mapWeb3TransactionError,
+} from "mappers/web3js-to-internal";
+import React from "react";
+import { FaFlask, FaPlay } from "react-icons/fa";
+import { DEFAULT_TRANSACTION_RUN } from "utils/state";
+import { RUN_TYPES, SIMULATED_SIGNATURE } from "utils/ui-constants";
+
+export const SendButton: React.FC<{
+  resultsRef: React.RefObject<HTMLDivElement>;
+}> = ({ resultsRef }) => {
+  const scrollToResults = useConfigStore(
+    (state) => state.appOptions.scrollToResults
+  );
+  const [runType, inProgress, setUI] = useShallowSessionStoreWithoutUndo(
+    (state) => [
+      state.uiState.runType,
+      state.transactionRun.inProgress,
+      state.set,
+    ]
+  );
+  // TODO causes component reload
+  const transaction = useSessionStoreWithUndo((state) => state.transaction);
+
+  const { publicKey: walletPublicKey } = useWallet();
+
+  const scrollDown = () => {
+    if (scrollToResults) {
+      resultsRef.current?.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // send the web3 transaction/simulation
+  const { simulate, send } = useSendWeb3Transaction({
+    onSimulated: (response, tranaction) => {
+      setUI((state) => {
+        state.transactionRun = {
+          inProgress: false, // instantenous
+          signature: SIMULATED_SIGNATURE,
+          error: mapWeb3TransactionError(response.value.err),
+        };
+        // TODO returnData
+        state.simulationResults = {
+          logs: response.value.logs ?? [],
+          unitsConsumed: response.value.unitsConsumed,
+          slot: response.context.slot,
+          balances: extractBalancesFromSimulation(
+            response.value,
+            tranaction.message
+          ),
+        };
+      });
+      scrollDown();
+    },
+    onSent: (signature) => {
+      setUI((state) => {
+        state.transactionRun = { inProgress: true, signature };
+      });
+      scrollDown();
+    },
+    onError: (error) => {
+      setUI((state) => {
+        state.transactionRun.error = error.message;
+        if (runType === "simulate") {
+          state.transactionRun.signature = SIMULATED_SIGNATURE; // trigger results
+        }
+      });
+      scrollDown();
+    },
+  });
+
+  return (
+    <Tooltip
+      shouldWrapChildren
+      hasArrow={!walletPublicKey}
+      label={
+        walletPublicKey
+          ? "Run Transaction"
+          : "Please connect a wallet to continue"
+      }
+    >
+      <ButtonGroup isAttached>
+        <Button
+          isLoading={inProgress}
+          isDisabled={!walletPublicKey}
+          ml="2"
+          w="110px"
+          colorScheme="purple"
+          aria-label="Run Program"
+          rightIcon={<Icon as={runType === "simulate" ? FaFlask : FaPlay} />}
+          onClick={() => {
+            setUI((state) => {
+              state.transactionRun = DEFAULT_TRANSACTION_RUN;
+              state.simulationResults = undefined;
+            });
+            if (runType === "simulate") {
+              simulate(transaction);
+            } else {
+              send(transaction);
+            }
+          }}
+        >
+          {RUN_TYPES.find(({ id }) => id === runType)?.name}
+        </Button>
+        <Menu placement="right-start">
+          <MenuButton
+            as={IconButton}
+            minW="5"
+            mr="2"
+            variant="outline"
+            colorScheme="purple"
+            aria-label="More"
+            icon={<TriangleDownIcon w="2" />}
+          />
+          <MenuList>
+            {RUN_TYPES.map(({ id, name }, index) => (
+              <MenuItem
+                key={index}
+                icon={id === runType ? <CheckIcon /> : undefined}
+                onClick={() => {
+                  setUI((state) => {
+                    state.uiState.runType = id;
+                  });
+                }}
+              >
+                {name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+      </ButtonGroup>
+    </Tooltip>
+  );
+};

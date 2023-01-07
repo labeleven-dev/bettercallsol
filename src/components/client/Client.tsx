@@ -3,6 +3,7 @@ import { AddressLookupTables } from "components/client/AddressLookupTables";
 import { ClientHeader } from "components/client/ClientHeader";
 import { Instructions } from "components/client/Instructions";
 import { Results } from "components/client/results/Results";
+import { SendButton } from "components/client/SendButton";
 import React, { useRef } from "react";
 
 export const Client: React.FC = () => {
@@ -13,7 +14,7 @@ export const Client: React.FC = () => {
     <Grid m="2">
       <Box p="5">
         {/* TODO split ClientHeader from TransactionHeader, without causing excessive reloads */}
-        <ClientHeader resultsRef={resultsRef} />
+        <ClientHeader sendButton={<SendButton resultsRef={resultsRef} />} />
         <AddressLookupTables />
         <Instructions />
       </Box>

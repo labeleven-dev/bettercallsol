@@ -18,6 +18,8 @@ const root = ReactDOM.createRoot(container);
 
 root.render(
   <>
+    {/* TODO react-aria (used for autocomplete) does not support react 18's strict mode */}
+    {/* TODO https://reactjs.org/blog/2022/03/08/react-18-upgrade-guide.html#updates-to-strict-mode */}
     {/* TODO https://github.com/adobe/react-spectrum/issues/779 */}
     {/* <React.StrictMode> */}
     <>

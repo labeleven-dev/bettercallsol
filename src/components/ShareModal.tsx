@@ -37,12 +37,8 @@ import { mapITransactionToTransactionExt } from "mappers/internal-to-external";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 
-export const ShareModal: React.FC = () => {
-  const [isOpen, set] = useShallowSessionStoreWithoutUndo((state) => [
-    state.uiState.shareOpen,
-    state.set,
-  ]);
-  // TODO causes component reload
+const ShareModalInternal: React.FC = () => {
+  const set = useShallowSessionStoreWithoutUndo((state) => state.set);
   const [transaction, rpcEndpoint] = useShallowSessionStoreWithUndo((state) => [
     state.transaction,
     state.rpcEndpoint,
@@ -56,8 +52,6 @@ export const ShareModal: React.FC = () => {
   const { hasCopied, onCopy } = useClipboard(externalJson);
 
   useEffect(() => {
-    if (!isOpen) return;
-
     const external = mapITransactionToTransactionExt(transaction, rpcEndpoint);
 
     // encode transaction
@@ -73,14 +67,14 @@ export const ShareModal: React.FC = () => {
         new Blob([externalJson], { type: "application/json" })
       )
     );
-  }, [isOpen, transaction, rpcEndpoint, annotate, externalJson]);
+  }, [transaction, rpcEndpoint, annotate, externalJson]);
 
   return (
     <Modal
       size="xl"
       // prevent "react-remove-scroll-bar: cannot calculate scrollbar size because it is removed (overflow:hidden on body)"
       blockScrollOnMount={false}
-      isOpen={isOpen}
+      isOpen={true}
       onClose={() => {
         set((state) => {
           state.uiState.shareOpen = false;
@@ -196,4 +190,14 @@ export const ShareModal: React.FC = () => {
       </ModalContent>
     </Modal>
   );
+};
+
+// separated from actual modal so it is not re-rendered
+// in the background due to transaction updates
+export const ShareModal: React.FC = () => {
+  const isOpen = useShallowSessionStoreWithoutUndo(
+    (state) => state.uiState.shareOpen
+  );
+
+  return isOpen ? <ShareModalInternal /> : null;
 };
