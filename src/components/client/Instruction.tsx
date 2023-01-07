@@ -29,7 +29,7 @@ import { FaAnchor, FaRocket } from "react-icons/fa";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
-  const { useShallowGet, update } = useInstruction();
+  const { id, useShallowGet, update } = useInstruction();
   const [programId, description, anchorMethod, disabled, expanded] =
     useShallowGet((state) => [
       state.programId,
@@ -107,8 +107,9 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                 paddingStart: "10",
                 autoFocus: true,
               }}
-              types={["program"]}
+              types={["input", "program", "instruction"]}
               pubkey={programId}
+              updateInstructionWithId={id}
               setPubkey={(pubkey) => {
                 update((state) => {
                   state.programId = pubkey.trim();

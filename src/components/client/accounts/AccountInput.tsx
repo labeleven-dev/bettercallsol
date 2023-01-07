@@ -35,6 +35,7 @@ export const AccountInput: React.FC = () => {
       </InputLeftElement>
 
       <AccountAutoComplete
+        types={["input", "type", "program", "sysvar"]}
         chakraInputProps={{
           size: "sm",
           paddingStart: "12",

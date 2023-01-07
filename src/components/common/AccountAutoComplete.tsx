@@ -2,14 +2,18 @@ import { Badge, Flex, InputProps, Spacer, Text } from "@chakra-ui/react";
 import { Autocomplete, AutoCompleteItem } from "components/common/AutoComplete";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { WritableDraft } from "immer/dist/internal";
+import { NATIVE_INSTRUCTIONS } from "library/instructions/native";
+import { SPL_INSTRUCTIONS } from "library/instructions/spl";
 import { LOADER_IDS, programLabel, PROGRAM_INFO_BY_ID } from "library/programs";
 import { SYSVARS_BY_ID } from "library/sysvars";
-import React, { useState } from "react";
+import { mapIInstructionExtToIInstruction } from "mappers/external-to-internal";
+import React, { useMemo, useState } from "react";
 import { useFilter } from "react-aria";
 import { AccountType, IAccount, INetwork, IPubKey } from "types/internal";
+import { IID } from "types/sortable";
 import { ALL_NETWORKS } from "utils/internal";
 
-type OptionType = "input" | "type" | "program" | "sysvar";
+type OptionType = "input" | "type" | "program" | "sysvar" | "instruction";
 
 interface Option {
   label: string;
@@ -20,31 +24,46 @@ interface Option {
 }
 
 // TODO needs to be refactored to handle program ID auto-complete
+// TODO can we cache the autocomplete items, rather than creating them for each component?
 
 /**
  * Action box for accounts
  */
 export const AccountAutoComplete: React.FC<{
+  types: OptionType[];
   pubkey: IPubKey;
   setPubkey: (pubkey: IPubKey) => void;
   updateAccount?: (fn: (state: WritableDraft<IAccount>) => void) => void;
-  types?: OptionType[];
+  updateInstructionWithId?: IID;
   chakraInputProps?: InputProps;
-}> = ({ pubkey, setPubkey, updateAccount, types, chakraInputProps }) => {
-  const [options, setOptions] = useState(OPTIONS);
+}> = ({
+  pubkey,
+  setPubkey,
+  updateAccount,
+  updateInstructionWithId,
+  types,
+  chakraInputProps,
+}) => {
+  const availableOptions = useMemo(
+    () => OPTIONS.filter((option) => types.includes(option.type)),
+    []
+  );
+  const [options, setOptions] = useState<Option[]>(availableOptions);
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null);
 
   let { contains, startsWith } = useFilter({ sensitivity: "base" });
-  const network = useSessionStoreWithUndo((state) => state.rpcEndpoint.network);
+  const [network, setTransaction] = useSessionStoreWithUndo((state) => [
+    state.rpcEndpoint.network,
+    state.set,
+  ]);
 
   const onInputChange = (v: string) => {
     setPubkey(v);
 
     // TODO check network
-    const matching = OPTIONS.filter(
-      ({ type, label, secondaryLabel = "" }) =>
-        (!types || types.includes(type)) &&
-        (contains(label, v) || startsWith(secondaryLabel, v))
+    const matching = availableOptions.filter(
+      ({ label, secondaryLabel = "" }) =>
+        contains(label, v) || startsWith(secondaryLabel, v)
     );
     setOptions(
       matching.length > 0
@@ -94,6 +113,17 @@ export const AccountAutoComplete: React.FC<{
           };
         });
       }
+    } else if (type == "instruction") {
+      setPubkey("");
+      if (updateInstructionWithId) {
+        const library = value.startsWith("SPL.")
+          ? SPL_INSTRUCTIONS
+          : NATIVE_INSTRUCTIONS;
+        setTransaction((state) => {
+          state.transaction.instructions.map[updateInstructionWithId] =
+            mapIInstructionExtToIInstruction(library[value].instruction);
+        });
+      }
     }
   };
 
@@ -121,6 +151,8 @@ export const AccountAutoComplete: React.FC<{
                   ? "purple"
                   : type === "sysvar"
                   ? "blue"
+                  : type === "instruction"
+                  ? "pink"
                   : type === "input"
                   ? "orange"
                   : undefined
@@ -174,23 +206,36 @@ const OPTIONS: Option[] = [
   },
 ]
   .concat(
-    Object.entries(PROGRAM_INFO_BY_ID)
-      .map(([address, { name, deployments }]) => ({
+    Object.entries({ ...NATIVE_INSTRUCTIONS, ...SPL_INSTRUCTIONS }).map(
+      ([id, { program, instruction }]) => ({
+        label: instruction.name,
+        secondaryLabel: program,
+        value: id,
+        type: "instruction",
+        available: ALL_NETWORKS,
+      })
+    )
+  )
+  .concat(
+    Object.entries(PROGRAM_INFO_BY_ID).map(
+      ([address, { name, deployments }]) => ({
         label: name,
         secondaryLabel: address,
         value: address,
         type: "program",
         available: deployments,
+      })
+    )
+  )
+  .concat(
+    Object.entries(LOADER_IDS)
+      .map(([address, name]) => ({
+        label: name,
+        secondaryLabel: address,
+        value: address,
+        type: "program",
+        available: ALL_NETWORKS,
       }))
-      .concat(
-        Object.entries(LOADER_IDS).map(([address, name]) => ({
-          label: name,
-          secondaryLabel: address,
-          value: address,
-          type: "program",
-          available: ALL_NETWORKS,
-        }))
-      )
       .sort((a, b) => a.label.localeCompare(b.label))
   )
   .concat(
