@@ -67,7 +67,7 @@ export interface IInstrctionDataField {
 
 export type DataFormat = "raw" | "bufferLayout" | "borsh";
 
-export type RawEncoding = "hex" | "bs58";
+export type RawEncoding = "hex" | "bs58" | "utf8";
 
 export interface IInstructionDataRaw {
   content: string;

@@ -69,6 +69,7 @@ message Transaction {
                 enum Encoding {
                     HEX = 0;
                     BS58 = 1;
+                    UTF8 = 2;
                 }
                 Encoding encoding = 1;
 

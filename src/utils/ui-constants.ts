@@ -60,6 +60,7 @@ export const FORMAT_DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> =
       "i64",
       "bool",
       "publicKey",
+      "bytes",
       "string",
       "unsupported",
     ],
@@ -75,7 +76,6 @@ export const FORMAT_DATA_TYPES: Record<DataFormat, InstructionDataFieldType[]> =
       "f32",
       "f64",
       "bool",
-      "bytes",
       "publicKey",
       // TODO underbaked - needs to support various types of String encodings
       // "string",

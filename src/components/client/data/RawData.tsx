@@ -12,6 +12,7 @@ import bs58 from "bs58";
 import { Description } from "components/common/Description";
 import { useInstruction } from "hooks/useInstruction";
 import React from "react";
+import { RawEncoding } from "types/internal";
 
 export const RawData: React.FC = () => {
   const { useShallowGet, update } = useInstruction();
@@ -23,42 +24,43 @@ export const RawData: React.FC = () => {
 
   const toast = useToast();
 
-  const onChange = (encoding: string) => {
-    if (encoding === "bs58") {
-      const encoded = bs58.encode(Buffer.from(content, "hex"));
-
-      if (content.length !== 0 && encoded.length === 0) {
-        toast({
-          title: "Invalid raw data",
-          description: "This is not a valid hexadecimal string.",
-          status: "error",
-          isClosable: true,
-        });
-        return;
+  const onChange = (targetEncoding: RawEncoding) => {
+    try {
+      let encoded: string;
+      if (encoding === "hex") {
+        const buffer = Buffer.from(content, "hex");
+        if (targetEncoding === "bs58") {
+          encoded = bs58.encode(buffer);
+          if (content.length !== 0 && encoded.length === 0) {
+            throw new Error("Invalid bs58 string");
+          }
+        } else if (targetEncoding === "utf8") {
+          encoded = buffer.toString("utf-8");
+        }
+      } else if (encoding === "bs58") {
+        const buffer = Buffer.from(bs58.decode(content));
+        encoded = buffer.toString(targetEncoding as BufferEncoding);
+      } else if (encoding === "utf8") {
+        const buffer = Buffer.from(content, "utf-8");
+        if (targetEncoding === "hex") {
+          encoded = buffer.toString("hex");
+        } else if (targetEncoding === "bs58") {
+          encoded = bs58.encode(buffer);
+        }
       }
 
       update((state) => {
         state.data.raw.content = encoded;
-        state.data.raw.encoding = "bs58";
+        state.data.raw.encoding = targetEncoding;
       });
-    }
-
-    if (encoding === "hex") {
-      try {
-        const encoded = Buffer.from(bs58.decode(content)).toString("hex");
-        update((state) => {
-          state.data.raw.content = encoded;
-          state.data.raw.encoding = "hex";
-        });
-      } catch (e) {
-        toast({
-          title: "Invalid raw data",
-          description: "This is not a valid base 58-encoded string.",
-          status: "error",
-          isClosable: true,
-        });
-        return;
-      }
+    } catch (e) {
+      toast({
+        title: "Invalid raw data",
+        description: `This is not a valid ${targetEncoding} string.`,
+        status: "error",
+        isClosable: true,
+      });
+      return;
     }
   };
 
@@ -76,6 +78,7 @@ export const RawData: React.FC = () => {
           <Stack direction="row">
             <Radio value="bs58">Base 58</Radio>
             <Radio value="hex">Hex</Radio>
+            <Radio value="utf8">UTF-8</Radio>
           </Stack>
         </RadioGroup>
       </Flex>
@@ -83,11 +86,7 @@ export const RawData: React.FC = () => {
       <Textarea
         flex="1"
         fontFamily="mono"
-        placeholder={
-          encoding === "hex"
-            ? "Instruction data (hex)"
-            : "Instruction data (base58 encoded)"
-        }
+        placeholder="Instruction data"
         value={content}
         onChange={(e) => {
           update((state) => {

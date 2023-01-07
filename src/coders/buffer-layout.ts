@@ -5,6 +5,7 @@ import { IInstrctionDataField } from "types/internal";
 
 export class BufferLayoutCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {
+    // TODO non-unique name is used for layout names - makes errors more user-friendly than id
     const layout = BufferLayout.struct<any>(fields.map(mapToLayout));
 
     const values = fields.reduce((acc, { name, type, value }) => {

@@ -10,7 +10,7 @@ import {
 import { INetwork } from "types/internal";
 import { ALL_NETWORKS, LIVE_NETWORKS } from "utils/internal";
 
-// Copied and modified from https://github.com/solana-labs/solana/blob/adcc36da8e1961e2730c926b77faede12c9c5407/explorer/src/utils/tx.ts
+// Copied and modified from https://github.com/solana-labs/solana/blob/43a0745b37b2f7ba5643ca5d0bd865b82bcb886c/explorer/src/utils/tx.ts
 
 export const programLabel = (
   address: string,
@@ -52,7 +52,6 @@ export enum PROGRAM_NAMES {
 
   // other
   ACUMEN = "Acumen Program",
-  BONFIDA_POOL = "Bonfida Pool Program",
   BREAK_SOLANA = "Break Solana Program",
   CHAINLINK_ORACLE = "Chainlink OCR2 Oracle Program",
   CHAINLINK_STORE = "Chainlink Store Program",
@@ -90,15 +89,20 @@ export enum PROGRAM_NAMES {
   SERUM_2 = "Serum Dex Program v2",
   SERUM_3 = "Serum Dex Program v3",
   SERUM_SWAP = "Serum Swap Program",
+  SERUM_POOL = "Serum Pool",
   SOLEND = "Solend Program",
   SOLIDO = "Lido for Solana Program",
   STEP_SWAP = "Step Finance Swap Program",
   SWIM_SWAP = "Swim Swap Program",
   SWITCHBOARD = "Switchboard Oracle Program",
   WORMHOLE = "Wormhole",
+  WORMHOLE_CORE = "Wormhole Core Bridge",
+  WORMHOLE_TOKEN = "Wormhole Token Bridge",
+  WORMHOLE_NFT = "Wormhole NFT Bridge",
   SOLANART = "Solanart",
   SOLANART_GO = "Solanart - Global offers",
   STEPN_DEX = "STEPN Dex",
+  OPENBOOK_DEX = "OpenBook Dex",
 }
 
 export type ProgramInfo = {
@@ -195,7 +199,7 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     deployments: ["mainnet-beta"],
   },
   WvmTNLpGMVbwJVYztYL4Hnsy82cJhQorxjnnXcRm3b6: {
-    name: PROGRAM_NAMES.BONFIDA_POOL,
+    name: PROGRAM_NAMES.SERUM_POOL,
     deployments: ["mainnet-beta"],
   },
   BrEAK7zGZ6dM71zUDACDqJnekihmwF15noTddWTsknjC: {
@@ -370,6 +374,30 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     name: PROGRAM_NAMES.WORMHOLE,
     deployments: ["mainnet-beta"],
   },
+  worm2ZoG2kUd4vFXhvjh93UUH596ayRfgQ2MgjNMTth: {
+    name: PROGRAM_NAMES.WORMHOLE_CORE,
+    deployments: ["mainnet-beta"],
+  },
+  "3u8hJUVTA4jH1wYAyUur7FFZVQ8H635K3tSHHF4ssjQ5": {
+    name: PROGRAM_NAMES.WORMHOLE_CORE,
+    deployments: ["devnet"],
+  },
+  wormDTUJ6AWPNvk59vGQbDvGJmqbDTdgWgAqcLBCgUb: {
+    name: PROGRAM_NAMES.WORMHOLE_TOKEN,
+    deployments: ["mainnet-beta"],
+  },
+  DZnkkTmCiFWfYTfT41X3Rd1kDgozqzxWaHqsw6W4x2oe: {
+    name: PROGRAM_NAMES.WORMHOLE_TOKEN,
+    deployments: ["devnet"],
+  },
+  WnFt12ZrnzZrFZkt2xsNsaNWoQribnuQ5B5FrDbwDhD: {
+    name: PROGRAM_NAMES.WORMHOLE_NFT,
+    deployments: ["mainnet-beta"],
+  },
+  "2rHhojZ7hpu1zA91nvZmT8TqWWvMcKmmNBCr2mKTtMq4": {
+    name: PROGRAM_NAMES.WORMHOLE_NFT,
+    deployments: ["devnet"],
+  },
   CJsLwbP1iu5DuUikHEJnLfANgKy6stB2uFgvBBHoyxwz: {
     name: PROGRAM_NAMES.SOLANART,
     deployments: ["mainnet-beta"],
@@ -380,6 +408,10 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
   },
   Dooar9JkhdZ7J3LHN3A7YCuoGRUggXhQaG4kijfLGU2j: {
     name: PROGRAM_NAMES.STEPN_DEX,
+    deployments: ["mainnet-beta"],
+  },
+  srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX: {
+    name: PROGRAM_NAMES.OPENBOOK_DEX,
     deployments: ["mainnet-beta"],
   },
 };

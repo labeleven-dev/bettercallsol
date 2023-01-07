@@ -77,6 +77,7 @@ export const mapRawEncodingToProtobuf: Record<
 > = {
   hex: ProtoRawEncoding.HEX,
   bs58: ProtoRawEncoding.BS58,
+  utf8: ProtoRawEncoding.UTF8,
 };
 export const mapProtobufToRawEncoding: Record<
   protobuf.Transaction.Instruction.Data.DataRaw.Encoding,

@@ -34,17 +34,17 @@ export const mapITransactionToWeb3Instructions = ({
         } else if (data.format === "raw" && data.raw.content) {
           if (data.raw.encoding === "hex") {
             buffer = Buffer.from(data.raw.content, "hex");
-          } else {
+          } else if (data.raw.encoding == "bs58") {
             buffer = Buffer.from(bs58.decode(data.raw.content));
+          } else {
+            buffer = Buffer.from(data.raw.content, "utf-8");
           }
         }
       } catch (err) {
         const message = Object.getOwnPropertyNames(err).includes("message")
           ? (err as { message: string }).message
           : JSON.stringify(err);
-        throw new Error(
-          `Error at Instruction #${index + 1}: ${message} in Data`
-        );
+        throw new Error(`Error at Instruction #${index + 1} Data: ${message}`);
       }
 
       // accounts
@@ -56,11 +56,9 @@ export const mapITransactionToWeb3Instructions = ({
               return new PublicKey(pubkey);
             } else {
               throw new Error(
-                `Error at Instruction #${
-                  index + 1
-                }: Invalid public key input ${pubkey} in Accounts #${
+                `Error at Instruction #${index + 1} Account #${
                   keyIdx + 1
-                }`
+                }: Invalid public key: ${pubkey}`
               );
             }
           })(),
@@ -78,7 +76,7 @@ export const mapITransactionToWeb3Instructions = ({
               throw new Error(
                 `Error at Instruction #${
                   index + 1
-                }: Invalid program id ${programId}`
+                }: Invalid program ID: ${programId}`
               );
             }
           })(),
