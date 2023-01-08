@@ -83,27 +83,32 @@ export const TransactionAccountSummary: React.FC<
 
   return (
     <>
-      <Flex {...theRest} alignItems="center">
-        <Tooltip label="Static accounts">
-          <Flex>
-            <AccountIcon />
-            <Text ml="2" mr="6" fontSize="sm">
-              Static
-            </Text>
-          </Flex>
-        </Tooltip>
+      {staticKeys > 0 && (
+        <Flex {...theRest} alignItems="center">
+          <Tooltip label="Static accounts">
+            <Flex>
+              <AccountIcon />
+              <Text ml="2" mr="6" fontSize="sm">
+                Static
+              </Text>
+            </Flex>
+          </Tooltip>
 
-        <Wrap spacing={1}>
-          {staticTags.map(({ label, tooltip, count, colourScheme }, index) => (
-            <Tooltip key={index} label={tooltip}>
-              <Tag mr="1" size="sm" colorScheme={colourScheme}>
-                {label}: {count}
-              </Tag>
-            </Tooltip>
-          ))}
-        </Wrap>
-      </Flex>
-      {lookupTags && (
+          <Wrap spacing={1}>
+            {staticTags.map(
+              ({ label, tooltip, count, colourScheme }, index) => (
+                <Tooltip key={index} label={tooltip}>
+                  <Tag mr="1" size="sm" colorScheme={colourScheme}>
+                    {label}: {count}
+                  </Tag>
+                </Tooltip>
+              )
+            )}
+          </Wrap>
+        </Flex>
+      )}
+
+      {lookupTables > 0 && (
         <Flex {...theRest} alignItems="center">
           <Tooltip label="Looked-up Accounts">
             <Flex>
