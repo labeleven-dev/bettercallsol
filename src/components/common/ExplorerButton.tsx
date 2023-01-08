@@ -12,6 +12,7 @@ import { useConfigStore } from "hooks/useConfigStore";
 import React from "react";
 import { INetwork, IRpcEndpoint } from "types/internal";
 import { Explorer } from "types/state";
+import { short } from "utils/web3js";
 
 export type AddressType = "tx" | "account";
 
@@ -35,7 +36,11 @@ const explorerOpts: Record<
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
         rpcEndpoint.custom ? "custom" : rpcEndpoint.network
-      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
+      }${
+        rpcEndpoint.custom
+          ? "&customUrl=" + encodeURIComponent(rpcEndpoint.url)
+          : ""
+      }`,
   },
   solanafm: {
     label: "Open in SolanaFM",
@@ -45,7 +50,7 @@ const explorerOpts: Record<
         valueType === "account" ? "address" : valueType
       }/${value}?cluster=${
         rpcEndpoint.custom
-          ? rpcEndpoint.url
+          ? encodeURIComponent(rpcEndpoint.url)
           : rpcEndpoint.network === "devnet"
           ? "devnet-qn1"
           : rpcEndpoint.network === "testnet"
@@ -71,7 +76,11 @@ const explorerOpts: Record<
     url: (valueType, value, rpcEndpoint) =>
       `https://solscan.io/${valueType}/${value}?cluster=${
         rpcEndpoint.custom ? "custom" : rpcEndpoint.network
-      }${rpcEndpoint.custom ? "&customUrl=" + rpcEndpoint.url : ""}`,
+      }${
+        rpcEndpoint.custom
+          ? "&customUrl=" + encodeURIComponent(rpcEndpoint.url)
+          : ""
+      }`,
   },
 };
 
@@ -80,6 +89,7 @@ export const ExplorerButton: React.FC<
     value: string;
     valueType: AddressType;
     rpcEndpoint: IRpcEndpoint;
+    variant: "button" | "long-link" | "short-link";
   } & Omit<ButtonProps, "aria-label">
 > = ({
   value,
@@ -101,10 +111,11 @@ export const ExplorerButton: React.FC<
 
   return (
     <Tooltip label={opts.label} isDisabled={disabled}>
-      {variant === "link" ? (
+      {variant === "long-link" || variant === "short-link" ? (
         children || (
           <Button as={Link} variant="link" href={href} isExternal {...theRest}>
-            {value} <ExternalLinkIcon ml="1" />
+            {variant === "short-link" ? short(value) : value}{" "}
+            <ExternalLinkIcon ml="1" />
           </Button>
         )
       ) : (

@@ -62,7 +62,7 @@ export const BalanceTable: React.FC<{
                       value={address}
                       valueType="account"
                       rpcEndpoint={rpcEndpoint}
-                      variant="link"
+                      variant="long-link"
                       fontFamily="mono"
                       fontWeight="normal"
                       fontSize="sm"
