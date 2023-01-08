@@ -64,11 +64,12 @@ export const App: React.FC = () => {
               <Tooltip label={paletteOpen ? "Close side-bar" : "Open side-bar"}>
                 <IconButton
                   position="absolute"
-                  top="140px"
+                  top="85px"
                   right="0"
                   rounded="none"
                   roundedBottomLeft="md"
                   roundedTopLeft="md"
+                  colorScheme="purple"
                   aria-label={paletteOpen ? "Close side-bar" : "Open side-bar"}
                   icon={
                     paletteOpen ? (

@@ -234,8 +234,14 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
         <EditableName
           tooltip="Click to edit"
           tooltipProps={{ placement: "bottom-start" }}
-          previewProps={{ p: "3px 10px 3px 10px" }}
-          inputProps={{ p: "3px 10px 3px 10px" }}
+          previewProps={{
+            p: "3px 10px 3px 10px",
+            mr: "12", // to avoid collision with sidebar button
+          }}
+          inputProps={{
+            p: "3px 10px 3px 10px",
+            mr: "12", // to avoid collision with sidebar buttons
+          }}
           placeholder="Unnamed Transaction"
           value={transactionName}
           onChange={(value) =>
