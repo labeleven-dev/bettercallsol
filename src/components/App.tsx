@@ -61,30 +61,36 @@ export const App: React.FC = () => {
             <Box flex="2" overflow="scroll" position="relative">
               <Client />
 
-              <Tooltip label={paletteOpen ? "Close side-bar" : "Open side-bar"}>
-                <IconButton
-                  position="absolute"
-                  top="85px"
-                  right="0"
-                  rounded="none"
-                  roundedBottomLeft="md"
-                  roundedTopLeft="md"
-                  colorScheme="purple"
-                  aria-label={paletteOpen ? "Close side-bar" : "Open side-bar"}
-                  icon={
-                    paletteOpen ? (
-                      <Icon as={FaChevronRight} />
-                    ) : (
-                      <Icon as={FaChevronLeft} />
-                    )
-                  }
-                  onClick={() => {
-                    setUI((state) => {
-                      state.uiState.paletteOpen = !paletteOpen;
-                    });
-                  }}
-                />
-              </Tooltip>
+              <Hide below="md">
+                <Tooltip
+                  label={paletteOpen ? "Close side-bar" : "Open side-bar"}
+                >
+                  <IconButton
+                    position="absolute"
+                    top="85px"
+                    right="0"
+                    rounded="none"
+                    roundedBottomLeft="md"
+                    roundedTopLeft="md"
+                    colorScheme="purple"
+                    aria-label={
+                      paletteOpen ? "Close side-bar" : "Open side-bar"
+                    }
+                    icon={
+                      paletteOpen ? (
+                        <Icon as={FaChevronRight} />
+                      ) : (
+                        <Icon as={FaChevronLeft} />
+                      )
+                    }
+                    onClick={() => {
+                      setUI((state) => {
+                        state.uiState.paletteOpen = !paletteOpen;
+                      });
+                    }}
+                  />
+                </Tooltip>
+              </Hide>
             </Box>
 
             {paletteOpen && (

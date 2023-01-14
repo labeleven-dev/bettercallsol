@@ -1,6 +1,5 @@
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { BraveWalletAdapter } from "@solana/wallet-adapter-brave";
-import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import {
   ConnectionProvider,
@@ -29,7 +28,6 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
   const wallets = useMemo(
     () => [
       new BraveWalletAdapter(),
-      new GlowWalletAdapter(),
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter({
         network: rpcEndpoint.network as WalletAdapterNetwork,

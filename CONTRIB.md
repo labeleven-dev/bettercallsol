@@ -7,8 +7,9 @@ Overview
 | Component | Library
 |--|--
 | Program Language | TypeScript
-| Front-end | React via create-react-app
+| Front-end | React via Vite.js
 | UI Components | Chakra UI
+| State Management | Zustand
 | Web3 Client | Solana Web3.js & Anchor TypeScript Client
 | Code style | Prettier
 

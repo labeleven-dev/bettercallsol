@@ -1,6 +1,6 @@
 import { ColorModeScript } from "@chakra-ui/react";
 import * as Sentry from "@sentry/react";
-import { App } from "App";
+import { App } from "components/App";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "reportWebVitals";
