@@ -83,6 +83,7 @@ export const AccountInput: React.FC = () => {
             )}
             <ExplorerButton
               size="xs"
+              variant="button"
               valueType="account"
               value={pubkey}
               rpcEndpoint={rpcEndpoint}

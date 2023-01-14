@@ -48,6 +48,7 @@ export const Signature: React.FC<{
         <CopyButton size="xs" isDisabled={!signature} value={signature} />
         <ExplorerButton
           size="xs"
+          variant="button"
           valueType="tx"
           isDisabled={!signature || signature === SIMULATED_SIGNATURE}
           value={signature}

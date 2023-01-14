@@ -152,6 +152,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
                 )}
               <ExplorerButton
                 size="sm"
+                variant="button"
                 valueType="account"
                 value={programId}
                 rpcEndpoint={rpcEndpoint}

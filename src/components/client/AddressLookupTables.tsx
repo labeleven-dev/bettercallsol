@@ -105,6 +105,7 @@ export const AddressLookupTables: React.FC = () => {
                 {isValidPublicKey(address) && (
                   <ExplorerButton
                     size="xs"
+                    variant="button"
                     valueType="account"
                     value={address}
                     rpcEndpoint={rpcEndpoint}
