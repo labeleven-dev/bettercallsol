@@ -5,14 +5,18 @@ import {
   Tooltip,
   useClipboard,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 export const CopyButton: React.FC<
   {
     value: string;
   } & Omit<IconButtonProps, "aria-label">
 > = ({ value, ...theRest }) => {
-  const { hasCopied, onCopy } = useClipboard(value);
+  const { hasCopied, onCopy, setValue } = useClipboard("");
+
+  useEffect(() => {
+    setValue(value);
+  }, [value]);
 
   return (
     <Tooltip label="Copy to Clipboard">

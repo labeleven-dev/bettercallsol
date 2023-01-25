@@ -44,12 +44,11 @@ const ShareModalInternal: React.FC = () => {
     state.rpcEndpoint,
   ]);
 
-  const [externalJson, setExternalJson] = useState("");
   const [encodedUrl, setEncodedUrl] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [annotate, setAnnotate] = useState(false);
 
-  const { hasCopied, onCopy } = useClipboard(externalJson);
+  const { hasCopied, onCopy, setValue: setExternalJsonCopy } = useClipboard("");
 
   useEffect(() => {
     const external = mapITransactionToTransactionExt(transaction, rpcEndpoint);
@@ -61,13 +60,14 @@ const ShareModalInternal: React.FC = () => {
     );
 
     // create download URL
-    setExternalJson(JSON.stringify(external));
+    const externalJson = JSON.stringify(external);
+    setExternalJsonCopy(externalJson);
     setDownloadUrl(
       URL.createObjectURL(
         new Blob([externalJson], { type: "application/json" })
       )
     );
-  }, [transaction, rpcEndpoint, annotate, externalJson]);
+  }, [transaction, rpcEndpoint, annotate]);
 
   return (
     <Modal
