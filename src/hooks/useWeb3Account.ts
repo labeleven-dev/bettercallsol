@@ -47,22 +47,13 @@ export const useWeb3Account = (
     const fetch = async () => {
       setAccountInfo({ status: "inProgress" });
       const pubkey = new PublicKey(address);
-      const accountInfo = await activeConnection.getAccountInfo(pubkey);
+      const idlAddr = await idlAddress(pubkey);
 
-      let label = undefined;
-      let hasIdl = false;
-      let verified = null;
+      const [accountInfo, idlAccountInfo] =
+        await activeConnection.getMultipleAccountsInfo([pubkey, idlAddr]);
+
+      let aprVerified = null;
       if (accountInfo?.executable) {
-        // get program label
-        label = programLabel(address, activeRpcEndpoint.network);
-
-        // check if program has IDL
-        const idlAddr = await idlAddress(pubkey);
-        const idlAccountInfo = await activeConnection.getAccountInfo(idlAddr);
-        if (idlAccountInfo) {
-          hasIdl = true;
-        }
-
         // check if program in apr.dev
         const response = await axios.get(
           `https://anchor.projectserum.com/api/v0/program/${address}/latest?limit=1`
@@ -70,7 +61,7 @@ export const useWeb3Account = (
         if (response?.status === 200 && response.data?.length > 0) {
           const build: { aborted: boolean; state: string; verified: string } =
             response.data[0];
-          verified =
+          aprVerified =
             !build.aborted &&
             build.state === "Built" &&
             build.verified === "Verified";
@@ -80,16 +71,16 @@ export const useWeb3Account = (
         status: "fetched",
         exists: accountInfo !== null,
         executable: accountInfo?.executable || false,
-        label,
-        hasIdl,
-        aprVerified: verified,
+        label: programLabel(address, activeRpcEndpoint.network),
+        hasIdl: idlAccountInfo !== undefined,
+        aprVerified,
       });
     };
 
     fetch().catch((e) => {
       sentryCaptureException(e);
     });
-  }, [address, activeConnection, activeRpcEndpoint]);
+  }, [address, activeRpcEndpoint]); // TODO activeConnection causes a refresh
 
   return accountInfo;
 };
