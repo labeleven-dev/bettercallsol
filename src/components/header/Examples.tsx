@@ -79,6 +79,13 @@ export const Example: React.FC = () => {
       <MenuList fontSize="md" zIndex="modal">
         <MenuItem
           onClick={() => {
+            loadExample("memoV2Program");
+          }}
+        >
+          SPL Memo v2
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             loadExample("systemProgramTransfer");
           }}
         >

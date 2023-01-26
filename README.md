@@ -5,6 +5,9 @@
     <h3>The Missing Solana Client</h3>
     <p><i>For when you have had enough glass...</i></p>
     <p>
+      <a href="https://github.com/labeleven-dev/bettercallsol/actions/workflows/deploy.yml">
+        <img alt="Deploy" src="https://github.com/labeleven-dev/bettercallsol/actions/workflows/deploy.yml/badge.svg">
+      </a>
       <a href="https://github.com/labeleven-dev/bettercallsol/discussions">
         <img alt="Join the community on GitHub Discussions" src="https://img.shields.io/badge/Join%20the%20community-on%20GitHub%20Discussions-blue">
       </a>
@@ -17,15 +20,15 @@ Features
 
 Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://solana.com/).
 
-* [x] Compose and send basic transactions
+* [x] Compose and send Solana transactions
 * [x] Easily switch between networks
 * [x] Define instruction data in raw, Buffer Layout and Borsh formats
 * [x] Basic Anchor support
 * [x] Import transactions from the chain
 * [x] Share transactions with others
 * [x] Connect your favourite Solana wallet
-* [x] Open accounts and transactions in your favourite explorer
-* [x] Airdrop SOLs to accounts
+* [x] Use your favourite Solana explorer
+* [x] Airdrop SOLs
 * [x] Generate PDAs
 
 See [GitHub issues](https://github.com/labeleven-dev/bettercallsol/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the upcoming features.

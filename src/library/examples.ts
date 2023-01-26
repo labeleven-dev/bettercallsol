@@ -3,6 +3,35 @@ import { ITransactionExt } from "types/external";
 // TODO add an Anchor example
 
 export const EXAMPLES: Record<string, ITransactionExt> = {
+  memoV2Program: {
+    version: "1.0.0",
+    txnVersion: "0",
+    network: "devnet",
+    name: "Memo v2",
+    description: `Send a memo to the chain, using [Memo v2 SPL program](https://spl.solana.com/memo).
+
+1. Connect a wallet (preferably a burner wallet) using the button at the top right
+1. Update the instruction body if you want
+1. Send!
+    `,
+    addressLookupTables: [],
+    instructions: [
+      {
+        name: "Memo v2",
+        programId: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+        description: `Programs are called as part of an instruction, along with relevant accounts and instruction data.`,
+        accounts: [],
+        data: {
+          format: "raw",
+          value: {
+            encoding: "utf8",
+            content: "Hello World",
+            description: "Content of the memo",
+          },
+        },
+      },
+    ],
+  },
   systemProgramCreateAccount: {
     version: "1.0.0",
     txnVersion: "0",
