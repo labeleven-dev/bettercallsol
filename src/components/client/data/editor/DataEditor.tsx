@@ -16,7 +16,7 @@ import React from "react";
 import { DataFormat, IInstrctionDataField } from "types/internal";
 import { IID, SortableCollection } from "types/sortable";
 import { newDataField } from "utils/internal";
-import { addTo } from "utils/sortable";
+import { appendTo } from "utils/sortable";
 
 export const InstructionDataFieldContext = React.createContext<IID>("");
 
@@ -77,7 +77,7 @@ export const DataEditor: React.FC<{
             variant="ghost"
             size="sm"
             onClick={() => {
-              updateFields((state) => addTo(state, newDataField()));
+              updateFields((state) => appendTo(state, newDataField()));
             }}
           />
         </Tooltip>

@@ -16,7 +16,7 @@ import { InstructionAccountSummary } from "components/palette/preview/Instructio
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
 import { IInstructionPreview, PreviewSource } from "types/preview";
-import { addTo } from "utils/sortable";
+import { appendTo } from "utils/sortable";
 import { short } from "utils/web3js";
 
 export const InstructionPreview: React.FC<{
@@ -65,7 +65,7 @@ export const InstructionPreview: React.FC<{
               icon={<AddIcon />}
               onClick={() => {
                 set((state) => {
-                  addTo(
+                  appendTo(
                     state.transaction.instructions,
                     mapIInstructionPreviewToIInstruction(instruction, source)
                   );

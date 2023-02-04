@@ -13,7 +13,7 @@ import { useShallowSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
 import { IID } from "types/sortable";
 import { newInstruction } from "utils/internal";
-import { addTo } from "utils/sortable";
+import { appendTo } from "utils/sortable";
 
 export const InstructionContext = React.createContext("");
 
@@ -58,7 +58,7 @@ export const Instructions: React.FC = () => {
           variant="ghost"
           onClick={() => {
             set((state) => {
-              addTo(state.transaction.instructions, newInstruction());
+              appendTo(state.transaction.instructions, newInstruction());
             });
           }}
         />

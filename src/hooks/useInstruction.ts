@@ -18,6 +18,7 @@ export const useInstruction = (): {
   useGet: <U>(select: (instruction: IInstruction) => U) => U;
   useShallowGet: <U>(select: (instruction: IInstruction) => U) => U;
   update: (fn: (state: WritableDraft<IInstruction>) => void) => void;
+  set: (instruction: IInstruction) => void;
   reset: () => void;
 } => {
   const id = useContext(InstructionContext);
@@ -39,6 +40,12 @@ export const useInstruction = (): {
     });
   };
 
+  const setInstruction = (instruction: IInstruction) => {
+    set((state) => {
+      state.transaction.instructions.map[id] = instruction;
+    });
+  };
+
   const reset = () => {
     set((state) => {
       state.transaction.instructions.map[id] = {
@@ -54,6 +61,7 @@ export const useInstruction = (): {
     useGet,
     useShallowGet,
     update,
+    set: setInstruction,
     reset,
   };
 };

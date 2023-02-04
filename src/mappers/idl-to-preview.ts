@@ -9,7 +9,7 @@ import { IAccountExt, IInstrctionDataFieldExt } from "types/external";
 import { IPubKey, IRpcEndpoint } from "types/internal";
 import { IInstructionPreview, IPreview, PreviewSource } from "types/preview";
 
-const mapIdlAccountItemToIAccountExt = (
+export const mapIdlAccountItemToIAccountExt = (
   account: IdlAccountItem
 ): IAccountExt | null => {
   if (Object.keys(account).includes("isMut")) {
@@ -27,7 +27,7 @@ const mapIdlAccountItemToIAccountExt = (
   }
 };
 
-const mapIdlInstructionToIInstructionPreview = (
+export const mapIdlInstructionToIInstructionPreview = (
   { name, accounts, args }: IdlInstruction,
   programId: IPubKey
 ): IInstructionPreview => {

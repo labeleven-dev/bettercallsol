@@ -1,7 +1,8 @@
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import * as Borsh from "@project-serum/borsh";
 import { PublicKey } from "@solana/web3.js";
 import { Coder } from "coders";
-import { IInstrctionDataField } from "types/internal";
+import { IInstrctionDataField, IInstructionDataRaw } from "types/internal";
 
 export class BorshCoder implements Coder {
   encode(fields: IInstrctionDataField[]): Buffer {
@@ -26,6 +27,23 @@ export class BorshCoder implements Coder {
     const buffer = Buffer.alloc(1000);
     const length = layout.encode(values, buffer);
     return buffer.slice(0, length);
+  }
+
+  decodeFromRaw(
+    { content, encoding }: IInstructionDataRaw,
+    fields: IInstrctionDataField[]
+  ): IInstrctionDataField[] {
+    // TODO non-unique name is used for layout names - makes errors more user-friendly than id
+    const layout = Borsh.struct(fields.map(mapToLayout));
+
+    const decoded =
+      encoding === "hex"
+        ? Buffer.from(content, "hex")
+        : encoding === "bs58"
+        ? bs58.decode(content)
+        : Buffer.from(content, "utf-8");
+
+    return layout.decode(decoded.slice(8)); // strip off anchor method sighash
   }
 }
 

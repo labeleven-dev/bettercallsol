@@ -1,11 +1,11 @@
-import { idlAddress } from "@project-serum/anchor/dist/cjs/idl";
+import { Idl, idlAddress } from "@project-serum/anchor/dist/cjs/idl";
 import { Connection, PublicKey } from "@solana/web3.js";
-import axios from "axios";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { useWeb3Connection } from "hooks/useWeb3Connection";
 import { programLabel } from "library/programs";
 import { useEffect, useState } from "react";
 import { IPubKey, IRpcEndpoint } from "types/internal";
+import { parseIdl } from "utils/idl";
 import { sentryCaptureException } from "utils/sentry";
 import { isValidPublicKey } from "utils/web3js";
 
@@ -14,8 +14,7 @@ interface Web3AccountInfo {
   exists?: boolean;
   executable?: boolean;
   label?: string;
-  hasIdl?: boolean;
-  aprVerified?: boolean | null;
+  idl?: Idl;
 }
 
 /**
@@ -52,28 +51,14 @@ export const useWeb3Account = (
       const [accountInfo, idlAccountInfo] =
         await activeConnection.getMultipleAccountsInfo([pubkey, idlAddr]);
 
-      let aprVerified = null;
-      if (accountInfo?.executable) {
-        // check if program in apr.dev
-        const response = await axios.get(
-          `https://anchor.projectserum.com/api/v0/program/${address}/latest?limit=1`
-        );
-        if (response?.status === 200 && response.data?.length > 0) {
-          const build: { aborted: boolean; state: string; verified: string } =
-            response.data[0];
-          aprVerified =
-            !build.aborted &&
-            build.state === "Built" &&
-            build.verified === "Verified";
-        }
-      }
       setAccountInfo({
         status: "fetched",
         exists: accountInfo !== null,
         executable: accountInfo?.executable || false,
         label: programLabel(address, activeRpcEndpoint.network),
-        hasIdl: idlAccountInfo !== undefined,
-        aprVerified,
+        idl: idlAccountInfo
+          ? (await parseIdl(idlAccountInfo.data)) ?? undefined
+          : undefined,
       });
     };
 

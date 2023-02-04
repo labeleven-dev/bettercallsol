@@ -25,7 +25,7 @@ const mapToSortableCollection = <T>(
 ): SortableCollection<T & Identifiable> =>
   toSortableCollection(items.map(mapToSortable));
 
-const mpaIAccountExtToIAccount = ({
+export const mapIAccountExtToIAccount = ({
   name,
   description,
   type,
@@ -57,7 +57,7 @@ export const mapIInstructionExtToIInstruction = ({
     description,
     programId,
     programMetadata,
-    accounts: mapToSortableCollection(accounts.map(mpaIAccountExtToIAccount)),
+    accounts: mapToSortableCollection(accounts.map(mapIAccountExtToIAccount)),
     data: {
       format: data.format,
       raw:
@@ -85,7 +85,7 @@ export const mapIInstructionExtToIInstruction = ({
       ),
     },
     anchorMethod,
-    anchorAccounts: anchorAccounts?.map(mpaIAccountExtToIAccount),
+    anchorAccounts: anchorAccounts?.map(mapIAccountExtToIAccount),
     disabled: false,
     expanded: true,
   });

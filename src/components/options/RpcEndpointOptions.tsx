@@ -4,7 +4,7 @@ import { Sortable } from "components/common/Sortable";
 import { RpcEndpointOption } from "components/options/fields/RpcEndpointOption";
 import { useShallowConfigStore } from "hooks/useConfigStore";
 import { newRpcEndpoint } from "utils/internal";
-import { addTo, toSortedArray } from "utils/sortable";
+import { appendTo, toSortedArray } from "utils/sortable";
 
 export const RpcEndpointOptions: React.FC = () => {
   const [rpcEndpoints, set] = useShallowConfigStore((state) => [
@@ -36,7 +36,7 @@ export const RpcEndpointOptions: React.FC = () => {
           variant="ghost"
           onClick={() => {
             set((state) => {
-              addTo(state.appOptions.rpcEndpoints, newRpcEndpoint());
+              appendTo(state.appOptions.rpcEndpoints, newRpcEndpoint());
             });
           }}
         />

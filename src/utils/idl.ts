@@ -30,8 +30,14 @@ export const fetchIdl = async <IDL extends Idl = Idl>(
   if (!accountInfo) {
     return null;
   }
+  return parseIdl(accountInfo.data);
+};
+
+export const parseIdl = async <IDL extends Idl = Idl>(
+  data: Buffer
+): Promise<IDL | null> => {
   // Chop off account discriminator.
-  let idlAccount = decodeIdlAccount(accountInfo.data.slice(8));
+  let idlAccount = decodeIdlAccount(data.slice(8));
   const inflatedIdl = inflate(idlAccount.data);
   return JSON.parse(utf8.decode(inflatedIdl));
 };

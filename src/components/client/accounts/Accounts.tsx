@@ -17,7 +17,7 @@ import { useInstruction } from "hooks/useInstruction";
 import React from "react";
 import { IID } from "types/sortable";
 import { newAccount } from "utils/internal";
-import { addTo } from "utils/sortable";
+import { appendTo } from "utils/sortable";
 
 export const AccountContext = React.createContext<{
   id: IID | number;
@@ -96,7 +96,7 @@ export const Accounts: React.FC = () => {
           size="sm"
           onClick={() => {
             update((state) => {
-              addTo(state.accounts, newAccount());
+              appendTo(state.accounts, newAccount());
             });
           }}
         />

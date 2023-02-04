@@ -1,4 +1,4 @@
-import { CheckCircleIcon, WarningIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import { WarningTwoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Collapse,
@@ -10,10 +10,17 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Link,
+  Menu,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Portal,
   Tag,
+  Text,
   Tooltip,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Accounts } from "components/client/accounts/Accounts";
 import { Data } from "components/client/data/Data";
@@ -24,21 +31,58 @@ import { ExplorerButton } from "components/common/ExplorerButton";
 import { useInstruction } from "hooks/useInstruction";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { useWeb3Account } from "hooks/useWeb3Account";
-import React from "react";
-import { FaAnchor, FaRocket } from "react-icons/fa";
+import { mapIdlInstructionToIInstructionPreview } from "mappers/idl-to-preview";
+import { detectAnchorMethod, tryMapToAnchor } from "mappers/internal";
+import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
+import React, { useMemo } from "react";
+import { FaAnchor, FaExchangeAlt, FaRocket } from "react-icons/fa";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
-  const { id, useShallowGet, update } = useInstruction();
-  const [programId, description, anchorMethod, disabled, expanded] =
-    useShallowGet((state) => [
-      state.programId,
-      state.description,
-      state.anchorMethod,
-      state.disabled,
-      state.expanded,
-    ]);
+  const { id, isAnchor, useGet, update, set } = useInstruction();
+  const instruction = useGet((state) => state);
+  const { programId, description, anchorMethod, data, disabled, expanded } =
+    instruction;
   const programInfo = useWeb3Account(programId);
+  const toast = useToast();
+
+  const possibleAnchorMethod = useMemo(
+    () =>
+      !isAnchor && programInfo.idl
+        ? detectAnchorMethod(data, programInfo.idl)
+        : null,
+    [isAnchor, programInfo.idl, data]
+  );
+
+  const convertToEmptyAnchor = (ixnName: string) => {
+    const newInstruction = mapIInstructionPreviewToIInstruction(
+      mapIdlInstructionToIInstructionPreview(
+        programInfo.idl?.instructions.find(({ name }) => name === ixnName)!, // the name comes from Idl so it will never be undefined
+        programId
+      ),
+      "anchorProgramId"
+    );
+    set(newInstruction);
+  };
+
+  const mapToDetectedAnchor = () => {
+    try {
+      const mapped = tryMapToAnchor(
+        instruction,
+        possibleAnchorMethod!, // the button won't be there if this is undefined
+        programInfo.idl! // the button won't be there if this is undefined
+      );
+      set(mapped);
+    } catch (e: unknown) {
+      toast({
+        title: "Cannot map instruction to Anchor",
+        description: (e as Error).message,
+        status: "error",
+        duration: 8000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Grid
@@ -77,7 +121,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
           <InputGroup>
             {programInfo.status === "fetched" && (
               <InputLeftElement pointerEvents="none">
-                {programInfo.hasIdl ? (
+                {isAnchor ? (
                   <Tooltip label="Anchor program">
                     {/* Box is needed coz react-icons do not support forwardref 
                       https://github.com/chakra-ui/chakra-ui/issues/683
@@ -122,34 +166,43 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               w=""
               mr="1"
             >
-              {programInfo.status === "fetched" &&
-                programInfo.aprVerified !== null && (
-                  <Tooltip
-                    label={`${
-                      programInfo.aprVerified ? "Verified" : "Unverified"
-                    } Build (Open in apr.dev)`}
-                  >
-                    <Link
-                      href={`https://www.apr.dev/program/${programId}`}
-                      isExternal
-                    >
-                      <IconButton
-                        aria-label={`${
-                          programInfo.aprVerified ? "Verified" : "Unverified"
-                        } Build (Open in apr.dev)`}
-                        variant="ghost"
-                        size="sm"
-                        icon={
-                          programInfo.aprVerified ? (
-                            <CheckCircleIcon color="green.400" />
-                          ) : (
-                            <WarningIcon color="yellow.400" />
-                          )
-                        }
-                      />
-                    </Link>
+              {programInfo.idl && (
+                <Menu>
+                  <Tooltip label="Switch to an empty Anchor instruction">
+                    <MenuButton
+                      as={IconButton}
+                      size="sm"
+                      variant="ghost"
+                      aria-label="Choose Anchor method"
+                      icon={<Icon as={FaAnchor} />}
+                    />
                   </Tooltip>
-                )}
+                  <Portal>
+                    <MenuList
+                      h={80}
+                      sx={{ overflow: "scroll" }}
+                      fontSize="sm"
+                      // avoid z-index issues with it rendering before other compoents that may clash with it
+                      zIndex="modal"
+                    >
+                      <MenuGroup title="Instructions">
+                        {programInfo.idl.instructions.map(({ name }, index) => (
+                          <MenuItem
+                            key={index}
+                            fontFamily="mono"
+                            onClick={() => {
+                              convertToEmptyAnchor(name);
+                            }}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </MenuGroup>
+                    </MenuList>
+                  </Portal>
+                </Menu>
+              )}
+
               <ExplorerButton
                 size="sm"
                 variant="button"
@@ -164,7 +217,31 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         <Flex ml="70px" mb="4">
           {programInfo.label && <Tag size="sm">{programInfo.label}</Tag>}
           {anchorMethod && (
-            <Tag size="sm">{`Anchor Method: ${anchorMethod}`}</Tag>
+            <Tag size="sm">
+              Anchor Method:
+              <Text fontFamily="mono" ml="1">
+                {anchorMethod}
+              </Text>
+            </Tag>
+          )}
+          {possibleAnchorMethod && (
+            <Tag size="sm" colorScheme="yellow" variant="outline">
+              Anchor Method Detected:
+              <Text fontFamily="mono" ml="1">
+                {possibleAnchorMethod}
+              </Text>
+              <Tooltip label="Convert to Anchor">
+                <IconButton
+                  ml="1"
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="yellow"
+                  aria-label="Convert to Anchor"
+                  icon={<Icon as={FaExchangeAlt} />}
+                  onClick={mapToDetectedAnchor}
+                />
+              </Tooltip>
+            </Tag>
           )}
         </Flex>
 
