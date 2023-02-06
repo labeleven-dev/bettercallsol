@@ -57,40 +57,9 @@ export const App: React.FC = () => {
             </Alert>
           </Show>
 
-          <Flex mt="45px" pb="10px" h="calc(100vh - 60px)">
+          <Flex mt="80px" pb="10px" h="calc(100vh - 120px)">
             <Box flex="2" overflow="scroll" position="relative">
               <Client />
-
-              <Hide below="md">
-                <Tooltip
-                  label={paletteOpen ? "Close side-bar" : "Open side-bar"}
-                >
-                  <IconButton
-                    position="absolute"
-                    top="85px"
-                    right="0"
-                    rounded="none"
-                    roundedBottomLeft="md"
-                    roundedTopLeft="md"
-                    colorScheme="purple"
-                    aria-label={
-                      paletteOpen ? "Close side-bar" : "Open side-bar"
-                    }
-                    icon={
-                      paletteOpen ? (
-                        <Icon as={FaChevronRight} />
-                      ) : (
-                        <Icon as={FaChevronLeft} />
-                      )
-                    }
-                    onClick={() => {
-                      setUI((state) => {
-                        state.uiState.paletteOpen = !paletteOpen;
-                      });
-                    }}
-                  />
-                </Tooltip>
-              </Hide>
             </Box>
 
             {paletteOpen && (
@@ -103,7 +72,37 @@ export const App: React.FC = () => {
             )}
           </Flex>
 
-          <Box position="fixed" bottom="0px" h="40px" w="full" zIndex="modal">
+          <Hide below="md">
+            <Tooltip label={paletteOpen ? "Close side-bar" : "Open side-bar"}>
+              <IconButton
+                size="sm"
+                position="fixed"
+                top="110px"
+                right="0"
+                rounded="none"
+                roundedBottomLeft="md"
+                roundedTopLeft="md"
+                color="white"
+                bg="purple.500"
+                _hover={{ bg: "purple.600" }}
+                aria-label={paletteOpen ? "Close side-bar" : "Open side-bar"}
+                icon={
+                  paletteOpen ? (
+                    <Icon as={FaChevronRight} />
+                  ) : (
+                    <Icon as={FaChevronLeft} />
+                  )
+                }
+                onClick={() => {
+                  setUI((state) => {
+                    state.uiState.paletteOpen = !paletteOpen;
+                  });
+                }}
+              />
+            </Tooltip>
+          </Hide>
+
+          <Box position="fixed" bottom="0px" h="50px" w="full" zIndex="modal">
             <Footer />
           </Box>
         </Flex>

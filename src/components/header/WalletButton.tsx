@@ -9,7 +9,10 @@ export const WalletButton: React.FC = () => (
       ".wallet-adapter-button": {
         height: "40px",
         fontSize: "13px",
-        backgroundColor: "#1A202C",
+        backgroundColor: "purple.500",
+      },
+      ".wallet-adapter-button:hover": {
+        backgroundColor: "purple.600",
       },
     }}
   >

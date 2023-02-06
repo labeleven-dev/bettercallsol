@@ -23,9 +23,6 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
         variant="ghost"
         ml="2"
         onClick={toggleColorMode}
-        // maintain the colorMode for the element itself since the title bar is always in dark mode
-        color="white"
-        _hover={{ bg: "whiteAlpha.200" }}
         icon={<SwitchIcon />}
         aria-label={label}
         {...props}

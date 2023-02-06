@@ -87,7 +87,7 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
       {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
       <Portal>
         <PopoverContent>
-          <PopoverArrow />
+          <PopoverArrow bg="chakra-body-bg" />
           <PopoverCloseButton />
 
           <PopoverHeader>

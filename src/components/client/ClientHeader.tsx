@@ -175,12 +175,13 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
 
         <Menu>
           <MenuButton
+            mr="4"
             as={IconButton}
             aria-label="Options"
             icon={<Icon as={FaEllipsisV} />}
             variant="ghost"
           />
-          <MenuList zIndex="modal">
+          <MenuList fontSize="md" zIndex="modal">
             <MenuItem
               icon={<Icon as={FaExpand} />}
               onClick={setAllExpanded(true)}

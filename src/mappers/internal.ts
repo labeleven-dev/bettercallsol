@@ -87,7 +87,7 @@ export const tryMapToAnchor = (
   // fill in accounts
   toSortedArray(accounts).forEach((account, index) => {
     if (index < (newInstruction.anchorAccounts?.length ?? 0)) {
-      newInstruction.anchorAccounts![index] = account;
+      newInstruction.anchorAccounts![index].pubkey = account.pubkey;
     } else {
       appendTo(newInstruction.accounts, account);
     }

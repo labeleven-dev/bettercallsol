@@ -19,7 +19,6 @@ import {
   Tag,
   Text,
   Tooltip,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { Accounts } from "components/client/accounts/Accounts";
@@ -86,19 +85,17 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
 
   return (
     <Grid
-      mb="2"
-      px="5"
-      py="3"
+      mb="5"
+      p="5"
       border="1px"
       rounded="md"
-      borderColor={useColorModeValue("gray.200", "gray.600")}
+      borderColor="chakra-body-bg"
       bg={
         disabled
           ? "repeating-linear-gradient(-45deg, transparent, transparent 40px, #85858510 40px, #85858510 80px)"
           : ""
       }
-      bgColor={useColorModeValue("", "whiteAlpha.50")}
-      boxShadow={useColorModeValue("base", "")}
+      boxShadow={disabled ? "0 0 8px 1px gray" : "0 0 8px 1px #9945FF"}
     >
       <InstructionHeader index={index} />
 

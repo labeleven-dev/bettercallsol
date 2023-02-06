@@ -1,7 +1,6 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Button,
-  DarkMode,
   Menu,
   MenuButton,
   MenuItem,
@@ -64,18 +63,11 @@ export const Example: React.FC = () => {
 
   return (
     <Menu>
-      <DarkMode>
-        <Tooltip shouldWrapChildren label="Load an example transaction">
-          <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-            variant="ghost"
-            textColor="white"
-          >
-            Examples
-          </MenuButton>
-        </Tooltip>
-      </DarkMode>
+      <Tooltip shouldWrapChildren label="Load an example transaction">
+        <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="ghost">
+          Examples
+        </MenuButton>
+      </Tooltip>
       <MenuList fontSize="md" zIndex="modal">
         <MenuItem
           onClick={() => {

@@ -67,7 +67,7 @@ export const PdaTypeConfig: React.FC = () => {
           {/* avoid z-index issues with it rendering before other compoents that may clash with it */}
           <Portal>
             <PopoverContent>
-              <PopoverArrow />
+              <PopoverArrow bg="chakra-body-bg" />
 
               <PopoverBody>
                 <HStack spacing="1">

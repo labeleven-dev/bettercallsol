@@ -12,12 +12,7 @@ import {
 import { FaGithub, FaLaptop, FaTwitter } from "react-icons/fa";
 
 export const Footer: React.FC = () => (
-  <Grid
-    p="3"
-    templateColumns="repeat(3,1fr)"
-    backgroundColor={useColorModeValue("gray.100", "gray.900")}
-    alignItems="center"
-  >
+  <Grid p="3" pb="5" templateColumns="repeat(3,1fr)" alignItems="center">
     <Flex alignItems="center">
       <Text fontSize="xs">© {new Date().getFullYear()}</Text>
       <Link ml="2" mt="-1" href="https://labeleven.dev" isExternal>

@@ -14,7 +14,7 @@ import { useAccount } from "hooks/useAccount";
 import { useAccountType } from "hooks/useAccountType";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import React from "react";
-import { FaMagic } from "react-icons/fa";
+import { FaFillDrip } from "react-icons/fa";
 import { isValidPublicKey } from "utils/web3js";
 
 export const AccountInput: React.FC = () => {
@@ -97,7 +97,7 @@ export const AccountInput: React.FC = () => {
             variant="ghost"
             colorScheme="teal"
             aria-label="Auto-fill"
-            icon={<Icon as={FaMagic} />}
+            icon={<Icon as={FaFillDrip} />}
             isDisabled={type === "unspecified"}
             onClick={() => {
               populate();

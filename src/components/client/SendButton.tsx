@@ -110,7 +110,7 @@ export const SendButton: React.FC<{
           isDisabled={!walletPublicKey}
           ml="2"
           w="110px"
-          colorScheme="purple"
+          colorScheme="green"
           aria-label="Run Program"
           rightIcon={<Icon as={runType === "simulate" ? FaFlask : FaPlay} />}
           onClick={() => {
@@ -135,11 +135,11 @@ export const SendButton: React.FC<{
             minW="5"
             mr="2"
             variant="outline"
-            colorScheme="purple"
+            colorScheme="green"
             aria-label="More"
             icon={<TriangleDownIcon w="2" />}
           />
-          <MenuList>
+          <MenuList fontSize="md">
             {RUN_TYPES.map(({ id, name }, index) => (
               <MenuItem
                 key={index}
