@@ -20,12 +20,10 @@ import { EditableName } from "components/common/EditableName";
 import { Numbering } from "components/common/Numbering";
 import { useInstruction } from "hooks/useInstruction";
 import { useShallowSessionStoreWithUndo } from "hooks/useSessionStore";
-import { ejectFromAnchor } from "mappers/internal";
 import React from "react";
 import {
   FaAngleDoubleDown,
   FaAngleDoubleUp,
-  FaEject,
   FaEllipsisV,
   FaEraser,
   FaEye,
@@ -34,7 +32,7 @@ import {
 import { removeFrom } from "utils/sortable";
 
 export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
-  const { id, isAnchor, useShallowGet, update, reset } = useInstruction();
+  const { id, useShallowGet, update, reset } = useInstruction();
   const [expanded, name, disabled] = useShallowGet((state) => [
     state.expanded,
     state.name,
@@ -109,21 +107,6 @@ export const InstructionHeader: React.FC<{ index: number }> = ({ index }) => {
           variant="ghost"
         />
         <MenuList zIndex="modal" fontSize="md">
-          {isAnchor && (
-            <MenuItem
-              icon={<Icon as={FaEject} />}
-              onClick={() => {
-                set((state) => {
-                  state.transaction.instructions.map[id] = ejectFromAnchor(
-                    state.transaction.instructions.map[id]
-                  );
-                });
-              }}
-            >
-              Eject from Anchor
-            </MenuItem>
-          )}
-
           <MenuItem
             icon={<Icon as={FaAngleDoubleUp} />}
             isDisabled={index === 0}

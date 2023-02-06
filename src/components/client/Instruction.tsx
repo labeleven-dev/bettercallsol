@@ -31,10 +31,14 @@ import { useInstruction } from "hooks/useInstruction";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { useWeb3Account } from "hooks/useWeb3Account";
 import { mapIdlInstructionToIInstructionPreview } from "mappers/idl-to-preview";
-import { detectAnchorMethod, tryMapToAnchor } from "mappers/internal";
+import {
+  detectAnchorMethod,
+  ejectFromAnchor,
+  tryMapToAnchor,
+} from "mappers/internal";
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
 import React, { useMemo } from "react";
-import { FaAnchor, FaExchangeAlt, FaRocket } from "react-icons/fa";
+import { FaAnchor, FaEject, FaExchangeAlt, FaRocket } from "react-icons/fa";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
@@ -81,6 +85,10 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         isClosable: true,
       });
     }
+  };
+
+  const ejectAnchor = () => {
+    set(ejectFromAnchor(instruction));
   };
 
   return (
@@ -219,6 +227,16 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               <Text fontFamily="mono" ml="1">
                 {anchorMethod}
               </Text>
+              <Tooltip label="Eject from Anchor">
+                <IconButton
+                  ml="1"
+                  size="xs"
+                  variant="ghost"
+                  aria-label="Convert to Anchor"
+                  icon={<Icon as={FaEject} />}
+                  onClick={ejectAnchor}
+                />
+              </Tooltip>
             </Tag>
           )}
           {possibleAnchorMethod && (

@@ -3,14 +3,13 @@ import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { BorshCoder } from "coders/borsh";
 import { mapIdlInstructionToIInstructionPreview } from "mappers/idl-to-preview";
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
-import { IInstruction, IInstructionData } from "types/internal";
-import { newDataField } from "utils/internal";
 import {
-  appendTo,
-  prependTo,
-  toSortableCollection,
-  toSortedArray,
-} from "utils/sortable";
+  IInstrctionDataField,
+  IInstruction,
+  IInstructionData,
+} from "types/internal";
+import { newDataField } from "utils/internal";
+import { appendTo, toSortableCollection, toSortedArray } from "utils/sortable";
 import { anchorMethodSighash } from "utils/web3js";
 
 export const ejectFromAnchor = (instruction: IInstruction): IInstruction => {
@@ -18,15 +17,25 @@ export const ejectFromAnchor = (instruction: IInstruction): IInstruction => {
 
   const anchorAccountsCollection = toSortableCollection(anchorAccounts || []);
 
-  prependTo(data.borsh, {
+  const sighash: IInstrctionDataField = {
     ...newDataField(),
     name: "sighash",
     type: "bytes",
     value: bs58.encode(anchorMethodSighash(anchorMethod!)), // definitely an Anchor method here
-  });
+  };
 
   return {
     ...instruction,
+    data: {
+      ...data,
+      borsh: {
+        order: [sighash.id, ...data.borsh.order],
+        map: {
+          ...data.borsh.map,
+          [sighash.id]: sighash,
+        },
+      },
+    },
     anchorMethod: undefined,
     anchorAccounts: [],
     accounts: {
