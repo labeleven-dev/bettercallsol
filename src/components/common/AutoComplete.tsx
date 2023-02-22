@@ -201,7 +201,7 @@ const Popover = (
         {...otherProps}
         {...overlayProps}
         ref={popoverRef}
-        background={useColorModeValue("#fff", "gray.700")}
+        background="chakra-body-bg"
         borderWidth="1px"
         borderStyle="solid"
         borderColor="chakra-border-color"

@@ -93,7 +93,7 @@ export const useSendWeb3Transaction = ({
       !transaction.instructions.map ||
       Object.values(transaction.instructions.map).every((x) => x.disabled)
     ) {
-      onError && onError(new Error("No instructions provider"));
+      onError && onError(new Error("No instructions provided"));
       return;
     }
 
