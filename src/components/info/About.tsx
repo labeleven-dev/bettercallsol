@@ -12,7 +12,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import GitHubButton from "react-github-btn";
-import { FaGithub, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaCrown, FaGithub, FaTwitter, FaYoutube } from "react-icons/fa";
 
 export const GITHUB_URL = "https://github.com/labeleven-dev/bettercallsol";
 
@@ -21,6 +21,28 @@ export const About: React.FC = () => {
 
   return (
     <VStack mt="5">
+      <Box
+        px="4"
+        py="2"
+        mb="3"
+        rounded="md"
+        fontStyle="italic"
+        fontWeight="semibold"
+        alignItems="center"
+        bgGradient="linear(45deg,#9945ff,#19fb9d)"
+      >
+        <Link
+          href="https://solana.com/news/solana-summer-camp-winners#web3-track"
+          isExternal
+          color="black"
+          fontSize="sm"
+        >
+          <Icon as={FaCrown} mr="2" />
+          Winner of Solana Hackathon 2022
+          <Icon as={FaCrown} ml="2" />
+        </Link>
+      </Box>
+
       <Image w="80px" h="80px" src="/logo128.png" alt="Logo" />
       <Text
         p="2"
