@@ -162,7 +162,7 @@ export const AccountAutoComplete: React.FC<{
             </Badge>
             <Text>{label}</Text>
             <Spacer />
-            <Text fontSize="xs" color="gray.500" fontFamily="mono">
+            <Text fontSize="xs" opacity="0.6" fontFamily="mono">
               {secondaryLabel}
             </Text>
           </Flex>

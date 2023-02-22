@@ -148,8 +148,6 @@ const Option = ({
     ref
   );
 
-  const focusedBacground = useColorModeValue("gray.100", "whiteAlpha.100");
-
   return (
     <ListItem
       {...optionProps}
@@ -157,7 +155,7 @@ const Option = ({
       ref={ref}
       px="2"
       py="2"
-      background={isFocused ? focusedBacground : "transparent"}
+      background={isFocused ? "purple.500" : "transparent"}
       color="chakra-body-text"
       fontWeight={isSelected ? "bold" : "normal"}
       cursor="default"
