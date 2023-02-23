@@ -1,8 +1,15 @@
+import { UseToastOptions } from "@chakra-ui/react";
 import { Commitment, Finality, TransactionVersion } from "@solana/web3.js";
 import { DataFormat, InstructionDataFieldType } from "types/internal";
 import { Explorer, RunType } from "types/state";
 
 export const SIMULATED_SIGNATURE = "<simulated>";
+
+export const DEFAULT_ERROR_MODAL: UseToastOptions = {
+  status: "error",
+  duration: 8000,
+  isClosable: true,
+};
 
 export const RUN_TYPES: { id: RunType; name: string }[] = [
   { id: "send", name: "Send" },

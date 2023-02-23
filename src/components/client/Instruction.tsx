@@ -39,6 +39,7 @@ import {
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
 import React, { useMemo } from "react";
 import { FaAnchor, FaEject, FaExchangeAlt, FaRocket } from "react-icons/fa";
+import { DEFAULT_ERROR_MODAL } from "utils/ui-constants";
 
 export const Instruction: React.FC<{ index: number }> = ({ index }) => {
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
@@ -78,11 +79,9 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
       set(mapped);
     } catch (e: unknown) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Cannot map instruction to Anchor",
         description: (e as Error).message,
-        status: "error",
-        duration: 8000,
-        isClosable: true,
       });
     }
   };

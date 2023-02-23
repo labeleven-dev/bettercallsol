@@ -15,6 +15,7 @@ import { mapProtobufToITransactionExt } from "mappers/protobuf-to-external";
 import { mapTransactionResponseToIPreview } from "mappers/web3js-to-preview";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { DEFAULT_ERROR_MODAL } from "utils/ui-constants";
 import { short } from "utils/web3js";
 
 const DEFAULT_STATUS = { isLoading: false, status: "" };
@@ -67,11 +68,9 @@ export const useImportFromUrl = (): {
       setSearchParams({});
     } catch (e) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Transaction import failed",
         description: `Could not decode the provided transcation`,
-        status: "error",
-        duration: 10000,
-        isClosable: true,
       });
     }
   });
@@ -99,11 +98,9 @@ export const useImportFromUrl = (): {
       onError: (error) => {
         setStatus(DEFAULT_STATUS);
         toast({
+          ...DEFAULT_ERROR_MODAL,
           title: "Transaction import failed",
           description: `Failed to fetch the transcation: ${error.message}`,
-          status: "error",
-          duration: 15000,
-          isClosable: true,
         });
       },
     });
@@ -154,11 +151,9 @@ export const useImportFromUrl = (): {
       .catch((err) => {
         setStatus(DEFAULT_STATUS);
         toast({
+          ...DEFAULT_ERROR_MODAL,
           title: "Transaction import failed",
           description: `Cannot fetch transaction from the URL: ${err}`,
-          status: "error",
-          duration: 10000,
-          isClosable: true,
         });
       });
 

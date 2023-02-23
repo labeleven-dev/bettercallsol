@@ -6,6 +6,7 @@ import { useAccount } from "hooks/useAccount";
 import { useInstruction } from "hooks/useInstruction";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { AccountType, IAccountMetadata } from "types/internal";
+import { DEFAULT_ERROR_MODAL } from "utils/ui-constants";
 import { isValidPublicKey } from "utils/web3js";
 
 /**
@@ -35,11 +36,9 @@ export const useAccountType = (): {
   const wallet = () => {
     if (!walletPublicKey) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Wallet not connected!",
         description: "Please use the top-right button to connect one.",
-        status: "error",
-        duration: 8000,
-        isClosable: true,
       });
       return;
     }
@@ -80,11 +79,9 @@ export const useAccountType = (): {
 
     if (!isValidPublicKey(programId)) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Cannot create PDA",
         description: "The instruction needs a program ID",
-        status: "error",
-        duration: 8000,
-        isClosable: true,
       });
       return;
     }
@@ -109,11 +106,9 @@ export const useAccountType = (): {
 
     if (!walletPublicKey) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Wallet not connected!",
         description: "Please use the top-right button to connect one.",
-        status: "error",
-        duration: 8000,
-        isClosable: true,
       });
       return;
     }

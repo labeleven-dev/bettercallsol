@@ -13,6 +13,7 @@ import { Description } from "components/common/Description";
 import { useInstruction } from "hooks/useInstruction";
 import React from "react";
 import { RawEncoding } from "types/internal";
+import { DEFAULT_ERROR_MODAL } from "utils/ui-constants";
 
 export const RawData: React.FC = () => {
   const { useShallowGet, update } = useInstruction();
@@ -55,10 +56,9 @@ export const RawData: React.FC = () => {
       });
     } catch (e) {
       toast({
+        ...DEFAULT_ERROR_MODAL,
         title: "Invalid raw data",
         description: `This is not a valid ${targetEncoding} string.`,
-        status: "error",
-        isClosable: true,
       });
       return;
     }

@@ -32,6 +32,7 @@ import { useWeb3Connection } from "hooks/useWeb3Connection";
 import React, { useRef, useState } from "react";
 import { FaParachuteBox } from "react-icons/fa";
 import { IPubKey } from "types/internal";
+import { DEFAULT_ERROR_MODAL } from "utils/ui-constants";
 import { toLamports } from "utils/web3js";
 
 export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
@@ -57,12 +58,10 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
       })
       .catch((e) => {
         toast({
+          ...DEFAULT_ERROR_MODAL,
           position: "top-right",
-          status: "error",
           title: `Air Drop has failed.`,
           description: `Error: ${e}`,
-          duration: 10_000,
-          isClosable: true,
         });
       });
   };
