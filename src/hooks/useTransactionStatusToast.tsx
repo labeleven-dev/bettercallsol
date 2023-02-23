@@ -201,11 +201,7 @@ const TransactionStatusToast: React.FC<
           />
           <Box>{description}</Box>
           {inProgress && (
-            <Button
-              leftIcon={<SmallCloseIcon />}
-              onClick={cancel}
-              colorScheme="red"
-            >
+            <Button leftIcon={<SmallCloseIcon />} onClick={cancel}>
               Cancel
             </Button>
           )}

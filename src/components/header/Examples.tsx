@@ -5,6 +5,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
@@ -50,8 +51,15 @@ export const Example: React.FC = () => {
 
     toast({
       title: "Welcome to Better Call Sol!",
-      description:
-        "To get started, you can try one of the options in the Example menu at the top.",
+      description: (
+        <Text>
+          This is a client for composing and sending Solana transactions.
+          <br />
+          <br />
+          To get started, you can try one of the options in the{" "}
+          <strong>Example</strong> menu at the top.
+        </Text>
+      ),
       status: "info",
       duration: 10000,
       isClosable: true,
@@ -89,6 +97,13 @@ export const Example: React.FC = () => {
           }}
         >
           System Program: Create Account
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            loadExample("anchorSquads");
+          }}
+        >
+          Anchor: Squads
         </MenuItem>
       </MenuList>
     </Menu>

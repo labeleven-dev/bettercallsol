@@ -26,7 +26,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
-import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { useTransactionStatusToast } from "hooks/useTransactionStatusToast";
 import { useWeb3Connection } from "hooks/useWeb3Connection";
 import React, { useRef, useState } from "react";
@@ -39,7 +38,6 @@ export const AirdropButton: React.FC<{ accountPubkey: IPubKey }> = ({
   accountPubkey,
 }) => {
   const [value, setValue] = useState("1.0");
-  const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
   const initialFocusRef = useRef(null);
 
   const connection = useWeb3Connection();

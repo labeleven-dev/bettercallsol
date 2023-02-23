@@ -1,5 +1,7 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 
+// TODO update this as part of the CI build automatically
+
 export const Acknowledgements: React.FC = () => (
   <VStack spacing="5">
     <Text>
@@ -18,45 +20,39 @@ export const Acknowledgements: React.FC = () => (
       boxShadow="inner"
     >
       <Text>
-        @chakra-ui/icons (2.0.4), licenced MIT
+        @chakra-ui/icons (2.0.14), licenced MIT
         <br />
-        @chakra-ui/react (2.2.4), licenced MIT
+        @chakra-ui/react (2.4.4), licenced MIT
         <br />
-        @dnd-kit/core (6.0.5), licenced MIT
+        @dnd-kit/core (6.0.6), licenced MIT
         <br />
-        @dnd-kit/modifiers (6.0.0), licenced MIT
+        @dnd-kit/modifiers (6.0.1), licenced MIT
         <br />
         @dnd-kit/sortable (7.0.1), licenced MIT
         <br />
-        @emotion/react (11.9.3), licenced MIT
+        @emotion/react (11.10.5), licenced MIT
         <br />
-        @emotion/styled (11.9.3), licenced MIT
+        @emotion/styled (11.10.5), licenced MIT
         <br />
         @project-serum/anchor (0.25.0), licenced (MIT OR Apache-2.0)
         <br />
-        @sentry/react (7.28.1), licenced MIT
+        @sentry/react (7.38.0), licenced MIT
         <br />
         @solana/buffer-layout (4.0.0), licenced MIT
         <br />
-        @solana/wallet-adapter-backpack (0.1.7), licenced Apache-2.0
+        @solana/spl-token (0.3.7), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-base (0.9.17), licenced Apache-2.0
+        @solana/wallet-adapter-base (0.9.20), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-brave (0.1.11), licenced Apache-2.0
+        @solana/wallet-adapter-brave (0.1.14), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-glow (0.1.12), licenced Apache-2.0
+        @solana/wallet-adapter-react (0.15.26), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-ledger (0.9.19), licenced Apache-2.0
+        @solana/wallet-adapter-react-ui (0.9.25), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-phantom (0.9.16), licenced Apache-2.0
+        @solana/wallet-adapter-solflare (0.6.20), licenced Apache-2.0
         <br />
-        @solana/wallet-adapter-react (0.15.19), licenced Apache-2.0
-        <br />
-        @solana/wallet-adapter-react-ui (0.9.17), licenced Apache-2.0
-        <br />
-        @solana/wallet-adapter-solflare (0.6.16), licenced Apache-2.0
-        <br />
-        @solana/web3.js (1.63.1), licenced MIT
+        @solana/web3.js (1.72.0), licenced MIT
         <br />
         assert (2.0.0), licenced MIT
         <br />
@@ -70,7 +66,7 @@ export const Acknowledgements: React.FC = () => (
         <br />
         crypto-browserify (3.12.0), licenced MIT
         <br />
-        framer-motion (6.3.15), licenced MIT
+        framer-motion (8.0.1), licenced MIT
         <br />
         immer (9.0.16), licenced MIT
         <br />
@@ -78,7 +74,7 @@ export const Acknowledgements: React.FC = () => (
         <br />
         jsbi (3.2.5), licenced Apache-2.0
         <br />
-        pako (2.0.4), licenced (MIT AND Zlib)
+        pako (2.1.0), licenced (MIT AND Zlib)
         <br />
         process (0.11.10), licenced MIT
         <br />
@@ -86,19 +82,19 @@ export const Acknowledgements: React.FC = () => (
         <br />
         react (18.2.0), licenced MIT
         <br />
-        react-aria (3.18.0), licenced Apache-2.0
+        react-aria (3.22.0), licenced Apache-2.0
         <br />
         react-dom (18.2.0), licenced MIT
         <br />
-        react-github-btn (1.3.0), licenced BSD-2-Clause
+        react-github-btn (1.4.0), licenced BSD-2-Clause
         <br />
-        react-icons (3.11.0), licenced MIT
+        react-icons (4.7.1), licenced MIT
         <br />
-        react-markdown (8.0.3), licenced MIT
+        react-markdown (8.0.4), licenced MIT
         <br />
-        react-router-dom (6.3.0), licenced MIT
+        react-router-dom (6.6.0), licenced MIT
         <br />
-        react-stately (3.16.0), licenced Apache-2.0
+        react-stately (3.20.0), licenced Apache-2.0
         <br />
         snake-case (3.0.4), licenced MIT
         <br />

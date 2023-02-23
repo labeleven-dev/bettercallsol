@@ -87,15 +87,18 @@ export const Results = forwardRef<
 
         <Spacer />
 
-        {endedAt && (
-          <Tooltip
-            label={`Last fetched @ ${new Date(endedAt).toLocaleString()}`}
-          >
-            <Tag height="20px" variant="outline">
-              {new Date(endedAt).toLocaleTimeString()}
-            </Tag>
-          </Tooltip>
-        )}
+        {
+          // do not display if transaction has been cleared, i.e. no signature
+          endedAt && transactionRun.signature && (
+            <Tooltip
+              label={`Last fetched @ ${new Date(endedAt).toLocaleString()}`}
+            >
+              <Tag height="20px" variant="outline">
+                {new Date(endedAt).toLocaleTimeString()}
+              </Tag>
+            </Tooltip>
+          )
+        }
         {transactionRun.inProgress ? (
           <Button
             color="red.600"

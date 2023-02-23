@@ -1,7 +1,5 @@
 import { ITransactionExt } from "types/external";
 
-// TODO add an Anchor example
-
 export const EXAMPLES: Record<string, ITransactionExt> = {
   memoV2Program: {
     version: "1.0.0",
@@ -160,6 +158,39 @@ _A lamport is 0.000,000,001 SOL._`,
               value: 100_000,
             },
           ],
+        },
+      },
+    ],
+  },
+
+  anchorSquads: {
+    version: "1.0.0",
+    txnVersion: "0",
+    network: "devnet",
+    name: "Anchor: Squads",
+    description: `If an Anchor program has an on-chain IDL, _Better Call Sol_ can help you invoke it.
+    
+For this example, we are using [Squads MPL](https://squads.so/), a popular multisig program. We have pre-populated the program ID for you.
+
+The tool detects the IDL and see shows ⚓ icon in the Program field.
+
+1. Click on this button to get a list of possible instructions to pre-populate.
+1. Eject out of Anchor instruction into a plain one by clicking ⏏️ button next to the _Anchor Method_ field.
+1. Once you eject, you will see that the tool can also detect an Anchor program instruction. Convert back using the 🔁 button, next to the "Detected Anchor Method".
+
+The latter is particularly useful when you import a transaction from the chain.`,
+    addressLookupTables: [],
+    instructions: [
+      {
+        name: "Squads",
+        programId: "SMPLecH534NA9acpos4G6x7uf3LWbCAwZQE9e8ZekMu",
+        accounts: [],
+        data: {
+          format: "raw",
+          value: {
+            encoding: "utf8",
+            content: "",
+          },
         },
       },
     ],
