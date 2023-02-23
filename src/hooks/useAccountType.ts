@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import { useAccount } from "hooks/useAccount";
@@ -100,7 +101,31 @@ export const useAccountType = (): {
   };
 
   const ata = () => {
-    // TODO
+    const mint = metadata?.mint;
+    // TODO is it needed?
+    if (!mint) {
+      return;
+    }
+
+    if (!walletPublicKey) {
+      toast({
+        title: "Wallet not connected!",
+        description: "Please use the top-right button to connect one.",
+        status: "error",
+        duration: 8000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const ata = getAssociatedTokenAddressSync(
+      new PublicKey(mint),
+      walletPublicKey
+    );
+
+    accountUpdate((state) => {
+      state.pubkey = ata.toBase58();
+    });
   };
 
   const program = () => {

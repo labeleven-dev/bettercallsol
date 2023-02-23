@@ -188,12 +188,11 @@ const OPTIONS: Option[] = [
     value: "pda",
     type: "type",
   },
-  // TODO implement
-  // {
-  //   label: "Associated token account",
-  //   value: "ata",
-  //   type: "type",
-  // },
+  {
+    label: "Associated token account (ATA)",
+    value: "ata",
+    type: "type",
+  },
   {
     label: "Program",
     value: "program",

@@ -26,8 +26,7 @@ const TYPES: AccountType[] = [
   "wallet",
   "keypair",
   "pda",
-  // TODO implement
-  // "ata",
+  "ata",
   "program",
   "sysvar",
   "unspecified",
@@ -77,8 +76,6 @@ export const AccountTypeButton: React.FC = () => {
     // only populates for account types that receieve no config,
     // e.g. wallet or new key pair
     allPopulate[type]();
-
-    // TODO open the config collapse thing
   };
 
   return (

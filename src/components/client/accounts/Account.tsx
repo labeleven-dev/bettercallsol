@@ -10,6 +10,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import { AccountInput } from "components/client/accounts/AccountInput";
+import { AtaTypeConfig } from "components/client/accounts/type-configs/AtaTypeConfig";
 import { PdaTypeConfig } from "components/client/accounts/type-configs/PdaTypeConfig";
 import { Description } from "components/common/Description";
 import { DragHandle } from "components/common/DragHandle";
@@ -106,13 +107,8 @@ export const Account: React.FC<{
               // TODO ignores other future tags
               pt={isTypeConfigurable || metadata?.name ? "1" : undefined}
             >
-              {/* TODO */}
-              {/* {type === "ata" && (
-            <AtaTypeConfig />
-          )} */}
-
+              {type === "ata" && <AtaTypeConfig />}
               {type === "pda" && <PdaTypeConfig />}
-
               {metadata?.name && <Tag size="sm">{metadata.name}</Tag>}
 
               {/* TODO account balance */}
