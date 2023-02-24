@@ -57,7 +57,7 @@ export const Example: React.FC = () => {
           <br />
           <br />
           To get started, you can try one of the options in the{" "}
-          <strong>Example</strong> menu at the top.
+          <strong>Examples</strong> menu at the top.
         </Text>
       ),
       status: "info",
