@@ -11,17 +11,21 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { ToggleIconButton } from "components/common/ToggleIconButton";
 import { ColorModeSwitcher } from "components/header/ColorModeSwitcher";
 import { Example } from "components/header/Examples";
 import { WalletButton } from "components/header/WalletButton";
 import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import { useState } from "react";
-import { FaWrench } from "react-icons/fa";
+import { FaInfo, FaShareAlt, FaWrench } from "react-icons/fa";
 
 export const Header: React.FC = () => {
   const [funTitle, setFunTitle] = useState(true);
   const toast = useToast();
-  const set = useSessionStoreWithoutUndo((state) => state.set);
+  const [descriptionVisible, set] = useSessionStoreWithoutUndo((state) => [
+    state.uiState.descriptionVisible,
+    state.set,
+  ]);
 
   return (
     <Flex px="8" py="5" alignItems="center">
@@ -81,6 +85,31 @@ export const Header: React.FC = () => {
             />
           </Tooltip>
         </Hide> */}
+
+      <ToggleIconButton
+        ml="1"
+        label={descriptionVisible ? "Hide annotations" : "Display annotations"}
+        icon={<Icon as={FaInfo} />}
+        toggled={descriptionVisible}
+        onToggle={(toggled) => {
+          set((state) => {
+            state.uiState.descriptionVisible = toggled;
+          });
+        }}
+      />
+
+      <Tooltip label="Share">
+        <IconButton
+          aria-label="Share"
+          icon={<Icon as={FaShareAlt} />}
+          variant="ghost"
+          onClick={() => {
+            set((state) => {
+              state.uiState.shareOpen = true;
+            });
+          }}
+        />
+      </Tooltip>
 
       <ColorModeSwitcher justifySelf="flex-end" />
 

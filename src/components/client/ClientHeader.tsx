@@ -19,34 +19,23 @@ import {
 import { Description } from "components/common/Description";
 import { EditableName } from "components/common/EditableName";
 import { RpcEndpointMenu } from "components/common/RpcEndpointMenu";
-import { ToggleIconButton } from "components/common/ToggleIconButton";
 import { useShallowConfigStore } from "hooks/useConfigStore";
 import {
   useShallowSessionStoreWithoutUndo,
   useShallowSessionStoreWithUndo,
 } from "hooks/useSessionStore";
 import React, { useEffect } from "react";
-import {
-  FaCompress,
-  FaEllipsisV,
-  FaEraser,
-  FaExpand,
-  FaFileImport,
-  FaInfo,
-  FaShareAlt,
-} from "react-icons/fa";
+import { FaCompress, FaEllipsisV, FaEraser, FaExpand } from "react-icons/fa";
 import { DEFAULT_TRANSACTION_RUN, EMPTY_TRANSACTION } from "utils/state";
 import { TRANSACTION_VERSIONS } from "utils/ui-constants";
 
 export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
   sendButton,
 }) => {
-  const [runType, descriptionVisible, setUI] =
-    useShallowSessionStoreWithoutUndo((state) => [
-      state.uiState.runType,
-      state.uiState.descriptionVisible,
-      state.set,
-    ]);
+  const [runType, setUI] = useShallowSessionStoreWithoutUndo((state) => [
+    state.uiState.runType,
+    state.set,
+  ]);
 
   const [
     transactionVersion,
@@ -132,46 +121,6 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
         {sendButton}
 
         <Spacer />
-
-        <ToggleIconButton
-          ml="1"
-          label={
-            descriptionVisible ? "Hide annotations" : "Display annotations"
-          }
-          icon={<Icon as={FaInfo} />}
-          toggled={descriptionVisible}
-          onToggle={(toggled) => {
-            setUI((state) => {
-              state.uiState.descriptionVisible = toggled;
-            });
-          }}
-        />
-
-        <Tooltip label="Import">
-          <IconButton
-            aria-label="Import"
-            icon={<Icon as={FaFileImport} />}
-            variant="ghost"
-            onClick={() => {
-              setUI((state) => {
-                state.uiState.paletteOpen = true;
-              });
-            }}
-          />
-        </Tooltip>
-
-        <Tooltip label="Share">
-          <IconButton
-            aria-label="Share"
-            icon={<Icon as={FaShareAlt} />}
-            variant="ghost"
-            onClick={() => {
-              setUI((state) => {
-                state.uiState.shareOpen = true;
-              });
-            }}
-          />
-        </Tooltip>
 
         <Menu>
           <MenuButton

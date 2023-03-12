@@ -32,7 +32,7 @@ export interface AppOptions {
 
 export interface UIState {
   readonly runType: RunType;
-  readonly paletteOpen: boolean;
+  readonly sidePanel: "import" | "closed";
   readonly optionsOpen: boolean;
   readonly shareOpen: boolean;
   readonly infoOpen: boolean;

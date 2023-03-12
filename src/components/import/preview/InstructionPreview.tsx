@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { CopyButton } from "components/common/CopyButton";
 import { Numbering } from "components/common/Numbering";
-import { DataPreview } from "components/palette/preview/DataPreview";
-import { InstructionAccountSummary } from "components/palette/preview/InstructionAccountSummary";
+import { DataPreview } from "components/import/preview/DataPreview";
+import { InstructionAccountSummary } from "components/import/preview/InstructionAccountSummary";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { mapIInstructionPreviewToIInstruction } from "mappers/preview-to-internal";
 import { IInstructionPreview, PreviewSource } from "types/preview";

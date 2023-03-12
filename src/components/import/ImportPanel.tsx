@@ -3,20 +3,22 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Flex,
   Grid,
+  Heading,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
 import { ErrorAlert } from "components/common/ErrorAlert";
-import { AnchorJsonImport } from "components/palette/import/AnchorJsonImport";
-import { AnchorProgramIdImport } from "components/palette/import/AnchorProgramIdImport";
-import { ShareJsonImport } from "components/palette/import/ShareJsonImport";
-import { ShareUrlImport } from "components/palette/import/ShareUrlImport";
-import { TransactionIdImport } from "components/palette/import/TransactionIdImport";
-import { Preview } from "components/palette/preview/Preview";
+import { AnchorJsonImport } from "components/import/import-types/AnchorJsonImport";
+import { AnchorProgramIdImport } from "components/import/import-types/AnchorProgramIdImport";
+import { ShareJsonImport } from "components/import/import-types/ShareJsonImport";
+import { ShareUrlImport } from "components/import/import-types/ShareUrlImport";
+import { TransactionIdImport } from "components/import/import-types/TransactionIdImport";
+import { Preview } from "components/import/preview/Preview";
 import { useState } from "react";
 import { IPreview, PreviewSource } from "types/preview";
 
@@ -28,13 +30,19 @@ const SOURCES: { source: PreviewSource; label: string; type: string }[] = [
   { source: "anchorJson", label: "Anchor IDL JSON", type: "anchor" },
 ];
 
-export const ImportTransaction: React.FC = () => {
+export const ImportPanel: React.FC = () => {
   const [source, setSource] = useState<PreviewSource>("tx");
   const [preview, setPreview] = useState<IPreview>();
   const [error, setError] = useState("");
 
   return (
-    <Grid>
+    <Grid mt="2">
+      <Center mb="4">
+        <Heading as="h3" size="md">
+          Import
+        </Heading>
+      </Center>
+
       <Flex mb="1">
         <Menu matchWidth={true}>
           <MenuButton flex="1" as={Button} size="sm">

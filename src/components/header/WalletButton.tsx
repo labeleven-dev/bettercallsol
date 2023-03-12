@@ -10,6 +10,7 @@ export const WalletButton: React.FC = () => (
         height: "40px",
         fontSize: "13px",
         backgroundColor: "purple.500",
+        lineHeight: "normal", // when wrapped line height is huge?
       },
       ".wallet-adapter-button:hover": {
         backgroundColor: "purple.600",

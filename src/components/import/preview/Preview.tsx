@@ -17,8 +17,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { CopyButton } from "components/common/CopyButton";
-import { InstructionPreview } from "components/palette/preview/InstructionPreview";
-import { TransactionAccountSummary } from "components/palette/preview/TranasctionAccountSummary";
+import { InstructionPreview } from "components/import/preview/InstructionPreview";
+import { TransactionAccountSummary } from "components/import/preview/TranasctionAccountSummary";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { mapIPreviewToITransaction } from "mappers/preview-to-internal";
 import { FaAnchor } from "react-icons/fa";
