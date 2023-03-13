@@ -1,6 +1,7 @@
 import { ColorModeScript } from "@chakra-ui/react";
 import * as Sentry from "@sentry/react";
 import { App } from "components/App";
+import React from "react";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "reportWebVitals";
@@ -17,11 +18,7 @@ if (!container) throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <>
-    {/* TODO react-aria (used for autocomplete) does not support react 18's strict mode */}
-    {/* TODO https://reactjs.org/blog/2022/03/08/react-18-upgrade-guide.html#updates-to-strict-mode */}
-    {/* TODO https://github.com/adobe/react-spectrum/issues/779 */}
-    {/* <React.StrictMode> */}
+  <React.StrictMode>
     <>
       {
         // TODO initial colour mode is broken https://github.com/chakra-ui/chakra-ui/discussions/5051
@@ -35,8 +32,7 @@ root.render(
         <App />
       </Sentry.ErrorBoundary>
     </BrowserRouter>
-    {/* </React.StrictMode> */}
-  </>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
