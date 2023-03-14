@@ -43,18 +43,7 @@ export const About: React.FC = () => {
         </Link>
       </Box>
 
-      <Image w="80px" h="80px" src="/logo128.png" alt="Logo" />
-      <Text
-        p="2"
-        fontFamily="'Dancing Script', cursive;"
-        fontWeight="extrabold"
-        fontSize="4xl"
-        bgGradient="linear(to-r, #ff6f61ff, #fece2f)"
-        bgClip="text"
-      >
-        Better Call Sol
-      </Text>
-
+      <Image w="300px" src="/logo-custom.png" alt="Logo" />
       <Box h="5" />
 
       <Box p="5" boxShadow="dark-lg" rounded="lg">
@@ -75,18 +64,6 @@ export const About: React.FC = () => {
               aria-label="Star labeleven-dev/bettercallsol on GitHub"
             >
               Star
-            </GitHubButton>
-          </WrapItem>
-
-          <WrapItem>
-            <GitHubButton
-              href="https://github.com/labeleven-dev/bettercallsol/subscription"
-              data-icon="octicon-eye"
-              data-color-scheme={colorMode}
-              data-show-count="true"
-              aria-label="Watch labeleven-dev/bettercallsol on GitHub"
-            >
-              Watch
             </GitHubButton>
           </WrapItem>
 
