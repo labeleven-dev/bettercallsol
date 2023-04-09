@@ -131,6 +131,8 @@ export interface IBalance {
 export interface ITransactionRun {
   inProgress: boolean;
   signature: string; // not optional to work-around uncontrolled input issue
+  recentBlockhash?: string;
+  lastValidBlockHeight?: number;
   error?: string;
   slot?: number;
   confirmations?: number;
