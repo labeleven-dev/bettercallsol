@@ -1,4 +1,4 @@
-import { WarningTwoIcon } from "@chakra-ui/icons";
+import { DownloadIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Collapse,
@@ -56,6 +56,18 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         ? detectAnchorMethod(data, programInfo.idl)
         : null,
     [isAnchor, programInfo.idl, data]
+  );
+
+  const downloadUrl = useMemo(
+    () =>
+      programInfo.idl
+        ? URL.createObjectURL(
+            new Blob([JSON.stringify(programInfo.idl)], {
+              type: "application/json",
+            })
+          )
+        : undefined,
+    [programInfo.idl]
   );
 
   const convertToEmptyAnchor = (ixnName: string) => {
@@ -171,40 +183,56 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
               mr="1"
             >
               {programInfo.idl && (
-                <Menu>
-                  <Tooltip label="Switch to an empty Anchor instruction">
-                    <MenuButton
-                      as={IconButton}
+                <>
+                  <Tooltip label="Download Anchor IDL">
+                    <IconButton
+                      as="a"
                       size="sm"
                       variant="ghost"
-                      aria-label="Choose Anchor method"
-                      icon={<Icon as={FaAnchor} />}
+                      aria-label="Download Anchor IDL"
+                      icon={<DownloadIcon />}
+                      href={downloadUrl}
+                      download={`${programInfo.idl.name}.json`}
                     />
                   </Tooltip>
-                  <Portal>
-                    <MenuList
-                      h={80}
-                      sx={{ overflow: "scroll" }}
-                      fontSize="sm"
-                      // avoid z-index issues with it rendering before other compoents that may clash with it
-                      zIndex="modal"
-                    >
-                      <MenuGroup title="Instructions">
-                        {programInfo.idl.instructions.map(({ name }, index) => (
-                          <MenuItem
-                            key={index}
-                            fontFamily="mono"
-                            onClick={() => {
-                              convertToEmptyAnchor(name);
-                            }}
-                          >
-                            {name}
-                          </MenuItem>
-                        ))}
-                      </MenuGroup>
-                    </MenuList>
-                  </Portal>
-                </Menu>
+                  <Menu>
+                    <Tooltip label="Switch to an empty Anchor instruction">
+                      <MenuButton
+                        as={IconButton}
+                        size="sm"
+                        variant="ghost"
+                        aria-label="Choose Anchor method"
+                        icon={<Icon as={FaAnchor} />}
+                        href={downloadUrl}
+                      />
+                    </Tooltip>
+                    <Portal>
+                      <MenuList
+                        h={80}
+                        sx={{ overflow: "scroll" }}
+                        fontSize="sm"
+                        // avoid z-index issues with it rendering before other compoents that may clash with it
+                        zIndex="modal"
+                      >
+                        <MenuGroup title="Instructions">
+                          {programInfo.idl.instructions.map(
+                            ({ name }, index) => (
+                              <MenuItem
+                                key={index}
+                                fontFamily="mono"
+                                onClick={() => {
+                                  convertToEmptyAnchor(name);
+                                }}
+                              >
+                                {name}
+                              </MenuItem>
+                            )
+                          )}
+                        </MenuGroup>
+                      </MenuList>
+                    </Portal>
+                  </Menu>
+                </>
               )}
 
               <ExplorerButton
