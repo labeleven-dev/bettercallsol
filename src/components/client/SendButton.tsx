@@ -1,28 +1,30 @@
-import { CheckIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { TriangleDownIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
-  Icon,
   IconButton,
   Menu,
   MenuButton,
+  MenuDivider,
+  MenuGroup,
   MenuItem,
   MenuList,
   Tooltip,
 } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useSendToSquads } from "hooks/squads";
 import { useConfigStore } from "hooks/useConfigStore";
 import { useSendWeb3Transaction } from "hooks/useSendWeb3Transaction";
 import {
   useSessionStoreWithUndo,
   useShallowSessionStoreWithoutUndo,
 } from "hooks/useSessionStore";
+import { TransactionBuilderArgs } from "hooks/useWeb3TranasctionBuilder";
 import {
   extractBalancesFromSimulation,
   mapWeb3TransactionError,
 } from "mappers/web3js-to-internal";
-import React from "react";
-import { FaFlask, FaPlay } from "react-icons/fa";
+import React, { useMemo } from "react";
 import { IPubKey } from "types/internal";
 import { DEFAULT_TRANSACTION_RUN } from "utils/state";
 import { RUN_TYPES, SIMULATED_SIGNATURE } from "utils/ui-constants";
@@ -41,10 +43,16 @@ export const SendButton: React.FC<{
       state.set,
     ]
   );
-  // TODO causes component reload
-  const transaction = useSessionStoreWithUndo((state) => state.transaction);
 
   const { publicKey: walletPublicKey } = useWallet();
+
+  const { name: runName, icon: runIcon } = useMemo(
+    () => RUN_TYPES.find(({ id }) => runType === id)!,
+    [runType]
+  );
+
+  // TODO causes component reload
+  const transaction = useSessionStoreWithUndo((state) => state.transaction);
 
   const scrollDown = () => {
     if (scrollToResults) {
@@ -56,43 +64,98 @@ export const SendButton: React.FC<{
     }
   };
 
-  // send the web3 transaction/simulation
+  const onSimulated: TransactionBuilderArgs["onSimulated"] = (
+    response,
+    { transaction, recentBlockhash, lastValidBlockHeight }
+  ) => {
+    setUI((state) => {
+      state.transactionRun = {
+        inProgress: false,
+        signature: SIMULATED_SIGNATURE,
+        confirmationStatus: "simulated",
+        confirmations: 0,
+        lastValidBlockHeight,
+        recentBlockhash,
+        error: mapWeb3TransactionError(response.value.err),
+        logs: response.value.logs ?? [],
+        unitsConsumed: response.value.unitsConsumed,
+        slot: response.context.slot,
+        balances: extractBalancesFromSimulation(
+          response.value,
+          transaction.message
+        ),
+        // TODO returnData
+      };
+    });
+    scrollDown();
+  };
+
+  const onSent: TransactionBuilderArgs["onSent"] = (
+    signature,
+    { recentBlockhash, lastValidBlockHeight }
+  ) => {
+    setUI((state) => {
+      state.transactionRun.signature = signature;
+      state.transactionRun.recentBlockhash = recentBlockhash;
+      state.transactionRun.lastValidBlockHeight = lastValidBlockHeight;
+    });
+    startGet(signature);
+    scrollDown();
+  };
+
+  const onError: TransactionBuilderArgs["onError"] = (error) => {
+    setUI((state) => {
+      state.transactionRun.inProgress = false;
+      state.transactionRun.error = error.message;
+    });
+    scrollDown();
+  };
+
   const { simulate, send } = useSendWeb3Transaction({
-    onSimulated: (response, tranaction) => {
-      setUI((state) => {
-        state.transactionRun = {
-          inProgress: false,
-          signature: SIMULATED_SIGNATURE,
-          confirmationStatus: "simulated",
-          confirmations: 0,
-          error: mapWeb3TransactionError(response.value.err),
-          logs: response.value.logs ?? [],
-          unitsConsumed: response.value.unitsConsumed,
-          slot: response.context.slot,
-          balances: extractBalancesFromSimulation(
-            response.value,
-            tranaction.message
-          ),
-          // TODO returnData
-        };
-      });
-      scrollDown();
-    },
-    onSent: (signature) => {
-      setUI((state) => {
-        state.transactionRun.signature = signature;
-      });
-      startGet(signature);
-      scrollDown();
-    },
-    onError: (error) => {
-      setUI((state) => {
-        state.transactionRun.inProgress = false;
-        state.transactionRun.error = error.message;
-      });
-      scrollDown();
-    },
+    onSimulated,
+    onSent,
+    onError,
   });
+
+  const { simulate: squadsSimulate, send: squadsSend } = useSendToSquads({
+    onSimulated,
+    onSent,
+    onError,
+  });
+
+  const onClick = () => {
+    setUI((state) => {
+      state.transactionRun = {
+        ...DEFAULT_TRANSACTION_RUN,
+        inProgress: true,
+      };
+    });
+
+    if (runType === "simulate") {
+      simulate(transaction);
+    } else if (runType === "send") {
+      send(transaction);
+    } else if (runType === "squadsSimulate") {
+      squadsSimulate(transaction);
+    } else if (runType === "squadsSend") {
+      squadsSend(transaction);
+    }
+  };
+
+  const menuItems = (items: typeof RUN_TYPES) =>
+    items.map(({ id, name, icon }, index) => (
+      <MenuItem
+        key={index}
+        icon={icon}
+        onClick={() => {
+          setUI((state) => {
+            state.uiState.runType = id;
+          });
+        }}
+      >
+        {name}
+      </MenuItem>
+    ));
 
   return (
     <Tooltip
@@ -100,7 +163,7 @@ export const SendButton: React.FC<{
       hasArrow={!walletPublicKey}
       label={
         walletPublicKey
-          ? "Run Transaction"
+          ? "Send transaction"
           : "Please connect a wallet to continue"
       }
     >
@@ -109,25 +172,13 @@ export const SendButton: React.FC<{
           isLoading={inProgress}
           isDisabled={!walletPublicKey}
           ml="2"
-          w="110px"
+          w="fit-content"
           colorScheme="green"
-          aria-label="Run Program"
-          rightIcon={<Icon as={runType === "simulate" ? FaFlask : FaPlay} />}
-          onClick={() => {
-            setUI((state) => {
-              state.transactionRun = {
-                ...DEFAULT_TRANSACTION_RUN,
-                inProgress: true,
-              };
-            });
-            if (runType === "simulate") {
-              simulate(transaction);
-            } else {
-              send(transaction);
-            }
-          }}
+          aria-label="Send transaction"
+          rightIcon={runIcon}
+          onClick={onClick}
         >
-          {RUN_TYPES.find(({ id }) => id === runType)?.name}
+          {runName}
         </Button>
         <Menu placement="right-start">
           <MenuButton
@@ -140,19 +191,13 @@ export const SendButton: React.FC<{
             icon={<TriangleDownIcon w="2" />}
           />
           <MenuList fontSize="md">
-            {RUN_TYPES.map(({ id, name }, index) => (
-              <MenuItem
-                key={index}
-                icon={id === runType ? <CheckIcon /> : undefined}
-                onClick={() => {
-                  setUI((state) => {
-                    state.uiState.runType = id;
-                  });
-                }}
-              >
-                {name}
-              </MenuItem>
-            ))}
+            {menuItems(RUN_TYPES.filter(({ type }) => type === "standard"))}
+            <MenuDivider />
+            <MenuGroup title="Integrations">
+              {menuItems(
+                RUN_TYPES.filter(({ type }) => type === "integration")
+              )}
+            </MenuGroup>
           </MenuList>
         </Menu>
       </ButtonGroup>

@@ -17,7 +17,7 @@ export type Explorer =
   | "solscan"
   | "none";
 
-export type RunType = "send" | "simulate";
+export type RunType = "send" | "simulate" | "squadsSimulate" | "squadsSend";
 
 // We mutate state using immerjs. All state fields are set to readonly
 // so we don't by mistake try to mutate outside immerjs.
@@ -39,6 +39,13 @@ export interface UIState {
   readonly descriptionVisible: boolean;
 }
 
+export interface SquadsConfig {
+  readonly programId: IPubKey;
+  readonly multisig: IPubKey;
+  readonly authorityIndex: number;
+  readonly activateTransaction: boolean;
+}
+
 ////// State Stores //////
 
 export interface PersistentState {
@@ -52,6 +59,7 @@ export interface SessionStateWithUndo {
   readonly transaction: ITransaction;
   readonly rpcEndpoint: IRpcEndpoint;
   readonly keypairs: Record<IPubKey, Uint8Array>;
+  readonly squadsConfig: SquadsConfig;
   set: (fn: (state: Draft<SessionStateWithUndo>) => void) => void;
 }
 

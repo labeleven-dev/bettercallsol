@@ -1,5 +1,9 @@
 import { SIGHASH_GLOBAL_NAMESPACE } from "@project-serum/anchor/dist/cjs/coder/borsh/instruction";
-import { LAMPORTS_PER_SOL, TransactionVersion } from "@solana/web3.js";
+import {
+  LAMPORTS_PER_SOL,
+  TransactionVersion,
+  VersionedTransaction,
+} from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import bs58 from "bs58";
 import { sha256 } from "js-sha256";
@@ -40,4 +44,13 @@ export const anchorMethodSighash = (anchorMethod: string): Buffer => {
   let name = snakeCase(anchorMethod);
   let preimage = `${SIGHASH_GLOBAL_NAMESPACE}:${name}`;
   return Buffer.from(sha256.digest(preimage)).slice(0, 8);
+};
+
+export const getAllAccounts = (transaction: VersionedTransaction) => {
+  const staticAccounts = transaction.message.staticAccountKeys;
+  const lookupAccounts =
+    transaction.message.getAccountKeys().accountKeysFromLookups;
+  const writableLookup = lookupAccounts?.writable || [];
+  const readOnlyLookup = lookupAccounts?.readonly || [];
+  return staticAccounts.concat(writableLookup).concat(readOnlyLookup);
 };

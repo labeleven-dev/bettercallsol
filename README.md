@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/alpha/public/logo128.png?raw=true" />
+  <img height="128px" src="https://github.com/labeleven-dev/bettercallsol/blob/alpha/public/logo-custom.png?raw=true" />
   <h1><a href="https://bettercallsol.dev">Better Call Sol</a></h1>
   <p>
     <h3>The Missing Solana Client</h3>
@@ -20,7 +20,7 @@ Features
 
 Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://solana.com/).
 
-* [x] Compose and send Solana transactions
+* [x] Compose, simulate and send Solana transactions
 * [x] Easily switch between networks
 * [x] Define instruction data in raw, Buffer Layout and Borsh formats
 * [x] Basic Anchor support
@@ -30,6 +30,7 @@ Ideal for learning and sending ad-hoc requests to [Solana blockchain](https://so
 * [x] Use your favourite Solana explorer
 * [x] Airdrop SOLs
 * [x] Generate PDAs
+* [x] Integration: Squads
 
 See [GitHub issues](https://github.com/labeleven-dev/bettercallsol/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the upcoming features.
 

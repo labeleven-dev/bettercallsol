@@ -16,13 +16,14 @@ import {
   Spacer,
   Tooltip,
 } from "@chakra-ui/react";
+import { SquadsConfig } from "components/client/SquadsConfig";
 import { Description } from "components/common/Description";
 import { EditableName } from "components/common/EditableName";
 import { RpcEndpointMenu } from "components/common/RpcEndpointMenu";
 import { useShallowConfigStore } from "hooks/useConfigStore";
 import {
-  useShallowSessionStoreWithoutUndo,
   useShallowSessionStoreWithUndo,
+  useShallowSessionStoreWithoutUndo,
 } from "hooks/useSessionStore";
 import React, { useEffect } from "react";
 import { FaCompress, FaEllipsisV, FaEraser, FaExpand } from "react-icons/fa";
@@ -79,7 +80,7 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
             <MenuButton
               as={Button}
               mr="2"
-              minW="120px"
+              w="fit-content"
               rightIcon={<ChevronDownIcon />}
             >
               {
@@ -108,8 +109,8 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
         </Menu>
 
         <RpcEndpointMenu
-          menuButtonProps={{ minW: "250px", maxW: "250px" }}
-          menuListProps={{ fontSize: "md" }}
+          menuButtonProps={{ w: "fit-content" }}
+          menuListProps={{ fontSize: "md", minW: "250px" }}
           endpoint={rpcEndpoint}
           setEndpoint={(endpoint) => {
             setSession((state) => {
@@ -179,6 +180,10 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
           </AlertDescription>
         </Alert>
       </Collapse>
+
+      {(runType === "squadsSimulate" || runType === "squadsSend") && (
+        <SquadsConfig />
+      )}
 
       <Heading mt="5" mb="2" alignItems="center" flex="1" size="lg">
         <EditableName

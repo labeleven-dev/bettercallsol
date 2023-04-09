@@ -3,6 +3,8 @@ import * as Sentry from "@sentry/react";
 import { App } from "components/App";
 import React from "react";
 import * as ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "reportWebVitals";
 
@@ -29,7 +31,11 @@ root.render(
     <ColorModeScript initialColorMode="system" />
     <BrowserRouter>
       <Sentry.ErrorBoundary>
-        <App />
+        <QueryClientProvider client={new QueryClient()}>
+          <App />
+          {/* Only included if NODE_ENV is development */}
+          <ReactQueryDevtools />
+        </QueryClientProvider>
       </Sentry.ErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>

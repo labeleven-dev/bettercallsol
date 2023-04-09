@@ -9,8 +9,9 @@ import {
 import {
   AppOptions,
   PersistentState,
-  SessionStateWithoutUndo,
   SessionStateWithUndo,
+  SessionStateWithoutUndo,
+  SquadsConfig,
 } from "types/state";
 import { newAccount, newInstruction } from "utils/internal";
 import { toSortableCollection } from "utils/sortable";
@@ -100,10 +101,18 @@ export const DEFAULT_TRANSACTION_RUN: ITransactionRun = {
   error: "",
 };
 
+export const DEFAULT_SQUADS_CONFIG: SquadsConfig = {
+  programId: "SMPLecH534NA9acpos4G6x7uf3LWbCAwZQE9e8ZekMu",
+  multisig: "",
+  authorityIndex: 1,
+  activateTransaction: false,
+};
+
 export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
   rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   keypairs: {},
+  squadsConfig: DEFAULT_SQUADS_CONFIG,
   set: () => {}, // set by the hook
 };
 

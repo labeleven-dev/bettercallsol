@@ -10,7 +10,7 @@ import {
 import { INetwork } from "types/internal";
 import { ALL_NETWORKS, LIVE_NETWORKS } from "utils/internal";
 
-// Copied and modified from https://github.com/solana-labs/solana/blob/43a0745b37b2f7ba5643ca5d0bd865b82bcb886c/explorer/src/utils/tx.ts
+// Copied and modified from https://github.com/solana-labs/explorer/blob/fa28f1a88594db8d78e84527296ba6f62d13ca7b/src/utils/tx.ts
 
 export const programLabel = (
   address: string,
@@ -39,6 +39,7 @@ export enum PROGRAM_NAMES {
 
   // spl
   ASSOCIATED_TOKEN = "Associated Token Program",
+  ACCOUNT_COMPRESSION = "Account Compression Program",
   FEATURE_PROPOSAL = "Feature Proposal Program",
   LENDING = "Lending Program",
   MEMO = "Memo Program",
@@ -55,6 +56,8 @@ export enum PROGRAM_NAMES {
   BREAK_SOLANA = "Break Solana Program",
   CHAINLINK_ORACLE = "Chainlink OCR2 Oracle Program",
   CHAINLINK_STORE = "Chainlink Store Program",
+  CLOCKWORK_1 = "Clockwork Thread Program v1",
+  CLOCKWORK_2 = "Clockwork Thread Program v2",
   MANGO_GOVERNANCE = "Mango Governance Program",
   MANGO_ICO = "Mango ICO Program",
   MANGO_1 = "Mango Program v1",
@@ -103,6 +106,9 @@ export enum PROGRAM_NAMES {
   SOLANART_GO = "Solanart - Global offers",
   STEPN_DEX = "STEPN Dex",
   OPENBOOK_DEX = "OpenBook Dex",
+
+  SQUADS_V3 = "Squads v3",
+  SQUADS_BASED = "Squads Based",
 }
 
 export type ProgramInfo = {
@@ -151,6 +157,10 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
   ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL: {
     name: PROGRAM_NAMES.ASSOCIATED_TOKEN,
     deployments: ALL_NETWORKS,
+  },
+  cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK: {
+    name: PROGRAM_NAMES.ACCOUNT_COMPRESSION,
+    deployments: ["devnet", "mainnet-beta"],
   },
   Feat1YXHhH6t1juaWF74WLcfv4XoNocjXA6sPWHNgAse: {
     name: PROGRAM_NAMES.FEATURE_PROPOSAL,
@@ -413,6 +423,23 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
   srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX: {
     name: PROGRAM_NAMES.OPENBOOK_DEX,
     deployments: ["mainnet-beta"],
+  },
+  "3XXuUFfweXBwFgFfYaejLvZE4cGZiHgKiGfMtdxNzYmv": {
+    name: PROGRAM_NAMES.CLOCKWORK_1,
+    deployments: ["mainnet-beta", "devnet"],
+  },
+  CLoCKyJ6DXBJqqu2VWx9RLbgnwwR6BMHHuyasVmfMzBh: {
+    name: PROGRAM_NAMES.CLOCKWORK_2,
+    deployments: ["mainnet-beta", "devnet"],
+  },
+
+  SMPLecH534NA9acpos4G6x7uf3LWbCAwZQE9e8ZekMu: {
+    name: PROGRAM_NAMES.SQUADS_V3,
+    deployments: ALL_NETWORKS,
+  },
+  BASEDWVF6xeXTJSrk99cbMCwGFtaUvFLihpg6ki9UWX3: {
+    name: PROGRAM_NAMES.SQUADS_BASED,
+    deployments: ALL_NETWORKS,
   },
 };
 
