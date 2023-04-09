@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import svgrPlugin from "vite-plugin-svgr";
 import viteTsconfigPaths from "vite-tsconfig-paths";
@@ -10,6 +11,7 @@ export default defineConfig({
     viteTsconfigPaths(),
     svgrPlugin(),
     splitVendorChunkPlugin(),
+    visualizer(),
   ],
   server: {
     open: true,

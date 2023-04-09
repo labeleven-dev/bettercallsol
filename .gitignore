@@ -40,3 +40,5 @@ cypress/downloads
 src/generated
 
 dist
+# rollup-plugin-visualizer
+stats.html

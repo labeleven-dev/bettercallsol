@@ -91,6 +91,7 @@
     "license-report": "^6.3.0",
     "protobufjs-cli": "^1.1.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "rollup-plugin-visualizer": "^5.9.0",
     "semantic-release": "^19.0.5",
     "semantic-release-export-data": "^1.0.1",
     "ts-json-schema-generator": "^1.2.0",
