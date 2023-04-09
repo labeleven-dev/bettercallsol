@@ -5,6 +5,10 @@ import {
   Icon,
   IconButton,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Text,
   Tooltip,
@@ -17,7 +21,7 @@ import { Example } from "components/header/Examples";
 import { WalletButton } from "components/header/WalletButton";
 import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import { useState } from "react";
-import { FaInfo, FaShareAlt, FaWrench } from "react-icons/fa";
+import { FaEllipsisH, FaInfo, FaShareAlt, FaWrench } from "react-icons/fa";
 
 export const Header: React.FC = () => {
   const [funTitle, setFunTitle] = useState(true);
@@ -111,35 +115,41 @@ export const Header: React.FC = () => {
         />
       </Tooltip>
 
-      <ColorModeSwitcher justifySelf="flex-end" />
-
-      <Tooltip label="Options">
-        <IconButton
-          mr="0.5"
-          aria-label="Options"
-          icon={<Icon as={FaWrench} />}
-          variant="ghost"
-          onClick={() => {
-            set((state) => {
-              state.uiState.optionsOpen = true;
-            });
-          }}
-        />
-      </Tooltip>
-
-      <Tooltip label="Info">
-        <IconButton
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          ml="1"
           mr="1"
-          aria-label="Info"
-          icon={<InfoIcon />}
+          aria-label="More..."
+          icon={<Icon as={FaEllipsisH} />}
           variant="ghost"
-          onClick={() => {
-            set((state) => {
-              state.uiState.infoOpen = true;
-            });
-          }}
         />
-      </Tooltip>
+        <MenuList fontSize="md" zIndex="modal">
+          <ColorModeSwitcher />
+
+          <MenuItem
+            icon={<Icon as={FaWrench} />}
+            onClick={() => {
+              set((state) => {
+                state.uiState.optionsOpen = true;
+              });
+            }}
+          >
+            Options
+          </MenuItem>
+
+          <MenuItem
+            icon={<InfoIcon />}
+            onClick={() => {
+              set((state) => {
+                state.uiState.infoOpen = true;
+              });
+            }}
+          >
+            Info
+          </MenuItem>
+        </MenuList>
+      </Menu>
 
       <WalletButton />
     </Flex>
