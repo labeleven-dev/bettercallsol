@@ -7,7 +7,6 @@ import {
 import {
   Button,
   Flex,
-  forwardRef,
   Grid,
   Heading,
   IconButton,
@@ -17,14 +16,15 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Tag,
   Text,
   Tooltip,
+  forwardRef,
 } from "@chakra-ui/react";
 import { BalanceTable } from "components/client/results/BalanceTable";
 import { ProgramLogs } from "components/client/results/ProgramLogs";
 import { Signature } from "components/client/results/Signature";
 import { ErrorAlert } from "components/common/ErrorAlert";
+import { RelativeTimestamp } from "components/common/RelativeTimestamp";
 import { useConfigStore } from "hooks/useConfigStore";
 import { useShallowSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import { IPubKey } from "types/internal";
@@ -90,12 +90,10 @@ export const Results = forwardRef<
         {
           // do not display if transaction has been cleared, i.e. no signature
           endedAt && transactionRun.signature && (
-            <Tooltip
-              label={`Last fetched @ ${new Date(endedAt).toLocaleString()}`}
-            >
-              <Tag height="20px" variant="outline">
-                {new Date(endedAt).toLocaleTimeString()}
-              </Tag>
+            <Tooltip label={new Date(endedAt).toLocaleString()}>
+              <Text fontSize="sm" color="gray.400">
+                Last fetched <RelativeTimestamp timestamp={endedAt} />
+              </Text>
             </Tooltip>
           )
         }

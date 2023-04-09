@@ -55,6 +55,7 @@
     "buffer": "^6.0.3",
     "chakra-ui-markdown-renderer": "^4.1.0",
     "crypto-browserify": "^3.12.0",
+    "dayjs": "^1.11.7",
     "framer-motion": "^8.0.1",
     "immer": "^9.0.16",
     "js-sha256": "^0.9.0",
