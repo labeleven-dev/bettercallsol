@@ -116,7 +116,6 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
     shareOpen: false,
     infoOpen: false,
     descriptionVisible: false,
-    addressLookupTableExpanded: false,
   },
   set: () => {}, // set by the hook
 };
