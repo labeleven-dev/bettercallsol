@@ -1,10 +1,10 @@
 import { Badge, Flex, InputProps, Spacer, Text } from "@chakra-ui/react";
-import { Autocomplete, AutoCompleteItem } from "components/common/AutoComplete";
+import { AutoCompleteItem, Autocomplete } from "components/common/AutoComplete";
 import { useSessionStoreWithUndo } from "hooks/useSessionStore";
 import { WritableDraft } from "immer/dist/internal";
 import { NATIVE_INSTRUCTIONS } from "library/instructions/native";
 import { SPL_INSTRUCTIONS } from "library/instructions/spl";
-import { LOADER_IDS, programLabel, PROGRAM_INFO_BY_ID } from "library/programs";
+import { LOADER_IDS, PROGRAM_INFO_BY_ID, programLabel } from "library/programs";
 import { SYSVARS_BY_ID } from "library/sysvars";
 import { mapIInstructionExtToIInstruction } from "mappers/external-to-internal";
 import React, { useMemo, useState } from "react";
@@ -24,6 +24,7 @@ interface Option {
 }
 
 // TODO needs to be refactored to handle program ID auto-complete
+// TODO too coupled to instruction accounts
 // TODO can we cache the autocomplete items, rather than creating them for each component?
 
 /**
@@ -35,6 +36,7 @@ export const AccountAutoComplete: React.FC<{
   setPubkey: (pubkey: IPubKey) => void;
   updateAccount?: (fn: (state: WritableDraft<IAccount>) => void) => void;
   updateInstructionWithId?: IID;
+  filter?: (option: Option) => boolean;
   chakraInputProps?: InputProps;
 }> = ({
   pubkey,
@@ -42,6 +44,7 @@ export const AccountAutoComplete: React.FC<{
   updateAccount,
   updateInstructionWithId,
   types,
+  filter,
   chakraInputProps,
 }) => {
   const availableOptions = useMemo(
@@ -62,8 +65,10 @@ export const AccountAutoComplete: React.FC<{
 
     // TODO check network
     const matching = availableOptions.filter(
-      ({ label, secondaryLabel = "" }) =>
-        contains(label, v) || startsWith(secondaryLabel, v)
+      (option) =>
+        (!filter || filter(option)) &&
+        (contains(option.label, v) ||
+          startsWith(option.secondaryLabel ?? "", v))
     );
     setOptions(
       matching.length > 0
