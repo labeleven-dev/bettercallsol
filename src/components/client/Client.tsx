@@ -62,7 +62,13 @@ export const Client: React.FC = () => {
   const startGet = (signature: string, skipPolling: boolean = false) => {
     if (!signature) return;
     set((state) => {
-      state.transactionRun = { inProgress: true, signature };
+      state.transactionRun = {
+        inProgress: true,
+        signature,
+        // set prior to transaction submission so needs to be preserved
+        recentBlockhash: state.transactionRun.recentBlockhash,
+        lastValidBlockHeight: state.transactionRun.lastValidBlockHeight,
+      };
     });
     start(signature, skipPolling);
   };

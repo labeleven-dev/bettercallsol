@@ -40,12 +40,16 @@ export const Results = forwardRef<
 >(({ startGet, cancelGet, endedAt }, ref) => {
   const finality = useConfigStore((state) => state.transactionOptions.finality);
 
-  const [transactionRun, set] = useShallowSessionStoreWithoutUndo((state) => [
-    state.transactionRun,
-    state.set,
-  ]);
+  const [signature, inProgress, confirmationStatus, error, set] =
+    useShallowSessionStoreWithoutUndo((state) => [
+      state.transactionRun.signature,
+      state.transactionRun.inProgress,
+      state.transactionRun.confirmationStatus,
+      state.transactionRun.error,
+      state.set,
+    ]);
 
-  const isSimulated = transactionRun.signature === SIMULATED_SIGNATURE;
+  const isSimulated = signature === SIMULATED_SIGNATURE;
 
   return (
     <Grid ref={ref} pt="2" pl="5" pr="5">
@@ -53,10 +57,10 @@ export const Results = forwardRef<
         <Heading mr="3" size="md">
           Results
         </Heading>
-        {transactionRun.confirmationStatus === finality ||
-        transactionRun.confirmationStatus === "finalized" ||
+        {confirmationStatus === finality ||
+        confirmationStatus === "finalized" ||
         isSimulated ? (
-          transactionRun.error ? (
+          error ? (
             <>
               <WarningIcon mr="1" color="red.400" />
               <Text color="red.400" fontSize="sm">
@@ -74,8 +78,8 @@ export const Results = forwardRef<
             </>
           )
         ) : (
-          transactionRun.signature &&
-          !transactionRun.inProgress && (
+          signature &&
+          !inProgress && (
             <>
               <QuestionIcon mr="1" color="yellow.400" />
               <Text color="yellow.400" fontSize="sm">
@@ -89,7 +93,7 @@ export const Results = forwardRef<
 
         {
           // do not display if transaction has been cleared, i.e. no signature
-          endedAt && transactionRun.signature && (
+          endedAt && signature && (
             <Tooltip label={new Date(endedAt).toLocaleString()}>
               <Text fontSize="sm" color="gray.400">
                 Last fetched <RelativeTimestamp timestamp={endedAt} />
@@ -97,7 +101,7 @@ export const Results = forwardRef<
             </Tooltip>
           )
         }
-        {transactionRun.inProgress ? (
+        {inProgress ? (
           <Button
             color="red.600"
             variant="outline"
@@ -107,7 +111,7 @@ export const Results = forwardRef<
             Cancel
           </Button>
         ) : (
-          transactionRun.signature && (
+          signature && (
             <Tooltip label="Refresh">
               <IconButton
                 ml="1"
@@ -116,7 +120,7 @@ export const Results = forwardRef<
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  startGet(transactionRun.signature, true);
+                  startGet(signature, true);
                 }}
               />
             </Tooltip>
@@ -125,7 +129,7 @@ export const Results = forwardRef<
       </Flex>
 
       <ErrorAlert
-        error={transactionRun.error}
+        error={error}
         onClose={() => {
           set((state) => {
             state.transactionRun.error = "";
@@ -133,14 +137,7 @@ export const Results = forwardRef<
         }}
       />
 
-      <Signature
-        signature={transactionRun.signature}
-        confirmationStatus={transactionRun.confirmationStatus}
-        confirmations={transactionRun.confirmations}
-        slot={transactionRun.slot}
-        fee={transactionRun.fee}
-        unitsConsumed={transactionRun.unitsConsumed}
-      />
+      <Signature />
 
       <Tabs colorScheme="main" variant="enclosed">
         <TabList>
@@ -149,13 +146,10 @@ export const Results = forwardRef<
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ProgramLogs
-              inProgress={transactionRun.inProgress}
-              logs={transactionRun.logs}
-            />
+            <ProgramLogs />
           </TabPanel>
           <TabPanel>
-            <BalanceTable balances={transactionRun.balances || []} />
+            <BalanceTable />
           </TabPanel>
         </TabPanels>
       </Tabs>

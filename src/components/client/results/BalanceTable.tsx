@@ -12,16 +12,19 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { ExplorerButton } from "components/common/ExplorerButton";
-import { useSessionStoreWithUndo } from "hooks/useSessionStore";
+import {
+  useSessionStoreWithUndo,
+  useSessionStoreWithoutUndo,
+} from "hooks/useSessionStore";
 import React, { useState } from "react";
-import { IBalance } from "types/internal";
 import { toSol } from "utils/web3js";
 
-export const BalanceTable: React.FC<{
-  balances: IBalance[];
-}> = ({ balances }) => {
+export const BalanceTable: React.FC = () => {
   const [showOnlyChanges, setShowOnlyChanges] = useState(true);
   const rpcEndpoint = useSessionStoreWithUndo((state) => state.rpcEndpoint);
+  const balances = useSessionStoreWithoutUndo(
+    (state) => state.transactionRun.balances ?? []
+  );
 
   return (
     <TableContainer fontSize="sm" mb="8">

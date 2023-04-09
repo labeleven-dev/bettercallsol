@@ -12,13 +12,12 @@ import { CopyButton } from "components/common/CopyButton";
 import { useSessionStoreWithoutUndo } from "hooks/useSessionStore";
 import React, { useMemo } from "react";
 
-export const ProgramLogs: React.FC<{
-  inProgress: boolean;
-  logs?: string[];
-}> = ({ inProgress, logs }) => {
-  const signature = useSessionStoreWithoutUndo(
-    (state) => state.transactionRun.signature
-  );
+export const ProgramLogs: React.FC = () => {
+  const [signature, inProgress, logs] = useSessionStoreWithoutUndo((state) => [
+    state.transactionRun.signature,
+    state.transactionRun.inProgress,
+    state.transactionRun.logs,
+  ]);
   const joinedUpLogs = logs?.join("\n");
   const downloadUrl = useMemo(
     () =>
