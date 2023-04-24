@@ -266,6 +266,7 @@ export const SendButton: React.FC<{
             aria-label="More"
             boxShadow={!simulate ? "0 0 8px 1px #9AE6B4" : undefined}
             icon={<TriangleDownIcon w="2" />}
+            isDisabled={!walletPublicKey}
           />
           <MenuList fontSize="md">
             {menuItems(RUN_TYPES.filter(({ type }) => type === "standard"))}
