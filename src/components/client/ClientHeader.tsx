@@ -4,6 +4,7 @@ import {
   AlertDescription,
   AlertIcon,
   Button,
+  Checkbox,
   Collapse,
   Flex,
   Heading,
@@ -33,10 +34,9 @@ import { TRANSACTION_VERSIONS } from "utils/ui-constants";
 export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
   sendButton,
 }) => {
-  const [runType, setUI] = useShallowSessionStoreWithoutUndo((state) => [
-    state.uiState.runType,
-    state.set,
-  ]);
+  const [runType, simulate, setUI] = useShallowSessionStoreWithoutUndo(
+    (state) => [state.uiState.runType, state.uiState.simulate, state.set]
+  );
 
   const [
     transactionVersion,
@@ -119,6 +119,19 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
           }}
         />
 
+        <Checkbox
+          mx="2"
+          colorScheme="green"
+          isChecked={simulate}
+          onChange={(event) => {
+            setUI((state) => {
+              state.uiState.simulate = event.target.checked;
+            });
+          }}
+        >
+          Simulate
+        </Checkbox>
+
         {sendButton}
 
         <Spacer />
@@ -181,9 +194,7 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
         </Alert>
       </Collapse>
 
-      {(runType === "squadsSimulate" || runType === "squadsSend") && (
-        <SquadsConfig />
-      )}
+      {runType === "squads" && <SquadsConfig />}
 
       <Heading mt="5" mb="2" alignItems="center" flex="1" size="lg">
         <EditableName

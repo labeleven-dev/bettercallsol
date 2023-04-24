@@ -1,8 +1,8 @@
 import produce from "immer";
 import { SessionStateWithoutUndo, SessionStateWithUndo } from "types/state";
 import {
-  DEFAULT_SESSION_STATE_WITHOUT_UNDO,
   DEFAULT_SESSION_STATE_WITH_UNDO,
+  DEFAULT_SESSION_STATE_WITHOUT_UNDO,
 } from "utils/state";
 import create from "zustand";
 import { persist, subscribeWithSelector } from "zustand/middleware";

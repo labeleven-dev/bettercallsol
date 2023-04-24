@@ -9,7 +9,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FaGithub, FaLaptop, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaTwitter } from "react-icons/fa";
 
 export const Footer: React.FC = () => (
   <Grid p="3" pb="5" templateColumns="repeat(3,1fr)" alignItems="center">
@@ -28,11 +28,8 @@ export const Footer: React.FC = () => (
         >
           <Icon as={FaGithub} />
         </Link>
-        <Link mr="4" href="https://twitter.com/labeleven_dev" isExternal>
-          <Icon as={FaTwitter} />
-        </Link>
         <Link href="https://twitter.com/sohrabwashere" isExternal>
-          <Icon as={FaLaptop} />
+          <Icon as={FaTwitter} />
         </Link>
       </Center>
     </Box>

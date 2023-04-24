@@ -50,20 +50,8 @@ export const RUN_TYPES: {
 }[] = [
   { id: "send", name: "Send", type: "standard", icon: <Icon as={FaPlay} /> },
   {
-    id: "simulate",
-    name: "Simulate",
-    type: "standard",
-    icon: <Icon as={FaFlask} />,
-  },
-  {
-    id: "squadsSend",
+    id: "squads",
     name: "Send to Squads",
-    type: "integration",
-    icon: <SquadsIcon />,
-  },
-  {
-    id: "squadsSimulate",
-    name: "Simulate to Squads",
     type: "integration",
     icon: <SquadsIcon />,
   },
@@ -76,13 +64,13 @@ export const SendButton: React.FC<{
   const scrollToResults = useConfigStore(
     (state) => state.appOptions.scrollToResults
   );
-  const [runType, inProgress, setUI] = useShallowSessionStoreWithoutUndo(
-    (state) => [
+  const [runType, simulate, inProgress, setUI] =
+    useShallowSessionStoreWithoutUndo((state) => [
       state.uiState.runType,
+      state.uiState.simulate,
       state.transactionRun.inProgress,
       state.set,
-    ]
-  );
+    ]);
 
   const { publicKey: walletPublicKey } = useWallet();
 
@@ -151,7 +139,7 @@ export const SendButton: React.FC<{
     scrollDown();
   };
 
-  const { simulate, send } = useSendWeb3Transaction({
+  const { simulate: sendSimulate, send } = useSendWeb3Transaction({
     onSimulated,
     onSent,
     onError,
@@ -171,13 +159,13 @@ export const SendButton: React.FC<{
       };
     });
 
-    if (runType === "simulate") {
-      simulate(transaction);
-    } else if (runType === "send") {
+    if (runType === "send" && simulate) {
+      sendSimulate(transaction);
+    } else if (runType === "send" && !simulate) {
       send(transaction);
-    } else if (runType === "squadsSimulate") {
+    } else if (runType === "squads" && simulate) {
       squadsSimulate(transaction);
-    } else if (runType === "squadsSend") {
+    } else if (runType === "squads" && !simulate) {
       squadsSend(transaction);
     }
   };
@@ -203,7 +191,9 @@ export const SendButton: React.FC<{
       hasArrow={!walletPublicKey}
       label={
         walletPublicKey
-          ? "Send transaction"
+          ? simulate
+            ? "Simulate transaction"
+            : "Send transaction"
           : "Please connect a wallet to continue"
       }
     >
@@ -215,7 +205,8 @@ export const SendButton: React.FC<{
           w="fit-content"
           colorScheme="green"
           aria-label="Send transaction"
-          rightIcon={runIcon}
+          rightIcon={simulate ? <Icon as={FaFlask} /> : runIcon}
+          boxShadow={!simulate ? "0 0 8px 1px #9AE6B4" : undefined}
           onClick={onClick}
         >
           {runName}
@@ -228,6 +219,7 @@ export const SendButton: React.FC<{
             variant="outline"
             colorScheme="green"
             aria-label="More"
+            boxShadow={!simulate ? "0 0 8px 1px #9AE6B4" : undefined}
             icon={<TriangleDownIcon w="2" />}
           />
           <MenuList fontSize="md">

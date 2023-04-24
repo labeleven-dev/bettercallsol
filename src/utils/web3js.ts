@@ -1,6 +1,7 @@
 import { SIGHASH_GLOBAL_NAMESPACE } from "@project-serum/anchor/dist/cjs/coder/borsh/instruction";
 import {
   LAMPORTS_PER_SOL,
+  PublicKey,
   TransactionVersion,
   VersionedTransaction,
 } from "@solana/web3.js";
@@ -30,6 +31,16 @@ export const isValidPublicKey = (key: string): boolean => {
   } catch (_) {}
 
   return valid;
+};
+
+export const toPublicKey = (key: string, field?: string): PublicKey => {
+  try {
+    return new PublicKey(key);
+  } catch (_) {
+    throw new Error(
+      `Invalid public key${field ? " in " + field : ""}: ${key || "N/A"}`
+    );
+  }
 };
 
 export const toTransactionVersion = (

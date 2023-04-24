@@ -15,7 +15,7 @@ import { mapITransactionToWeb3Instructions } from "mappers/internal-to-web3js";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { ITransaction } from "types/internal";
-import { isValidPublicKey } from "utils/web3js";
+import { isValidPublicKey, toPublicKey } from "utils/web3js";
 
 export const useTransactionPda = (
   programId: string,
@@ -81,8 +81,8 @@ export const useSendToSquads = (
     }
 
     const anchorProvider = new AnchorProvider(connection, anchorWallet, {});
-    const programPubkey = new PublicKey(programId);
-    const multisigPda = new PublicKey(multisig);
+    const programPubkey = toPublicKey(programId, "Squads program");
+    const multisigPda = toPublicKey(multisig, "Multisig account");
 
     const squads = new Squads({
       connection: anchorProvider.connection,

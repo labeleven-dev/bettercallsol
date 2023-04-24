@@ -120,6 +120,7 @@ export const DEFAULT_SESSION_STATE_WITHOUT_UNDO: SessionStateWithoutUndo = {
   transactionRun: DEFAULT_TRANSACTION_RUN,
   uiState: {
     runType: "send",
+    simulate: false,
     sidePanel: "closed",
     optionsOpen: false,
     shareOpen: false,

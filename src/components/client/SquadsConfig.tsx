@@ -28,7 +28,7 @@ export const SquadsConfig: React.FC = () => {
     useSessionStoreWithUndo((state) => [state.squadsConfig, state.set]);
 
   const [transactionPda, setTransactionPda] = useState("");
-  const { isLoading: transactionPdaIsLoading, refetch: getTransactionPda } =
+  const { isFetching: transactionPdaIsLoading, refetch: getTransactionPda } =
     useTransactionPda(programId, multisig, (pubkey) => {
       if (!!pubkey) {
         setTransactionPda(pubkey.toBase58());

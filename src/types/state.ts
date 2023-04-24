@@ -17,7 +17,7 @@ export type Explorer =
   | "solscan"
   | "none";
 
-export type RunType = "send" | "simulate" | "squadsSimulate" | "squadsSend";
+export type RunType = "send" | "squads";
 
 // We mutate state using immerjs. All state fields are set to readonly
 // so we don't by mistake try to mutate outside immerjs.
@@ -32,6 +32,7 @@ export interface AppOptions {
 
 export interface UIState {
   readonly runType: RunType;
+  readonly simulate: boolean;
   readonly sidePanel: "import" | "closed";
   readonly optionsOpen: boolean;
   readonly shareOpen: boolean;
