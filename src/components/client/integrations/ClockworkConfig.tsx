@@ -86,7 +86,7 @@ export const ClockworkConfig: React.FC = () => {
           value={threadId}
           onChange={(event) => {
             set((state) => {
-              state.clockworkConfig.threadId = event.target.value.trim();
+              state.clockworkConfig.threadId = event.target.value;
             });
           }}
         />
