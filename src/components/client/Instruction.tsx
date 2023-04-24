@@ -249,7 +249,7 @@ export const Instruction: React.FC<{ index: number }> = ({ index }) => {
         <Flex ml="70px" mb="4">
           {programInfo.label && <Tag size="sm">{programInfo.label}</Tag>}
           {anchorMethod && (
-            <Tag size="sm">
+            <Tag ml="1" size="sm">
               Anchor Method:
               <Text fontFamily="mono" ml="1">
                 {anchorMethod}

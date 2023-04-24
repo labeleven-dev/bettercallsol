@@ -31,11 +31,7 @@ export const useTransactionPda = (
   );
 
   return useQuery<PublicKey | undefined>(
-    // avoid re-rending due to array getting recreated :(
-    useMemo(
-      () => ["squadsTransactionPda", programId, multisig],
-      [programId, multisig]
-    ),
+    ["squadsTransactionPda", programId, multisig],
     async () => {
       if (!isValidPublicKey(programId) || !isValidPublicKey(multisig)) return;
 
