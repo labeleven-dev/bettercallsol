@@ -17,7 +17,7 @@ export type Explorer =
   | "solscan"
   | "none";
 
-export type RunType = "send" | "squads";
+export type RunType = "send" | "squads" | "clockwork";
 
 // We mutate state using immerjs. All state fields are set to readonly
 // so we don't by mistake try to mutate outside immerjs.
@@ -47,6 +47,29 @@ export interface SquadsConfig {
   readonly activateTransaction: boolean;
 }
 
+export interface ClockworkConfig {
+  readonly threadId: string;
+  readonly amount: number;
+  readonly fee: number | "";
+  readonly rateLimit: number | "";
+  readonly trigger: "account" | "cron" | "now" | "slot" | "epoch";
+  readonly cronTrigger: {
+    schedule: string;
+    skippable: boolean;
+  };
+  readonly accountTrigger: {
+    address: string;
+    offset: number;
+    size: number;
+  };
+  readonly slotTrigger: {
+    slot: number;
+  };
+  readonly epochTrigger: {
+    epoch: number;
+  };
+}
+
 ////// State Stores //////
 
 export interface PersistentState {
@@ -61,6 +84,7 @@ export interface SessionStateWithUndo {
   readonly rpcEndpoint: IRpcEndpoint;
   readonly keypairs: Record<IPubKey, Uint8Array>;
   readonly squadsConfig: SquadsConfig;
+  readonly clockworkConfig: ClockworkConfig;
   set: (fn: (state: Draft<SessionStateWithUndo>) => void) => void;
 }
 

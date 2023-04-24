@@ -17,7 +17,8 @@ import {
   Spacer,
   Tooltip,
 } from "@chakra-ui/react";
-import { SquadsConfig } from "components/client/SquadsConfig";
+import { ClockworkConfig } from "components/client/integrations/ClockworkConfig";
+import { SquadsConfig } from "components/client/integrations/SquadsConfig";
 import { Description } from "components/common/Description";
 import { EditableName } from "components/common/EditableName";
 import { RpcEndpointMenu } from "components/common/RpcEndpointMenu";
@@ -195,6 +196,7 @@ export const ClientHeader: React.FC<{ sendButton: React.ReactNode }> = ({
       </Collapse>
 
       {runType === "squads" && <SquadsConfig />}
+      {runType === "clockwork" && <ClockworkConfig />}
 
       <Heading mt="5" mb="2" alignItems="center" flex="1" size="lg">
         <EditableName

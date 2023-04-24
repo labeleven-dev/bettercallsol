@@ -1,4 +1,4 @@
-import { RepeatIcon } from "@chakra-ui/icons";
+import { InfoOutlineIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
@@ -7,11 +7,13 @@ import {
   GridItem,
   IconButton,
   Input,
+  Link,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Spacer,
   Spinner,
   Switch,
   Tooltip,
@@ -43,6 +45,20 @@ export const SquadsConfig: React.FC = () => {
   return (
     <ExpandableSection heading="Integration: Squads Configuration">
       <Grid templateColumns="1fr 4fr" gap="5px 5px" alignItems="center">
+        <GridItem colSpan={2} display="flex" mb="2">
+          <Spacer />
+          <Link
+            href="https://docs.squads.so/squads-v3-docs/"
+            isExternal
+            fontSize="sm"
+            // line up icon and text
+            display="flex"
+            alignItems="center"
+          >
+            <InfoOutlineIcon mr="1" color="blue.500" /> Squads V3 documentation
+          </Link>
+        </GridItem>
+
         <FormLabel htmlFor="squads-program-id" textAlign="right">
           Squads program
         </FormLabel>

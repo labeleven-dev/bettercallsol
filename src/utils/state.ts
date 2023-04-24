@@ -8,6 +8,7 @@ import {
 } from "types/internal";
 import {
   AppOptions,
+  ClockworkConfig,
   PersistentState,
   SessionStateWithUndo,
   SessionStateWithoutUndo,
@@ -108,11 +109,24 @@ export const DEFAULT_SQUADS_CONFIG: SquadsConfig = {
   activateTransaction: false,
 };
 
+export const DEFAULT_CLOCKWORK_CONFIG: ClockworkConfig = {
+  threadId: "",
+  amount: 0,
+  fee: "",
+  rateLimit: "",
+  trigger: "now",
+  cronTrigger: { schedule: "", skippable: false },
+  accountTrigger: { address: "", offset: 0, size: 0 },
+  slotTrigger: { slot: 0 },
+  epochTrigger: { epoch: 0 },
+};
+
 export const DEFAULT_SESSION_STATE_WITH_UNDO: SessionStateWithUndo = {
   transaction: DEFAULT_TRANSACTION,
   rpcEndpoint: DEFAULT_RPC_ENDPOINTS[0],
   keypairs: {},
   squadsConfig: DEFAULT_SQUADS_CONFIG,
+  clockworkConfig: DEFAULT_CLOCKWORK_CONFIG,
   set: () => {}, // set by the hook
 };
 
