@@ -4,9 +4,13 @@ import {
   DEFAULT_SESSION_STATE_WITH_UNDO,
   DEFAULT_SESSION_STATE_WITHOUT_UNDO,
 } from "utils/state";
-import create from "zustand";
-import { persist, subscribeWithSelector } from "zustand/middleware";
-import shallow from "zustand/shallow";
+import { create } from "zustand";
+import {
+  createJSONStorage,
+  persist,
+  subscribeWithSelector,
+} from "zustand/middleware";
+import { shallow } from "zustand/shallow";
 
 // TODO implement undo/redo once this is resolved: https://github.com/charkour/zundo/issues/38
 
@@ -23,12 +27,11 @@ export const useSessionStoreWithUndo = create<SessionStateWithUndo>()(
     }),
     {
       name: "bscol-with-undo",
-      getStorage: () => sessionStorage,
-      serialize: ({ state, ...theRest }) =>
-        JSON.stringify({
-          ...theRest,
-          state: { ...state, lastUpdatedAt: new Date().getTime() },
-        }),
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({
+        ...state,
+        lastUpdatedAt: new Date().getTime(),
+      }),
     }
   )
 );
@@ -50,7 +53,7 @@ export const useSessionStoreWithoutUndo = create<SessionStateWithoutUndo>()(
     })),
     {
       name: "bscol-without-undo",
-      getStorage: () => sessionStorage,
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

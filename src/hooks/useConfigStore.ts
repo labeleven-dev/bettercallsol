@@ -1,9 +1,9 @@
 import produce from "immer";
 import { PersistentState } from "types/state";
 import { DEFAULT_PERSISTENT_STATE } from "utils/state";
-import create from "zustand";
-import { persist } from "zustand/middleware";
-import shallow from "zustand/shallow";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { shallow } from "zustand/shallow";
 
 /**
  * Provides access to the LocalStorage Zustand store
@@ -19,6 +19,7 @@ export const useConfigStore = create<PersistentState>()(
     {
       name: "bcsol-config",
       version: 1,
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
