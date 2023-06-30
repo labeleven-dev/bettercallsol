@@ -15,6 +15,8 @@
   </p>
 </div>
 
+✨ **The app is available at <https://bettercallsol.dev>.**
+
 Features
 ---
 
